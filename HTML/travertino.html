@@ -1,0 +1,198 @@
+ <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--=============== BOXICONS ===============-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+        <!--=============== SWIPER CSS ===============--> 
+        <link rel="stylesheet" href="../CSS/swiper-bundle.min.css">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="../CSS/estilo_1.css">
+        <link rel="stylesheet" href="../CSS/style.css">
+        <link rel="stylesheet" href="../CSS/styles.css">
+
+        <title>Gallos Marmoleria</title>
+    </head>
+    <body>
+        <!--==================== HEADER ====================-->
+        <header class="header" id="header"> 
+            <nav class="nav container">
+                <a class="nav__logo">
+                    <img src="../ICONO/Icono negro corto.png"></i> GALLOS MARMOLERÍA
+                </a>
+
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="#travertino" class="nav__link">MÁRMOL TRAVERTINO</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="#inspirate" class="nav__link">INSPIRATE</a>
+                        </li>
+                    </ul>
+
+                    <div class="nav__close" id="nav-close">
+                        <i class='bx bx-x'></i>
+                    </div>
+                </div>
+
+                <div class="nav__btns">
+                    <!-- Theme change button -->
+                    <i class='bx bx-moon change-theme' id="theme-button"></i>
+
+                    <div class="nav__toggle" id="nav-toggle">
+                        <i class='bx bx-grid-alt' ></i>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!--==================== BUSCADOR ====================-->
+        <div class="cart" id="cart">
+            <i class='bx bx-x cart__close' id="cart-close"></i>
+            <div id="side-menu" class="fas fa-bars"></div>  
+            <div class="side-bar">
+                <div class="box">
+                   <h3 class="title">GALERÍA</h3>
+                   <input type="text" placeholder="Buscar imagen ..." id="search-box">
+                </div>
+                <div class="box">
+                   <h3 class="title">CATEGORÍA :</h3>
+                   <div class="category">
+                      <div class="btn active" data-category="TODO">TODO</div>
+                      <div class="btn" data-category="FIORITO">FIORITO</div>
+                      <div class="btn" data-category="STORM">STORM</div>
+                      <div class="btn" data-category="RUMI">RUMI</div>
+                      <div class="btn" data-category="PEDRE">PEDRE</div>
+                   </div>
+                </div>
+             </div>
+         </div>
+
+        <!--==================== MAIN ====================-->
+
+            <!--==================== MÁRMOL TRAVERTINO ====================-->
+            <section class="new section container" id="travertino">
+                <h2 class="section__title">
+                   MÁRMOL TRAVERTINO     
+                </h2>
+                <div class="new__container">
+                    <div class="swiper new-swiper">
+                        <div class="swiper-wrapper">
+                            <article class="new__card swiper-slide">
+                                <span class="new__tag">DISPONIBLE</span>
+                                <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 1.png" alt="" class="new__img">    
+                                <div class="new__data">
+                                    <h3 class="new__title">FIORITO</h3>
+                                </div>
+                                <a href="#contacto">
+                                    <button class="button new__button">MAYOR INFORMACIÓN</button>
+                                </a>
+                            </article>
+                            <article class="new__card swiper-slide">
+                                <span class="new__tag">DISPONIBLE</span>
+                                <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/STORM/Foto 1.png" alt="" class="new__img">    
+                                <div class="new__data">
+                                    <h3 class="new__title">STORM</h3>
+                                </div>
+                                <button class="button new__button">MAYOR INFORMACIÓN</button>
+                            </article>
+                            <article class="new__card swiper-slide">
+                                <span class="new__tag">DISPONIBLE</span>
+                                <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/RUMI/Foto 1.png" alt="" class="new__img">    
+                                <div class="new__data">
+                                    <h3 class="new__title">RUMI</h3>
+                                </div>
+                                <button class="button new__button">MAYOR INFORMACIÓN</button>
+                            </article>
+                            <article class="new__card swiper-slide">
+                                <span class="new__tag">DISPONIBLE</span>
+                                <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/PEDRE/Foto 1.png" alt="" class="new__img">    
+                                <div class="new__data">
+                                    <h3 class="new__title">PEDRE</h3>
+                                </div>
+                                <button class="button new__button">MAYOR INFORMACIÓN</button>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+         
+            <!--==================== INSPIRATE ====================-->
+            <section class="story section container" id="inspirate">
+                <div  class="division__inspirate">
+                    <div>
+                        <h2 class="section__title">
+                            INSPÍRATE   
+                        </h2>
+                    </div>
+                    <div class="nav__shop" id="cart-shop">
+                        <i class='bx bx-search'></i>
+                    </div>
+                </div>
+                <div class="gallery">              
+                    <div class="image-container">
+                        <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 2.png" data-cat="FIORITO" data-search="fiorito interior sala chicks" alt="">
+                        <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 3.png" data-cat="FIORITO" data-search="fiorito cookies christmas" alt="">
+                        <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 4.png" data-cat="RUMI" data-search="fiorito corn cartoon png" alt="">
+                        <img src="../FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 5.png" data-cat="STORM" data-search="animal fish dormitorio" alt="">
+                    </div>
+                 </div>
+                 
+                 <div class="image-popup">
+                    <img src="" alt="">
+                 </div>
+            </section> 
+
+            <!--==================== CONTACTO ====================-->
+            <section class="story section container">
+                <h2 class="section__title">
+                    CONTÁCTATE   
+                 </h2>
+                <article class="card__article" id="contacto">
+                    <div class="card__profile">
+                    <img src="../FOTO/VENDEDOR/Angie Giannina Ardian Sanchez.png" alt="image" class="card__profile-img">
+                    </div>
+                    
+                    <div class="card__tooltip">
+                    <div class="card__content">    
+                        <div class="card__data">
+                            <div class="card__image">
+                                <div class="card__mask">
+                                <img src="../FOTO/VENDEDOR/Angie Giannina Ardian Sanchez.png" alt="image" class="card__img">
+                                </div>
+                                
+                                <span class="card__status"></span>
+                            </div>
+        
+                            <h2 class="card__name">ANGIE ARDIAN</h2>
+                            <h3 class="card__profession">VENTAS</h3>
+        
+                            <a href="https://api.whatsapp.com/send/?phone=51964345293&text=Hola+Angie+deseo+mayor+informaci%C3%B3n&type=phone_number&app_absent=0" target="_blank" class="card__button">
+                                <i class="ri-chat-3-line"></i> <span>ENVIAR MENSAJE</span>
+                            </a>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+            </section>
+           
+        </main>
+
+        <!--=============== SCROLL UP ===============-->
+        <a href="#" class="scrollup" id="scroll-up"> 
+            <i class='bx bx-up-arrow-alt scrollup__icon' ></i>
+        </a>
+
+        <!--=============== SWIPER JS ===============-->
+        <script src="../JS/swiper-bundle.min.js"></script>
+
+        <!--=============== MAIN JS ===============-->
+        <script src="../JS/main.js"></script>
+        <script src="../JS/script_2.js"></script>
+    </body>
+</html>
