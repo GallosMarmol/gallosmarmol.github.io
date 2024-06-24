@@ -1,673 +1,248 @@
  <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!--=============== FAVICON ===============-->
-        <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
-
-        <!--=============== BOXICONS ===============-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
-        <!--=============== SWIPER CSS ===============--> 
-        <link rel="stylesheet" href="CSS/swiper-bundle.min.css">
-
-        <!--=============== CSS ===============-->
-        <link rel="stylesheet" href="CSS/estilo_1.css">
-        <link rel="stylesheet" href="CSS/style.css">
-        <link rel="stylesheet" href="CSS/styles.css">
-
-        <title>Gallos Marmoleria</title>
-    </head>
-    <body>
-        <!--==================== HEADER ====================-->
-        <header class="header" id="header"> 
-            <nav class="nav container">
-                <a class="nav__logo">
-                    <img src="ICONO/Icono negro corto.png"></i> GALLOS MARMOLERÍA
-                </a>
-
-                <div class="nav__menu" id="nav-menu">
-                    <ul class="nav__list">
-                        <li class="nav__item">
-                            <a href="#producto" class="nav__link">PRODUCTOS</a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#inspirate" class="nav__link">INSPÍRATE</a>
-                        </li>
-                        <li class="nav__item">
-                            <a href="#contactate" class="nav__link">CONTÁCTATE</a>
-                        </li>
-                    </ul>
-
-                    <div class="nav__close" id="nav-close">
-                        <i class='bx bx-x'></i>
+<!-- Website - www.codingnepalweb.com -->
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gallos Marmolería</title>
+    <link rel="stylesheet" href="CSS/estilo_1.css"/> <!--ESTILO PARA EL MENÚ-->
+    <link rel="stylesheet" href="CSS/estilo_2.css"/> <!--ESTILO PARA EL CONTENIDO-->
+    <link rel="stylesheet" href="CSS/estilo_3.css"/> <!--ESTILO PARA LA SECCIÓN DE CONTACTO-->
+    <!-- Boxicons CDN Link -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <i class="bx bxl-c-plus-plus icon"></i>
+        <div class="logo_name">Gallos Marmolería</div>
+        <i class="bx bx-menu" id="btn"></i>
+      </div>
+      <ul class="nav-list">
+        <li>
+          <a href="#piedras">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">PIEDRAS</span>
+          </a>
+          <span class="tooltip">PIEDRAS</span>
+        </li>
+        <li>
+          <a href="#cuarzo">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">CUARZO</span>
+          </a>
+          <span class="tooltip">CUARZO</span>
+        </li>
+      <!--
+        <li>
+          <a href="#hogar">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">HOGAR</span>
+          </a>
+          <span class="tooltip">HOGAR</span>
+        </li>
+        <li>
+          <a href="#porcenalato">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">PORCENALATO</span>
+          </a>
+          <span class="tooltip">PORCENALATO</span>
+        </li>
+        <li>
+          <a href="#escultura">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">ESCULTURA</span>
+          </a>
+          <span class="tooltip">ESCULTURA</span>
+        </li>
+      -->
+      </ul>
+    </div>
+    <section class="home-section">
+      <div class="container">
+        <div class="section-title" id="piedras">
+            <h1>PIEDRAS</h1>
+        </div>
+        <div class="row">
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 1 - Travertino.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>TRAVERTINO</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
+                    </div>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 2 - Marmol.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>MÁRMOL</h2>
+                    <div class="effect-btn">
+                      <a href="HTML/MARMOL/marmol.html" class="btn">VER MÁS</a>
                     </div>
                 </div>
-
-                <div class="nav__btns">
-                    <!-- Theme change button -->
-                    <i class='bx bx-moon change-theme' id="theme-button"></i>
-
-                    <div class="nav__toggle" id="nav-toggle">
-                        <i class='bx bx-grid-alt' ></i>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 3 - Granito.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>GRANITO</h2>
+                    <div class="effect-btn">
+                      <a href="HTML/GRANITO/granito.html" class="btn">VER MÁS</a>
                     </div>
                 </div>
-            </nav>
-        </header>
-
-        <!--==================== BUSCADOR ====================-->
-        <div class="cart" id="cart">
-            <i class='bx bx-x cart__close' id="cart-close"></i>
-            <div id="side-menu" class="fas fa-bars"></div>  
-            <div class="side-bar">
-                <div class="box">
-                   <h3 class="title">GALERÍA</h3>
-                   <input type="text" placeholder="Buscar imagen ..." id="search-box">
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 4 - Mosaico.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>MOSAICO DE DISEÑO</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
+                    </div>
+                  -->
                 </div>
-                <div class="box">
-                   <h3 class="title">CATEGORÍA :</h3>
-                   <div class="category">
-                      <div class="btn active" data-category="TODO">TODO</div>
-                      <div class="btn" data-category="FIORITO">FIORITO</div>
-                      <div class="btn" data-category="STORM">STORM</div>
-                      <div class="btn" data-category="RUMI">RUMI</div>
-                      <div class="btn" data-category="PEDRE">PEDRE</div>
-                   </div>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 5 - Terrazo.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>TERRAZO</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
+                    </div>
+                  -->
                 </div>
-             </div>
-         </div>
-
-        <!--==================== MAIN ====================-->
-
-            <!--==================== MÁRMOL TRAVERTINO ====================-->
-            <section class="new section container" id="producto">
-                <a href="HTML/travertino.html">
-                    <h2 class="section__title">
-                        MÁRMOL TRAVERTINO     
-                    </h2>
-                </a>
-                <div class="new__container">
-                    <div class="swiper new-swiper">
-                        <div class="swiper-wrapper">
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">FIORITO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/STORM/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">STORM</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/RUMI/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">RUMI</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/PEDRE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">PEDRE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                        </div>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 6 - Loseta.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>LOSETA DE CONCRETO</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
                     </div>
+                  -->
                 </div>
-            </section>
- 
-            <!--==================== MÁRMOL ====================-->
-            <section class="new section container">
-                <h2 class="section__title">
-                   MÁRMOL     
-                </h2>
-                <div class="new__container">
-                    <div class="swiper new-swiper">
-                        <div class="swiper-wrapper">
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/KALLISTON WHITE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">KALLISTON WHITE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/CARRARA CLASICO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CARRARA CLASICO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/RADIX/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">RADIX</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/CALACATTA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CALACATTA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/CARRARA VENATO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CARRARA VENATO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/ALIVERY GREY/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">ALIVERY GREY</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/ROJO ALICANTE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">ROJO ALICANTE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/NEGRO MARQUINA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">NEGRO MARQUINA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/MARRON EMPERADOR/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">MARRON EMPERADOR</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/DARK BROWN/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">DARK BROWN</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/VERDE SALTAN/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE SALTAN</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">NUEVO</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/FUSION/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">FUSION</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">NUEVO</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/AJAX BLUE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">AJAX BLUE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">NUEVO</span>
-                                <img src="FOTO/PRODUCTO/MARMOL/PENTELIKON/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">PENTELIKON</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                        </div>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 7 - Ladrillo.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>LADRILLO ROCOCHO</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
                     </div>
+                  -->
                 </div>
-            </section> 
-
-            <!--==================== GRANITO ====================-->
-            <section class="new section container">
-                <h2 class="section__title">
-                   GRANITO     
-                </h2>
-                <div class="new__container">
-                    <div class="swiper new-swiper">
-                        <div class="swiper-wrapper">
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/BLANCO DALLAS/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">BLANCO DALLAS</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/SANTA CECILIA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">SANTA CECILIA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/KASHMIR WHITE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">KASHMIR WHITE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/VIA LACTEA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VIA LACTEA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/AZUL LABRADOR/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">AZUL LABRADOR</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/MARRON OTOÑO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">MARRÓN OTOÑO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/NEGRO ABSOLUTO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">NEGRO ABSOLUTO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/GRANITO/BLACK GALAXY/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">BLACK GALAXY</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                        </div>
+              </div>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="effect">
+              <div class="effect-img">
+                <img src="FOTO/INICIO/Foto 8 - Piedra.png" alt="">
+              </div>
+              <div class="effect-text">
+                <div class="inner">
+                  <h2>PIEDRA TALAMOYE</h2>
+                  <!--
+                    <div class="effect-btn">
+                      <a href="#" class="btn">VER MÁS</a>
                     </div>
+                  -->
                 </div>
-            </section>             
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <!--==================== MOSAICO DE DISEÑO ====================-->
-            <section class="new section container">
-                <h2 class="section__title">
-                   MOSAICO DE DISEÑO     
-                </h2>
-                <div class="new__container">
-                    <div class="swiper new-swiper">
-                        <div class="swiper-wrapper">
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/LILA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">LILA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/CANELA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CANELA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/PALO ROSA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">PALO ROSA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/VERDE OSCURO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE OSCURO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/CELESTE/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CELESTE</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/BLANCO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">BLANCO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/VERDE LIMON/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE LIMON</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/VERDE HACIENDA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE HACIENDA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/VERDE CLARO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE CLARO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/VERDE BOTELLA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">VERDE BOTELLA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/AZULINO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">AZULINO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/AMARILLO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">AMARILLO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/TURQUESA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">TURQUESA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/TERRACOTA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">TERRACOTA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/ROSADO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">ROSADO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/NEGRO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">NEGRO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/DORADO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">DORADO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/CREMA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CREMA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/NARANJA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">NARANJA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/MARRON/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">MARRON</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/MORADO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">MORADO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/MAIZ/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">MAIZ</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/GUINDA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">GUINDA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/GRIS OSCURO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">GRIS OSCURO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/GRIS CLARO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">GRIS CLARO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/PANTONES/GRIS CEMENTO/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">GRIS CEMENTO</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                        </div>
-                    </div>
-                </div>
+        <div class="section-title" id="cuarzo">
+          <h1>CUARZO</h1>
+        </div>
+        <div class="row">
+          <div class="column"> 
+          <div class="effect">
+            <div class="effect-img">
+              <img src="FOTO/INICIO/Foto 9 - Cuarzo.png" alt="">
+            </div>
+            <div class="effect-text">
+              <div class="inner">
+                <h2>CUARZO</h2>
+                  <div class="effect-btn">
+                    <a href="HTML/CUARZO/cuarzo.html" class="btn">VER MÁS</a>
+                  </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
 
-                <div class="new__container">
-                    <div class="swiper new-swiper">
-                        <div class="swiper-wrapper">
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/TRADICIONAL/ESTRELLA POLAR/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">ESTRELLA POLAR</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/TRADICIONAL/CRUZ MALTA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">CRUZ MALTA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/TRADICIONAL/AMAPOLA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">AMAPOLA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/TRADICIONAL/FLOR INCA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">FLOR INCA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                            <article class="new__card swiper-slide">
-                                <span class="new__tag">DISPONIBLE</span>
-                                <img src="FOTO/PRODUCTO/MOSAICO/TRADICIONAL/FLOR DE PARRA/Foto 1.png" alt="" class="new__img">    
-                                <div class="new__data">
-                                    <h3 class="new__title">FLOR DE PARRA</h3>
-                                </div>
-                                <button class="button new__button">MAYOR INFORMACIÓN</button>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </section>  
+<!--
 
-            <!--==================== INSPIRATE ====================-->
-            <section class="story section container" id="inspirate">
-                <div  class="division__inspirate">
-                    <div>
-                        <h2 class="section__title">
-                            INSPÍRATE   
-                        </h2>
-                    </div>
-                    <div class="nav__shop" id="cart-shop">
-                        <i class='bx bx-search'></i>
-                    </div>
-                </div>
-                <div class="gallery">              
-                    <div class="image-container">
-                        <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 2.png" data-cat="FIORITO" data-search="fiorito interior sala chicks" alt="Foto 1">
-                        <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 3.png" data-cat="FIORITO" data-search="fiorito cookies christmas" alt="">
-                        <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 4.png" data-cat="FIORITO" data-search="fiorito corn cartoon png" alt="">
-                        <img src="FOTO/PRODUCTO/MARMOL TRAVERTINO/FIORITO/Foto 5.png" data-cat="STORM" data-search="animal fish dormitorio" alt="">
-                    </div>
-                 </div>
-                 
-                 <div class="image-popup">
-                    <img src="" alt="">
-                 </div>
-            </section> 
 
-            <section class="story section container" id="contactate">
-                <h2 class="section__title">
-                    CONTÁCTATE   
-                 </h2>
-                <article class="card__article">
-                    <div class="card__profile">
-                    <img src="FOTO/VENDEDOR/Angie Giannina Ardian Sanchez.png" alt="image" class="card__profile-img">
-                    </div>
-                    
-                    <div class="card__tooltip">
-                    <div class="card__content">    
-                        <div class="card__data">
-                            <div class="card__image">
-                                <div class="card__mask">
-                                <img src="FOTO/VENDEDOR/Angie Giannina Ardian Sanchez.png" alt="image" class="card__img">
-                                </div>
-                                
-                                <span class="card__status"></span>
-                            </div>
-        
-                            <h2 class="card__name">ANGIE ARDIAN</h2>
-                            <h3 class="card__profession">VENTAS</h3>
-        
-                            <a href="https://api.whatsapp.com/send/?phone=51964345293&text=Hola+Angie+deseo+mayor+informaci%C3%B3n&type=phone_number&app_absent=0" target="_blank" class="card__button">
-                                <i class="ri-chat-3-line"></i> <span>ENVIAR MENSAJE</span>
-                            </a>
-                        </div>
-                    </div>
-                    </div>
-                </article>
-            </section>
-           
-        </main>
+        <div class="section-title" id="hogar">
+          <h1>HOGAR</h1>
+        </div>
 
-        <!--=============== SCROLL UP ===============-->
-        <a href="#" class="scrollup" id="scroll-up"> 
-            <i class='bx bx-up-arrow-alt scrollup__icon' ></i>
-        </a>
+        <div class="section-title" id="porcenalato">
+          <h1>PORCENALATO</h1>
+        </div>
 
-        <!--=============== SWIPER JS ===============-->
-        <script src="JS/swiper-bundle.min.js"></script>
+        <div class="section-title" id="escultura">
+          <h1>ESCULTURA</h1>
+        </div>
 
-        <!--=============== MAIN JS ===============-->
-        <script src="JS/main.js"></script>
-        <script src="JS/script_2.js"></script>
-    </body>
+        <div class="section-title" id="contacto">
+          <h1>CONTACTO</h1>
+        </div>
+-->
+
+
+      </div>
+    </section>
+
+    <script src="JS/script_1.js"></script>
+  </body>
 </html>
