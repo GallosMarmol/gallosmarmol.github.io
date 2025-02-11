@@ -106,21 +106,21 @@
             cursor: pointer;
         }
         .btn-favorito {
-            background: #ffcc00;
-            color: black;
+            background: #000000;
+            color: rgb(255, 255, 255);
         }
         .btn-favorito.activo {
-            background: #ff6666;
+            background: #ff0000;
         }
         .agotado {
             position: absolute;
             top: 10px;
             left: 10px;
             background: red;
-            color: white;
+            color: rgb(255, 255, 255);
             padding: 5px 10px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
         }
         canvas {
@@ -147,10 +147,10 @@
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
         const productos = [
-            { codigo: 'COD01', familia: 'Mármol', material: 'Carrara', acabado: 'Pulido', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'COD02', familia: 'Mármol', material: 'Carrara', acabado: 'No Pulido', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'COD03', familia: 'Mármol', material: 'Carrara', acabado: 'Rustico', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'COD04', familia: 'Mármol', material: 'Travertino', acabado: 'Mate', medida: '50x50 cm', precio: '$90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' }
+            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', precio: 'S/90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' }
         ];
 
         // Cargar favoritos desde localStorage
