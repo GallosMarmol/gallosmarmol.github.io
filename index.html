@@ -94,7 +94,7 @@
             text-align: center;
             width: 100%;
         }
-        .btn-ver-mas {
+        .btn-ver-mas, .btn-favorito {
             display: block;
             background: black;
             color: white;
@@ -103,6 +103,14 @@
             border-radius: 5px;
             text-align: center;
             margin-top: 10px;
+            cursor: pointer;
+        }
+        .btn-favorito {
+            background: #ffcc00;
+            color: black;
+        }
+        .btn-favorito.activo {
+            background: #ff6666;
         }
         .agotado {
             position: absolute;
@@ -144,6 +152,19 @@
             { codigo: 'COD03', familia: 'Mármol', material: 'Carrara', acabado: 'Rustico', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
             { codigo: 'COD04', familia: 'Mármol', material: 'Travertino', acabado: 'Mate', medida: '50x50 cm', precio: '$90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' }
         ];
+
+        // Cargar favoritos desde localStorage
+        let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+
+        function toggleFavorito(codigo) {
+            if (favoritos.includes(codigo)) {
+                favoritos = favoritos.filter(f => f !== codigo); // Eliminar de favoritos
+            } else {
+                favoritos.push(codigo); // Añadir a favoritos
+            }
+            localStorage.setItem('favoritos', JSON.stringify(favoritos)); // Guardar en localStorage
+            filterProducts(); // Actualizar la lista de productos
+        }
 
         function populateFilters() {
             const materialSelect = document.getElementById("filter-material");
@@ -189,7 +210,15 @@
                 (!acabado || p.acabado === acabado) &&
                 (!codigo || p.codigo.toLowerCase().includes(codigo))
             );
-            displayProducts(filtered);
+
+            // Ordenar productos: favoritos primero
+            const sortedProducts = filtered.sort((a, b) => {
+                const aFavorito = favoritos.includes(a.codigo);
+                const bFavorito = favoritos.includes(b.codigo);
+                return bFavorito - aFavorito;
+            });
+
+            displayProducts(sortedProducts);
         }
 
         function displayProducts(products) {
@@ -211,7 +240,20 @@
                 groupedByMaterial[material].forEach(p => {
                     const card = document.createElement("div");
                     card.classList.add("card");
-                    card.innerHTML = `${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}<img src="${p.foto}" alt="${p.material}"><div class="card-content"><p><strong>Acabado:</strong> ${p.acabado}</p><p><strong>Medida:</strong> ${p.medida}</p><p><strong>Precio:</strong> ${p.precio}</p><a href="#" class="btn-ver-mas">Ver más</a></div>`;
+                    const esFavorito = favoritos.includes(p.codigo);
+                    card.innerHTML = `
+                        ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
+                        <img src="${p.foto}" alt="${p.material}">
+                        <div class="card-content">
+                            <p><strong>Acabado:</strong> ${p.acabado}</p>
+                            <p><strong>Medida:</strong> ${p.medida}</p>
+                            <p><strong>Precio:</strong> ${p.precio}</p>
+                            <a href="#" class="btn-ver-mas">Ver más</a>
+                            <button class="btn-favorito ${esFavorito ? 'activo' : ''}" onclick="toggleFavorito('${p.codigo}')">
+                                ${esFavorito ? 'Eliminar favorito' : 'Agregar Favorito'}
+                            </button>
+                        </div>
+                    `;
                     cardContainer.appendChild(card);
                 });
                 group.appendChild(cardContainer);
