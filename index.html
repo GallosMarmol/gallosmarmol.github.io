@@ -94,7 +94,7 @@
             text-align: center;
             width: 100%;
         }
-        .btn-ver-mas, .btn-favorito {
+        .btn-ver-mas, .btn-favorito, .btn-compartir {
             display: block;
             background: black;
             color: white;
@@ -104,6 +104,10 @@
             text-align: center;
             margin-top: 10px;
             cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .btn-favorito {
             background: #000000;
@@ -111,6 +115,13 @@
         }
         .btn-favorito.activo {
             background: #ff0000;
+        }
+        .btn-compartir {
+            background: #25D366; /* Verde de WhatsApp */
+            color: white;
+        }
+        .btn-compartir:hover {
+            background: #128C7E; /* Verde oscuro de WhatsApp */
         }
         .agotado {
             position: absolute;
@@ -122,6 +133,26 @@
             border-radius: 5px;
             font-size: 16px;
             font-weight: bold;
+        }
+        .etiqueta {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .etiqueta.nuevo {
+            background: #28a745; /* Verde para "Nuevo" */
+        }
+        .etiqueta.popular {
+            background: #ffc107; /* Amarillo para "Popular" */
+        }
+        .etiqueta.mas-vendido {
+            background: #dc3545; /* Rojo para "Más vendido" */
         }
         canvas {
             display: none; /* Ocultar el canvas */
@@ -139,23 +170,35 @@
             <select id="filter-acabado" disabled onchange="filterProducts()">
                 <option value="">Selecciona un acabado</option>
             </select>
+            <select id="filter-etiqueta" onchange="filterProducts()">
+                <option value="">Todas las etiquetas</option>
+                <option value="Nuevo">Nuevo</option>
+                <option value="Popular">Popular</option>
+                <option value="Más vendido">Más vendido</option>
+            </select>
             <button onclick="resetFilters()">Resetear</button>
         </div>
         <div id="product-list"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
         const productos = [
-            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
-            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', precio: 'S/90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' }
+            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Nuevo'] },
+            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Popular'] },
+            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Más vendido'] },
+            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', precio: 'S/90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Nuevo', 'Popular'] }
         ];
 
         // Cargar favoritos desde localStorage
         let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 
+        // Función para compartir por WhatsApp
+        function compartirPorWhatsApp(url, titulo) {
+            const mensaje = encodeURIComponent(`Mira este producto: ${titulo}\n\nPuedes verlo aquí: ${url}`);
+            window.open(`https://api.whatsapp.com/send?text=${mensaje}`, '_blank');
+        }
+
+        // Función para alternar favoritos
         function toggleFavorito(codigo) {
             if (favoritos.includes(codigo)) {
                 favoritos = favoritos.filter(f => f !== codigo); // Eliminar de favoritos
@@ -166,6 +209,7 @@
             filterProducts(); // Actualizar la lista de productos
         }
 
+        // Función para llenar el selector de materiales
         function populateFilters() {
             const materialSelect = document.getElementById("filter-material");
             const materiales = [...new Set(productos.map(p => p.material))];
@@ -175,9 +219,9 @@
                 option.textContent = material;
                 materialSelect.appendChild(option);
             });
-            displayProducts(productos);
         }
 
+        // Función para actualizar el selector de acabados
         function updateAcabado() {
             const material = document.getElementById("filter-material").value;
             const acabadoSelect = document.getElementById("filter-acabado");
@@ -193,22 +237,28 @@
             filterProducts();
         }
 
+        // Función para resetear los filtros
         function resetFilters() {
             document.getElementById("filter-material").value = "";
             document.getElementById("filter-acabado").value = "";
             document.getElementById("filter-acabado").disabled = true;
             document.getElementById("search-code").value = "";
+            document.getElementById("filter-etiqueta").value = "";
             displayProducts(productos);
         }
 
+        // Función para filtrar productos
         function filterProducts() {
             const material = document.getElementById("filter-material").value;
             const acabado = document.getElementById("filter-acabado").value;
             const codigo = document.getElementById("search-code").value.toLowerCase();
+            const etiqueta = document.getElementById("filter-etiqueta").value;
+
             const filtered = productos.filter(p => 
                 (!material || p.material === material) && 
                 (!acabado || p.acabado === acabado) &&
-                (!codigo || p.codigo.toLowerCase().includes(codigo))
+                (!codigo || p.codigo.toLowerCase().includes(codigo)) &&
+                (!etiqueta || p.etiquetas.includes(etiqueta))
             );
 
             // Ordenar productos: favoritos primero
@@ -221,6 +271,7 @@
             displayProducts(sortedProducts);
         }
 
+        // Función para mostrar productos
         function displayProducts(products) {
             const container = document.getElementById("product-list");
             container.innerHTML = "";
@@ -241,8 +292,17 @@
                     const card = document.createElement("div");
                     card.classList.add("card");
                     const esFavorito = favoritos.includes(p.codigo);
+                    const productUrl = window.location.href; // URL actual (puedes personalizarla)
+                    const productTitle = `${p.material} - ${p.acabado}`;
+
+                    // Mostrar etiquetas
+                    const etiquetasHTML = p.etiquetas.map(etiqueta => `
+                        <div class="etiqueta ${etiqueta.toLowerCase().replace(/ /g, '-')}">${etiqueta}</div>
+                    `).join('');
+
                     card.innerHTML = `
                         ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
+                        ${etiquetasHTML}
                         <img src="${p.foto}" alt="${p.material}">
                         <div class="card-content">
                             <p><strong>Acabado:</strong> ${p.acabado}</p>
@@ -252,6 +312,7 @@
                             <button class="btn-favorito ${esFavorito ? 'activo' : ''}" onclick="toggleFavorito('${p.codigo}')">
                                 ${esFavorito ? 'Eliminar favorito' : 'Agregar Favorito'}
                             </button>
+                            <button class="btn-compartir" onclick="compartirPorWhatsApp('${productUrl}', '${productTitle}')">Compartir por WhatsApp</button>
                         </div>
                     `;
                     cardContainer.appendChild(card);
@@ -261,60 +322,10 @@
             });
         }
 
+        // Inicializar la página
         document.addEventListener("DOMContentLoaded", () => {
-            populateFilters();
-
-            const scanQRButton = document.getElementById("scan-qr-button");
-            const searchCodeInput = document.getElementById("search-code");
-
-            scanQRButton.addEventListener("click", () => {
-                startQRScan();
-            });
-
-            function startQRScan() {
-                const video = document.createElement("video");
-                const canvasElement = document.createElement("canvas");
-                const canvas = canvasElement.getContext("2d");
-
-                document.body.appendChild(canvasElement);
-
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                    .then((stream) => {
-                        video.srcObject = stream;
-                        video.setAttribute("playsinline", true);
-                        video.play();
-                        requestAnimationFrame(tick);
-                    })
-                    .catch((err) => {
-                        console.error("Error al acceder a la cámara:", err);
-                        alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
-                    });
-
-                function tick() {
-                    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                        canvasElement.height = video.videoHeight;
-                        canvasElement.width = video.videoWidth;
-                        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-
-                        const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                        const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                            inversionAttempts: "dontInvert",
-                        });
-
-                        if (code) {
-                            video.srcObject.getTracks().forEach(track => track.stop());
-                            document.body.removeChild(canvasElement);
-
-                            searchCodeInput.value = code.data;
-                            filterProducts();
-                        } else {
-                            requestAnimationFrame(tick);
-                        }
-                    } else {
-                        requestAnimationFrame(tick);
-                    }
-                }
-            }
+            populateFilters(); // Llenar el selector de materiales
+            displayProducts(productos); // Mostrar productos iniciales
         });
     </script>
 </body>
