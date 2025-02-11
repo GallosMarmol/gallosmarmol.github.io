@@ -181,9 +181,10 @@
         <div id="product-list"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
         const productos = [
-            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Nuevo'] },
+            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: [] },
             { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Popular'] },
             { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Más vendido'] },
             { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', precio: 'S/90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Nuevo', 'Popular'] }
@@ -322,10 +323,65 @@
             });
         }
 
+        // Función para escanear QR
+        function startQRScan() {
+            const video = document.createElement("video");
+            const canvasElement = document.createElement("canvas");
+            const canvas = canvasElement.getContext("2d");
+
+            // Añadir el canvas al cuerpo del documento (puedes ocultarlo con CSS)
+            document.body.appendChild(canvasElement);
+
+            // Configurar el video para usar la cámara
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.setAttribute("playsinline", true); // Para iOS
+                    video.play();
+                    requestAnimationFrame(tick);
+                })
+                .catch((err) => {
+                    console.error("Error al acceder a la cámara:", err);
+                    alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
+                });
+
+            function tick() {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvasElement.height = video.videoHeight;
+                    canvasElement.width = video.videoWidth;
+                    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+
+                    const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: "dontInvert",
+                    });
+
+                    if (code) {
+                        // Detener la cámara y limpiar el canvas
+                        video.srcObject.getTracks().forEach(track => track.stop());
+                        document.body.removeChild(canvasElement);
+
+                        // Establecer el código escaneado en el campo de búsqueda
+                        const searchCodeInput = document.getElementById("search-code");
+                        searchCodeInput.value = code.data;
+                        filterProducts();
+                    } else {
+                        requestAnimationFrame(tick);
+                    }
+                } else {
+                    requestAnimationFrame(tick);
+                }
+            }
+        }
+
         // Inicializar la página
         document.addEventListener("DOMContentLoaded", () => {
             populateFilters(); // Llenar el selector de materiales
             displayProducts(productos); // Mostrar productos iniciales
+
+            // Escanear QR al hacer clic en el botón
+            const scanQRButton = document.getElementById("scan-qr-button");
+            scanQRButton.addEventListener("click", startQRScan);
         });
     </script>
 </body>
