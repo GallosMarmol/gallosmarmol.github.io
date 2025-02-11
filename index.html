@@ -1,244 +1,279 @@
- <!DOCTYPE html>
-<!-- Website - www.codingnepalweb.com -->
-<html lang="es" dir="ltr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Gallos Marmolería</title>
-    <link rel="stylesheet" href="CSS/estilo_1.css"/> <!--ESTILO PARA EL MENÚ-->
-    <link rel="stylesheet" href="CSS/estilo_2.css"/> <!--ESTILO PARA EL CONTENIDO-->
-    <link rel="stylesheet" href="CSS/estilo_3.css"/> <!--ESTILO PARA LA SECCIÓN DE CONTACTO-->
-    <!-- Boxicons CDN Link -->
-    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <div class="sidebar">
-      <div class="logo-details">
-        <i class="bx bxl-c-plus-plus icon"></i>
-        <div class="logo_name">Gallos Marmolería</div>
-        <i class="bx bx-menu" id="btn"></i>
-      </div>
-      <ul class="nav-list">
-        <li>
-          <a href="#piedras">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">PIEDRAS</span>
-          </a>
-          <span class="tooltip">PIEDRAS</span>
-        </li>
-        <li>
-          <a href="#cuarzo">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">CUARZO</span>
-          </a>
-          <span class="tooltip">CUARZO</span>
-        </li>
-      <!--
-        <li>
-          <a href="#hogar">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">HOGAR</span>
-          </a>
-          <span class="tooltip">HOGAR</span>
-        </li>
-        <li>
-          <a href="#porcenalato">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">PORCENALATO</span>
-          </a>
-          <span class="tooltip">PORCENALATO</span>
-        </li>
-        <li>
-          <a href="#escultura">
-            <i class="bx bx-grid-alt"></i>
-            <span class="links_name">ESCULTURA</span>
-          </a>
-          <span class="tooltip">ESCULTURA</span>
-        </li>
-      -->
-      </ul>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Mármol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        select, button, input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: black;
+            color: white;
+            cursor: pointer;
+        }
+        #scan-qr-button {
+            background: #007bff;
+            color: white;
+            border: none;
+        }
+        #scan-qr-button:hover {
+            background: #0056b3;
+        }
+        .material-group {
+            margin-bottom: 30px;
+        }
+        .material-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 350px;
+            margin: 10px;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+        .card-content {
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        .btn-ver-mas {
+            display: block;
+            background: black;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .agotado {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: red;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        canvas {
+            display: none; /* Ocultar el canvas */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="filter-container">
+            <input type="text" id="search-code" placeholder="Buscar por código" oninput="filterProducts()">
+            <button id="scan-qr-button">Escanear QR</button>
+            <select id="filter-material" onchange="updateAcabado()">
+                <option value="">Selecciona un material</option>
+            </select>
+            <select id="filter-acabado" disabled onchange="filterProducts()">
+                <option value="">Selecciona un acabado</option>
+            </select>
+            <button onclick="resetFilters()">Resetear</button>
+        </div>
+        <div id="product-list"></div>
     </div>
-    <section class="home-section">
-      <div class="container">
-        <div class="section-title" id="piedras">
-            <h1>PIEDRAS</h1>
-        </div>
-        <div class="row">
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 1 - Travertino.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>TRAVERTINO</h2>
-                    <div class="effect-btn">
-                      <a href="HTML/TRAVERTINO/travertino.html" class="btn">VER MÁS</a>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 2 - Marmol.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>MÁRMOL</h2>
-                    <div class="effect-btn">
-                      <a href="HTML/MARMOL/marmol.html" class="btn">VER MÁS</a>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 3 - Granito.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>GRANITO</h2>
-                    <div class="effect-btn">
-                      <a href="HTML/GRANITO/granito.html" class="btn">VER MÁS</a>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 4 - Mosaico.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>MOSAICO DE DISEÑO</h2>
-                  <!--
-                    <div class="effect-btn">
-                      <a href="#" class="btn">VER MÁS</a>
-                    </div>
-                  -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 5 - Terrazo.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>TERRAZO</h2>
-                    <div class="effect-btn">
-                      <a href="HTML/TERRAZO/terrazo.html" class="btn">VER MÁS</a>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 6 - Loseta.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>LOSETA DE CONCRETO</h2>
-                  <!--
-                    <div class="effect-btn">
-                      <a href="#" class="btn">VER MÁS</a>
-                    </div>
-                  -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 7 - Ladrillo.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>LADRILLO ROCOCHO</h2>
-                  <!--
-                    <div class="effect-btn">
-                      <a href="#" class="btn">VER MÁS</a>
-                    </div>
-                  -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column"> 
-            <div class="effect">
-              <div class="effect-img">
-                <img src="FOTO/INICIO/Foto 8 - Piedra.png" alt="">
-              </div>
-              <div class="effect-text">
-                <div class="inner">
-                  <h2>PIEDRA TALAMOYE</h2>
-                  <!--
-                    <div class="effect-btn">
-                      <a href="#" class="btn">VER MÁS</a>
-                    </div>
-                  -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="section-title" id="cuarzo">
-          <h1>CUARZO</h1>
-        </div>
-        <div class="row">
-          <div class="column"> 
-          <div class="effect">
-            <div class="effect-img">
-              <img src="FOTO/INICIO/Foto 9 - Cuarzo.png" alt="">
-            </div>
-            <div class="effect-text">
-              <div class="inner">
-                <h2>CUARZO</h2>
-                  <div class="effect-btn">
-                    <a href="HTML/CUARZO/cuarzo.html" class="btn">VER MÁS</a>
-                  </div>
-              </div>
-            </div>
-          </div>
-          </div>
-        </div>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+    <script>
+        const productos = [
+            { codigo: 'COD01', familia: 'Mármol', material: 'Carrara', acabado: 'Pulido', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'COD02', familia: 'Mármol', material: 'Carrara', acabado: 'No Pulido', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'COD03', familia: 'Mármol', material: 'Carrara', acabado: 'Rustico', medida: '60x60 cm', precio: '$100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' },
+            { codigo: 'COD04', familia: 'Mármol', material: 'Travertino', acabado: 'Mate', medida: '50x50 cm', precio: '$90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png' }
+        ];
 
-<!--
+        function populateFilters() {
+            const materialSelect = document.getElementById("filter-material");
+            const materiales = [...new Set(productos.map(p => p.material))];
+            materiales.forEach(material => {
+                const option = document.createElement("option");
+                option.value = material;
+                option.textContent = material;
+                materialSelect.appendChild(option);
+            });
+            displayProducts(productos);
+        }
 
+        function updateAcabado() {
+            const material = document.getElementById("filter-material").value;
+            const acabadoSelect = document.getElementById("filter-acabado");
+            acabadoSelect.innerHTML = '<option value="">Selecciona un acabado</option>';
+            const acabados = [...new Set(productos.filter(p => p.material === material).map(p => p.acabado))];
+            acabados.forEach(acabado => {
+                const option = document.createElement("option");
+                option.value = acabado;
+                option.textContent = acabado;
+                acabadoSelect.appendChild(option);
+            });
+            acabadoSelect.disabled = acabados.length === 0;
+            filterProducts();
+        }
 
-        <div class="section-title" id="hogar">
-          <h1>HOGAR</h1>
-        </div>
+        function resetFilters() {
+            document.getElementById("filter-material").value = "";
+            document.getElementById("filter-acabado").value = "";
+            document.getElementById("filter-acabado").disabled = true;
+            document.getElementById("search-code").value = "";
+            displayProducts(productos);
+        }
 
-        <div class="section-title" id="porcenalato">
-          <h1>PORCENALATO</h1>
-        </div>
+        function filterProducts() {
+            const material = document.getElementById("filter-material").value;
+            const acabado = document.getElementById("filter-acabado").value;
+            const codigo = document.getElementById("search-code").value.toLowerCase();
+            const filtered = productos.filter(p => 
+                (!material || p.material === material) && 
+                (!acabado || p.acabado === acabado) &&
+                (!codigo || p.codigo.toLowerCase().includes(codigo))
+            );
+            displayProducts(filtered);
+        }
 
-        <div class="section-title" id="escultura">
-          <h1>ESCULTURA</h1>
-        </div>
+        function displayProducts(products) {
+            const container = document.getElementById("product-list");
+            container.innerHTML = "";
+            const groupedByMaterial = {};
+            products.forEach(p => {
+                if (!groupedByMaterial[p.material]) {
+                    groupedByMaterial[p.material] = [];
+                }
+                groupedByMaterial[p.material].push(p);
+            });
+            Object.keys(groupedByMaterial).forEach(material => {
+                const group = document.createElement("div");
+                group.classList.add("material-group");
+                group.innerHTML = `<div class='material-title'>${material}</div>`;
+                const cardContainer = document.createElement("div");
+                cardContainer.classList.add("card-container");
+                groupedByMaterial[material].forEach(p => {
+                    const card = document.createElement("div");
+                    card.classList.add("card");
+                    card.innerHTML = `${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}<img src="${p.foto}" alt="${p.material}"><div class="card-content"><p><strong>Acabado:</strong> ${p.acabado}</p><p><strong>Medida:</strong> ${p.medida}</p><p><strong>Precio:</strong> ${p.precio}</p><a href="#" class="btn-ver-mas">Ver más</a></div>`;
+                    cardContainer.appendChild(card);
+                });
+                group.appendChild(cardContainer);
+                container.appendChild(group);
+            });
+        }
 
-        <div class="section-title" id="contacto">
-          <h1>CONTACTO</h1>
-        </div>
--->
+        document.addEventListener("DOMContentLoaded", () => {
+            populateFilters();
 
+            const scanQRButton = document.getElementById("scan-qr-button");
+            const searchCodeInput = document.getElementById("search-code");
 
-      </div>
-    </section>
+            scanQRButton.addEventListener("click", () => {
+                startQRScan();
+            });
 
-    <script src="JS/script_1.js"></script>
-  </body>
+            function startQRScan() {
+                const video = document.createElement("video");
+                const canvasElement = document.createElement("canvas");
+                const canvas = canvasElement.getContext("2d");
+
+                document.body.appendChild(canvasElement);
+
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then((stream) => {
+                        video.srcObject = stream;
+                        video.setAttribute("playsinline", true);
+                        video.play();
+                        requestAnimationFrame(tick);
+                    })
+                    .catch((err) => {
+                        console.error("Error al acceder a la cámara:", err);
+                        alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
+                    });
+
+                function tick() {
+                    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                        canvasElement.height = video.videoHeight;
+                        canvasElement.width = video.videoWidth;
+                        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+
+                        const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                            inversionAttempts: "dontInvert",
+                        });
+
+                        if (code) {
+                            video.srcObject.getTracks().forEach(track => track.stop());
+                            document.body.removeChild(canvasElement);
+
+                            searchCodeInput.value = code.data;
+                            filterProducts();
+                        } else {
+                            requestAnimationFrame(tick);
+                        }
+                    } else {
+                        requestAnimationFrame(tick);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
 </html>
