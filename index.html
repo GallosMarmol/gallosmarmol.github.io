@@ -157,6 +157,58 @@
         canvas {
             display: none; /* Ocultar el canvas */
         }
+
+        /* Estilos para la interfaz de escaneo QR */
+        #qr-scanner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #qr-scanner-container {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        #qr-video {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #qr-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            border: 4px solid #007bff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+        }
+        #qr-instructions {
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        #qr-close-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #qr-close-button:hover {
+            background: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -179,6 +231,16 @@
             <button onclick="resetFilters()">Resetear</button>
         </div>
         <div id="product-list"></div>
+    </div>
+
+    <!-- Interfaz de escaneo QR -->
+    <div id="qr-scanner-overlay" style="display: none;">
+        <div id="qr-scanner-container">
+            <video id="qr-video"></video>
+            <div id="qr-frame"></div>
+            <p id="qr-instructions">Coloca el código QR dentro del marco</p>
+            <button id="qr-close-button">Cerrar</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
@@ -325,14 +387,14 @@
 
         // Función para escanear QR
         function startQRScan() {
-            const video = document.createElement("video");
-            const canvasElement = document.createElement("canvas");
-            const canvas = canvasElement.getContext("2d");
+            const overlay = document.getElementById("qr-scanner-overlay");
+            const video = document.getElementById("qr-video");
+            const closeButton = document.getElementById("qr-close-button");
 
-            // Añadir el canvas al cuerpo del documento (puedes ocultarlo con CSS)
-            document.body.appendChild(canvasElement);
+            // Mostrar la interfaz de escaneo
+            overlay.style.display = "flex";
 
-            // Configurar el video para usar la cámara
+            // Configurar la cámara
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then((stream) => {
                     video.srcObject = stream;
@@ -343,10 +405,14 @@
                 .catch((err) => {
                     console.error("Error al acceder a la cámara:", err);
                     alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
+                    overlay.style.display = "none"; // Ocultar la interfaz si hay un error
                 });
 
+            // Función para procesar el video
             function tick() {
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    const canvasElement = document.createElement("canvas");
+                    const canvas = canvasElement.getContext("2d");
                     canvasElement.height = video.videoHeight;
                     canvasElement.width = video.videoWidth;
                     canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
@@ -357,9 +423,9 @@
                     });
 
                     if (code) {
-                        // Detener la cámara y limpiar el canvas
+                        // Detener la cámara y limpiar
                         video.srcObject.getTracks().forEach(track => track.stop());
-                        document.body.removeChild(canvasElement);
+                        overlay.style.display = "none";
 
                         // Establecer el código escaneado en el campo de búsqueda
                         const searchCodeInput = document.getElementById("search-code");
@@ -372,6 +438,12 @@
                     requestAnimationFrame(tick);
                 }
             }
+
+            // Cerrar la interfaz de escaneo
+            closeButton.addEventListener("click", () => {
+                video.srcObject.getTracks().forEach(track => track.stop());
+                overlay.style.display = "none";
+            });
         }
 
         // Inicializar la página
