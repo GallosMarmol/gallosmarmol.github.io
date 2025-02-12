@@ -184,10 +184,10 @@
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
         const productos = [
-            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: [] },
-            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Popular'] },
-            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', precio: 'S/100', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Más vendido'] },
-            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', precio: 'S/90', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: ['Nuevo', 'Popular'] }
+            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: '' },
+            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', borde: 'Redondeado', calidad: 'Media', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Popular' },
+            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Más vendido' },
+            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', borde: 'Redondeado', calidad: 'Baja', precio: 'S/-', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Nuevo' }
         ];
 
         // Cargar favoritos desde localStorage
@@ -259,7 +259,7 @@
                 (!material || p.material === material) && 
                 (!acabado || p.acabado === acabado) &&
                 (!codigo || p.codigo.toLowerCase().includes(codigo)) &&
-                (!etiqueta || p.etiquetas.includes(etiqueta))
+                (!etiqueta || p.etiquetas === etiqueta)
             );
 
             // Ordenar productos: favoritos primero
@@ -296,14 +296,14 @@
                     const productUrl = window.location.href; // URL actual (puedes personalizarla)
                     const productTitle = `${p.material} - ${p.acabado}`;
 
-                    // Mostrar etiquetas
-                    const etiquetasHTML = p.etiquetas.map(etiqueta => `
-                        <div class="etiqueta ${etiqueta.toLowerCase().replace(/ /g, '-')}">${etiqueta}</div>
-                    `).join('');
+                    // Mostrar etiqueta si existe
+                    const etiquetaHTML = p.etiquetas ? `
+                        <div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>
+                    ` : '';
 
                     card.innerHTML = `
                         ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
-                        ${etiquetasHTML}
+                        ${etiquetaHTML}
                         <img src="${p.foto}" alt="${p.material}">
                         <div class="card-content">
                             <p><strong>Acabado:</strong> ${p.acabado}</p>
