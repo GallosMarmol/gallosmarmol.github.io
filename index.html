@@ -19,28 +19,79 @@
         .container {
             max-width: 1200px;
             margin: auto;
+            padding: 20px;
         }
+
+        /* Estilos para el selector de grupos */
+        .group-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .group-selector button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 30px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .group-selector button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .group-selector button.active {
+            background: #0056b3;
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos para el contenedor de filtros */
         .filter-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
             background: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filter-group.hidden {
+            display: none;
+        }
+
+        /* Estilos para los elementos de los filtros */
         select, button, input {
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
         }
         button {
             background: black;
             color: white;
             cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #333;
         }
         #scan-qr-button {
             background: #007bff;
@@ -50,6 +101,16 @@
         #scan-qr-button:hover {
             background: #0056b3;
         }
+        #show-favorites-button {
+            background: #28a745; /* Verde para el botón de favoritos */
+            color: white;
+            border: none;
+        }
+        #show-favorites-button.activo {
+            background: #dc3545; /* Rojo cuando está activo */
+        }
+
+        /* Estilos para la lista de productos */
         .material-group {
             margin-bottom: 30px;
         }
@@ -154,8 +215,22 @@
         .etiqueta.mas-vendido {
             background: #dc3545; /* Rojo para "Más vendido" */
         }
-        canvas {
-            display: none; /* Ocultar el canvas */
+
+        /* Estilos para móviles */
+        @media (max-width: 768px) {
+            .group-selector button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            .filter-container {
+                padding: 15px;
+            }
+            .card {
+                max-width: 100%;
+            }
+            .card img {
+                height: 150px;
+            }
         }
 
         /* Estilos para la interfaz de escaneo QR */
@@ -213,21 +288,37 @@
 </head>
 <body>
     <div class="container">
+        <!-- Selector de grupos de filtros -->
+        <div class="group-selector">
+            <button onclick="toggleFilterGroup('group-search')" class="active">Buscar</button>
+            <button onclick="toggleFilterGroup('group-material')">Material/Acabado</button>
+            <button onclick="toggleFilterGroup('group-favorites')">Favoritos</button>
+        </div>
+
+        <!-- Contenedor de filtros -->
         <div class="filter-container">
-            <input type="text" id="search-code" placeholder="Buscar por código" oninput="filterProducts()">
-            <button id="scan-qr-button">Escanear QR</button>
-            <select id="filter-material" onchange="updateAcabado()">
-                <option value="">Selecciona un material</option>
-            </select>
-            <select id="filter-acabado" disabled onchange="filterProducts()">
-                <option value="">Selecciona un acabado</option>
-            </select>
-            <select id="filter-etiqueta" onchange="filterProducts()">
-                <option value="">Todas las etiquetas</option>
-                <option value="Nuevo">Nuevo</option>
-                <option value="Popular">Popular</option>
-                <option value="Más vendido">Más vendido</option>
-            </select>
+            <!-- Grupo 1: Buscar código y escanear QR -->
+            <div class="filter-group" id="group-search">
+                <input type="text" id="search-code" placeholder="Buscar por código" oninput="filterProducts()">
+                <button id="scan-qr-button" onclick="startQRScan()">Escanear QR</button>
+            </div>
+
+            <!-- Grupo 2: Selector de material y acabado -->
+            <div class="filter-group hidden" id="group-material">
+                <select id="filter-material" onchange="updateAcabado()">
+                    <option value="">Selecciona un material</option>
+                </select>
+                <select id="filter-acabado" disabled onchange="filterProducts()">
+                    <option value="">Selecciona un acabado</option>
+                </select>
+            </div>
+
+            <!-- Grupo 3: Mostrar favoritos -->
+            <div class="filter-group hidden" id="group-favorites">
+                <button id="show-favorites-button" onclick="toggleFavoritesFilter()">Mostrar Favoritos</button>
+            </div>
+
+            <!-- Botón de resetear (siempre visible) -->
             <button onclick="resetFilters()">Resetear</button>
         </div>
         <div id="product-list"></div>
@@ -246,42 +337,38 @@
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
         const productos = [
-            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: '' },
-            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', borde: 'Redondeado', calidad: 'Media', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Popular' },
-            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Más vendido' },
-            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', borde: 'Redondeado', calidad: 'Baja', precio: 'S/-', estado: 'Agotado', foto: 'https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png', etiquetas: 'Nuevo' }
+            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol oscuro con acabado pompeya, ideal para interiores.', etiquetas: '' },
+            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', borde: 'Redondeado', calidad: 'Media', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol otoñal con acabado bruto, perfecto para exteriores.', etiquetas: 'Popular' },
+            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol crater con acabado martillado, resistente y elegante.', etiquetas: 'Más vendido' },
+            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', borde: 'Redondeado', calidad: 'Baja', precio: 'S/-', estado: 'Agotado', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol crater con acabado arenado, ideal para áreas de alto tráfico.', etiquetas: 'Nuevo' }
         ];
 
-        // Cargar favoritos desde localStorage
         let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+        let mostrarFavoritos = false;
 
-        // Función para compartir por WhatsApp
-        function compartirPorWhatsApp(url, titulo) {
-            const mensaje = encodeURIComponent(`Mira este producto: ${titulo}\n\nPuedes verlo aquí: ${url}`);
-            window.open(`https://api.whatsapp.com/send?text=${mensaje}`, '_blank');
+        // Función para mostrar/ocultar grupos de filtros
+        function toggleFilterGroup(groupId) {
+            const groups = document.querySelectorAll('.filter-group');
+            groups.forEach(group => group.classList.add('hidden')); // Ocultar todos los grupos
+            document.getElementById(groupId).classList.remove('hidden'); // Mostrar el grupo seleccionado
+
+            // Actualizar el estado activo de los botones
+            const buttons = document.querySelectorAll('.group-selector button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.querySelector(`.group-selector button[onclick="toggleFilterGroup('${groupId}')"]`).classList.add('active');
+
+            resetFilters(); // Resetear filtros al cambiar de grupo
         }
 
-        // Función para alternar favoritos
-        function toggleFavorito(codigo) {
-            if (favoritos.includes(codigo)) {
-                favoritos = favoritos.filter(f => f !== codigo); // Eliminar de favoritos
-            } else {
-                favoritos.push(codigo); // Añadir a favoritos
-            }
-            localStorage.setItem('favoritos', JSON.stringify(favoritos)); // Guardar en localStorage
-            filterProducts(); // Actualizar la lista de productos
-        }
-
-        // Función para llenar el selector de materiales
-        function populateFilters() {
-            const materialSelect = document.getElementById("filter-material");
-            const materiales = [...new Set(productos.map(p => p.material))];
-            materiales.forEach(material => {
-                const option = document.createElement("option");
-                option.value = material;
-                option.textContent = material;
-                materialSelect.appendChild(option);
-            });
+        // Función para resetear filtros
+        function resetFilters() {
+            document.getElementById("search-code").value = "";
+            document.getElementById("filter-material").value = "";
+            document.getElementById("filter-acabado").value = "";
+            document.getElementById("filter-acabado").disabled = true;
+            mostrarFavoritos = false;
+            document.getElementById("show-favorites-button").classList.remove("activo");
+            filterProducts();
         }
 
         // Función para actualizar el selector de acabados
@@ -300,38 +387,20 @@
             filterProducts();
         }
 
-        // Función para resetear los filtros
-        function resetFilters() {
-            document.getElementById("filter-material").value = "";
-            document.getElementById("filter-acabado").value = "";
-            document.getElementById("filter-acabado").disabled = true;
-            document.getElementById("search-code").value = "";
-            document.getElementById("filter-etiqueta").value = "";
-            displayProducts(productos);
-        }
-
         // Función para filtrar productos
         function filterProducts() {
+            const codigo = document.getElementById("search-code").value.toLowerCase();
             const material = document.getElementById("filter-material").value;
             const acabado = document.getElementById("filter-acabado").value;
-            const codigo = document.getElementById("search-code").value.toLowerCase();
-            const etiqueta = document.getElementById("filter-etiqueta").value;
 
             const filtered = productos.filter(p => 
-                (!material || p.material === material) && 
-                (!acabado || p.acabado === acabado) &&
                 (!codigo || p.codigo.toLowerCase().includes(codigo)) &&
-                (!etiqueta || p.etiquetas === etiqueta)
+                (!material || p.material === material) &&
+                (!acabado || p.acabado === acabado) &&
+                (!mostrarFavoritos || favoritos.includes(p.codigo))
             );
 
-            // Ordenar productos: favoritos primero
-            const sortedProducts = filtered.sort((a, b) => {
-                const aFavorito = favoritos.includes(a.codigo);
-                const bFavorito = favoritos.includes(b.codigo);
-                return bFavorito - aFavorito;
-            });
-
-            displayProducts(sortedProducts);
+            displayProducts(filtered);
         }
 
         // Función para mostrar productos
@@ -355,27 +424,18 @@
                     const card = document.createElement("div");
                     card.classList.add("card");
                     const esFavorito = favoritos.includes(p.codigo);
-                    const productUrl = window.location.href; // URL actual (puedes personalizarla)
-                    const productTitle = `${p.material} - ${p.acabado}`;
-
-                    // Mostrar etiqueta si existe
-                    const etiquetaHTML = p.etiquetas ? `
-                        <div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>
-                    ` : '';
-
                     card.innerHTML = `
                         ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
-                        ${etiquetaHTML}
-                        <img src="${p.foto}" alt="${p.material}">
+                        ${p.etiquetas ? `<div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>` : ''}
+                        <img src="${p.fotos[0]}" alt="${p.material}">
                         <div class="card-content">
                             <p><strong>Acabado:</strong> ${p.acabado}</p>
                             <p><strong>Medida:</strong> ${p.medida}</p>
                             <p><strong>Precio:</strong> ${p.precio}</p>
-                            <a href="#" class="btn-ver-mas">Ver más</a>
+                            <a href="detalle.html?codigo=${p.codigo}" class="btn-ver-mas">Ver más</a>
                             <button class="btn-favorito ${esFavorito ? 'activo' : ''}" onclick="toggleFavorito('${p.codigo}')">
                                 ${esFavorito ? 'Eliminar favorito' : 'Agregar Favorito'}
                             </button>
-                            <button class="btn-compartir" onclick="compartirPorWhatsApp('${productUrl}', '${productTitle}')">Compartir por WhatsApp</button>
                         </div>
                     `;
                     cardContainer.appendChild(card);
@@ -385,30 +445,45 @@
             });
         }
 
+        // Función para alternar favoritos
+        function toggleFavorito(codigo) {
+            if (favoritos.includes(codigo)) {
+                favoritos = favoritos.filter(f => f !== codigo);
+            } else {
+                favoritos.push(codigo);
+            }
+            localStorage.setItem('favoritos', JSON.stringify(favoritos));
+            filterProducts();
+        }
+
+        // Función para alternar el filtro de favoritos
+        function toggleFavoritesFilter() {
+            mostrarFavoritos = !mostrarFavoritos;
+            document.getElementById("show-favorites-button").classList.toggle("activo", mostrarFavoritos);
+            filterProducts();
+        }
+
         // Función para escanear QR
         function startQRScan() {
             const overlay = document.getElementById("qr-scanner-overlay");
             const video = document.getElementById("qr-video");
             const closeButton = document.getElementById("qr-close-button");
 
-            // Mostrar la interfaz de escaneo
             overlay.style.display = "flex";
 
-            // Configurar la cámara
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then((stream) => {
                     video.srcObject = stream;
-                    video.setAttribute("playsinline", true); // Para iOS
+                    video.setAttribute("playsinline", true);
                     video.play();
                     requestAnimationFrame(tick);
                 })
                 .catch((err) => {
                     console.error("Error al acceder a la cámara:", err);
                     alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
-                    overlay.style.display = "none"; // Ocultar la interfaz si hay un error
+                    overlay.style.display = "none";
                 });
 
-            // Función para procesar el video
             function tick() {
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
                     const canvasElement = document.createElement("canvas");
@@ -423,13 +498,9 @@
                     });
 
                     if (code) {
-                        // Detener la cámara y limpiar
                         video.srcObject.getTracks().forEach(track => track.stop());
                         overlay.style.display = "none";
-
-                        // Establecer el código escaneado en el campo de búsqueda
-                        const searchCodeInput = document.getElementById("search-code");
-                        searchCodeInput.value = code.data;
+                        document.getElementById("search-code").value = code.data;
                         filterProducts();
                     } else {
                         requestAnimationFrame(tick);
@@ -439,7 +510,6 @@
                 }
             }
 
-            // Cerrar la interfaz de escaneo
             closeButton.addEventListener("click", () => {
                 video.srcObject.getTracks().forEach(track => track.stop());
                 overlay.style.display = "none";
@@ -448,12 +518,18 @@
 
         // Inicializar la página
         document.addEventListener("DOMContentLoaded", () => {
-            populateFilters(); // Llenar el selector de materiales
-            displayProducts(productos); // Mostrar productos iniciales
+            const materialSelect = document.getElementById("filter-material");
+            const materiales = [...new Set(productos.map(p => p.material))];
+            materiales.forEach(material => {
+                const option = document.createElement("option");
+                option.value = material;
+                option.textContent = material;
+                materialSelect.appendChild(option);
+            });
 
-            // Escanear QR al hacer clic en el botón
-            const scanQRButton = document.getElementById("scan-qr-button");
-            scanQRButton.addEventListener("click", startQRScan);
+            // Mostrar el grupo de búsqueda por defecto
+            toggleFilterGroup('group-search');
+            displayProducts(productos);
         });
     </script>
 </body>
