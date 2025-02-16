@@ -1,1 +1,46 @@
-
+[
+    {
+        "codigo": "BPYM2ADT08121",
+        "familia": "BALDOSAS",
+        "material": "ANDINO DARK",
+        "acabado": "POMPEYA",
+        "medida": "60x60 cm",
+        "borde": "Recto",
+        "calidad": "Alta",
+        "precio": "S/120.00",
+        "estado": "Disponible",
+        "etiqueta": "Nuevo, Más vendido",
+        "portada": "12.png",
+        "muestras": [
+            "39.png",
+            "https://photos.app.goo.gl/TPwrrHthCShyam1w5",
+            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+            "https://photos.google.com/album/AF1QipMrxBuxBRjCVKIZJpYNzqiemExlOIncQult1D62/photo/AF1QipNiNoafVSBlKcoL1EbrjaipVzEpti9pXlLJfYCp"
+        ],
+        "inspiracion": [
+            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
+        ]
+    },
+    {
+        "codigo": "BBRR1PPA20302",
+        "familia": "BALDOSAS",
+        "material": "AUTUMN",
+        "acabado": "BRUTO",
+        "medida": "60x60 cm",
+        "borde": "Redondeado",
+        "calidad": "Media",
+        "precio": "S/90.00",
+        "estado": "Disponible",
+        "etiqueta": "Popular",
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "muestras": [
+            "https://ejemplo.com/muestras/muestra3.jpg",
+            "https://ejemplo.com/muestras/muestra4.jpg"
+        ],
+        "inspiracion": [
+            "https://ejemplo.com/inspiracion/inspiracion3.jpg",
+            "https://ejemplo.com/inspiracion/inspiracion4.jpg"
+        ]
+    }
+]
