@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Mármol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -15,22 +16,21 @@
             background: #f4f4f4;
             color: #333;
             padding: 20px;
+            position: relative;
         }
         .container {
             max-width: 1200px;
             margin: auto;
             padding: 20px;
+            text-align: center;
         }
-
-        /* Estilos para el selector de grupos */
-        .group-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+        h1 {
             margin-bottom: 20px;
         }
-        .group-selector button {
+        .filter-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px 24px;
             font-size: 16px;
             border: none;
@@ -40,85 +40,77 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-        .group-selector button:hover {
+        .filter-button:hover {
             background: #0056b3;
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
-        .group-selector button.active {
-            background: #0056b3;
-            transform: translateY(0);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .filter-button i {
+            margin-right: 8px;
         }
-
-        /* Estilos para el contenedor de filtros */
-        .filter-container {
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
             justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .modal-content h2 {
             margin-bottom: 20px;
         }
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .filter-group.hidden {
-            display: none;
-        }
-
-        /* Estilos para los elementos de los filtros */
-        select, button, input {
+        .modal-content input, .modal-content select, .modal-content button {
+            width: 100%;
             padding: 10px;
-            font-size: 16px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
-            max-width: 300px;
+            font-size: 16px;
         }
-        button {
-            background: black;
+        .modal-content button {
+            background: #007bff;
             color: white;
             cursor: pointer;
             transition: background 0.3s ease;
         }
-        button:hover {
-            background: #333;
-        }
-        #scan-qr-button {
-            background: #007bff;
-            color: white;
-            border: none;
-        }
-        #scan-qr-button:hover {
+        .modal-content button:hover {
             background: #0056b3;
         }
-        #show-favorites-button {
-            background: #28a745; /* Verde para el botón de favoritos */
-            color: white;
-            border: none;
+        .modal-content .reset-button {
+            background: #dc3545;
         }
-        #show-favorites-button.activo {
-            background: #dc3545; /* Rojo cuando está activo */
+        .modal-content .reset-button:hover {
+            background: #c82333;
         }
-
-        /* Estilos para la lista de productos */
-        .material-group {
-            margin-bottom: 30px;
+        .modal-content .section {
+            display: none;
         }
-        .material-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
+        .modal-content .section.active {
+            display: block;
+        }
+        .modal-content .section-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .modal-content .section-buttons button {
+            flex: 1;
+            margin: 0 5px;
         }
         .card-container {
             display: flex;
@@ -173,6 +165,27 @@
         .btn-explorar:hover {
             background: #333;
         }
+        .btn-cotizar {
+            display: block;
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-cotizar.activo {
+            background: #dc3545;
+        }
+        .btn-cotizar:hover {
+            opacity: 0.9;
+        }
         .agotado {
             position: absolute;
             top: 10px;
@@ -196,34 +209,15 @@
             font-weight: bold;
         }
         .etiqueta.nuevo {
-            background: #28a745; /* Verde para "Nuevo" */
+            background: #28a745;
         }
         .etiqueta.popular {
-            background: #ffc107; /* Amarillo para "Popular" */
+            background: #ffc107;
         }
         .etiqueta.mas-vendido {
-            background: #dc3545; /* Rojo para "Más vendido" */
+            background: #dc3545;
         }
-
-        /* Estilos para móviles */
-        @media (max-width: 768px) {
-            .group-selector button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-            .filter-container {
-                padding: 15px;
-            }
-            .card {
-                max-width: 100%;
-            }
-            .card img {
-                height: 150px;
-            }
-        }
-
-        /* Estilos para la interfaz de escaneo QR */
-        #qr-scanner-overlay {
+        .qr-scanner-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -233,19 +227,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 1001;
         }
-        #qr-scanner-container {
+        .qr-scanner-container {
             position: relative;
             width: 90%;
             max-width: 500px;
             text-align: center;
         }
-        #qr-video {
+        .qr-video {
             width: 100%;
             border-radius: 10px;
         }
-        #qr-frame {
+        .qr-frame {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -256,12 +250,12 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
         }
-        #qr-instructions {
+        .qr-instructions {
             color: white;
             font-size: 18px;
             margin-top: 20px;
         }
-        #qr-close-button {
+        .qr-close-button {
             margin-top: 20px;
             padding: 10px 20px;
             background: #dc3545;
@@ -270,352 +264,287 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        #qr-close-button:hover {
+        .qr-close-button:hover {
             background: #c82333;
         }
-
-        /* Estilos para el modal */
-        .modal-overlay {
+        /* Botón flotante */
+        .floating-button {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 10px;
             z-index: 1000;
         }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
+        .floating-button:hover {
+            background: #218838;
         }
-        .modal-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-            align-items: center; /* Centrar los botones horizontalmente */
-        }
-        .modal-buttons button {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%; /* Ancho completo */
-            max-width: 200px; /* Ancho máximo */
-        }
-        .modal-buttons button.btn-ver-mas {
-            background: #007bff;
-            color: white;
-        }
-        .modal-buttons button.btn-cotizacion {
-            background: #ff9800; /* Naranja para el botón de cotización */
-            color: white;
-        }
-        .modal-buttons button.btn-favorito {
-            background: #000000;
-            color: white;
-        }
-        .modal-buttons button.btn-favorito.activo {
-            background: #ff0000;
-        }
-        .modal-buttons button.btn-compartir {
-            background: #25D366; /* Verde de WhatsApp */
-            color: white;
-        }
-        .modal-buttons button.btn-compartir:hover {
-            background: #128C7E; /* Verde oscuro de WhatsApp */
+        .floating-button .badge {
+            background: #dc3545;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Selector de grupos de filtros -->
-        <div class="group-selector">
-            <button onclick="toggleFilterGroup('group-search')" class="active">Buscar</button>
-            <button onclick="toggleFilterGroup('group-material')">Material/Acabado</button>
-            <button onclick="toggleFilterGroup('group-favorites')">Favoritos</button>
-        </div>
+        <h1>Catálogo de Mármol</h1>
+        <button class="filter-button" onclick="openModal()">
+            <i class="fas fa-filter"></i> Filtros
+        </button>
+        <div id="product-list" class="card-container"></div>
+    </div>
 
-        <!-- Contenedor de filtros -->
-        <div class="filter-container">
-            <!-- Grupo 1: Buscar código y escanear QR -->
-            <div class="filter-group" id="group-search">
-                <input type="text" id="search-code" placeholder="Buscar por código" oninput="filterProducts()">
-                <button id="scan-qr-button" onclick="startQRScan()">Escanear QR</button>
+    <!-- Botón flotante para cotización -->
+    <div class="floating-button" onclick="solicitarCotizacion()">
+        <i class="fas fa-file-invoice"></i> Solicitar Cotización
+        <span class="badge" id="cotizacion-count">0</span>
+    </div>
+
+    <!-- Modal de Filtros -->
+    <div id="filter-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2>Filtros</h2>
+            <div class="section-buttons">
+                <button onclick="changeSection('search-section')">Buscar</button>
+                <button onclick="changeSection('material-section')">Material</button>
+                <button onclick="changeSection('cotizar-section')">Para Cotizar</button>
             </div>
-
-            <!-- Grupo 2: Selector de material y acabado -->
-            <div class="filter-group hidden" id="group-material">
-                <select id="filter-material" onchange="updateAcabado()">
+            <div id="search-section" class="section active">
+                <input type="text" id="search-code" placeholder="Buscar por código" oninput="searchByCode()">
+                <button onclick="startQRScan()">Escanear QR</button>
+                <button class="reset-button" onclick="resetFilters()">Resetear</button>
+            </div>
+            <div id="material-section" class="section">
+                <select id="filter-material" onchange="filterByMaterial()">
                     <option value="">Selecciona un material</option>
                 </select>
-                <select id="filter-acabado" disabled onchange="filterProducts()">
-                    <option value="">Selecciona un acabado</option>
-                </select>
+                <button class="reset-button" onclick="resetFilters()">Resetear</button>
             </div>
-
-            <!-- Grupo 3: Mostrar favoritos -->
-            <div class="filter-group hidden" id="group-favorites">
-                <button id="show-favorites-button" onclick="toggleFavoritesFilter()">Mostrar Favoritos</button>
+            <div id="cotizar-section" class="section">
+                <button onclick="showCotizar()">Mostrar Para Cotizar</button>
+                <button class="reset-button" onclick="resetFilters()">Resetear</button>
             </div>
-
-            <!-- Botón de resetear (siempre visible) -->
-            <button onclick="resetFilters()">Resetear</button>
-        </div>
-        <div id="product-list"></div>
-    </div>
-
-    <!-- Interfaz de escaneo QR -->
-    <div id="qr-scanner-overlay" style="display: none;">
-        <div id="qr-scanner-container">
-            <video id="qr-video"></video>
-            <div id="qr-frame"></div>
-            <p id="qr-instructions">Coloca el código QR dentro del marco</p>
-            <button id="qr-close-button">Cerrar</button>
         </div>
     </div>
 
-    <!-- Modal para explorar productos -->
-    <div id="modal-overlay" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h3 id="modal-title"></h3>
-            <div class="modal-buttons">
-                <button class="btn-ver-mas" onclick="window.location.href='detalle.html'">Ver más</button>
-                <button class="btn-cotizacion" onclick="solicitarCotizacion()">Solicitar Cotización</button>
-                <button class="btn-favorito" id="modal-favorito" onclick="toggleFavoritoModal()">Agregar Favorito</button>
-                <button class="btn-compartir" id="modal-compartir" onclick="compartirWhatsApp()">Compartir por WhatsApp</button>
-            </div>
+    <!-- Interfaz de Escaneo QR -->
+    <div id="qr-scanner-overlay" class="qr-scanner-overlay" style="display: none;">
+        <div class="qr-scanner-container">
+            <video id="qr-video" class="qr-video"></video>
+            <div id="qr-frame" class="qr-frame"></div>
+            <p class="qr-instructions">Coloca el código QR dentro del marco</p>
+            <button class="qr-close-button" onclick="closeQRScanner()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Producto -->
+    <div id="product-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 id="modal-title"></h2>
+            <button class="btn-ver-mas" onclick="window.location.href='detalle.html?codigo=' + currentProductCode">Ver más</button>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
     <script>
-        const productos = [
-            { codigo: 'BPYM2ADT08121', familia: 'BALDOSAS', material: 'ANDINO DARK', acabado: 'POMPEYA', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol oscuro con acabado pompeya, ideal para interiores.', etiquetas: '' },
-            { codigo: 'BBRR1PPA20302', familia: 'BALDOSAS', material: 'AUTUMN', acabado: 'BRUTO', medida: '60x60 cm', borde: 'Redondeado', calidad: 'Media', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol otoñal con acabado bruto, perfecto para exteriores.', etiquetas: 'Popular' },
-            { codigo: 'BBHM2KRA05201', familia: 'BALDOSAS', material: 'CRATER', acabado: 'BUSH HAMERED', medida: '60x60 cm', borde: 'Recto', calidad: 'Alta', precio: 'S/-', estado: 'Disponible', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol crater con acabado martillado, resistente y elegante.', etiquetas: 'Más vendido' },
-            { codigo: 'BSAV2KRAAB11AB112', familia: 'BALDOSAS', material: 'CRATER', acabado: 'SANDBLASTED BRUSHED', medida: '50x50 cm', borde: 'Redondeado', calidad: 'Baja', precio: 'S/-', estado: 'Agotado', fotos: ['https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png'], descripcion: 'Mármol crater con acabado arenado, ideal para áreas de alto tráfico.', etiquetas: 'Nuevo' }
-        ];
+        let productos = [];
+        let productosParaCotizar = JSON.parse(localStorage.getItem('productosParaCotizar')) || [];
+        let videoStream = null;
+        let currentProductCode = ''; // Variable para almacenar el código del producto actual
 
-        let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-        let mostrarFavoritos = false;
-        let productoActual = null;
-
-        // Lista de números de WhatsApp
-        const numerosWhatsApp = [
-            "993395957", // Reemplaza con números reales
-            "989001787",
-            "965799039",
-            "932627152",
-            "964345293"
-        ];
-
-        // Función para seleccionar un número aleatorio
-        function seleccionarNumeroAleatorio() {
-            const indice = Math.floor(Math.random() * numerosWhatsApp.length);
-            return numerosWhatsApp[indice];
+        // Cargar productos desde un archivo JSON
+        async function loadProducts() {
+            const response = await fetch('productos.json');
+            productos = await response.json();
+            populateMaterialSelect();
+            displayProducts(productos);
+            updateCotizacionCount();
         }
 
-        // Función para mostrar/ocultar grupos de filtros
-        function toggleFilterGroup(groupId) {
-            const groups = document.querySelectorAll('.filter-group');
-            groups.forEach(group => group.classList.add('hidden')); // Ocultar todos los grupos
-            document.getElementById(groupId).classList.remove('hidden'); // Mostrar el grupo seleccionado
-
-            // Actualizar el estado activo de los botones
-            const buttons = document.querySelectorAll('.group-selector button');
-            buttons.forEach(button => button.classList.remove('active'));
-            document.querySelector(`.group-selector button[onclick="toggleFilterGroup('${groupId}')"]`).classList.add('active');
-
-            resetFilters(); // Resetear filtros al cambiar de grupo
-        }
-
-        // Función para resetear filtros
-        function resetFilters() {
-            document.getElementById("search-code").value = "";
-            document.getElementById("filter-material").value = "";
-            document.getElementById("filter-acabado").value = "";
-            document.getElementById("filter-acabado").disabled = true;
-            mostrarFavoritos = false;
-            document.getElementById("show-favorites-button").classList.remove("activo");
-            filterProducts();
-        }
-
-        // Función para actualizar el selector de acabados
-        function updateAcabado() {
-            const material = document.getElementById("filter-material").value;
-            const acabadoSelect = document.getElementById("filter-acabado");
-            acabadoSelect.innerHTML = '<option value="">Selecciona un acabado</option>';
-            const acabados = [...new Set(productos.filter(p => p.material === material).map(p => p.acabado))];
-            acabados.forEach(acabado => {
-                const option = document.createElement("option");
-                option.value = acabado;
-                option.textContent = acabado;
-                acabadoSelect.appendChild(option);
+        // Llenar el selector de materiales
+        function populateMaterialSelect() {
+            const materialSelect = document.getElementById('filter-material');
+            const materiales = [...new Set(productos.map(p => p.material))];
+            materiales.forEach(material => {
+                const option = document.createElement('option');
+                option.value = material;
+                option.textContent = material;
+                materialSelect.appendChild(option);
             });
-            acabadoSelect.disabled = acabados.length === 0;
-            filterProducts();
         }
 
-        // Función para filtrar productos
-        function filterProducts() {
-            const codigo = document.getElementById("search-code").value.toLowerCase();
-            const material = document.getElementById("filter-material").value;
-            const acabado = document.getElementById("filter-acabado").value;
-
-            const filtered = productos.filter(p => 
-                (!codigo || p.codigo.toLowerCase().includes(codigo)) &&
-                (!material || p.material === material) &&
-                (!acabado || p.acabado === acabado) &&
-                (!mostrarFavoritos || favoritos.includes(p.codigo))
-            );
-
-            displayProducts(filtered);
-        }
-
-        // Función para mostrar productos
+        // Mostrar productos
         function displayProducts(products) {
-            const container = document.getElementById("product-list");
-            container.innerHTML = "";
-            const groupedByMaterial = {};
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
             products.forEach(p => {
-                if (!groupedByMaterial[p.material]) {
-                    groupedByMaterial[p.material] = [];
-                }
-                groupedByMaterial[p.material].push(p);
-            });
-            Object.keys(groupedByMaterial).forEach(material => {
-                const group = document.createElement("div");
-                group.classList.add("material-group");
-                group.innerHTML = `<div class='material-title'>${material}</div>`;
-                const cardContainer = document.createElement("div");
-                cardContainer.classList.add("card-container");
-                groupedByMaterial[material].forEach(p => {
-                    const card = document.createElement("div");
-                    card.classList.add("card");
-                    const esFavorito = favoritos.includes(p.codigo);
-                    card.innerHTML = `
-                        ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
-                        ${p.etiquetas ? `<div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>` : ''}
-                        <img src="${p.fotos[0]}" alt="${p.material}">
-                        <div class="card-content">
-                            <p><strong>Acabado:</strong> ${p.acabado}</p>
-                            <p><strong>Medida:</strong> ${p.medida}</p>
-                            <p><strong>Precio:</strong> ${p.precio}</p>
-                            <button class="btn-explorar" onclick="openModal('${p.codigo}')">Explorar</button>
-                        </div>
-                    `;
-                    cardContainer.appendChild(card);
-                });
-                group.appendChild(cardContainer);
-                container.appendChild(group);
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.innerHTML = `
+                    ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
+                    ${p.etiquetas ? `<div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>` : ''}
+                    <img src="${p.fotos[0]}" alt="${p.material}">
+                    <div class="card-content">
+                        <p><strong>Acabado:</strong> ${p.acabado}</p>
+                        <p><strong>Medida:</strong> ${p.medida}</p>
+                        <p><strong>Precio:</strong> ${p.precio}</p>
+                        <button class="btn-explorar" onclick="openProductModal('${p.codigo}')">Explorar</button>
+                        <button class="btn-cotizar ${productosParaCotizar.includes(p.codigo) ? 'activo' : ''}" onclick="toggleCotizar('${p.codigo}')">
+                            ${productosParaCotizar.includes(p.codigo) ? 'Eliminar de Cotización' : 'Agregar para Cotizar'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
 
-        // Función para abrir el modal
-        function openModal(codigo) {
-            productoActual = productos.find(p => p.codigo === codigo);
-            const modal = document.getElementById("modal-overlay");
-            const modalTitle = document.getElementById("modal-title");
-            const modalFavorito = document.getElementById("modal-favorito");
-
-            modalTitle.textContent = productoActual.material;
-            modalFavorito.textContent = favoritos.includes(codigo) ? 'Eliminar Favorito' : 'Agregar Favorito';
-            modalFavorito.classList.toggle('activo', favoritos.includes(codigo));
-            modal.style.display = 'flex';
+        // Abrir modal de filtros
+        function openModal() {
+            document.getElementById('filter-modal').style.display = 'flex';
         }
 
-        // Función para cerrar el modal al hacer clic fuera
-        document.getElementById("modal-overlay").addEventListener("click", (e) => {
-            if (e.target === document.getElementById("modal-overlay")) {
+        // Cerrar modal de filtros al hacer clic fuera
+        document.getElementById('filter-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('filter-modal')) {
                 closeModal();
             }
         });
 
-        // Función para cerrar el modal
+        // Cerrar modal de filtros
         function closeModal() {
-            document.getElementById("modal-overlay").style.display = 'none';
+            document.getElementById('filter-modal').style.display = 'none';
         }
 
-        // Función para alternar favoritos desde el modal
-        function toggleFavoritoModal() {
-            if (favoritos.includes(productoActual.codigo)) {
-                favoritos = favoritos.filter(f => f !== productoActual.codigo);
-            } else {
-                favoritos.push(productoActual.codigo);
+        // Cambiar sección en el modal y resetear filtros
+        function changeSection(sectionId) {
+            resetFilters(); // Resetear filtros al cambiar de sección
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Buscar por código
+        function searchByCode() {
+            const codigo = document.getElementById('search-code').value.toLowerCase();
+            const filtered = productos.filter(p => p.codigo.toLowerCase().includes(codigo));
+            displayProducts(filtered);
+        }
+
+        // Filtrar por material
+        function filterByMaterial() {
+            const material = document.getElementById('filter-material').value;
+            const filtered = productos.filter(p => p.material === material);
+            displayProducts(filtered);
+        }
+
+        // Mostrar productos para cotizar
+        function showCotizar() {
+            const filtered = productos.filter(p => productosParaCotizar.includes(p.codigo));
+            displayProducts(filtered);
+        }
+
+        // Resetear filtros
+        function resetFilters() {
+            document.getElementById('search-code').value = '';
+            document.getElementById('filter-material').value = '';
+            displayProducts(productos);
+        }
+
+        // Abrir modal de producto
+        function openProductModal(codigo) {
+            currentProductCode = codigo; // Guardar el código del producto
+            const producto = productos.find(p => p.codigo === codigo);
+            const modal = document.getElementById('product-modal');
+            const modalTitle = document.getElementById('modal-title');
+            modalTitle.textContent = producto.material;
+            modal.style.display = 'flex';
+        }
+
+        // Cerrar modal de producto al hacer clic fuera
+        document.getElementById('product-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('product-modal')) {
+                closeProductModal();
             }
-            localStorage.setItem('favoritos', JSON.stringify(favoritos));
-            document.getElementById("modal-favorito").textContent = favoritos.includes(productoActual.codigo) ? 'Eliminar Favorito' : 'Agregar Favorito';
-            document.getElementById("modal-favorito").classList.toggle('activo', favoritos.includes(productoActual.codigo));
-            filterProducts();
+        });
+
+        // Cerrar modal de producto
+        function closeProductModal() {
+            document.getElementById('product-modal').style.display = 'none';
         }
 
-        // Función para compartir por WhatsApp
-        function compartirWhatsApp() {
+        // Alternar producto para cotización
+        function toggleCotizar(codigo) {
+            if (productosParaCotizar.includes(codigo)) {
+                productosParaCotizar = productosParaCotizar.filter(p => p !== codigo);
+            } else {
+                productosParaCotizar.push(codigo);
+            }
+            localStorage.setItem('productosParaCotizar', JSON.stringify(productosParaCotizar));
+            displayProducts(productos);
+            updateCotizacionCount();
+        }
+
+        // Actualizar contador de cotización
+        function updateCotizacionCount() {
+            const count = productosParaCotizar.length;
+            document.getElementById('cotizacion-count').textContent = count;
+        }
+
+        // Solicitar cotización
+        function solicitarCotizacion() {
+            const productosCotizar = productos.filter(p => productosParaCotizar.includes(p.codigo));
             const mensaje = encodeURIComponent(
-                `¡Mira este producto!\n\nCódigo: ${productoActual.codigo}\nMaterial: ${productoActual.material}\nAcabado: ${productoActual.acabado}\nMedida: ${productoActual.medida}\nDescripción: ${productoActual.descripcion}`
+                `Hola, estoy interesado en los siguientes productos:\n\n${productosCotizar.map(p => `- ${p.material} (${p.codigo})`).join('\n')}\n\nPor favor, envíenme una cotización.`
             );
             window.open(`https://wa.me/?text=${mensaje}`, '_blank');
         }
 
-        // Función para solicitar cotización
-        function solicitarCotizacion() {
-            const numeroSeleccionado = seleccionarNumeroAleatorio();
-            const mensaje = encodeURIComponent(
-                `Hola, estoy interesado en el producto:\n\nCódigo: ${productoActual.codigo}\nMaterial: ${productoActual.material}\nAcabado: ${productoActual.acabado}\nMedida: ${productoActual.medida}\n\nPor favor, envíenme más información o una cotización.`
-            );
-            window.open(`https://wa.me/${numeroSeleccionado}?text=${mensaje}`, '_blank');
-        }
-
-        // Función para escanear QR
+        // Escanear QR
         function startQRScan() {
-            const overlay = document.getElementById("qr-scanner-overlay");
-            const video = document.getElementById("qr-video");
-            const closeButton = document.getElementById("qr-close-button");
+            const overlay = document.getElementById('qr-scanner-overlay');
+            const video = document.getElementById('qr-video');
+            const canvasElement = document.createElement('canvas');
+            const canvas = canvasElement.getContext('2d');
 
-            overlay.style.display = "flex";
+            overlay.style.display = 'flex';
 
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                .then((stream) => {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(stream => {
+                    videoStream = stream;
                     video.srcObject = stream;
-                    video.setAttribute("playsinline", true);
+                    video.setAttribute('playsinline', true);
                     video.play();
                     requestAnimationFrame(tick);
                 })
-                .catch((err) => {
-                    console.error("Error al acceder a la cámara:", err);
-                    alert("No se pudo acceder a la cámara. Asegúrate de permitir el acceso.");
-                    overlay.style.display = "none";
+                .catch(err => {
+                    console.error('Error al acceder a la cámara:', err);
+                    alert('No se pudo acceder a la cámara. Asegúrate de permitir el acceso.');
                 });
 
             function tick() {
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    const canvasElement = document.createElement("canvas");
-                    const canvas = canvasElement.getContext("2d");
                     canvasElement.height = video.videoHeight;
                     canvasElement.width = video.videoWidth;
                     canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-
                     const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
                     const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                        inversionAttempts: "dontInvert",
+                        inversionAttempts: 'dontInvert',
                     });
 
                     if (code) {
-                        video.srcObject.getTracks().forEach(track => track.stop());
-                        overlay.style.display = "none";
-                        document.getElementById("search-code").value = code.data;
-                        filterProducts();
+                        document.getElementById('search-code').value = code.data;
+                        searchByCode();
+                        closeQRScanner();
+                        closeModal();
                     } else {
                         requestAnimationFrame(tick);
                     }
@@ -623,35 +552,20 @@
                     requestAnimationFrame(tick);
                 }
             }
-
-            closeButton.addEventListener("click", () => {
-                video.srcObject.getTracks().forEach(track => track.stop());
-                overlay.style.display = "none";
-            });
         }
 
-        // Función para alternar el filtro de favoritos
-        function toggleFavoritesFilter() {
-            mostrarFavoritos = !mostrarFavoritos;
-            document.getElementById("show-favorites-button").classList.toggle("activo", mostrarFavoritos);
-            filterProducts();
+        // Cerrar interfaz de escaneo QR
+        function closeQRScanner() {
+            const video = document.getElementById('qr-video');
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+            document.getElementById('qr-scanner-overlay').style.display = 'none';
         }
 
-        // Inicializar la página
-        document.addEventListener("DOMContentLoaded", () => {
-            const materialSelect = document.getElementById("filter-material");
-            const materiales = [...new Set(productos.map(p => p.material))];
-            materiales.forEach(material => {
-                const option = document.createElement("option");
-                option.value = material;
-                option.textContent = material;
-                materialSelect.appendChild(option);
-            });
-
-            // Mostrar el grupo de búsqueda por defecto
-            toggleFilterGroup('group-search');
-            displayProducts(productos);
-        });
+        // Cargar productos al iniciar
+        document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>
 </html>
