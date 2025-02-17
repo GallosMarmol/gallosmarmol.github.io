@@ -10,11 +10,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', Times, serif
         }
         body {
-            background: #f4f4f4;
-            color: #333;
+            background: #ffffff;
+            color: #000000;
             padding: 20px;
             position: relative;
         }
@@ -35,7 +35,7 @@
             font-size: 16px;
             border: none;
             border-radius: 30px;
-            background: #007bff;
+            background: #000000;
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -43,7 +43,7 @@
             margin-bottom: 20px;
         }
         .filter-button:hover {
-            background: #0056b3;
+            background: #333;
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
@@ -61,6 +61,13 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         .modal-content {
             background: white;
@@ -70,6 +77,13 @@
             width: 90%;
             max-width: 400px;
             position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
         }
         .modal-content h2 {
             margin-bottom: 20px;
@@ -83,19 +97,19 @@
             font-size: 16px;
         }
         .modal-content button {
-            background: #007bff;
-            color: white;
+            background: #000000;
+            color: rgb(255, 255, 255);
             cursor: pointer;
             transition: background 0.3s ease;
         }
         .modal-content button:hover {
-            background: #0056b3;
+            background: #333;
         }
         .modal-content .reset-button {
-            background: #dc3545;
+            background: #ff0019;
         }
         .modal-content .reset-button:hover {
-            background: #c82333;
+            background: #ff394d;
         }
         .modal-content .section {
             display: none;
@@ -119,7 +133,7 @@
             justify-content: center;
         }
         .card {
-            background: white;
+            background: rgb(243, 242, 242);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -149,11 +163,12 @@
         }
         .btn-explorar {
             display: block;
-            background: black;
-            color: white;
+            background: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
             padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
+            border: none;
             text-align: center;
             margin-top: 10px;
             cursor: pointer;
@@ -172,6 +187,7 @@
             padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
+            border: none;
             text-align: center;
             margin-top: 10px;
             cursor: pointer;
@@ -181,7 +197,7 @@
             margin-right: auto;
         }
         .btn-cotizar.activo {
-            background: #dc3545;
+            background: #ff0019;
         }
         .btn-cotizar:hover {
             opacity: 0.9;
@@ -211,11 +227,8 @@
         .etiqueta.nuevo {
             background: #28a745;
         }
-        .etiqueta.popular {
+        .etiqueta.destacado {
             background: #ffc107;
-        }
-        .etiqueta.mas-vendido {
-            background: #dc3545;
         }
         .qr-scanner-overlay {
             position: fixed;
@@ -228,6 +241,13 @@
             justify-content: center;
             align-items: center;
             z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .qr-scanner-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         .qr-scanner-container {
             position: relative;
@@ -267,7 +287,6 @@
         .qr-close-button:hover {
             background: #c82333;
         }
-        /* Botón flotante */
         .floating-button {
             position: fixed;
             bottom: 20px;
@@ -292,11 +311,124 @@
             border-radius: 20px;
             font-size: 14px;
         }
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .confirmation-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .confirmation-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .confirmation-modal.active .confirmation-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .confirmation-content h2 {
+            margin-bottom: 20px;
+        }
+        .confirmation-content button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .confirmation-content button.confirm {
+            background: #28a745;
+            color: white;
+        }
+        .confirmation-content button.confirm:hover {
+            background: #218838;
+        }
+        .confirmation-content button.cancel {
+            background: #dc3545;
+            color: white;
+        }
+        .confirmation-content button.cancel:hover {
+            background: #c82333;
+        }
+        .alert-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1003;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .alert-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .alert-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .alert-modal.active .alert-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .alert-content h2 {
+            margin-bottom: 20px;
+        }
+        .alert-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .alert-content button:hover {
+            background: #333;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Catálogo de Mármol</h1>
+        <h1>POOL COPING</h1>
         <button class="filter-button" onclick="openModal()">
             <i class="fas fa-filter"></i> Filtros
         </button>
@@ -310,7 +442,7 @@
     </div>
 
     <!-- Modal de Filtros -->
-    <div id="filter-modal" class="modal-overlay" style="display: none;">
+    <div id="filter-modal" class="modal-overlay">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2>Filtros</h2>
             <div class="section-buttons">
@@ -337,7 +469,7 @@
     </div>
 
     <!-- Interfaz de Escaneo QR -->
-    <div id="qr-scanner-overlay" class="qr-scanner-overlay" style="display: none;">
+    <div id="qr-scanner-overlay" class="qr-scanner-overlay">
         <div class="qr-scanner-container">
             <video id="qr-video" class="qr-video"></video>
             <div id="qr-frame" class="qr-frame"></div>
@@ -347,10 +479,28 @@
     </div>
 
     <!-- Modal de Producto -->
-    <div id="product-modal" class="modal-overlay" style="display: none;">
+    <div id="product-modal" class="modal-overlay">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 id="modal-title"></h2>
             <button class="btn-ver-mas" onclick="window.location.href='detalle.html?codigo=' + currentProductCode">Ver más</button>
+            <button class="btn-compartir" onclick="compartirPorWhatsApp()">Compartir por WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmation-modal" class="confirmation-modal">
+        <div class="confirmation-content" onclick="event.stopPropagation()">
+            <h2>¿Estás seguro de enviar la cotización?</h2>
+            <button class="confirm" onclick="enviarCotizacion()">Sí, enviar</button>
+            <button class="cancel" onclick="closeConfirmationModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Alerta -->
+    <div id="alert-modal" class="alert-modal">
+        <div class="alert-content" onclick="event.stopPropagation()">
+            <h2>No has seleccionado productos para cotizar</h2>
+            <button onclick="closeAlertModal()">Entiendo</button>
         </div>
     </div>
 
@@ -359,15 +509,36 @@
         let productos = [];
         let productosParaCotizar = JSON.parse(localStorage.getItem('productosParaCotizar')) || [];
         let videoStream = null;
-        let currentProductCode = ''; // Variable para almacenar el código del producto actual
+        let currentProductCode = '';
+        const whatsappNumbers = [
+            "+51993395957", // Número 1
+            "+51964345295", // Número 2
+            "+51989001787"  // Número 3
+        ];
+        let whatsappUsageCount = JSON.parse(localStorage.getItem('whatsappUsageCount')) || Array(whatsappNumbers.length).fill(0);
 
         // Cargar productos desde un archivo JSON
         async function loadProducts() {
             const response = await fetch('productos.json');
             productos = await response.json();
+            ordenarProductosPorEtiqueta(); // Ordenar productos al cargar
             populateMaterialSelect();
             displayProducts(productos);
             updateCotizacionCount();
+        }
+
+        // Ordenar productos por etiqueta: Nuevo > Destacado > Sin etiqueta
+        function ordenarProductosPorEtiqueta() {
+            productos.sort((a, b) => {
+                const etiquetaA = a.etiquetas || '';
+                const etiquetaB = b.etiquetas || '';
+
+                if (etiquetaA === "Nuevo" && etiquetaB !== "Nuevo") return -1;
+                if (etiquetaB === "Nuevo" && etiquetaA !== "Nuevo") return 1;
+                if (etiquetaA === "Destacado" && etiquetaB !== "Destacado") return -1;
+                if (etiquetaB === "Destacado" && etiquetaA !== "Destacado") return 1;
+                return 0; // Mantener el orden si no hay etiqueta
+            });
         }
 
         // Llenar el selector de materiales
@@ -391,12 +562,12 @@
                 card.classList.add('card');
                 card.innerHTML = `
                     ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
-                    ${p.etiquetas ? `<div class="etiqueta ${p.etiquetas.toLowerCase().replace(/ /g, '-')}">${p.etiquetas}</div>` : ''}
-                    <img src="${p.fotos[0]}" alt="${p.material}">
-                    <div class="card-content">
+                    ${p.etiqueta ? `<div class="etiqueta ${p.etiqueta.toLowerCase().replace(/ /g, '-')}">${p.etiqueta}</div>` : ''}
+                    <img src="${p.portada}" alt="${p.material}">
+                    <div class="card-content">                      
                         <p><strong>Acabado:</strong> ${p.acabado}</p>
                         <p><strong>Medida:</strong> ${p.medida}</p>
-                        <p><strong>Precio:</strong> ${p.precio}</p>
+                        <p><h2><strong>S/. ${p.precio}</strong></h2></p>
                         <button class="btn-explorar" onclick="openProductModal('${p.codigo}')">Explorar</button>
                         <button class="btn-cotizar ${productosParaCotizar.includes(p.codigo) ? 'activo' : ''}" onclick="toggleCotizar('${p.codigo}')">
                             ${productosParaCotizar.includes(p.codigo) ? 'Eliminar de Cotización' : 'Agregar para Cotizar'}
@@ -409,7 +580,7 @@
 
         // Abrir modal de filtros
         function openModal() {
-            document.getElementById('filter-modal').style.display = 'flex';
+            document.getElementById('filter-modal').classList.add('active');
         }
 
         // Cerrar modal de filtros al hacer clic fuera
@@ -421,7 +592,7 @@
 
         // Cerrar modal de filtros
         function closeModal() {
-            document.getElementById('filter-modal').style.display = 'none';
+            document.getElementById('filter-modal').classList.remove('active');
         }
 
         // Cambiar sección en el modal y resetear filtros
@@ -466,7 +637,7 @@
             const modal = document.getElementById('product-modal');
             const modalTitle = document.getElementById('modal-title');
             modalTitle.textContent = producto.material;
-            modal.style.display = 'flex';
+            modal.classList.add('active');
         }
 
         // Cerrar modal de producto al hacer clic fuera
@@ -478,7 +649,7 @@
 
         // Cerrar modal de producto
         function closeProductModal() {
-            document.getElementById('product-modal').style.display = 'none';
+            document.getElementById('product-modal').classList.remove('active');
         }
 
         // Alternar producto para cotización
@@ -501,9 +672,51 @@
 
         // Solicitar cotización
         function solicitarCotizacion() {
+            if (productosParaCotizar.length === 0) {
+                openAlertModal();
+                return;
+            }
+            openConfirmationModal();
+        }
+
+        // Abrir modal de confirmación
+        function openConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.add('active');
+        }
+
+        // Cerrar modal de confirmación
+        function closeConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.remove('active');
+        }
+
+        // Seleccionar número de WhatsApp de manera justa
+        function seleccionarNumeroWhatsApp() {
+            const minCount = Math.min(...whatsappUsageCount);
+            const availableNumbers = whatsappNumbers.filter((_, index) => whatsappUsageCount[index] === minCount);
+            const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+            const selectedNumber = availableNumbers[randomIndex];
+            const selectedIndex = whatsappNumbers.indexOf(selectedNumber);
+            whatsappUsageCount[selectedIndex]++;
+            localStorage.setItem('whatsappUsageCount', JSON.stringify(whatsappUsageCount));
+            return selectedNumber;
+        }
+
+        // Enviar cotización por WhatsApp
+        function enviarCotizacion() {
             const productosCotizar = productos.filter(p => productosParaCotizar.includes(p.codigo));
             const mensaje = encodeURIComponent(
-                `Hola, estoy interesado en los siguientes productos:\n\n${productosCotizar.map(p => `- ${p.material} (${p.codigo})`).join('\n')}\n\nPor favor, envíenme una cotización.`
+                `Hola, estoy interesado(a) en los siguientes productos:\n\n${productosCotizar.map(p => `* ${p.familia} ${p.material} ${p.acabado} ${p.medida} (${p.codigo})`).join('\n')}\n\nPor favor, envíenme una cotización.`
+            );
+            const selectedNumber = seleccionarNumeroWhatsApp();
+            window.open(`https://wa.me/${selectedNumber}?text=${mensaje}`, '_blank');
+            closeConfirmationModal();
+        }
+
+        // Compartir producto por WhatsApp
+        function compartirPorWhatsApp() {
+            const producto = productos.find(p => p.codigo === currentProductCode);
+            const mensaje = encodeURIComponent(
+                `¡Mira este increíble producto!\n\n* Código: ${producto.codigo}\n\n* Familia: ${producto.familia}\n\n* Material: ${producto.material}\n\n* Acabado: ${producto.acabado}\n\n* Medidas: ${producto.medida}\n\n* Más detalles: ${window.location.origin}/detalle.html?codigo=${producto.codigo}\n\n¡No te lo pierdas!`
             );
             window.open(`https://wa.me/?text=${mensaje}`, '_blank');
         }
@@ -515,7 +728,7 @@
             const canvasElement = document.createElement('canvas');
             const canvas = canvasElement.getContext('2d');
 
-            overlay.style.display = 'flex';
+            overlay.classList.add('active');
 
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
                 .then(stream => {
@@ -561,7 +774,17 @@
                 videoStream.getTracks().forEach(track => track.stop());
                 videoStream = null;
             }
-            document.getElementById('qr-scanner-overlay').style.display = 'none';
+            document.getElementById('qr-scanner-overlay').classList.remove('active');
+        }
+
+        // Abrir modal de alerta
+        function openAlertModal() {
+            document.getElementById('alert-modal').classList.add('active');
+        }
+
+        // Cerrar modal de alerta
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.remove('active');
         }
 
         // Cargar productos al iniciar
