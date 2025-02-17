@@ -7,13 +7,10 @@
         "medida": "60x60 cm",
         "borde": "Recto",
         "calidad": "Alta",
-        "precio": "S/-",
-        "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol oscuro con acabado pompeya, ideal para interiores.",
-        "etiquetas": "Nuevo"
+        "precio": "100.90",
+        "estado": "Agotado",
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": "Nuevo"
     },
     {
         "codigo": "BBRR1PPA20302",
@@ -23,13 +20,10 @@
         "medida": "60x60 cm",
         "borde": "Redondeado",
         "calidad": "Media",
-        "precio": "S/-",
+        "precio": "",
         "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol otoñal con acabado bruto, perfecto para exteriores.",
-        "etiquetas": "Popular"
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": "Nuevo"
     },
     {
         "codigo": "BBHM2KRA05201",
@@ -39,13 +33,10 @@
         "medida": "60x60 cm",
         "borde": "Recto",
         "calidad": "Alta",
-        "precio": "S/-",
+        "precio": "",
         "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol crater con acabado martillado, resistente y elegante.",
-        "etiquetas": "Más vendido"
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": "Destacado"
     },
     {
         "codigo": "BSAV2KRAAB11AB112",
@@ -55,13 +46,10 @@
         "medida": "50x50 cm",
         "borde": "Redondeado",
         "calidad": "Baja",
-        "precio": "S/-",
+        "precio": "",
         "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol crater con acabado arenado, ideal para áreas de alto tráfico.",
-        "etiquetas": "Nuevo"
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": "Destacado"
     },
     {
         "codigo": "BPYM2ADT08122",
@@ -71,13 +59,10 @@
         "medida": "60x60 cm",
         "borde": "Recto",
         "calidad": "Alta",
-        "precio": "S/-",
+        "precio": "",
         "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol claro con acabado pulido, ideal para interiores modernos.",
-        "etiquetas": "Popular"
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": ""
     },
     {
         "codigo": "BBRR1PPA20303",
@@ -87,12 +72,9 @@
         "medida": "60x60 cm",
         "borde": "Redondeado",
         "calidad": "Media",
-        "precio": "S/-",
+        "precio": "",
         "estado": "Disponible",
-        "fotos": [
-            "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png"
-        ],
-        "descripcion": "Mármol otoñal con acabado pulido, perfecto para exteriores.",
-        "etiquetas": "Popular"
+        "portada": "https://gallosmarmol.com.pe/wp-content/uploads/2019/08/ancnd2-1-600x400.png",
+        "etiqueta": "Destacado"
     }
 ]
