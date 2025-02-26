@@ -3,792 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Mármol</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="description" content="Gallos Mármol - Encuentra nuestras sedes y explora la mejor calidad en mármol y piedras naturales.">
+    <meta name="keywords" content="mármol, piedras naturales, Gallos Mármol, catálogo, promociones, sedes">
+    <meta name="author" content="Gallos Mármol">
+    <title>Gallos Mármol</title>
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="FOTOS/ICONOS/Icono_1.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_4.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_2.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_5.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_3.webp" as="image">
+    <!-- Estilos -->
     <style>
+        /* Reset básico */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif
+            font-family: 'Times New Roman', Times, serif;
         }
+
         body {
             background: #ffffff;
             color: #000000;
-            padding: 20px;
-            position: relative;
+            line-height: 1.6;
         }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Estilos generales */
+        section {
+            padding: 80px 20px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        h1 {
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 2.5rem;
             margin-bottom: 20px;
         }
-        .filter-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            font-size: 16px;
-            border: none;
-            border-radius: 30px;
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-destacado {
+            display: inline-block;
             background: #000000;
             color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .filter-button:hover {
-            background: #333;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        .filter-button i {
-            margin-right: 8px;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
             border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: all 0.3s ease-in-out;
         }
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .modal-content h2 {
-            margin-bottom: 20px;
-        }
-        .modal-content input, .modal-content select, .modal-content button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .modal-content button {
+
+        .btn-ubicación {
+            display: inline-block;
             background: #000000;
-            color: rgb(255, 255, 255);
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .modal-content button:hover {
-            background: #333;
-        }
-        .modal-content .reset-button {
-            background: #ff0019;
-        }
-        .modal-content .reset-button:hover {
-            background: #ff394d;
-        }
-        .modal-content .section {
-            display: none;
-        }
-        .modal-content .section.active {
-            display: block;
-        }
-        .modal-content .section-buttons {
-            display: flex;
-            justify-content: space-between;
+            color: white;
+            padding: 8px 30px;
+            font-size: 0.9rem;
+            font-weight: bolder;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
             margin-bottom: 20px;
         }
-        .modal-content .section-buttons button {
-            flex: 1;
-            margin: 0 5px;
-        }
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .card {
-            background: rgb(243, 242, 242);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 350px;
-            margin: 10px;
-            padding-bottom: 15px;
-            position: relative;
-        }
-        .card:hover {
+
+        .btn-destacado:hover, .btn-ubicación:hover {
+            background: #cb3e2c;
             transform: scale(1.05);
         }
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px 10px 0 0;
-        }
-        .card-content {
-            padding: 15px;
-            text-align: center;
-            width: 100%;
-        }
-        .btn-explorar {
-            display: block;
-            background: rgb(0, 0, 0);
-            color: rgb(255, 255, 255);
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            border: none;
-            text-align: center;
-            margin-top: 10px;
-            cursor: pointer;
-            width: 100%;
-            max-width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .btn-explorar:hover {
-            background: #333;
-        }
-        .btn-cotizar {
-            display: block;
-            background: #28a745;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            border: none;
-            text-align: center;
-            margin-top: 10px;
-            cursor: pointer;
-            width: 100%;
-            max-width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .btn-cotizar.activo {
-            background: #ff0019;
-        }
-        .btn-cotizar:hover {
-            opacity: 0.9;
-        }
-        .agotado {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: red;
-            color: rgb(255, 255, 255);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .etiqueta {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #007bff;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .etiqueta.nuevo {
-            background: #28a745;
-        }
-        .etiqueta.destacado {
-            background: #ffc107;
-        }
-        .qr-scanner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .qr-scanner-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .qr-scanner-container {
+            background: #ffffff;
             position: relative;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
+            overflow: hidden;
         }
-        .qr-video {
+
+        .logo {
+            width: 300px;
+            height: 300px;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        /* Grids */
+        .promo-grid, .sedes-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .promo-card, .sede-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             width: 100%;
-            border-radius: 10px;
+            max-width: 300px;
         }
-        .qr-frame {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            height: 70%;
-            border: 4px solid #007bff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+
+        .promo-card:hover, .sede-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
-        .qr-instructions {
-            color: white;
-            font-size: 18px;
-            margin-top: 20px;
+
+        .promo-card img, .sede-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
         }
-        .qr-close-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .promo-card h3, .sede-card h3 {
+            font-size: 1.3rem;
+            margin: 15px 0;
         }
-        .qr-close-button:hover {
-            background: #c82333;
+
+        .promo-card p, .sede-card p {
+            font-size: 1rem;
+            padding: 0 15px 20px;
         }
-        .floating-button {
+
+        /* Botón de Volver Arriba */
+        #back-to-top {
+            display: none;
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #28a745;
+            background: #000;
             color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        #back-to-top:hover {
+            background: #cb3e2c;
+        }
+
+        /* Botones Flotantes de Redes Sociales */
+        #social-toggle {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        #social-toggle:hover {
+            background: #cb3e2c;
+        }
+
+        .social-floating {
+            position: fixed;
+            right: 25px;
+            bottom: 160px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            opacity: 0;
+            margin-bottom: 30px;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        .social-floating.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .social-floating a {
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .social-floating a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-floating img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Modal de confirmación */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
-        .floating-button:hover {
-            background: #218838;
-        }
-        .floating-button .badge {
-            background: #dc3545;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        .confirmation-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1002;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .confirmation-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .confirmation-content {
+
+        .modal-content {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
-            width: 90%;
             max-width: 400px;
-            position: relative;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        .confirmation-modal.active .confirmation-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .confirmation-content h2 {
+
+        .modal-content h3 {
+            font-size: 1.5rem;
             margin-bottom: 20px;
         }
-        .confirmation-content button {
-            margin: 0 10px;
+
+        .modal-content p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .modal-buttons button {
             padding: 10px 20px;
+            font-size: 1rem;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s ease;
-        }
-        .confirmation-content button.confirm {
-            background: #28a745;
-            color: white;
-        }
-        .confirmation-content button.confirm:hover {
-            background: #218838;
-        }
-        .confirmation-content button.cancel {
-            background: #dc3545;
-            color: white;
-        }
-        .confirmation-content button.cancel:hover {
-            background: #c82333;
-        }
-        .alert-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1003;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .alert-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .alert-content {
-            background: white;
-            padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
         }
-        .alert-modal.active .alert-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .alert-content h2 {
-            margin-bottom: 20px;
-        }
-        .alert-content button {
-            margin-top: 20px;
-            padding: 10px 20px;
+
+        .modal-buttons button.accept {
             background: #000000;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s ease;
         }
-        .alert-content button:hover {
-            background: #333;
+
+        .modal-buttons button.accept:hover {
+            background: #cb3e2c;
+        }
+
+        .modal-buttons button.cancel {
+            background: #e0e0e0;
+            color: #000000;
+        }
+
+        .modal-buttons button.cancel:hover {
+            background: #b0b0b0;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .btn-destacado {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .promo-card, .sede-card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .social-floating {
+                right: 20px;
+                bottom: 150px;
+            }
+
+            .social-floating a {
+                width: 50px;
+                height: 50px;
+            }
+
+            .social-floating img {
+                width: 20px;
+                height: 20px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .modal-content h3 {
+                font-size: 1.3rem;
+            }
+
+            .modal-content p {
+                font-size: 0.9rem;
+            }
+
+            .modal-buttons button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>POOL COPING</h1>
-        <button class="filter-button" onclick="openModal()">
-            <i class="fas fa-filter"></i> Filtros
-        </button>
-        <div id="product-list" class="card-container"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="FOTOS/ICONOS/Icono_1.webp" alt="Logo de Gallos Mármol" class="logo" loading="lazy">
+    </section>
+
+    <!-- Catálogo Section -->
+    <section id="catalogo">
+        <h2>Explora Nuestro Catálogo</h2>
+        <p>Descubre nuestra selección de mármoles y piedras naturales con la mejor calidad del mercado.</p>
+        <a href="HTML/catalogo.html" class="btn-destacado">Ver Catálogo</a>
+    </section>
+
+    <!-- Promociones Section -->
+    <section id="promociones">
+        <h2>Promociones Especiales</h2>
+        <p>Aprovecha nuestras ofertas exclusivas en mármoles y piedras naturales.</p>
+        <div class="promo-grid" id="promo-container"></div>
+    </section>
+
+    <!-- Sedes Section -->
+    <section id="sedes">
+        <h2>Nuestras Sedes</h2>
+        <p>Encuentra la tienda más cercana y visítanos para conocer nuestra amplia variedad de productos.</p>
+        <div class="sedes-grid" id="sedes-container"></div>
+    </section>
+
+    <!-- Botón Flotante General para Redes Sociales -->
+    <button id="social-toggle" title="Redes Sociales">🌐</button>
+    <div class="social-floating">
+        <a href="https://gallosmarmol.com.pe/" title="Página Web" target="_blank" aria-label="Página Web">
+            <img src="FOTOS/ICONOS/Icono_1.webp" alt="Gallos Mármol" loading="lazy">
+        </a>
+        <a id="whatsapp-button" target="_blank" title="WhatsApp" aria-label="WhatsApp">
+            <img src="FOTOS/ICONOS/Icono_4.webp" alt="WhatsApp" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/gallosmarmol/" title="Facebook" target="_blank" aria-label="Facebook">
+            <img src="FOTOS/ICONOS/Icono_2.webp" alt="Facebook" loading="lazy">
+        </a>
+        <a href="https://www.instagram.com/gallosmarmol/" title="Instagram" target="_blank" aria-label="Instagram">
+            <img src="FOTOS/ICONOS/Icono_5.webp" alt="Instagram" loading="lazy">
+        </a>
+        <a href="https://www.tiktok.com/@gallos.marmol.ofic" title="TikTok" target="_blank" aria-label="TikTok">
+            <img src="FOTOS/ICONOS/Icono_3.webp" alt="TikTok" loading="lazy">
+        </a>
     </div>
 
-    <!-- Botón flotante para cotización -->
-    <div class="floating-button" onclick="solicitarCotizacion()">
-        <i class="fas fa-file-invoice"></i> Solicitar Cotización
-        <span class="badge" id="cotizacion-count">0</span>
-    </div>
+    <!-- Botón de Volver Arriba -->
+    <button id="back-to-top" title="Volver arriba">↑</button>
 
-    <!-- Modal de Filtros -->
-    <div id="filter-modal" class="modal-overlay">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2>Filtros</h2>
-            <div class="section-buttons">
-                <button onclick="changeSection('search-section')">Buscar</button>
-                <button onclick="changeSection('material-section')">Material</button>
-                <button onclick="changeSection('cotizar-section')">Para Cotizar</button>
+    <!-- Modal de confirmación -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <h3>¿Deseas ser redirigido a WhatsApp?</h3>
+            <p>Se te asignará un asesor para brindarte mayor información.</p>
+            <div class="modal-buttons">
+                <button class="accept">Aceptar</button>
+                <button class="cancel">Cancelar</button>
             </div>
-            <div id="search-section" class="section active">
-                <input type="text" id="search-code" placeholder="Buscar por código" oninput="searchByCode()">
-                <button onclick="startQRScan()">Escanear QR</button>
-                <button class="reset-button" onclick="resetFilters()">Resetear</button>
-            </div>
-            <div id="material-section" class="section">
-                <select id="filter-material" onchange="filterByMaterial()">
-                    <option value="">Selecciona un material</option>
-                </select>
-                <button class="reset-button" onclick="resetFilters()">Resetear</button>
-            </div>
-            <div id="cotizar-section" class="section">
-                <button onclick="showCotizar()">Mostrar Para Cotizar</button>
-                <button class="reset-button" onclick="resetFilters()">Resetear</button>
-            </div>
         </div>
     </div>
 
-    <!-- Interfaz de Escaneo QR -->
-    <div id="qr-scanner-overlay" class="qr-scanner-overlay">
-        <div class="qr-scanner-container">
-            <video id="qr-video" class="qr-video"></video>
-            <div id="qr-frame" class="qr-frame"></div>
-            <p class="qr-instructions">Coloca el código QR dentro del marco</p>
-            <button class="qr-close-button" onclick="closeQRScanner()">Cerrar</button>
-        </div>
-    </div>
-
-    <!-- Modal de Producto -->
-    <div id="product-modal" class="modal-overlay">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 id="modal-title"></h2>
-            <button class="btn-ver-mas" onclick="window.location.href='detalle.html?codigo=' + currentProductCode">Ver más</button>
-            <button class="btn-compartir" onclick="compartirPorWhatsApp()">Compartir por WhatsApp</button>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmación -->
-    <div id="confirmation-modal" class="confirmation-modal">
-        <div class="confirmation-content" onclick="event.stopPropagation()">
-            <h2>¿Estás seguro de enviar la cotización?</h2>
-            <button class="confirm" onclick="enviarCotizacion()">Sí, enviar</button>
-            <button class="cancel" onclick="closeConfirmationModal()">Cancelar</button>
-        </div>
-    </div>
-
-    <!-- Modal de Alerta -->
-    <div id="alert-modal" class="alert-modal">
-        <div class="alert-content" onclick="event.stopPropagation()">
-            <h2>No has seleccionado productos para cotizar</h2>
-            <button onclick="closeAlertModal()">Entiendo</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+    <!-- Scripts -->
     <script>
-        let productos = [];
-        let productosParaCotizar = JSON.parse(localStorage.getItem('productosParaCotizar')) || [];
-        let videoStream = null;
-        let currentProductCode = '';
-        const whatsappNumbers = [
-            "+51993395957", // Número 1
-            "+51964345295", // Número 2
-            "+51989001787"  // Número 3
-        ];
-        let whatsappUsageCount = JSON.parse(localStorage.getItem('whatsappUsageCount')) || Array(whatsappNumbers.length).fill(0);
-
-        // Cargar productos desde un archivo JSON
-        async function loadProducts() {
-            const response = await fetch('productos.json');
-            productos = await response.json();
-            ordenarProductosPorEtiqueta(); // Ordenar productos al cargar
-            populateMaterialSelect();
-            displayProducts(productos);
-            updateCotizacionCount();
-        }
-
-        // Ordenar productos por etiqueta: Nuevo > Destacado > Sin etiqueta
-        function ordenarProductosPorEtiqueta() {
-            productos.sort((a, b) => {
-                const etiquetaA = a.etiquetas || '';
-                const etiquetaB = b.etiquetas || '';
-
-                if (etiquetaA === "Nuevo" && etiquetaB !== "Nuevo") return -1;
-                if (etiquetaB === "Nuevo" && etiquetaA !== "Nuevo") return 1;
-                if (etiquetaA === "Destacado" && etiquetaB !== "Destacado") return -1;
-                if (etiquetaB === "Destacado" && etiquetaA !== "Destacado") return 1;
-                return 0; // Mantener el orden si no hay etiqueta
-            });
-        }
-
-        // Llenar el selector de materiales
-        function populateMaterialSelect() {
-            const materialSelect = document.getElementById('filter-material');
-            const materiales = [...new Set(productos.map(p => p.material))];
-            materiales.forEach(material => {
-                const option = document.createElement('option');
-                option.value = material;
-                option.textContent = material;
-                materialSelect.appendChild(option);
-            });
-        }
-
-        // Mostrar productos
-        function displayProducts(products) {
-            const container = document.getElementById('product-list');
-            container.innerHTML = '';
-            products.forEach(p => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.innerHTML = `
-                    ${p.estado === 'Agotado' ? '<div class="agotado">Agotado</div>' : ''}
-                    ${p.etiqueta ? `<div class="etiqueta ${p.etiqueta.toLowerCase().replace(/ /g, '-')}">${p.etiqueta}</div>` : ''}
-                    <img src="${p.portada}" alt="${p.material}">
-                    <div class="card-content">                      
-                        <p><strong>Acabado:</strong> ${p.acabado}</p>
-                        <p><strong>Medida:</strong> ${p.medida}</p>
-                        <p><h2><strong>S/. ${p.precio}</strong></h2></p>
-                        <button class="btn-explorar" onclick="openProductModal('${p.codigo}')">Explorar</button>
-                        <button class="btn-cotizar ${productosParaCotizar.includes(p.codigo) ? 'activo' : ''}" onclick="toggleCotizar('${p.codigo}')">
-                            ${productosParaCotizar.includes(p.codigo) ? 'Eliminar de Cotización' : 'Agregar para Cotizar'}
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Abrir modal de filtros
-        function openModal() {
-            document.getElementById('filter-modal').classList.add('active');
-        }
-
-        // Cerrar modal de filtros al hacer clic fuera
-        document.getElementById('filter-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('filter-modal')) {
-                closeModal();
-            }
+        // Animaciones al hacer scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const checkVisibility = () => {
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    if (sectionTop < window.innerHeight * 0.8) {
+                        section.classList.add('visible');
+                    }
+                });
+            };
+            window.addEventListener('scroll', checkVisibility);
+            checkVisibility(); // Verificar al cargar la página
         });
 
-        // Cerrar modal de filtros
-        function closeModal() {
-            document.getElementById('filter-modal').classList.remove('active');
-        }
-
-        // Cambiar sección en el modal y resetear filtros
-        function changeSection(sectionId) {
-            resetFilters(); // Resetear filtros al cambiar de sección
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => section.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-        }
-
-        // Buscar por código
-        function searchByCode() {
-            const codigo = document.getElementById('search-code').value.toLowerCase();
-            const filtered = productos.filter(p => p.codigo.toLowerCase().includes(codigo));
-            displayProducts(filtered);
-        }
-
-        // Filtrar por material
-        function filterByMaterial() {
-            const material = document.getElementById('filter-material').value;
-            const filtered = productos.filter(p => p.material === material);
-            displayProducts(filtered);
-        }
-
-        // Mostrar productos para cotizar
-        function showCotizar() {
-            const filtered = productos.filter(p => productosParaCotizar.includes(p.codigo));
-            displayProducts(filtered);
-        }
-
-        // Resetear filtros
-        function resetFilters() {
-            document.getElementById('search-code').value = '';
-            document.getElementById('filter-material').value = '';
-            displayProducts(productos);
-        }
-
-        // Abrir modal de producto
-        function openProductModal(codigo) {
-            currentProductCode = codigo; // Guardar el código del producto
-            const producto = productos.find(p => p.codigo === codigo);
-            const modal = document.getElementById('product-modal');
-            const modalTitle = document.getElementById('modal-title');
-            modalTitle.textContent = producto.material;
-            modal.classList.add('active');
-        }
-
-        // Cerrar modal de producto al hacer clic fuera
-        document.getElementById('product-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('product-modal')) {
-                closeProductModal();
-            }
-        });
-
-        // Cerrar modal de producto
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.remove('active');
-        }
-
-        // Alternar producto para cotización
-        function toggleCotizar(codigo) {
-            if (productosParaCotizar.includes(codigo)) {
-                productosParaCotizar = productosParaCotizar.filter(p => p !== codigo);
+        // Botón de Volver Arriba
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.style.display = 'block';
             } else {
-                productosParaCotizar.push(codigo);
+                backToTopButton.style.display = 'none';
             }
-            localStorage.setItem('productosParaCotizar', JSON.stringify(productosParaCotizar));
-            displayProducts(productos);
-            updateCotizacionCount();
-        }
+        });
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-        // Actualizar contador de cotización
-        function updateCotizacionCount() {
-            const count = productosParaCotizar.length;
-            document.getElementById('cotizacion-count').textContent = count;
-        }
+        // Botón Flotante General para Redes Sociales
+        const socialToggle = document.getElementById('social-toggle');
+        const socialFloating = document.querySelector('.social-floating');
+        socialToggle.addEventListener('click', () => {
+            socialFloating.classList.toggle('visible');
+        });
 
-        // Solicitar cotización
-        function solicitarCotizacion() {
-            if (productosParaCotizar.length === 0) {
-                openAlertModal();
-                return;
+        // Cargar promociones desde JSON
+        fetch('JSON/promociones.json')
+            .then(response => response.json())
+            .then(data => {
+                const promoContainer = document.getElementById('promo-container');
+                data.promociones.forEach(promo => {
+                    const promoCard = `
+                        <div class="promo-card">
+                            <img src="${promo.imagen}" alt="${promo.titulo}" loading="lazy">
+                            <h3>${promo.titulo}</h3>
+                            <p>${promo.descripcion}</p>
+                        </div>
+                    `;
+                    promoContainer.innerHTML += promoCard;
+                });
+            })
+            .catch(error => console.error('Error cargando promociones:', error));
+
+        // Cargar sedes desde JSON
+        fetch('JSON/sedes.json')
+            .then(response => response.json())
+            .then(data => {
+                const sedesContainer = document.getElementById('sedes-container');
+                data.sedes.forEach(sede => {
+                    const sedeCard = `
+                        <div class="sede-card">
+                            <img src="${sede.imagen}" alt="${sede.nombre}" loading="lazy">
+                            <h3>${sede.nombre}</h3>
+                            <p>${sede.direccion}</p>
+                            <a href="${sede.maps}" class="btn-ubicación" target="_blank">Ubicación</a>
+                        </div>
+                    `;
+                    sedesContainer.innerHTML += sedeCard;
+                });
+            })
+            .catch(error => console.error('Error cargando sedes:', error));
+
+        // Cargar números de WhatsApp desde JSON
+        let whatsappNumbers = [];
+        let assignedNumbers = JSON.parse(localStorage.getItem("assignedNumbers")) || [];
+
+        fetch('JSON/whatsapp.json')
+            .then(response => response.json())
+            .then(data => {
+                whatsappNumbers = data.numeros;
+            })
+            .catch(error => console.error('Error cargando números de WhatsApp:', error));
+
+        // Funcionalidad del botón de WhatsApp
+        const whatsappButton = document.getElementById('whatsapp-button');
+        const modal = document.getElementById('confirmation-modal');
+        const acceptButton = modal.querySelector('.accept');
+        const cancelButton = modal.querySelector('.cancel');
+
+        const message = encodeURIComponent("Hola, estoy interesado(a) en obtener más información sobre sus productos.");
+
+        function getRandomWhatsAppNumber() {
+            const availableNumbers = whatsappNumbers.filter(num => !assignedNumbers.includes(num));
+
+            if (availableNumbers.length === 0) {
+                assignedNumbers = [];
+                return whatsappNumbers[0]; // Reinicia el ciclo
             }
-            openConfirmationModal();
-        }
 
-        // Abrir modal de confirmación
-        function openConfirmationModal() {
-            document.getElementById('confirmation-modal').classList.add('active');
-        }
+            const selectedNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
+            assignedNumbers.push(selectedNumber);
+            localStorage.setItem("assignedNumbers", JSON.stringify(assignedNumbers));
 
-        // Cerrar modal de confirmación
-        function closeConfirmationModal() {
-            document.getElementById('confirmation-modal').classList.remove('active');
-        }
-
-        // Seleccionar número de WhatsApp de manera justa
-        function seleccionarNumeroWhatsApp() {
-            const minCount = Math.min(...whatsappUsageCount);
-            const availableNumbers = whatsappNumbers.filter((_, index) => whatsappUsageCount[index] === minCount);
-            const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-            const selectedNumber = availableNumbers[randomIndex];
-            const selectedIndex = whatsappNumbers.indexOf(selectedNumber);
-            whatsappUsageCount[selectedIndex]++;
-            localStorage.setItem('whatsappUsageCount', JSON.stringify(whatsappUsageCount));
             return selectedNumber;
         }
 
-        // Enviar cotización por WhatsApp
-        function enviarCotizacion() {
-            const productosCotizar = productos.filter(p => productosParaCotizar.includes(p.codigo));
-            const mensaje = encodeURIComponent(
-                `Hola, estoy interesado(a) en los siguientes productos:\n\n${productosCotizar.map(p => `* ${p.familia} ${p.material} ${p.acabado} ${p.medida} (${p.codigo})`).join('\n')}\n\nPor favor, envíenme una cotización.`
-            );
-            const selectedNumber = seleccionarNumeroWhatsApp();
-            window.open(`https://wa.me/${selectedNumber}?text=${mensaje}`, '_blank');
-            closeConfirmationModal();
-        }
+        whatsappButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            modal.style.display = 'flex';
+        });
 
-        // Compartir producto por WhatsApp
-        function compartirPorWhatsApp() {
-            const producto = productos.find(p => p.codigo === currentProductCode);
-            const mensaje = encodeURIComponent(
-                `¡Mira este increíble producto!\n\n* Código: ${producto.codigo}\n\n* Familia: ${producto.familia}\n\n* Material: ${producto.material}\n\n* Acabado: ${producto.acabado}\n\n* Medidas: ${producto.medida}\n\n* Más detalles: ${window.location.origin}/detalle.html?codigo=${producto.codigo}\n\n¡No te lo pierdas!`
-            );
-            window.open(`https://wa.me/?text=${mensaje}`, '_blank');
-        }
-
-        // Escanear QR
-        function startQRScan() {
-            const overlay = document.getElementById('qr-scanner-overlay');
-            const video = document.getElementById('qr-video');
-            const canvasElement = document.createElement('canvas');
-            const canvas = canvasElement.getContext('2d');
-
-            overlay.classList.add('active');
-
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(stream => {
-                    videoStream = stream;
-                    video.srcObject = stream;
-                    video.setAttribute('playsinline', true);
-                    video.play();
-                    requestAnimationFrame(tick);
-                })
-                .catch(err => {
-                    console.error('Error al acceder a la cámara:', err);
-                    alert('No se pudo acceder a la cámara. Asegúrate de permitir el acceso.');
-                });
-
-            function tick() {
-                if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    canvasElement.height = video.videoHeight;
-                    canvasElement.width = video.videoWidth;
-                    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-                    const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                    const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                        inversionAttempts: 'dontInvert',
-                    });
-
-                    if (code) {
-                        document.getElementById('search-code').value = code.data;
-                        searchByCode();
-                        closeQRScanner();
-                        closeModal();
-                    } else {
-                        requestAnimationFrame(tick);
-                    }
-                } else {
-                    requestAnimationFrame(tick);
-                }
+        acceptButton.addEventListener('click', () => {
+            const nextNumber = getRandomWhatsAppNumber();
+            if (nextNumber) {
+                const whatsappLink = `https://wa.me/${nextNumber}?text=${message}`;
+                window.open(whatsappLink, '_blank');
+            } else {
+                alert("No hay asesores disponibles en este momento. Inténtalo más tarde.");
             }
-        }
+            modal.style.display = 'none';
+        });
 
-        // Cerrar interfaz de escaneo QR
-        function closeQRScanner() {
-            const video = document.getElementById('qr-video');
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                videoStream = null;
-            }
-            document.getElementById('qr-scanner-overlay').classList.remove('active');
-        }
-
-        // Abrir modal de alerta
-        function openAlertModal() {
-            document.getElementById('alert-modal').classList.add('active');
-        }
-
-        // Cerrar modal de alerta
-        function closeAlertModal() {
-            document.getElementById('alert-modal').classList.remove('active');
-        }
-
-        // Cargar productos al iniciar
-        document.addEventListener('DOMContentLoaded', loadProducts);
+        cancelButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
     </script>
 </body>
 </html>
