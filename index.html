@@ -9,11 +9,15 @@
     <title>Gallos Mármol</title>
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="FOTOS/ICONOS/Icono_1.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_4.webp" as="image">
     <link rel="preload" href="FOTOS/ICONOS/Icono_2.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_5.webp" as="image">
     <link rel="preload" href="FOTOS/ICONOS/Icono_3.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_4.webp" as="image">
+    <link rel="preload" href="FOTOS/ICONOS/Icono_5.webp" as="image">
     <!-- Estilos -->
+
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         /* Reset básico */
         * {
@@ -135,6 +139,7 @@
             gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            margin-bottom: 100px;
         }
 
         .promo-card, .sede-card {
@@ -171,24 +176,25 @@
         }
 
         /* Botones Flotantes de Redes Sociales */
-        #social-toggle {
+
+        .floating-button {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: linear-gradient(45deg, #cb3e2c, #ff6b6b);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            padding: 15px 25px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(203, 62, 44, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: background 0.3s ease, transform 0.3s ease;
+            color: #ffffff;
+
         }
 
-        #social-toggle:hover {
-            transform: scale(1.1);
+        .floating-button:hover {
             box-shadow: 0 6px 15px rgba(203, 62, 44, 0.5);
         }
 
@@ -204,6 +210,8 @@
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
             pointer-events: none;
             margin-bottom: 20px;
+            align-content: center;
+            align-items: center;
             
         }
 
@@ -269,7 +277,7 @@
         .modal-content p {
             font-size: 1rem;
             margin-bottom: 30px;
-            color: #333;
+            color: #000000;
         }
 
         .modal-buttons {
@@ -354,8 +362,11 @@
         <div class="sedes-grid" id="sedes-container"></div>
     </section>
 
-    <!-- Botón Flotante General para Redes Sociales -->
-    <button id="social-toggle" title="Redes Sociales">🌐</button>
+    <!-- Botón Flotante General para Contacto -->
+    
+    <div id="social-toggle" class="floating-button" title="Contáctanos">
+        <i class="fas fa-bars"></i>Contáctanos
+    </div>
     <div class="social-floating">
         <a href="https://gallosmarmol.com.pe/" title="Página Web" target="_blank" aria-label="Página Web">
             <img src="FOTOS/ICONOS/Icono_1.webp" alt="Gallos Mármol" loading="lazy">
