@@ -3,249 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gallos Mármol - Encuentra nuestras sedes y explora la mejor calidad en mármol y piedras naturales.">
-    <meta name="keywords" content="mármol, piedras naturales, Gallos Mármol, catálogo, promociones, sedes">
-    <meta name="author" content="Gallos Mármol">
-    <link rel="icon" type="image/x-icon" href="FOTOS/ICONOS/Icono_6.ico">
+    <meta name="description" content="Gallos Mármol - Especialistas en mármol, granito y cuarzo para tus proyectos residenciales y comerciales. Calidad y elegancia en acabados de piedra natural.">
+    <meta name="keywords" content="mármol, granito, cuarzo, acabados de lujo, diseño de interiores, cocinas de mármol, baños de mármol, pisos de mármol">
+    <link rel="icon" type="image/x-icon" href="../ICONOS/Icono_6.ico">
     <title>Gallos Mármol</title>
-    <!-- Preload de recursos críticos -->
-    <link rel="preload" href="FOTOS/ICONOS/Icono_1.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_2.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_3.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_4.webp" as="image">
-    <link rel="preload" href="FOTOS/ICONOS/Icono_5.webp" as="image">
-    <!-- Estilos -->
-
-    <!-- Iconos de FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link rel="preload" href="FOTOS/OTROS/Foto 2.webp" as="image">
+    <link rel="preload" href="FOTOS/OTROS/Foto 1.webp" as="image">
+    <link rel="preload" href="FOTOS/SEDES/Sede 1.webp" as="image">
+    <link rel="preload" href="FOTOS/SEDES/Sede 2.webp" as="image">
+    <link rel="preload" href="FOTOS/SEDES/Sede 3.webp" as="image">
     <style>
-        /* Reset básico */
+        /* Reset y estilos generales */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: #ffffff;
             color: #000000;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Animaciones */
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes gradientBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Estilos generales */
-        section {
-            padding: 40px 20px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #000000;
-        }
-
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            color: #000000;
-        }
-
-        .btn-destacado, .btn-ubicación {
-            display: inline-block;
-            background: linear-gradient(45deg, #cb3e2c, #ff6b6b);
-            color: rgb(255, 255, 255);
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
+        a {
             text-decoration: none;
-            border-radius: 50px;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 15px rgba(203, 62, 44, 0.3);
+            color: inherit;
         }
 
-        .btn-ubicación {
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
             display: inline-block;
-            background: linear-gradient(45deg, #cb3e2c, #ff6b6b);
+            padding: 7px 30px;
+            background-color: #000000;
             color: white;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 15px rgba(203, 62, 44, 0.3);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
             margin-bottom: 15px;
+            margin-top: 10px;
         }
 
-        .btn-destacado:hover, .btn-ubicación:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(203, 62, 44, 0.5);
+        .btn:hover {
+            background-color: #CB3E2C;
+            transform: translateY(-2px);
         }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: gradientBackground 10s ease infinite;
-            background-size: 200% 200%;
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: #000000;
             position: relative;
-            overflow: hidden;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #CB3E2C;
+            margin: 15px auto;
+        }
+
+        /* Header y navegación */
+        header {
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            width: 300px;
-            height: 300px;
-            animation: float 4s infinite ease-in-out;
-        }
-
-        .logo:hover{
-            filter: drop-shadow(5px 20px 29px rgba(203, 62, 44, 0.5));
-        }
-
-        /* Grids */
-        .promo-grid, .sedes-grid {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            max-width: 1200px;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* Hero Section */
+        #inicio {
+            padding-top: 120px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('FOTOS/OTROS/Foto 2.webp') no-repeat center center/cover;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: -20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
             margin: 0 auto;
-            margin-bottom: 100px;
         }
 
-        .promo-card, .sede-card {
-            background: #fff;
-            border-radius: 15px;
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #000000;
+            text-align: center;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            width: 100%;
-            max-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .promo-card:hover, .sede-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .promo-card img, .sede-card img {
+        .about-image img {
             width: 100%;
             height: auto;
-            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
         }
 
-        .promo-card h3, .sede-card h3 {
-            font-size: 1.2rem;
-            margin: 15px 0;
-            color: #000000;
+        .about-image:hover img {
+            transform: scale(1.05);
         }
 
-        .promo-card p, .sede-card p {
-            font-size: 1rem;
-            padding: 0 15px 20px;
-            color: #000000;
+        /* Estilos para estados vacíos */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin: 20px 0;
         }
 
-        /* Botones Flotantes de Redes Sociales */
+        .empty-icon {
+            font-size: 4rem;
+            color: #CB3E2C;
+            margin-bottom: 20px;
+        }
 
-        .floating-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #cb3e2c, #ff6b6b);
-            padding: 15px 25px;
-            border-radius: 50px;
+        .empty-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .empty-description {
+            color: #666;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Sección Promociones */
+        .promotions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .promotion-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            transition: background 0.3s ease, transform 0.3s ease;
-            color: #ffffff;
-
         }
 
-        .floating-button:hover {
-            box-shadow: 0 6px 15px rgba(203, 62, 44, 0.5);
+        .promotion-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .social-floating {
-            position: fixed;
-            right: 25px;
-            bottom: 90px;
+        .promotion-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .promotion-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            pointer-events: none;
-            margin-bottom: 20px;
-            align-content: center;
-            align-items: center;
-            
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
         }
 
-        .social-floating.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
+        /* Sección Proyectos */
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
 
-        .social-floating a {
-            display: block;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #fff;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        .project-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+            cursor: pointer;
         }
 
-        .social-floating a:hover {
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover img {
             transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .social-floating img {
-            width: 40px;
-            height: 40px;
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
         }
 
-        /* Modal de confirmación */
+        /* Sección Inspírate */
+        .inspiration-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .inspiration-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+            cursor: pointer;
+        }
+
+        .inspiration-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .inspiration-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .inspiration-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
+        }
+
+        /* Modal de Detalle */
         .modal {
             display: none;
             position: fixed;
@@ -253,264 +335,1239 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
         }
 
         .modal-content {
-            background: white;
+            background-color: white;
+            margin: 50px auto;
             padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            max-width: 1000px;
+            width: 90%;    
+            position: relative;
         }
 
-        .modal-content h3 {
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
             font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #000000;
-        }
-
-        .modal-content p {
-            font-size: 1rem;
-            margin-bottom: 30px;
-            color: #000000;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .modal-buttons button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            color: #333;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
-        .modal-buttons button.accept {
-            background: linear-gradient(45deg, #cb3e2c, #ff6b6b);
+        .close-modal:hover {
+            background: #CB3E2C;
             color: white;
         }
 
-        .modal-buttons button.accept:hover {
-            box-shadow: 0 6px 15px rgba(203, 62, 44, 0.5);
+        /* Estilos para el modal de inspiración */
+        .inspiration-detail {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
-        .modal-buttons button.cancel {
-            background: #c9c9c9;
+        .inspiration-gallery-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .inspiration-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #f5f5f5;
+        }
+
+        .inspiration-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .inspiration-description {
+            margin-bottom: 20px;
+        }
+
+        .inspiration-materials {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .inspiration-materials h3 {
+            margin-bottom: 20px;
+            color: #CB3E2C;
+            border-bottom: 2px solid #CB3E2C;
+            padding-bottom: 10px;
+        }
+
+        .inspiration-material-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .inspiration-material-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        /* Estilos para el modal de promoción */
+        .promotion-detail {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .promotion-image-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .promotion-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #f5f5f5;
+        }
+
+        .promotion-products {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .promotion-products h3 {
+            margin-bottom: 20px;
+            color: #CB3E2C;
+            border-bottom: 2px solid #CB3E2C;
+            padding-bottom: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        /* Estilos para el modal de proyectos */
+        .project-detail {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .project-gallery-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #f5f5f5;
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .project-description {
+            margin-bottom: 20px;
+        }
+
+        .project-materials {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .project-materials h3 {
+            margin-bottom: 20px;
+            color: #CB3E2C;
+            border-bottom: 2px solid #CB3E2C;
+            padding-bottom: 10px;
+        }
+
+        .project-material-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .project-material-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        /* Carrusel de imágenes - Versión mejorada */
+        .carousel {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        .carousel-inner {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            border: none;
+            outline: none;
+        }
+
+        .carousel-control:hover {
+            background: #CB3E2C;
+        }
+
+        .carousel-control.prev {
+            left: 20px;
+        }
+
+        .carousel-control.next {
+            right: 20px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+            gap: 8px;
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .carousel-indicator.active {
+            background: #CB3E2C;
+            transform: scale(1.2);
+        }
+
+        /* Sección Tiendas */
+        .stores-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .store-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .store-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .store-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .store-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .store-card:hover .store-image img {
+            transform: scale(1.05);
+        }
+
+        .store-info {
+            padding: 20px;
+        }
+
+        .store-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
             color: #000000;
         }
 
-        .modal-buttons button.cancel:hover {
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        .store-info p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
         }
 
-        /* Responsividad */
+        .store-info .btn-container{
+            text-align: center;
+            margin: 0;
+        }
+
+        .store-info .btn{
+            margin-top: 20px;
+        }
+
+        .store-info i {
+            margin-right: 10px;
+            color: #000000;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Lazy loading */
+        img[data-src] {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        img.lazy-loaded {
+            opacity: 1;
+        }
+
+        /* Focus styles para navegación por teclado */
+        a:focus, button:focus, .promotion-card:focus, .project-card:focus, .inspiration-item:focus {
+            outline: 3px solid #cb3f2c00;
+            outline-offset: 3px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .about-content {
+                flex-direction: column;
+            }
+
+            .inspiration-info,
+            .promotion-detail,
+            .project-info {
+                grid-template-columns: 1fr;
+            }
+
+            .inspiration-gallery-container,
+            .promotion-image-container,
+            .project-gallery-container {
+                height: 400px;
+            }
+        }
+
         @media (max-width: 768px) {
-            h2 {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .stores-container {
+                grid-template-columns: 1fr;
+            }
+
+            .inspiration-gallery-container,
+            .promotion-image-container,
+            .project-gallery-container {
+                height: 300px;
+            }
+            
+            .carousel-control {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .empty-icon {
+                font-size: 3rem;
+            }
+
+            .empty-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title {
                 font-size: 2rem;
             }
 
-            .btn-destacado {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                padding: 15px;
+                width: 95%;
+            }
+            
+            .carousel-control {
+                width: 35px;
+                height: 35px;
                 font-size: 1rem;
-                padding: 10px 20px;
+            }
+            
+            .carousel-indicator {
+                width: 10px;
+                height: 10px;
             }
 
-            .promo-grid, .sedes-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            .empty-icon {
+                font-size: 2.5rem;
             }
 
-            .social-floating {
-                right: 20px;
-                bottom: 80px;
+            .empty-title {
+                font-size: 1.1rem;
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero">
-        <img src="FOTOS/ICONOS/Icono_1.webp" alt="Logo de Gallos Mármol" class="logo" loading="lazy">
+    <!-- Contenedor para el menú que se cargará externamente -->
+    <div id="menu-container"></div>
+
+    <!-- Sección Inicio -->
+    <section id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Transforma tus espacios con la elegancia del mármol</h1>
+                <p>En Gallos Mármol ofrecemos acabados de la más alta calidad para darle un toque de sofisticación a tu hogar o proyecto.</p>
+                <a href="HTML/producto.html" class="btn">Ver productos</a>
+            </div>
+        </div>
     </section>
 
-    <!-- Catálogo Section -->
-    <section id="catalogo">
-        <h2>Explora Nuestro Catálogo</h2>
-        <p>Descubre nuestra selección de mármoles y piedras naturales con la mejor calidad del mercado.</p>
-        <a href="HTML/catalogo.html" class="btn-destacado">Ver catálogo</a>
+    <!-- Sección Sobre Nosotros -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Sobre Gallos Mármol</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Más de 20 años de experiencia en el mercado</h2>
+                    <p>En Gallos Mármol, nos especializamos en la transformación del mármol, cuarzo y granito en piezas únicas que reflejan elegancia, calidad y durabilidad. Con más de una década de experiencia en el rubro, nos hemos consolidado como una empresa líder en acabados de alto nivel, ofreciendo soluciones personalizadas para hogares, empresas y proyectos arquitectónicos.</p>
+                    <p>Nuestro compromiso con la excelencia y la atención al detalle nos permite brindar un servicio integral, desde la asesoría hasta la instalación final, garantizando la satisfacción total de nuestros clientes.</p>
+                </div>
+                <div class="about-image">
+                    <img src="FOTOS/OTROS/Foto 1.webp" alt="Cantera Gallos Mármol - Fachada de nuestra sede principal" loading="lazy">
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Promociones Section -->
+    <!-- Sección Promociones -->
     <section id="promociones">
-        <h2>Promociones Especiales</h2>
-        <p>Aprovecha nuestras ofertas exclusivas en mármoles y piedras naturales.</p>
-        <div class="promo-grid" id="promo-container"></div>
+        <div class="container">
+            <h2 class="section-title">Promociones</h2>
+            <div class="promotions-container" id="promotions-gallery">
+                <!-- Las promociones se cargarán dinámicamente desde promociones.json -->
+            </div>
+        </div>
     </section>
 
-    <!-- Sedes Section -->
-    <section id="sedes">
-        <h2>Nuestras Sedes</h2>
-        <p>Encuentra la tienda más cercana y visítanos para conocer nuestra amplia variedad de productos.</p>
-        <div class="sedes-grid" id="sedes-container"></div>
+    <!-- Sección Proyectos -->
+    <section id="proyectos">
+        <div class="container">
+            <h2 class="section-title">Proyectos</h2>
+            <div class="projects-container" id="projects-gallery">
+                <!-- Los proyectos se cargarán dinámicamente desde projects.json -->
+            </div>
+        </div>
     </section>
 
-    <!-- Botón Flotante General para Contacto -->
-    
-    <div id="social-toggle" class="floating-button" title="Contáctanos">
-        <i class="fas fa-bars"></i>Contáctanos
-    </div>
-    <div class="social-floating">
-        <a href="https://gallosmarmol.com.pe/" title="Página Web" target="_blank" aria-label="Página Web">
-            <img src="FOTOS/ICONOS/Icono_1.webp" alt="Gallos Mármol" loading="lazy">
-        </a>
-        <a id="whatsapp-button" target="_blank" title="WhatsApp" aria-label="WhatsApp">
-            <img src="FOTOS/ICONOS/Icono_4.webp" alt="WhatsApp" loading="lazy">
-        </a>
-        <a href="https://www.facebook.com/gallosmarmol/" title="Facebook" target="_blank" aria-label="Facebook">
-            <img src="FOTOS/ICONOS/Icono_2.webp" alt="Facebook" loading="lazy">
-        </a>
-        <a href="https://www.instagram.com/gallosmarmol/" title="Instagram" target="_blank" aria-label="Instagram">
-            <img src="FOTOS/ICONOS/Icono_5.webp" alt="Instagram" loading="lazy">
-        </a>
-        <a href="https://www.tiktok.com/@gallos.marmol.ofic" title="TikTok" target="_blank" aria-label="TikTok">
-            <img src="FOTOS/ICONOS/Icono_3.webp" alt="TikTok" loading="lazy">
-        </a>
-    </div>
+    <!-- Sección Inspírate -->
+    <section id="inspirate">
+        <div class="container">
+            <h2 class="section-title">Inspírate</h2>
+            <div class="inspiration-container" id="inspiration-gallery">
+                <!-- Las imágenes se cargarán dinámicamente desde inspiration.json -->
+            </div>
+        </div>
+    </section>
 
-    <!-- Modal de confirmación -->
-    <div class="modal" id="confirmation-modal">
+    <!-- Modal de Detalle de Promoción -->
+    <div id="promotion-modal" class="modal">
         <div class="modal-content">
-            <h3>¿Deseas ser redirigido a WhatsApp?</h3>
-            <p>Se te asignará un asesor para brindarte mayor información.</p>
-            <div class="modal-buttons">
-                <button class="accept">Aceptar</button>
-                <button class="cancel">Cancelar</button>
+            <span class="close-modal">&times;</span>
+            <div id="promotion-detail-content">
+                <!-- El contenido se cargará dinámicamente -->
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Modal de Detalle de Proyecto -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="project-detail-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalle de Inspiración -->
+    <div id="inspiration-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="inspiration-detail-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección Tiendas -->
+    <section id="tiendas">
+        <div class="container">
+            <h2 class="section-title">Tiendas</h2>
+            <div class="stores-container">
+                <div class="store-card">
+                    <div class="store-image">
+                        <img src="FOTOS/SEDES/Sede 1.webp" alt="Showroom Lurín - Vista exterior de nuestra tienda en Lurín" loading="lazy">
+                    </div>
+                    <div class="store-info">
+                        <h3>Showroom Lurín</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Zona Industrial - Urb. Las Praderas, Lurín</p>
+                        <p><i class="fas fa-clock"></i> Lunes a Viernes: 09:00 horas - 18:00 horas</p>
+                        <p><i class="fas fa-clock"></i> Sábados: 09:00 horas - 13:00 horas</p>
+                        <div class="btn-container">
+                            <a href="https://maps.app.goo.gl/hBA8AX5qrtqaRvFC6" target="_blank" class="btn">Cómo llegar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="store-card">
+                    <div class="store-image">
+                        <img src="FOTOS/SEDES/Sede 2.webp" alt="Saldos de Exportación - Área de productos con descuento" loading="lazy">
+                    </div>
+                    <div class="store-info">
+                        <h3>Saldos de Exportación</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Zona Industrial - Urb. Las Praderas, Lurín</p>
+                        <p><i class="fas fa-clock"></i> Lunes a Viernes: 09:00 horas - 18:00 horas</p>
+                        <p><i class="fas fa-clock"></i> Sábados: 9:00 horas - 13:00 horas</p>
+                        <div class="btn-container">
+                            <a href="https://maps.app.goo.gl/9o6g6AGyZQjkVR4CA" target="_blank" class="btn">Cómo llegar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="store-card">
+                    <div class="store-image">
+                        <img src="FOTOS/SEDES/Sede 3.webp" alt="Showroom Miraflores - Vista interior de nuestra tienda en Miraflores" loading="lazy">
+                    </div>
+                    <div class="store-info">
+                        <h3>Showroom Miraflores</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Marquez de la Torre 280, Miraflores</p>
+                        <p><i class="fas fa-clock"></i> Lunes a Viernes: 09:00 horas - 18:00 horas</p>
+                        <p><i class="fas fa-clock"></i> Sábados: 10:00 horas - 14:00 horas</p>
+                        <div class="btn-container">
+                            <a href="https://maps.app.goo.gl/YRRdz4ce6QvqUhoY9" target="_blank" class="btn">Cómo llegar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script para cargar el menú dinámicamente -->
+    <script src="../JS/cargarMenu.js"></script>
+
+    <!-- Script principal mejorado -->
     <script>
-        // Animaciones al hacer scroll
+        // Objeto para manejar el estado de los carruseles
+        const carouselState = {};
+        
+        // Cargar datos de promociones desde promociones.json
+        async function loadPromotions() {
+            try {
+                const response = await fetch('JSON/promociones.json');
+                const promotionsData = await response.json();
+                const promotionsContainer = document.getElementById('promotions-gallery');
+                
+                // Verificar si hay promociones
+                if (promotionsData.promociones && promotionsData.promociones.length > 0) {
+                    promotionsData.promociones.forEach(promotion => {
+                        const promotionCard = document.createElement('div');
+                        promotionCard.className = 'promotion-card';
+                        promotionCard.tabIndex = 0;
+                        promotionCard.innerHTML = `
+                            <img data-src="${promotion.imagen}" alt="${promotion.titulo} - Promoción de Gallos Mármol" class="lazy">
+                            <div class="promotion-overlay">
+                                <h3>${promotion.titulo}</h3>
+                            </div>
+                        `;
+                        
+                        promotionCard.addEventListener('click', () => openPromotionModal(promotion));
+                        promotionCard.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                openPromotionModal(promotion);
+                            }
+                        });
+                        promotionsContainer.appendChild(promotionCard);
+                    });
+                } else {
+                    // Mostrar estado vacío si no hay promociones
+                    promotionsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <h2 class="empty-title">No hay promociones vigentes</h2>
+                            <p class="empty-description">Actualmente no tenemos promociones disponibles. Vuelve a visitarnos pronto para conocer nuestras ofertas especiales.</p>
+                        </div>
+                    `;
+                }
+                
+                lazyLoadImages();
+            } catch (error) {
+                console.error('Error al cargar las promociones:', error);
+                // Mostrar estado de error si falla la carga
+                document.getElementById('promotions-gallery').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2 class="empty-title">Error al cargar las promociones</h2>
+                        <p class="empty-description">No pudimos cargar la información de promociones. Por favor, intenta nuevamente más tarde.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar datos de proyectos desde proyectos.json
+        async function loadProjects() {
+            try {
+                const response = await fetch('JSON/proyectos.json');
+                const projectsData = await response.json();
+                const projectsContainer = document.getElementById('projects-gallery');
+                
+                // Verificar si hay proyectos
+                if (projectsData.proyectos && projectsData.proyectos.length > 0) {
+                    projectsData.proyectos.forEach(project => {
+                        const projectCard = document.createElement('div');
+                        projectCard.className = 'project-card';
+                        projectCard.tabIndex = 0;
+                        projectCard.innerHTML = `
+                            <img data-src="${project.portada}" alt="Proyecto ${project.titulo} - ${project.ubicacion}" class="lazy">
+                            <div class="project-overlay">
+                                <h3>${project.titulo}</h3>
+                                <p>${project.ubicacion}</p>
+                            </div>
+                        `;
+                        
+                        projectCard.addEventListener('click', () => openProjectModal(project));
+                        projectCard.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                openProjectModal(project);
+                            }
+                        });
+                        projectsContainer.appendChild(projectCard);
+                    });
+                } else {
+                    // Mostrar estado vacío si no hay proyectos
+                    projectsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h2 class="empty-title">No hay proyectos disponibles</h2>
+                            <p class="empty-description">Actualmente no tenemos proyectos para mostrar. Estamos trabajando en nuevos trabajos para inspirarte.</p>
+                        </div>
+                    `;
+                }
+                
+                lazyLoadImages();
+            } catch (error) {
+                console.error('Error al cargar los proyectos:', error);
+                // Mostrar estado de error si falla la carga
+                document.getElementById('projects-gallery').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2 class="empty-title">Error al cargar los proyectos</h2>
+                        <p class="empty-description">No pudimos cargar la información de proyectos. Por favor, intenta nuevamente más tarde.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar datos de inspiración desde inspiracion.json
+        async function loadInspiration() {
+            try {
+                const response = await fetch('JSON/inspiracion.json');
+                const inspirationData = await response.json();
+                const inspirationContainer = document.getElementById('inspiration-gallery');
+                
+                // Verificar si hay elementos de inspiración
+                if (inspirationData.inspiracion && inspirationData.inspiracion.length > 0) {
+                    inspirationData.inspiracion.forEach(item => {
+                        const inspirationItem = document.createElement('div');
+                        inspirationItem.className = 'inspiration-item';
+                        inspirationItem.tabIndex = 0;
+                        inspirationItem.innerHTML = `
+                            <img data-src="${item.portada}" alt="Inspiración ${item.titulo} - Gallos Mármol" class="lazy">
+                            <div class="inspiration-overlay">
+                                <h3>${item.titulo}</h3>
+                            </div>
+                        `;
+                        
+                        inspirationItem.addEventListener('click', () => openInspirationModal(item));
+                        inspirationItem.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                openInspirationModal(item);
+                            }
+                        });
+                        inspirationContainer.appendChild(inspirationItem);
+                    });
+                } else {
+                    // Mostrar estado vacío si no hay inspiración
+                    inspirationContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h2 class="empty-title">No hay ideas de inspiración</h2>
+                            <p class="empty-description">Actualmente no tenemos ideas de inspiración disponibles. Estamos trabajando en nuevo contenido para ayudarte con tus proyectos.</p>
+                        </div>
+                    `;
+                }
+                
+                lazyLoadImages();
+            } catch (error) {
+                console.error('Error al cargar la inspiración:', error);
+                // Mostrar estado de error si falla la carga
+                document.getElementById('inspiration-gallery').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2 class="empty-title">Error al cargar la inspiración</h2>
+                        <p class="empty-description">No pudimos cargar las ideas de inspiración. Por favor, intenta nuevamente más tarde.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Lazy loading para imágenes
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('img.lazy');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('lazy-loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px 100px 0px'
+            });
+
+            lazyImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Abrir modal de promoción
+        function openPromotionModal(promotion) {
+            const modal = document.getElementById('promotion-modal');
+            const content = document.getElementById('promotion-detail-content');
+            
+            let productsHtml = '';
+            promotion.productos.slice(0, 5).forEach(producto => {
+                productsHtml += `
+                    <div class="product-item">
+                        <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
+                        <div>
+                            <h4>${producto.nombre}</h4>
+                            <a href="${producto.enlace}" class="btn">Ver producto</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = `
+                <div class="promotion-detail">
+                    <div class="promotion-image-container">
+                        <img src="${promotion.imagen}" alt="${promotion.titulo}" class="promotion-main-image">
+                    </div>
+                    <div class="promotion-products">
+                        <h3>Productos en promoción</h3>
+                        ${productsHtml}
+                        ${promotion.productos.length > 5 ? '<p>+ ' + (promotion.productos.length - 5) + ' productos más en esta promoción</p>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            document.querySelector('#promotion-modal .close-modal').addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Abrir modal de proyecto
+        function openProjectModal(project) {
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('project-detail-content');
+            
+            let materialsHtml = '';
+            project.productos.slice(0, 5).forEach(product => {
+                materialsHtml += `
+                    <div class="project-material-item">
+                        <img src="${product.foto}" alt="${product.descripcion}" loading="lazy">
+                        <div>
+                            <h4>${product.descripcion}</h4>
+                            <a href="${product.enlace}" class="btn">Ver detalles</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            let carouselHtml = `
+                <div class="project-gallery-container">
+                    <div class="carousel" id="project-carousel-${project.id}">
+                        <div class="carousel-inner">
+            `;
+            
+            project.galeria.forEach((image, index) => {
+                carouselHtml += `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${image}" alt="Proyecto ${project.titulo} - Imagen ${index + 1}" class="project-main-image" loading="lazy">
+                    </div>
+                `;
+            });
+            
+            carouselHtml += `
+                        </div>
+                        <button class="carousel-control prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-control next"><i class="fas fa-chevron-right"></i></button>
+                        <div class="carousel-indicators">
+            `;
+            
+            project.galeria.forEach((_, index) => {
+                carouselHtml += `<button class="carousel-indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`;
+            });
+            
+            carouselHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = `
+                <div class="project-detail">
+                    ${carouselHtml}
+                    <div class="project-info">
+                        <div>
+                            <h2>${project.titulo}</h2>
+                            <p><strong>Lugar:</strong> ${project.ubicacion}</p>
+                            ${project.descripcion ? `<div class="project-description"><p>${project.descripcion}</p></div>` : ''}
+                        </div>
+                        <div class="project-materials">
+                            <h3>Materiales utilizados</h3>
+                            ${materialsHtml}
+                            ${project.productos.length > 5 ? '<p>+ ' + (project.productos.length - 5) + ' materiales más en este proyecto</p>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Configurar el carrusel para este modal
+            setupCarousel(`project-carousel-${project.id}`);
+            
+            document.querySelector('#project-modal .close-modal').addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Abrir modal de inspiración (versión mejorada)
+        function openInspirationModal(item) {
+            const modal = document.getElementById('inspiration-modal');
+            const content = document.getElementById('inspiration-detail-content');
+            
+            let materialsHtml = '';
+            item.productos.slice(0, 5).forEach(producto => {
+                materialsHtml += `
+                    <div class="inspiration-material-item">
+                        <img src="${producto.foto}" alt="${producto.descripcion}" loading="lazy">
+                        <div>
+                            <h4>${producto.descripcion}</h4>
+                            <a href="${producto.enlace}" class="btn">Ver</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            let carouselHtml = `
+                <div class="inspiration-gallery-container">
+                    <div class="carousel" id="inspiration-carousel-${item.id}">
+                        <div class="carousel-inner">
+            `;
+            
+            item.galeria.forEach((image, index) => {
+                carouselHtml += `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${image}" alt="Inspiración ${item.titulo} - Imagen ${index + 1}" class="inspiration-main-image" loading="lazy">
+                    </div>
+                `;
+            });
+            
+            carouselHtml += `
+                        </div>
+                        <button class="carousel-control prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-control next"><i class="fas fa-chevron-right"></i></button>
+                        <div class="carousel-indicators">
+            `;
+            
+            item.galeria.forEach((_, index) => {
+                carouselHtml += `<button class="carousel-indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`;
+            });
+            
+            carouselHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = `
+                <div class="inspiration-detail">
+                    ${carouselHtml}
+                    <div class="inspiration-info">
+                        <div>
+                            <h2>${item.titulo}</h2>
+                        </div>
+                        <div class="inspiration-materials">
+                            <h3>Materiales utilizados</h3>
+                            ${materialsHtml}
+                            ${item.productos.length > 5 ? '<p>+ ' + (item.productos.length - 5) + ' materiales más en esta idea</p>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Configurar el carrusel para este modal
+            setupCarousel(`inspiration-carousel-${item.id}`);
+            
+            document.querySelector('#inspiration-modal .close-modal').addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Configurar funcionalidad del carrusel - Versión mejorada
+        function setupCarousel(carouselId) {
+            const carousel = document.getElementById(carouselId);
+            if (!carousel) return;
+            
+            const carouselInner = carousel.querySelector('.carousel-inner');
+            const carouselItems = carousel.querySelectorAll('.carousel-item');
+            const indicators = carousel.querySelectorAll('.carousel-indicator');
+            const prevBtn = carousel.querySelector('.carousel-control.prev');
+            const nextBtn = carousel.querySelector('.carousel-control.next');
+            
+            // Inicializar estado del carrusel
+            if (!carouselState[carouselId]) {
+                carouselState[carouselId] = {
+                    currentIndex: 0,
+                    interval: null,
+                    touchStartX: 0,
+                    touchEndX: 0
+                };
+            }
+            
+            const state = carouselState[carouselId];
+            
+            // Mostrar slide actual
+            function showSlide(index) {
+                // Validar índice
+                if (index < 0) index = carouselItems.length - 1;
+                if (index >= carouselItems.length) index = 0;
+                
+                // Ocultar todos los slides
+                carouselItems.forEach(item => item.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                // Mostrar slide actual
+                carouselItems[index].classList.add('active');
+                indicators[index].classList.add('active');
+                
+                // Actualizar estado
+                state.currentIndex = index;
+            }
+            
+            // Slide siguiente
+            function nextSlide() {
+                showSlide(state.currentIndex + 1);
+            }
+            
+            // Slide anterior
+            function prevSlide() {
+                showSlide(state.currentIndex - 1);
+            }
+            
+            // Event listeners para controles
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Event listeners para indicadores
+            indicators.forEach(indicator => {
+                indicator.addEventListener('click', () => {
+                    showSlide(parseInt(indicator.dataset.index));
+                });
+            });
+            
+            // Navegación por teclado
+            carousel.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            });
+            
+            // Touch events para dispositivos móviles
+            carouselInner.addEventListener('touchstart', (e) => {
+                state.touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            carouselInner.addEventListener('touchend', (e) => {
+                state.touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+            
+            function handleSwipe() {
+                const difference = state.touchStartX - state.touchEndX;
+                if (difference > 50) { // Deslizamiento a la izquierda
+                    nextSlide();
+                } else if (difference < -50) { // Deslizamiento a la derecha
+                    prevSlide();
+                }
+            }
+            
+            // Auto-avance
+            function startAutoSlide() {
+                state.interval = setInterval(nextSlide, 5000);
+            }
+            
+            function stopAutoSlide() {
+                clearInterval(state.interval);
+            }
+            
+            // Iniciar auto-avance
+            startAutoSlide();
+            
+            // Pausar al interactuar
+            carousel.addEventListener('mouseenter', stopAutoSlide);
+            carousel.addEventListener('mouseleave', startAutoSlide);
+            carousel.addEventListener('touchstart', stopAutoSlide);
+            carousel.addEventListener('touchend', startAutoSlide);
+            
+            // Mostrar primer slide
+            showSlide(0);
+        }
+
+        // Inicializar la página
         document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
-            const checkVisibility = () => {
-                sections.forEach(section => {
-                    const sectionTop = section.getBoundingClientRect().top;
-                    if (sectionTop < window.innerHeight * 0.8) {
-                        section.classList.add('visible');
+            loadPromotions();
+            loadProjects();
+            loadInspiration();
+            
+            // Animación al hacer scroll
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.about-image, .promotion-card, .project-card, .store-card, .inspiration-item');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
                     }
                 });
             };
-            window.addEventListener('scroll', checkVisibility);
-            checkVisibility(); // Verificar al cargar la página
-        });
 
-        // Botón Flotante General para Redes Sociales
-        const socialToggle = document.getElementById('social-toggle');
-        const socialFloating = document.querySelector('.social-floating');
-        socialToggle.addEventListener('click', () => {
-            socialFloating.classList.toggle('visible');
-        });
+            document.querySelectorAll('.about-image, .promotion-card, .project-card, .store-card, .inspiration-item').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(50px)';
+                element.style.transition = 'all 0.5s ease';
+            });
 
-        // Cargar promociones desde JSON
-        fetch('JSON/promociones.json')
-            .then(response => response.json())
-            .then(data => {
-                const promoContainer = document.getElementById('promo-container');
-                data.promociones.forEach(promo => {
-                    const promoCard = `
-                        <div class="promo-card">
-                            <img src="${promo.imagen}" alt="${promo.titulo}" loading="lazy">
-                            <h3>${promo.titulo}</h3>
-                            <p>${promo.descripcion}</p>
-                        </div>
-                    `;
-                    promoContainer.innerHTML += promoCard;
+            window.addEventListener('scroll', animateOnScroll);
+            window.addEventListener('load', animateOnScroll);
+
+            // Scroll suave para enlaces internos
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    if (targetId === '#inicio') {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                        return;
+                    }
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
                 });
-            })
-            .catch(error => console.error('Error cargando promociones:', error));
+            });
 
-        // Cargar sedes desde JSON
-        fetch('JSON/sedes.json')
-            .then(response => response.json())
-            .then(data => {
-                const sedesContainer = document.getElementById('sedes-container');
-                data.sedes.forEach(sede => {
-                    const sedeCard = `
-                        <div class="sede-card">
-                            <img src="${sede.imagen}" alt="${sede.nombre}" loading="lazy">
-                            <h3>${sede.nombre}</h3>
-                            <p>${sede.direccion}</p>
-                            <a href="${sede.maps}" class="btn-ubicación" target="_blank">Ubicación</a>
-                        </div>
-                    `;
-                    sedesContainer.innerHTML += sedeCard;
-                });
-            })
-            .catch(error => console.error('Error cargando sedes:', error));
-
-        // Cargar números de WhatsApp desde JSON
-        let whatsappNumbers = [];
-        let assignedNumbers = JSON.parse(localStorage.getItem("assignedNumbers")) || [];
-
-        fetch('JSON/whatsapp.json')
-            .then(response => response.json())
-            .then(data => {
-                whatsappNumbers = data.numeros;
-            })
-            .catch(error => console.error('Error cargando números de WhatsApp:', error));
-
-        // Funcionalidad del botón de WhatsApp
-        const whatsappButton = document.getElementById('whatsapp-button');
-        const modal = document.getElementById('confirmation-modal');
-        const acceptButton = modal.querySelector('.accept');
-        const cancelButton = modal.querySelector('.cancel');
-
-        const message = encodeURIComponent("Hola, estoy interesado(a) en obtener más información sobre sus productos.");
-
-        function getRandomWhatsAppNumber() {
-            const availableNumbers = whatsappNumbers.filter(num => !assignedNumbers.includes(num));
-
-            if (availableNumbers.length === 0) {
-                assignedNumbers = [];
-                return whatsappNumbers[0]; // Reinicia el ciclo
-            }
-
-            const selectedNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
-            assignedNumbers.push(selectedNumber);
-            localStorage.setItem("assignedNumbers", JSON.stringify(assignedNumbers));
-
-            return selectedNumber;
-        }
-
-        whatsappButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            modal.style.display = 'flex';
-        });
-
-        acceptButton.addEventListener('click', () => {
-            const nextNumber = getRandomWhatsAppNumber();
-            if (nextNumber) {
-                const whatsappLink = `https://wa.me/${nextNumber}?text=${message}`;
-                window.open(whatsappLink, '_blank');
-            } else {
-                alert("No hay asesores disponibles en este momento. Inténtalo más tarde.");
-            }
-            modal.style.display = 'none';
-        });
-
-        cancelButton.addEventListener('click', () => {
-            modal.style.display = 'none';
+            // Cambiar header al hacer scroll
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                header.classList.toggle('sticky', window.scrollY > 0);
+            });
         });
     </script>
 </body>
