@@ -1,0 +1,27 @@
+[
+    {  
+      "nombre": "Hugo", 
+      "apellidos": "Vidal", 
+      "celular": "51954306470" 
+    },
+    { 
+      "nombre": "Luis", 
+      "apellidos": "Torres", 
+      "celular": "51940368184" 
+    },
+    { 
+      "nombre": "Angie", 
+      "apellidos": "Ardian", 
+      "celular": "51964345293" 
+    },
+    { 
+      "nombre": "Katerin", 
+      "apellidos": "Chafloque", 
+      "celular": "51969337434" 
+    },
+    { 
+      "nombre": "Elder", 
+      "apellidos": "Chavarry", 
+      "celular": "51954308253" 
+    }       
+]
