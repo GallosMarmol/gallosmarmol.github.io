@@ -1,0 +1,2378 @@
+[
+  {
+    "codigo": "BBHM1KRA05201",
+    "precio": 69.9,
+    "stock": 66.9,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBHM2KRA05201",
+    "precio": 49.91,
+    "stock": 737.98,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1167Z181",
+    "precio": 75.33,
+    "stock": 26.51,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1CRE16322",
+    "precio": 134.52,
+    "stock": 31.05,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPA10102",
+    "precio": 34.9,
+    "stock": 82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPA20302",
+    "precio": 53.1,
+    "stock": 691.14,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPC10202",
+    "precio": 53.1,
+    "stock": 1312.52,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPC18182",
+    "precio": 134.52,
+    "stock": 41.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPG04046",
+    "precio": 69.9,
+    "stock": 99,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1PPG12122",
+    "precio": 149,
+    "stock": 52.92,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR1RUC20541",
+    "precio": 69.9,
+    "stock": 32.41,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BBRR2STM04046",
+    "precio": 69.9,
+    "stock": 49.34,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BEIR1RTD18362",
+    "precio": 141.6,
+    "stock": 46.82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BEIR1RTD20501",
+    "precio": 118,
+    "stock": 45.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB118518362",
+    "precio": 141.6,
+    "stock": 86.96,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1ABE30601",
+    "precio": 132.14,
+    "stock": 135.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1ANG18361",
+    "precio": 152.1,
+    "stock": 83.97,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1ATH18361",
+    "precio": 152.1,
+    "stock": 41.56,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1CRX12121",
+    "precio": 89.95,
+    "stock": 30.66,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1DOR18361",
+    "precio": 152.1,
+    "stock": 22.99,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1PDX18361",
+    "precio": 123.9,
+    "stock": 29.26,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1PGX12241",
+    "precio": 116.96,
+    "stock": 97.91,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1ROM16241",
+    "precio": 152.1,
+    "stock": 26.76,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RTD12241",
+    "precio": 149.9,
+    "stock": 432.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RTD15601",
+    "precio": 139.91,
+    "stock": 379.17,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RTD30601",
+    "precio": 149.9,
+    "stock": 1689.66,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RUA12241",
+    "precio": 139.91,
+    "stock": 498.15,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RUA30601",
+    "precio": 139.91,
+    "stock": 324,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RUC18361",
+    "precio": 139.76,
+    "stock": 74.25,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1RUX18181",
+    "precio": 118.74,
+    "stock": 27.59,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1SOM12121",
+    "precio": 101.65,
+    "stock": 22.43,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1TRX12121",
+    "precio": 126.99,
+    "stock": 27.77,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1TRX12241",
+    "precio": 139.91,
+    "stock": 2435.63,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1TRX18181",
+    "precio": 139.91,
+    "stock": 1150.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1TRX18361",
+    "precio": 152.11,
+    "stock": 1070.66,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB1YUX24241",
+    "precio": 114.34,
+    "stock": 51.28,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2ADT18181",
+    "precio": 116.6,
+    "stock": 81.94,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2FIO12241",
+    "precio": 101.65,
+    "stock": 1965.12,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2FIO18181",
+    "precio": 101.65,
+    "stock": 955.27,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2FIO18361",
+    "precio": 136.11,
+    "stock": 1211.52,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2FIO24241",
+    "precio": 114.34,
+    "stock": 472.32,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2PDR18181",
+    "precio": 89.68,
+    "stock": 41.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2PEO18361",
+    "precio": 126.76,
+    "stock": 30.1,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2RUC08361",
+    "precio": 99.9,
+    "stock": 71.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2RUC12241",
+    "precio": 101.65,
+    "stock": 1398.93,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFB2RUC15601",
+    "precio": 132.14,
+    "stock": 151.2,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFM1NOC04041",
+    "precio": 69.9,
+    "stock": 39.95,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFM1PPGV1151",
+    "precio": 69.9,
+    "stock": 27,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1CLS24481",
+    "precio": 182.95,
+    "stock": 89.18,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1FIO24361",
+    "precio": 164.29,
+    "stock": 40.45,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1KCO3636U",
+    "precio": 141.6,
+    "stock": 36.77,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1KMLA7361",
+    "precio": 171.51,
+    "stock": 25.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1MMZ12241",
+    "precio": 120.1,
+    "stock": 110.93,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1PPC04081",
+    "precio": 69.9,
+    "stock": 41.29,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1PPG04041",
+    "precio": 69.9,
+    "stock": 9.1,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1PPN24241",
+    "precio": 100.89,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RTD08482",
+    "precio": 99.9,
+    "stock": 37.9,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RTD12121",
+    "precio": 134.06,
+    "stock": 33.26,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RTD1836A12",
+    "precio": 141.6,
+    "stock": 22.56,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RTD30502",
+    "precio": 123.97,
+    "stock": 32.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RTD30602",
+    "precio": 123.9,
+    "stock": 1167.66,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RUC10101",
+    "precio": 69.9,
+    "stock": 22.22,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RUC18241",
+    "precio": 69.9,
+    "stock": 27.87,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1RUX24481",
+    "precio": 147.54,
+    "stock": 5.23,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1STC24481",
+    "precio": 185.53,
+    "stock": 44.59,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1STM06061",
+    "precio": 80.75,
+    "stock": 22.77,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1TBGX121",
+    "precio": 64.57,
+    "stock": 29.37,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1TRX24481",
+    "precio": 164.29,
+    "stock": 2516.37,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR1YUO24481",
+    "precio": 164.29,
+    "stock": 69.86,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR218518482",
+    "precio": 124.25,
+    "stock": 61.87,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2FIO24242",
+    "precio": 119.48,
+    "stock": 41.62,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2FIO24481",
+    "precio": 139.76,
+    "stock": 4868.88,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2FIO60A631",
+    "precio": 120.1,
+    "stock": 86.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2ITD24361",
+    "precio": 171.51,
+    "stock": 25.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2PDR59AB142",
+    "precio": 99.9,
+    "stock": 37.91,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2RUC18361",
+    "precio": 120.1,
+    "stock": 41.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHFR2RUC24482",
+    "precio": 100.3,
+    "stock": 200.67,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BHUB1STM12241",
+    "precio": 132.14,
+    "stock": 25.45,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAD1SOM1624P",
+    "precio": 147.57,
+    "stock": 30.47,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1CVJ16241",
+    "precio": 178.72,
+    "stock": 29.72,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1KRW16241",
+    "precio": 152.1,
+    "stock": 34.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1PPC0404P",
+    "precio": 69.9,
+    "stock": 59.87,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1PPC08161",
+    "precio": 69.9,
+    "stock": 66.89,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1PPC12A72",
+    "precio": 69.9,
+    "stock": 31.59,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1PPC16161",
+    "precio": 152.46,
+    "stock": 48.89,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1PPC20301",
+    "precio": 69.9,
+    "stock": 35.88,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1RTD24481",
+    "precio": 185.53,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1RUA40A631",
+    "precio": 150,
+    "stock": 82.56,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1RUC12A71",
+    "precio": 149.9,
+    "stock": 39.46,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1STM0606P",
+    "precio": 80.75,
+    "stock": 32.59,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1STM0808P",
+    "precio": 150.99,
+    "stock": 49.55,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1STM0816P",
+    "precio": 150.99,
+    "stock": 92.49,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1TRX16161",
+    "precio": 132.14,
+    "stock": 162.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1TRX16241",
+    "precio": 143.67,
+    "stock": 59.46,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1TRX18361",
+    "precio": 143.67,
+    "stock": 41.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR1TUS16241",
+    "precio": 143.67,
+    "stock": 53.26,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR2PPC30301",
+    "precio": 69.9,
+    "stock": 73.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPAR2PPG0408P",
+    "precio": 34.9,
+    "stock": 81.26,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1D2324241",
+    "precio": 100.89,
+    "stock": 33.82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1PEO08361",
+    "precio": 143.67,
+    "stock": 87.33,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RTD12241",
+    "precio": 149.9,
+    "stock": 494.24,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RTD18361",
+    "precio": 167.71,
+    "stock": 70.23,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RUC12241",
+    "precio": 149.9,
+    "stock": 567.18,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RUX12241",
+    "precio": 118.74,
+    "stock": 406.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RUX18361",
+    "precio": 141.6,
+    "stock": 58.01,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1RUX18362",
+    "precio": 141.6,
+    "stock": 41.82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB1TRX12121",
+    "precio": 126.99,
+    "stock": 65.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB2FIO24241",
+    "precio": 100.89,
+    "stock": 11.49,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB2PDR18361",
+    "precio": 120.1,
+    "stock": 31.35,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB2RUC08361",
+    "precio": 99.9,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFB2RUC18361",
+    "precio": 120.1,
+    "stock": 41.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR1CRX03061",
+    "precio": 71.25,
+    "stock": 58.7,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR1RTD12242",
+    "precio": 120.1,
+    "stock": 74.32,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR1RTD18362",
+    "precio": 200.6,
+    "stock": 250.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR2CRX03061",
+    "precio": 80.75,
+    "stock": 319.23,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR2RUC12242",
+    "precio": 99.9,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPFR2RUC15601",
+    "precio": 132.14,
+    "stock": 16.56,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM1MIX15151",
+    "precio": 34.9,
+    "stock": 36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2ADT06121",
+    "precio": 34.9,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2ADT08121",
+    "precio": 75.98,
+    "stock": 915.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2KRA08081",
+    "precio": 34.9,
+    "stock": 183.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2MAR08082",
+    "precio": 34.9,
+    "stock": 58.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2MIX04081",
+    "precio": 34.9,
+    "stock": 39.6,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2MIX06061",
+    "precio": 34.9,
+    "stock": 115.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2NOC04041",
+    "precio": 54.45,
+    "stock": 929.55,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2NOC04081",
+    "precio": 34.9,
+    "stock": 77.21,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2NOC06061",
+    "precio": 34.9,
+    "stock": 5.47,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2NOC0808P",
+    "precio": 34.9,
+    "stock": 18.21,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2ORE06061",
+    "precio": 34.9,
+    "stock": 36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2OSV08081",
+    "precio": 34.9,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPA0408P",
+    "precio": 34.9,
+    "stock": 253.03,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPC0404P",
+    "precio": 34.9,
+    "stock": 45.01,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPC04081",
+    "precio": 64.29,
+    "stock": 917.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPC0408P",
+    "precio": 34.9,
+    "stock": 32.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPC15151",
+    "precio": 34.9,
+    "stock": 77.63,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPC18181",
+    "precio": 34.9,
+    "stock": 31.35,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPG04041",
+    "precio": 34.9,
+    "stock": 50.38,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPG04081",
+    "precio": 34.9,
+    "stock": 78.04,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPG0408P",
+    "precio": 34.9,
+    "stock": 52.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPG06121",
+    "precio": 34.9,
+    "stock": 32.51,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2PPN15151",
+    "precio": 70.8,
+    "stock": 108,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2RUA04081",
+    "precio": 34.9,
+    "stock": 29.38,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2RUA08081",
+    "precio": 34.9,
+    "stock": 148.65,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2RUA08121",
+    "precio": 75.98,
+    "stock": 222.97,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2SOM04041",
+    "precio": 34.9,
+    "stock": 36.75,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYM2STM08081",
+    "precio": 64.29,
+    "stock": 564.42,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BPYP2PPO08121",
+    "precio": 34.9,
+    "stock": 22.29,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSAV2KRAAB11AB112",
+    "precio": 76.7,
+    "stock": 1100.6,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSAV2KRWAB11AB112",
+    "precio": 69.9,
+    "stock": 33.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM1RUC05201",
+    "precio": 69.9,
+    "stock": 78.61,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM1RUC07252",
+    "precio": 69.9,
+    "stock": 35.7,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM1STM06302",
+    "precio": 69.9,
+    "stock": 55.44,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM2FIO05202",
+    "precio": 120.1,
+    "stock": 75.2,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM2PPC05201",
+    "precio": 86.97,
+    "stock": 40.22,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBM2STM06302",
+    "precio": 69.9,
+    "stock": 68.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1FIO60A632",
+    "precio": 120.1,
+    "stock": 69.12,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1PPC04082",
+    "precio": 69.9,
+    "stock": 42.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1PPC0520P",
+    "precio": 69.9,
+    "stock": 22.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1PPC20202",
+    "precio": 69.9,
+    "stock": 80,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RTD16241",
+    "precio": 167.71,
+    "stock": 27.25,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RTD24482",
+    "precio": 177,
+    "stock": 1089.57,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RTD40601",
+    "precio": 69.9,
+    "stock": 34.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RTD40A631",
+    "precio": 120.1,
+    "stock": 123.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RTDA63042",
+    "precio": 120.1,
+    "stock": 37.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RUA24482",
+    "precio": 120.1,
+    "stock": 66.89,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RUC12361",
+    "precio": 69.9,
+    "stock": 25.09,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1RUC18362",
+    "precio": 199.13,
+    "stock": 338.62,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR1TRX18361",
+    "precio": 143.67,
+    "stock": 30.52,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR2FIO24482",
+    "precio": 101.78,
+    "stock": 3691.94,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR2PDR06202",
+    "precio": 69.9,
+    "stock": 63,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR2RUC08482",
+    "precio": 99.9,
+    "stock": 54.5,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR2RUC24482",
+    "precio": 100.3,
+    "stock": 21.55,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBR2RUCA6306Z5",
+    "precio": 99.9,
+    "stock": 68.03,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBV1MARAB11302",
+    "precio": 69.9,
+    "stock": 102.73,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBV1MARAB11602",
+    "precio": 69.9,
+    "stock": 31.71,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBV1MIXAB11AB112",
+    "precio": 69.9,
+    "stock": 23.73,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBV2MARAB11AB112",
+    "precio": 69.9,
+    "stock": 92.21,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSBV3STMAB11AB112",
+    "precio": 54.91,
+    "stock": 49.43,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1MIX04082",
+    "precio": 69.9,
+    "stock": 22.54,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1PPC02062",
+    "precio": 81.55,
+    "stock": 55.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1PPC02082",
+    "precio": 126.84,
+    "stock": 644.07,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1PPC04082",
+    "precio": 69.9,
+    "stock": 9.24,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1PPG02062",
+    "precio": 69.9,
+    "stock": 9.88,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1PPT02082",
+    "precio": 126.84,
+    "stock": 255.21,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSPR1STM02082",
+    "precio": 126.84,
+    "stock": 97.35,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BSSR1RUA30601",
+    "precio": 132.14,
+    "stock": 36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTBM1MNG0404P",
+    "precio": 69.9,
+    "stock": 22.11,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTCM1MIX0808P",
+    "precio": 150.99,
+    "stock": 57.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMM1CRX9090E",
+    "precio": 69.9,
+    "stock": 58.13,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1ATX24241",
+    "precio": 99.06,
+    "stock": 44.97,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1CVX18361",
+    "precio": 134.51,
+    "stock": 23.82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1RTD18181",
+    "precio": 118.74,
+    "stock": 10.66,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1RUX18362",
+    "precio": 141.6,
+    "stock": 40.55,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1STM04041",
+    "precio": 69.9,
+    "stock": 11.89,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1STM0606P",
+    "precio": 69.9,
+    "stock": 25.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1TMXZ18Z8",
+    "precio": 53.1,
+    "stock": 38.37,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1TRX08361",
+    "precio": 116.96,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1TRX12241",
+    "precio": 110.63,
+    "stock": 139.54,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1TRX18181",
+    "precio": 116.96,
+    "stock": 45.13,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1TRX24241",
+    "precio": 110.63,
+    "stock": 302.88,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1YUR06061",
+    "precio": 80.95,
+    "stock": 37.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1YUR15151",
+    "precio": 76.7,
+    "stock": 31.5,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR1YUX12241",
+    "precio": 101.65,
+    "stock": 76.54,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR2FIO04121",
+    "precio": 74.81,
+    "stock": 39.95,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMR2PPC16241",
+    "precio": 134.52,
+    "stock": 34.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTMY1TRX12242",
+    "precio": 156.11,
+    "stock": 83.24,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1ANZ18181",
+    "precio": 94.99,
+    "stock": 22.37,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1CVJ12241",
+    "precio": 134.52,
+    "stock": 26.6,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1IND08081",
+    "precio": 80.75,
+    "stock": 11.48,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1MIX03061",
+    "precio": 81.22,
+    "stock": 40.65,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1MIX06061",
+    "precio": 80.75,
+    "stock": 47.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1PPC06081",
+    "precio": 80.75,
+    "stock": 43.35,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1PPC0612P",
+    "precio": 84.78,
+    "stock": 54.63,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1PPC15151",
+    "precio": 69.9,
+    "stock": 74.25,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1PPG08081",
+    "precio": 80.75,
+    "stock": 74.32,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1PPG08121",
+    "precio": 84.78,
+    "stock": 82.99,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1RUA08121",
+    "precio": 101.65,
+    "stock": 37.04,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1STM0808P",
+    "precio": 150.99,
+    "stock": 87.54,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPD1STM1212P",
+    "precio": 94.99,
+    "stock": 48.77,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPM1PPC12122",
+    "precio": 94.99,
+    "stock": 11.15,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPM1STM0408P",
+    "precio": 69.9,
+    "stock": 53.27,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPR1PPG08161",
+    "precio": 69.9,
+    "stock": 97.53,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTPR1PPG20201",
+    "precio": 69.9,
+    "stock": 36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BTZR1RUC08082",
+    "precio": 69.9,
+    "stock": 30.35,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BUOR1RUC30902",
+    "precio": 118,
+    "stock": 87.48,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BVAM1MIX04041",
+    "precio": 69.9,
+    "stock": 89.19,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BVAM1MIX08121",
+    "precio": 101.65,
+    "stock": 59.46,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BVAR1167Z181",
+    "precio": 75.33,
+    "stock": 31.29,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BVAR1TCLA12121",
+    "precio": 64.57,
+    "stock": 9.14,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXBR1FIO24242",
+    "precio": 119.48,
+    "stock": 26.65,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXBR1TRXAB16AB172",
+    "precio": 116.96,
+    "stock": 40.47,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXBR2FIOAB16AB172",
+    "precio": 119.48,
+    "stock": 30.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXBR2ROM24242",
+    "precio": 102.19,
+    "stock": 27.13,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXIR1RTD20A1362",
+    "precio": 99.9,
+    "stock": 129.6,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXIR2RUC30601",
+    "precio": 89.68,
+    "stock": 72,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXIR2RUC30602",
+    "precio": 99.9,
+    "stock": 84.96,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BXIR2RUC40A631",
+    "precio": 99.9,
+    "stock": 123.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1ABT30601",
+    "precio": 88.52,
+    "stock": 72,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1RTD20A1362",
+    "precio": 99.9,
+    "stock": 194.4,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1RTD30602",
+    "precio": 177,
+    "stock": 1520.82,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1RTD40901",
+    "precio": 123.97,
+    "stock": 30.96,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1RTDAB1336A12",
+    "precio": 141.6,
+    "stock": 62.71,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR1RUC60A632",
+    "precio": 141.6,
+    "stock": 241.92,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZAR2RUC20A1362",
+    "precio": 99.9,
+    "stock": 157.2,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZBM1FIO05202",
+    "precio": 101.78,
+    "stock": 52.79,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BZXR1PPG02042",
+    "precio": 69.9,
+    "stock": 23.39,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "BDHFR1RUA2",
+    "precio": 118,
+    "stock": 7.34,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "KBRR1PPC2030A12",
+    "precio": 53.1,
+    "stock": 2682.51,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "KUOR1RTD1",
+    "precio": 118,
+    "stock": 391.43,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBK1127583",
+    "precio": 5,
+    "stock": 10.03,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBK1CDA592",
+    "precio": 5,
+    "stock": 0,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Agotado",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBO1067587",
+    "precio": 5,
+    "stock": 38.54,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBO1CAY582",
+    "precio": 5,
+    "stock": 26.17,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBO1DFY577",
+    "precio": 5,
+    "stock": 0,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBO1DFY577Q",
+    "precio": 5,
+    "stock": 5.75,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBO1FCA599",
+    "precio": 5,
+    "stock": 0,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBV1108F22",
+    "precio": 5,
+    "stock": 136.07,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBV1109F28",
+    "precio": 5,
+    "stock": 12.39,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "DTBV1109F28Q",
+    "precio": 5,
+    "stock": 0,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHCO1YUR611",
+    "precio": 2.54,
+    "stock": 0.87,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUO1FIO517",
+    "precio": 2.5,
+    "stock": 10.06,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO512",
+    "precio": 2.5,
+    "stock": 11.46,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO514",
+    "precio": 2.5,
+    "stock": 7.16,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO518",
+    "precio": 2.5,
+    "stock": 43.32,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO519",
+    "precio": 2.54,
+    "stock": 41.68,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO522",
+    "precio": 2.5,
+    "stock": 22.65,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO523",
+    "precio": 2.5,
+    "stock": 27.17,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO538",
+    "precio": 2.5,
+    "stock": 143.94,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2FIO547",
+    "precio": 2.5,
+    "stock": 82.84,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XHUR2IMP513",
+    "precio": 2.5,
+    "stock": 7.15,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "XTBO2IMP543",
+    "precio": 2.54,
+    "stock": 8.67,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "M02021HFR118712121",
+    "precio": 68.99,
+    "stock": 13.94,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MHFJ1025MM16",
+    "precio": 68.99,
+    "stock": 35.86,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MHFR1RUAMM37",
+    "precio": 68.99,
+    "stock": 10.21,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MHFR1SOMMM81",
+    "precio": 68.99,
+    "stock": 14.86,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MLMR1INVMM36",
+    "precio": 68.99,
+    "stock": 25.08,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MMM2TBK1NOC12121",
+    "precio": 68.99,
+    "stock": 28.61,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MMM80TMR118712121",
+    "precio": 68.99,
+    "stock": 21.36,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MPFR1CRVMM110",
+    "precio": 68.99,
+    "stock": 26.93,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MPFR1KRWMM80",
+    "precio": 68.99,
+    "stock": 48.24,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MPFR1STMMM80",
+    "precio": 68.99,
+    "stock": 30.3,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBK1PPTMM2",
+    "precio": 69.01,
+    "stock": 11.07,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBM1ABLMM4",
+    "precio": 68.99,
+    "stock": 41.81,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBO1PPGMM38",
+    "precio": 68.99,
+    "stock": 39.95,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1ADTMM11",
+    "precio": 68.99,
+    "stock": 28.8,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1ADTMM12",
+    "precio": 68.99,
+    "stock": 144.83,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1ANGMM17",
+    "precio": 68.99,
+    "stock": 42.74,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1ANGMM6",
+    "precio": 69.01,
+    "stock": 48.67,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1CAS02021",
+    "precio": 68.99,
+    "stock": 44.22,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1IMPMM6",
+    "precio": 68.99,
+    "stock": 20.44,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "MTBV1KRAMM10",
+    "precio": 68.99,
+    "stock": 70.6,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "JTMT1TUS12A7P",
+    "precio": 141.6,
+    "stock": 26.62,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "SPFR1ITL0909W",
+    "precio": 9.89,
+    "stock": 0,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "AAHFB1RUA08361",
+    "precio": 167.71,
+    "stock": 39.02,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "AAHFB1RUX08241",
+    "precio": 214.06,
+    "stock": 30.97,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "AAPFB1RTD08401",
+    "precio": 99.9,
+    "stock": 56.77,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Disponible",
+    "etiqueta": "Saldo de Exportación"
+  },
+  {
+    "codigo": "AAPFB1RUX08241",
+    "precio": 214.06,
+    "stock": 39.02,
+    "fechaActualizada": "03/05/2025",
+    "estado": "Stock bajo",
+    "etiqueta": "Saldo de Exportación"
+  }
+]

@@ -1,0 +1,478 @@
+[
+    {
+      "codigo": "BBHM2KRA05201",
+      "familia": "BALDOSAS",
+      "material": "CRATER",
+      "acabado": "BUSH HAMERED",
+      "medida": "20cm x 5cm x 1cm",
+      "borde": "TUMB",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BBHM2KRA05201/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BBHM2KRA05201/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BBHM2KRA05201/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BBHM2KRA05201/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BBHM2KRA05201/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "KBRR1PPC2030A12",
+      "familia": "BALDOSAS",
+      "material": "CREMA MIX",
+      "acabado": "BRUTO",
+      "medida": "30cm x 20cm x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/KBRR1PPC2030A12/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/KBRR1PPC2030A12/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/KBRR1PPC2030A12/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/KBRR1PPC2030A12/Foto_3.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BBRR1PPA20302",
+      "familia": "BALDOSAS",
+      "material": "AUTUMN",
+      "acabado": "BRUTO",
+      "medida": "30cm x 20cm x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BBRR1PPA20302/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BBRR1PPA20302/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPA20302/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPA20302/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPA20302/Foto_4.webp"        
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BBRR1PPC10202",
+      "familia": "BALDOSAS",
+      "material": "CREMA MIX",
+      "acabado": "BRUTO",
+      "medida": "20cm x 10cm x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BBRR1PPC10202/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BBRR1PPC10202/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPC10202/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPC10202/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BBRR1PPC10202/Foto_4.webp"        
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPFR1RTD18362",
+      "familia": "BALDOSAS",
+      "material": "RUMI STANDARD",
+      "acabado": "POLISHED FILLED",
+      "medida": "36″ x 18″ x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPFR1RTD18362/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPFR1RTD18362/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPFR1RTD18362/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPFR1RTD18362/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BPFR1RTD18362/Foto_4.webp"        
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BSBR1RUC18362",
+      "familia": "BALDOSAS",
+      "material": "RUMI",
+      "acabado": "SANDBLASTED",
+      "medida": "36″ x 18″ x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BSBR1RUC18362/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BSBR1RUC18362/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BSBR1RUC18362/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BSBR1RUC18362/Foto_3.webp"      
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BZAR1RTD30602",
+      "familia": "BALDOSAS",
+      "material": "RUMI STANDARD",
+      "acabado": "BRUTO 60/80/120 ESTUCADO",
+      "medida": "60cm x 30cm x 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BZAR1RTD30602/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BZAR1RTD30602/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BZAR1RTD30602/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BZAR1RTD30602/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BZAR1RTD30602/Foto_4.webp"      
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPYM2PPC04081",
+      "familia": "BALDOSAS",
+      "material": "CREMA MIX",
+      "acabado": "POMPEYA",
+      "medida": "8″ x 4″ x 1cm",
+      "borde": "TUMB",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPYM2PPC04081/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPYM2PPC04081/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPYM2PPC04081/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPYM2PPC04081/Foto_3.webp"     
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPYM2STM08081",
+      "familia": "BALDOSAS",
+      "material": "STORM",
+      "acabado": "POMPEYA",
+      "medida": "8″ x 8″ x 1cm",
+      "borde": "TUMB",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPYM2STM08081/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPYM2STM08081/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPYM2STM08081/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPYM2STM08081/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BPYM2STM08081/Foto_4.webp"   
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPYM1PPN08081",
+      "familia": "BALDOSAS",
+      "material": "NOCE",
+      "acabado": "POMPEYA",
+      "medida": "8″ x 8″ x 1cm",
+      "borde": "TUMB",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPYM1PPN08081/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPYM1PPN08081/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPYM1PPN08081/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPYM1PPN08081/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BPYM1PPN08081/Foto_4.webp"   
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPYM2ADT08121",
+      "familia": "BALDOSAS",
+      "material": "ANDINO DARK",
+      "acabado": "POMPEYA",
+      "medida": "12″ x 8″ x 1cm",
+      "borde": "TUMB",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPYM2ADT08121/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPYM2ADT08121/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPYM2ADT08121/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPYM2ADT08121/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BPYM2ADT08121/Foto_4.webp"   
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BSAV2KRAAB11AB112",
+      "familia": "BALDOSAS",
+      "material": "CRATER",
+      "acabado": "SANDBLASTED BRUSHED",
+      "medida": "19.5cm x 19.5cm x 2cm",
+      "borde": "STD",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BSAV2KRAAB11AB112/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BSAV2KRAAB11AB112/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BSAV2KRAAB11AB112/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BSAV2KRAAB11AB112/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BSAV2KRAAB11AB112/Foto_4.webp"   
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2FIO12241",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "HONED FILLED",
+      "medida": "24″ x 12″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2FIO12241/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2FIO12241/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO12241/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO12241/Foto_3.webp"  
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2RUC12241",
+      "familia": "BALDOSAS",
+      "material": "RUMI",
+      "acabado": "HONED FILLED",
+      "medida": "24″ x 12″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2RUC12241/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2RUC12241/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2RUC12241/Foto_2.webp" 
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2FIO18181",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "HONED FILLED",
+      "medida": "18″ x 18″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2FIO18181/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2FIO18181/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO18181/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO18181/Foto_3.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BSBR2FIO24482",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "SANDBLASTED",
+      "medida": "48″ x 24″ x 2cm",
+      "borde": "RECTO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BSBR2FIO24482/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BSBR2FIO24482/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BSBR2FIO24482/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BSBR2FIO24482/Foto_3.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2FIO24241",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "HONED FILLED",
+      "medida": "24″ x 24″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2FIO24241/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2FIO24241/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO24241/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO24241/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO24241/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "KUOR1RTD1",
+      "familia": "CORTE ESPECIAL",
+      "material": "RUMI STANDARD",
+      "acabado": "BRUTO 60/80 ESTUCADO",
+      "medida": "61cm x 6.7cm x 1cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/KUOR1RTD1/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/KUOR1RTD1/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/KUOR1RTD1/Foto_2.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BEIR1RTD20501",
+      "familia": "BALDOSAS",
+      "material": "RUMI STANDARD",
+      "acabado": "BRUTO 60/80 ESTUCADO",
+      "medida": "50cm x 20cm x 1cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BEIR1RTD20501/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BEIR1RTD20501/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BEIR1RTD20501/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BEIR1RTD20501/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BEIR1RTD20501/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BPFB1RUX12241",
+      "familia": "BALDOSAS",
+      "material": "RUMI X",
+      "acabado": "POLISHED FILLED",
+      "medida": "24″ X 12″ X 1cm",
+      "borde": "BISELADO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BPFB1RUX12241/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BPFB1RUX12241/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BPFB1RUX12241/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BPFB1RUX12241/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BPFB1RUX12241/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BSPR1PPC02082",
+      "familia": "BALDOSAS",
+      "material": "CREMA MIX",
+      "acabado": "SPACATTO",
+      "medida": "8″ X 2″ X 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BSPR1PPC02082/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BSPR1PPC02082/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPC02082/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPC02082/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPC02082/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BSPR1PPT02082",
+      "familia": "BALDOSAS",
+      "material": "TINTO",
+      "acabado": "SPACATTO",
+      "medida": "8″ X 2″ X 2cm",
+      "borde": "RECTO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BSPR1PPT02082/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BSPR1PPT02082/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPT02082/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPT02082/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BSPR1PPT02082/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2RUC15601",
+      "familia": "BALDOSAS",
+      "material": "RUMI",
+      "acabado": "HONED FILLED",
+      "medida": "60cm x 15cm x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2RUC15601/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2RUC15601/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2RUC15601/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB2RUC15601/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFB2RUC15601/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB2FIO18361",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "HONED FILLED",
+      "medida": "36″ x 18″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB2FIO18361/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB2FIO18361/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO18361/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO18361/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFB2FIO18361/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFR2FIO24481",
+      "familia": "BALDOSAS",
+      "material": "FIORITO",
+      "acabado": "HONED FILLED",
+      "medida": "48″ x 24″ x 1cm",
+      "borde": "RECTO",
+      "calidad": "COMERCIAL",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFR2FIO24481/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFR2FIO24481/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFR2FIO24481/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFR2FIO24481/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFR2FIO24481/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB1TRX12241",
+      "familia": "BALDOSAS",
+      "material": "TRANQUERA X",
+      "acabado": "HONED FILLED",
+      "medida": "24″ X 12″ X 1cm",
+      "borde": "BISELADO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB1TRX12241/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB1TRX12241/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX12241/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX12241/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX12241/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    },
+    {
+      "codigo": "BHFB1TRX18181",
+      "familia": "BALDOSAS",
+      "material": "TRANQUERA X",
+      "acabado": "HONED FILLED",
+      "medida": "18″ x 18″ x 1cm",
+      "borde": "BISELADO",
+      "calidad": "PRIMERA",
+      "unidadMedida": "m²",
+      "portada": "../FOTOS/PRODUCTOS/BHFB1TRX18181/Foto_1.webp",
+      "muestra": [
+        "../FOTOS/PRODUCTOS/BHFB1TRX18181/Foto_1.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX18181/Foto_2.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX18181/Foto_3.webp",
+        "../FOTOS/PRODUCTOS/BHFB1TRX18181/Foto_4.webp"
+      ],
+      "fichaTecnica": ""
+    }
+  ]
