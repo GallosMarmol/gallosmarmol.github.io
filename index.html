@@ -49,7 +49,7 @@
             background-color: #000000;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -58,6 +58,28 @@
         }
 
         .btn:hover {
+            background-color: #CB3E2C;
+            transform: translateY(-2px);
+        }
+
+        .btn2 {
+            display: inline-block;
+            padding: 7px 30px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            width: 30%;
+            align-content: center;
+        }
+
+
+        .btn2:hover {
             background-color: #CB3E2C;
             transform: translateY(-2px);
         }
@@ -119,7 +141,7 @@
             display: flex;
             align-items: center;
             text-align: center;
-            margin-top: -20px;
+            margin-top: -40px;
         }
 
         .hero-content {
@@ -774,6 +796,10 @@
             .empty-title {
                 font-size: 1.3rem;
             }
+
+            .btn2 {
+            width: 40%;
+            }
         }
 
         @media (max-width: 576px) {
@@ -808,6 +834,10 @@
             .empty-title {
                 font-size: 1.1rem;
             }
+
+            .btn2 {
+            width: 60%;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -822,7 +852,8 @@
             <div class="hero-content">
                 <h1>Transforma tus espacios con la elegancia del mármol</h1>
                 <p>En Gallos Mármol ofrecemos acabados de la más alta calidad para darle un toque de sofisticación a tu hogar o proyecto.</p>
-                <a href="HTML/producto.html" class="btn">Ver productos</a>
+                <a href="HTML/producto.html" class="btn2">Ver productos</a>
+                <a href="ARCHIVOS/CATALOGO/Catálogo 2025.pdf" target="_blank" class="btn2">Descargar Catálogo</a>
             </div>
         </div>
     </section>
