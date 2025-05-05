@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../ICONOS/Icono_6.ico">
+    <title>Detalle de Producto</title>
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #000000;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #CB3E2C;
+            transform: translateY(-2px);
+        }
+
+        /* Detalle de producto */
+        .product-detail-page {
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .product-gallery {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 15px;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .thumbnail.active, .thumbnail:hover {
+            border-color: #000000;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .product-subtitle {
+            font-size: 1.2rem;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .product-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .meta-item {
+            background-color: #f5f5f5;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            color: #CB3E2C;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Nuevos estilos para stock y fecha */
+        .product-stock-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .stock-amount {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .stock-date {
+            color: #666;
+            font-style: italic;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .favorite-btn {
+            background-color: #f5f5f5;
+        }
+
+        .favorite-btn.active {
+            background-color: #CB3E2C;
+            color: white;
+        }
+
+        .quote-btn {
+            background-color: #000000;
+            color: white;
+        }
+
+        .quote-btn:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
+        .quote-btn.active {
+            background-color: #CB3E2C;
+        }
+
+        .product-description {
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .tech-specs h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .specs-list {
+            list-style: none;
+        }
+
+        .specs-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .specs-list li:before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #000000;
+        }
+
+        .stock-status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .in-stock {
+            background-color: #d4edda;
+            color: #4CAF50;
+        }
+
+        .out-of-stock {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .low-stock {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .product-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        /* Colores para las etiquetas */
+        .badge-Nuevo {
+            background-color: #2196F3;
+        }
+        
+        .badge-Destacado {
+            background-color: #FF9800;
+        }
+        
+        .badge-Oferta {
+            background-color: #CB3E2C;
+        }
+        
+        .badge-Saldo-de-Exportación {
+            background-color: #8B7355;
+        }
+
+        /* Colores para estados */
+        .status-Disponible {
+            background-color: #4CAF50;
+        }
+        
+        .status-Agotado {
+            background-color: #CB3E2C;
+        }
+
+        .status-Stock-bajo {
+            background-color: #FF9800;
+        }
+
+        /* Productos relacionados */
+        .related-products {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            color: #000000;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #CB3E2C;
+            margin: 15px auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .product-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f3f3f3;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-image img.loaded {
+            opacity: 1;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .product-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        
+        .product-info-card {
+            padding: 15px;
+            background-color: white;
+        }
+        
+        .product-title-card {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .product-material-card {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .product-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 0.8rem;
+        }
+        
+        .spec-item {
+            background-color: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        /* Nuevos estilos para stock en cards */
+        .product-stock-card {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        
+        .stock-amount-card {
+            font-weight: 600;
+        }
+        
+        .stock-date-card {
+            font-style: italic;
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .product-price-card {
+            font-weight: 700;
+            color: #CB3E2C;
+            font-size: 1.1rem;
+        }
+        
+        .product-actions-card {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn-card {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn-card:hover {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .action-btn-card:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+        }
+        
+        /* Estilos para botones de acción */
+        .favorite-btn-card.active {
+            background-color: #CB3E2C;
+            color: white;
+        }
+        
+        .quote-btn-card.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .share-btn-card.active {
+            background-color: #25D366;
+            color: white;
+        }
+        
+        .details-btn {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            background-color: #f3f3f3;
+            border-radius: 4px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .details-btn:hover {
+            background-color: #000000;
+            color: white;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: fadeInOut 3s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-success {
+            background-color: #018005;
+        }
+
+        .toast-error {
+            background-color: #CB3E2C;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        /* Estilos para lazy loading */
+        img[data-src] {
+            background-color: #f5f5f5;
+            min-height: 100px;
+        }
+
+        img {
+            transition: opacity 0.3s ease;
+        }
+
+        img:not([src]) {
+            opacity: 0;
+        }
+
+        img[src] {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .product-detail {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-gallery {
+                grid-template-columns: 80px 1fr;
+            }
+            
+            .main-image {
+                height: 400px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-gallery {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+            }
+            
+            .thumbnail-list {
+                flex-direction: row;
+                order: 2;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .thumbnail {
+                height: 60px;
+                min-width: 60px;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Contenedor para el menú que se cargará externamente -->
+    <div id="menu-container"></div>
+
+    <!-- Detalle de Producto -->
+    <section class="product-detail-page">
+        <div class="container">
+            <div class="product-detail" id="product-detail-container">
+                <!-- Contenido dinámico -->
+            </div>
+
+            <!-- Productos relacionados -->
+            <div class="related-products" id="related-products-container">
+                <h2 class="section-title">Productos Relacionados</h2>
+                <div class="products-grid" id="related-products-grid">
+                    <!-- Productos relacionados se cargarán aquí -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script para cargar el menú -->
+    <script src="../JS/cargarMenu.js"></script>
+
+    <!-- Script específico de la página -->
+    <script>
+        // Variables globales
+        let allProducts = [];
+        let currentProduct = null;
+
+        // Obtener parámetro de URL
+        function getProductCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('codigo');
+        }
+        
+        // Mostrar notificación toast
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Eliminar toast después de la animación
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Función para carga diferida de imágenes
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            
+            // Verificar si el navegador soporta IntersectionObserver
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.onload = () => {
+                                img.classList.add('loaded');
+                            };
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(img => imageObserver.observe(img));
+            } else {
+                // Fallback para navegadores que no soportan IntersectionObserver
+                lazyImages.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.onload = () => {
+                        img.classList.add('loaded');
+                    };
+                });
+            }
+        }
+        
+        // Cargar datos del producto desde ambos JSON
+        async function loadProductDetail() {
+            const productCode = getProductCode();
+            
+            if (!productCode) {
+                window.location.href = 'productos.html';
+                return;
+            }
+            
+            try {
+                // Cargar ambos archivos JSON simultáneamente
+                const [productosResponse, preciosResponse] = await Promise.all([
+                    fetch('../JSON/productos_1.json'),
+                    fetch('../JSON/productos_2.json')
+                ]);
+                
+                if (!productosResponse.ok || !preciosResponse.ok) {
+                    throw new Error('Error al cargar los datos del producto');
+                }
+                
+                const productosData = await productosResponse.json();
+                const preciosData = await preciosResponse.json();
+                
+                // Combinar los datos de ambos JSON
+                allProducts = productosData.map(producto => {
+                    const precioInfo = preciosData.find(p => p.codigo === producto.codigo) || {};
+                    return {
+                        ...producto,
+                        precio: precioInfo.precio || 0,
+                        stock: precioInfo.stock || 0,
+                        fechaActualizada: precioInfo.fechaActualizada || '',
+                        estado: precioInfo.estado || 'Desconocido',
+                        etiqueta: precioInfo.etiqueta || ''
+                    };
+                });
+                
+                // Buscar el producto actual
+                currentProduct = allProducts.find(p => p.codigo === productCode);
+                
+                if (!currentProduct) {
+                    window.location.href = 'productos.html';
+                    return;
+                }
+                
+                displayProductDetail(currentProduct);
+                displayRelatedProducts(currentProduct);
+                setupEventListeners(currentProduct);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = 'productos.html';
+            }
+        }
+        
+        // Mostrar detalle del producto con lazy loading
+        function displayProductDetail(product) {
+            const container = document.getElementById('product-detail-container');
+            
+            // Determinar el estado del stock
+            let stockStatusClass, stockStatusText;
+            if (product.stock <= 0) {
+                stockStatusClass = "out-of-stock";
+                stockStatusText = "AGOTADO";
+                product.estado = "Agotado";
+            } else if (product.stock < 10) {
+                stockStatusClass = "low-stock";
+                stockStatusText = `STOCK BAJO`;
+                product.estado = "Stock bajo";
+            } else {
+                stockStatusClass = "in-stock";
+                stockStatusText = `DISPONIBLE`;
+                product.estado = "Disponible";
+            }
+            
+            // Crear HTML para las miniaturas con lazy loading
+            let thumbnailsHTML = '';
+            if (product.muestra && product.muestra.length > 0) {
+                product.muestra.forEach((img, index) => {
+                    thumbnailsHTML += `
+                        <img data-src="${img}" class="thumbnail ${index === 0 ? 'active' : ''}" 
+                             loading="lazy" onclick="changeMainImage('${img}', this)">
+                    `;
+                });
+            } else {
+                // Si no hay imágenes de muestra, mostrar solo la portada
+                thumbnailsHTML = `
+                    <img data-src="${product.portada}" class="thumbnail active" 
+                         loading="lazy" onclick="changeMainImage('${product.portada}', this)">
+                `;
+            }
+            
+            // Mostrar etiqueta si existe
+            const etiquetaHTML = product.etiqueta ? `
+                <div class="product-badge badge-${product.etiqueta.replace(/\s+/g, '-')}">
+                    ${product.etiqueta}
+                </div>
+            ` : '';
+            
+            // Verificar si hay ficha técnica para mostrar el botón
+            const fichaTecnicaBtn = product.fichaTecnica ? `
+                <a href="${product.fichaTecnica}" class="btn" target="_blank" style="margin-top: 20px;">
+                    <i class="fas fa-download"></i> Descargar ficha técnica
+                </a>
+            ` : '';
+            
+            container.innerHTML = `
+                <div class="product-gallery">
+                    <div class="thumbnail-list">
+                        ${thumbnailsHTML}
+                    </div>
+                    <img data-src="${product.portada}" class="main-image" id="main-image" loading="lazy">
+                </div>
+                
+                <div class="product-info">
+                    <h1 class="product-title">${product.familia}</h1>
+                    <h2 class="product-subtitle">${product.material} ${product.acabado}</h2>
+                    
+                    ${etiquetaHTML}
+                    <div class="stock-status ${stockStatusClass}">${stockStatusText}</div>
+                    
+                    <div class="product-stock-info">
+                        <span class="stock-amount">Stock: ${product.stock} unidades</span>
+                        <span class="stock-date">Actualizado: ${product.fechaActualizada}</span>
+                    </div>
+                    
+                    <div class="product-price">S/. ${product.precio.toFixed(2)} <p style="font-size: 10px;">Incluido IGV</p></div>
+                    
+                    <div class="product-actions">
+                        <button class="action-btn favorite-btn" id="favorite-btn" data-code="${product.codigo}">
+                            <i class="fas fa-heart"></i> Favorito
+                        </button>
+                        <button class="action-btn quote-btn" id="quote-btn" data-code="${product.codigo}" ${product.stock <= 0 ? 'disabled' : ''}>
+                            <i class="fas fa-file-alt"></i> ${product.stock <= 0 ? 'Producto Agotado' : 'Cotizar'}
+                        </button>
+                    </div>
+                    
+                    <div class="tech-specs">
+                        <h3>Especificaciones</h3>
+                        <ul class="specs-list">
+                            <li>Código: ${product.codigo}</li>
+                            <li>Familia: ${product.familia}</li>
+                            <li>Material: ${product.material}</li>
+                            <li>Acabado: ${product.acabado}</li>
+                            <li>Medida: ${product.medida}</li>
+                            <li>Borde: ${product.borde}</li>
+                            <li>Calidad: ${product.calidad}</li>
+                            <li>Unidad de medida: ${product.unidadMedida || 'No especificada'}</li>
+                            ${product.especificaciones ? `<li>Especificaciones adicionales: ${product.especificaciones}</li>` : ''}
+                        </ul>
+                    </div>
+                    
+                    ${fichaTecnicaBtn}
+                </div>
+            `;
+            
+            // Activar lazy loading para las imágenes
+            lazyLoadImages();
+        }
+
+        // Mostrar productos relacionados
+        function displayRelatedProducts(currentProduct) {
+            const relatedContainer = document.getElementById('related-products-grid');
+            
+            // Obtener productos de la misma familia (excluyendo el actual)
+            let relatedProducts = allProducts.filter(p => 
+                p.familia === currentProduct.familia && p.codigo !== currentProduct.codigo
+            );
+            
+            // Si no hay suficientes productos relacionados (menos de 4), complementar con productos aleatorios
+            if (relatedProducts.length < 6) {
+                const remaining = 6 - relatedProducts.length;
+                const randomProducts = allProducts
+                    .filter(p => 
+                        p.familia !== currentProduct.familia && 
+                        p.codigo !== currentProduct.codigo
+                    )
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, remaining);
+                
+                relatedProducts = [...relatedProducts, ...randomProducts];
+            }
+            
+            // Limitar a 6 productos
+            relatedProducts = relatedProducts.slice(0, 6);
+            
+            // Mostrar mensaje si no hay productos relacionados
+            if (relatedProducts.length === 0) {
+                relatedContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay productos relacionados disponibles</p>';
+                return;
+            }
+            
+            // Obtener favoritos y cotizaciones
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            let quotes = JSON.parse(localStorage.getItem('quoteList')) || [];
+            
+            // Mostrar productos relacionados
+            relatedContainer.innerHTML = relatedProducts.map(product => {
+                const isFavorite = favorites.includes(product.codigo);
+                const isInQuote = quotes.includes(product.codigo);
+                const isOutOfStock = product.stock <= 0;
+                
+                // Determinar el estado basado en el stock
+                let estado = product.estado;
+                if (product.stock <= 0) {
+                    estado = 'Agotado';
+                } else if (product.stock < 10) {
+                    estado = 'Stock bajo';
+                }
+                
+                // Clase para la etiqueta (badge)
+                const badgeClass = product.etiqueta ? `badge-${product.etiqueta.replace(/\s+/g, '-')}` : '';
+                
+                return `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img data-src="${product.portada}" alt="${product.material}">
+                            ${product.etiqueta ? `<span class="product-badge ${badgeClass}">${product.etiqueta}</span>` : ''}
+                            <span class="product-status status-${estado.replace(/\s+/g, '-')}">${estado}</span>
+                        </div>
+                        <div class="product-info-card">
+                            <h3 class="product-title-card">${product.familia}</h3>
+                            <p class="product-material-card">${product.material} ${product.acabado}</p>
+                            
+                            <div class="product-specs">
+                                <span class="spec-item">${product.medida}</span>
+                                <span class="spec-item">${product.borde}</span>
+                                <span class="spec-item">${product.calidad}</span>
+                            </div>
+                            
+                            <div class="product-stock-card">
+                                <span class="stock-amount-card">Stock: ${product.stock}</span>
+                                <span class="stock-date-card">${product.fechaActualizada}</span>
+                            </div>
+                            
+                            <div class="product-footer">
+                                <span class="product-price-card">S/. ${product.precio.toFixed(2)} <p style="font-size: 10px;">Incluido IGV</p></span>
+                                <div class="product-actions-card">
+                                    <button class="action-btn-card favorite-btn-card ${isFavorite ? 'active' : ''}" data-code="${product.codigo}">
+                                        <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn-card quote-btn-card ${isInQuote ? 'active' : ''}" data-code="${product.codigo}" ${isOutOfStock ? 'disabled' : ''}>
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="action-btn-card share-btn-card" data-code="${product.codigo}">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <a href="detalle.html?codigo=${product.codigo}" class="details-btn">Ver detalles</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Configurar event listeners para los botones de los productos relacionados
+            setupRelatedProductsEventListeners();
+            
+            // Activar lazy loading para las imágenes
+            lazyLoadImages();
+        }
+        
+        // Cambiar imagen principal
+        function changeMainImage(src, element) {
+            const mainImage = document.getElementById('main-image');
+            // Si ya está cargada diferida
+            if (mainImage.dataset.src) {
+                mainImage.src = src;
+                mainImage.removeAttribute('data-src');
+            } else {
+                mainImage.src = src;
+            }
+            
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners(product) {
+            // Botón de favoritos
+            const favoriteBtn = document.getElementById('favorite-btn');
+            if (favoriteBtn) {
+                const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                if (favorites.includes(product.codigo)) {
+                    favoriteBtn.classList.add('active');
+                    favoriteBtn.innerHTML = '<i class="fas fa-heart"></i> En favoritos';
+                }
+                
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleFavorite(favoriteBtn.dataset.code, favoriteBtn);
+                });
+            }
+            
+            // Botón para cotización (solo si no está agotado)
+            const quoteBtn = document.getElementById('quote-btn');
+            if (quoteBtn && product.stock > 0) {
+                const quoteList = JSON.parse(localStorage.getItem('quoteList')) || [];
+                if (quoteList.includes(product.codigo)) {
+                    quoteBtn.classList.add('active');
+                    quoteBtn.innerHTML = '<i class="fas fa-check"></i> En cotización';
+                }
+                
+                quoteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleQuote(quoteBtn.dataset.code, quoteBtn);
+                });
+            }
+        }
+
+        // Configurar event listeners para productos relacionados
+        function setupRelatedProductsEventListeners() {
+            // Botones de favoritos
+            document.querySelectorAll('.favorite-btn-card').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productCode = btn.dataset.code;
+                    toggleFavorite(productCode, btn);
+                });
+            });
+            
+            // Botones para cotización
+            document.querySelectorAll('.quote-btn-card').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Verificar si el producto está agotado
+                    const product = allProducts.find(p => p.codigo === btn.dataset.code);
+                    if (product && product.stock <= 0) {
+                        return;
+                    }
+                    
+                    const productCode = btn.dataset.code;
+                    toggleQuote(productCode, btn);
+                });
+            });
+            
+            // Botones para compartir por WhatsApp
+            document.querySelectorAll('.share-btn-card').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productCode = btn.dataset.code;
+                    const product = allProducts.find(p => p.codigo === productCode);
+                    
+                    if (product) {
+                        shareProductOnWhatsApp(product);
+                    }
+                });
+            });
+        }
+        
+        // Manejar favoritos
+        function toggleFavorite(productCode, btn) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            if (favorites.includes(productCode)) {
+                favorites = favorites.filter(code => code !== productCode);
+                if (btn.classList.contains('favorite-btn-card')) {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="far fa-heart"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="fas fa-heart"></i> Favorito';
+                }
+                showToast('Producto eliminado de favoritos', 'error');
+            } else {
+                favorites.push(productCode);
+                if (btn.classList.contains('favorite-btn-card')) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-heart"></i> En favoritos';
+                }
+                showToast('Producto agregado a favoritos', 'success');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        
+        // Manejar lista de cotización
+        function toggleQuote(productCode, btn) {
+            let quoteList = JSON.parse(localStorage.getItem('quoteList')) || [];
+            
+            if (quoteList.includes(productCode)) {
+                quoteList = quoteList.filter(code => code !== productCode);
+                if (btn.classList.contains('quote-btn-card')) {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="fas fa-file-alt"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="fas fa-file-alt"></i> Cotizar';
+                }
+                showToast('Producto eliminado de la cotización', 'error');
+            } else {
+                quoteList.push(productCode);
+                if (btn.classList.contains('quote-btn-card')) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-check"></i> En cotización';
+                }
+                showToast('Producto agregado a cotización', 'success');
+            }
+            
+            localStorage.setItem('quoteList', JSON.stringify(quoteList));
+        }
+
+        // Compartir producto por WhatsApp
+        function shareProductOnWhatsApp(product) {
+            const message = `¡Descubre este producto destacado!\n\n*${product.familia} - ${product.material} ${product.acabado}*\n\n` +
+                            `*Medida:* ${product.medida}\n` +
+                            `*Borde:* ${product.borde}\n` +
+                            `*Calidad:* ${product.calidad}\n` +
+                            `*Stock disponible:* ${product.stock} unidades (Actualizado: ${product.fechaActualizada})\n` +
+                            `*Precio:* S/. ${product.precio.toFixed(2)}\n\n` +
+                            `Conoce más detalles aquí: ${window.location.origin}/HTML/detalle.html?codigo=${product.codigo}`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+            showToast('Producto compartido con éxito');
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', loadProductDetail);
+        
+        // Hacer la función accesible globalmente para las miniaturas
+        window.changeMainImage = changeMainImage;
+    </script>
+</body>
+</html>

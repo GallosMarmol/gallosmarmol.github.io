@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../ICONOS/Icono_6.ico">
+    <title>Cotización</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #000000;
+            line-height: 1.6;
+            position: relative;
+            padding-bottom: 60px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .quote-page {
+            padding-bottom: 60px;
+            margin-top: -20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            color: #000000;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #CB3E2C;
+            margin: 15px auto;
+        }
+        
+        .quote-summary {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+        }
+        
+        .total-row {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #000000;
+        }
+        
+        .quote-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .quote-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .clear-quote {
+            background-color: #f5f5f5;
+            color: #000000;
+            border: 1px solid #ddd;
+        }
+        
+        .clear-quote:hover {
+            background-color: #dfdfdf;
+        }
+        
+        .request-quote {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .request-quote:hover {
+            background-color: #CB3E2C;
+        }
+        
+        .export-quote {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .export-quote:hover {
+            background-color: #CB3E2C;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .product-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            background-color: white;
+        }
+        
+        .product-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f3f3f3;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-image img.loaded {
+            opacity: 1;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-Nuevo {
+            background-color: #2196F3;
+        }
+        
+        .badge-Destacado {
+            background-color: #FF9800;
+        }
+        
+        .badge-Oferta {
+            background-color: #CB3E2C;
+        }
+        
+        .badge-Saldo-de-Exportación {
+            background-color: #8B7355;
+        }
+        
+        .product-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        
+        .status-Disponible {
+            background-color: #4CAF50;
+        }
+        
+        .status-Agotado {
+            background-color: #CB3E2C;
+        }
+
+        .status-Stock-bajo {
+            background-color: #FF9800;
+        }
+       
+        .product-info {
+            padding: 15px;
+            background-color: white;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #000000;
+        }
+        
+        .product-material {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .product-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 0.8rem;
+        }
+        
+        .spec-item {
+            background-color: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: #000000;
+        }
+
+        /* Nuevos estilos para stock y fecha */
+        .product-stock-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        
+        .stock-amount {
+            font-weight: 600;
+        }
+        
+        .stock-date {
+            font-style: italic;
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: #CB3E2C;
+            font-size: 1.1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .remove-btn:hover {
+            background-color: #CB3E2C;
+            color: white;
+        }
+
+        .details-btn {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            background-color: #f3f3f3;
+            border-radius: 4px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .details-btn:hover {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .quantity-unit {
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        /* Modales y notificaciones */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #000000;
+            text-align: center;
+        }
+        
+        .modal-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            margin: 10px auto;
+        }
+        
+        .confirm-title:after {
+            background-color: #CB3E2C;
+        }
+        
+        .whatsapp-title:after {
+            background-color: #25D366;
+        }
+        
+        .export-title:after {
+            background-color: #CB3E2C;
+        }
+        
+        .remove-title:after {
+            background-color: #CB3E2C;
+        }
+        
+        .modal-message {
+            margin-bottom: 20px;
+            color: #555;
+            text-align: center;
+        }
+        
+        .asesor-list {
+            margin-bottom: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .asesor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+        
+        .asesor-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .asesor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .asesor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .asesor-info {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .asesor-name {
+            font-weight: 600;
+            color: #000000;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .asesor-phone {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        
+        .asesor-specialty {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #CB3E2C;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-cancel {
+            background-color: #f5f5f5;
+            color: #000000;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .btn-contact {
+            background-color: #25D366;
+            color: white;
+            font-size: 1rem;
+            padding: 12px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-contact:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-accept {
+            background-color: #CB3E2C;
+            color: white;
+        }
+        
+        .btn-accept:hover {
+            background-color: #a83223;
+        }
+        
+        .btn-pdf {
+            background-color: #CB3E2C;
+            color: white;
+        }
+        
+        .btn-pdf:hover {
+            background-color: #a83223;
+        }
+        
+        .btn-image {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .btn-image:hover {
+            background-color: #0b7dda;
+        }
+        
+        .export-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .export-option-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1002;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .notification.error {
+            background-color: #CB3E2C;
+        }
+        
+        .notification.info {
+            background-color: #000000;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; bottom: 0; }
+            to { opacity: 1; bottom: 30px; }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            grid-column: 1/-1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .empty-description {
+            color: #777;
+            margin-bottom: 25px;
+        }
+        
+        .empty-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #000000;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .empty-btn:hover {
+            background-color: #CB3E2C;
+        }
+        
+        @media (max-width: 768px) {
+            .quote-actions {
+                flex-direction: column;
+            }
+            
+            .quote-btn {
+                width: 100%;
+            }
+            
+            .summary-row {
+                flex-direction: column;
+            }
+            
+            .summary-value {
+                margin-top: 5px;
+            }
+            
+            .modal-actions,
+            .export-options {
+                flex-direction: column;
+            }
+            
+            .btn,
+            .export-option-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="menu-container"></div>
+
+    <section class="quote-page">
+        <div class="container">
+            <h1 class="section-title">Cotización</h1>
+            
+            <div class="quote-summary">
+                <div class="summary-row">
+                    <span class="summary-label">Productos seleccionados:</span>
+                    <span class="summary-value" id="product-count">0</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span class="summary-label">Total:</span>
+                    <span class="summary-value" id="total">S/. 0.00</span>
+                </div>
+            </div>
+            
+            <div class="quote-actions">
+                <button class="quote-btn clear-quote" id="clearQuote">
+                    <i class="fas fa-trash-alt"></i> Vaciar Cotización
+                </button>
+                <button class="quote-btn export-quote" id="exportQuote">
+                    <i class="fas fa-file-export"></i> Exportar
+                </button>
+                <button class="quote-btn request-quote" id="requestQuote">
+                    <i class="fab fa-whatsapp"></i> Solicitar Cotización
+                </button>
+            </div>
+            
+            <div class="products-grid" id="quote-container">
+                <!-- Los productos en cotización se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de confirmación para vaciar cotización -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h2 class="modal-title confirm-title">¿Estás seguro?</h2>
+            <p class="modal-message">¿Deseas vaciar toda la cotización? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" id="cancelClear">Cancelar</button>
+                <button class="btn btn-accept" id="confirmClear">Vaciar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar producto -->
+    <div class="modal" id="removeProductModal">
+        <div class="modal-content">
+            <h2 class="modal-title remove-title">Eliminar Producto</h2>
+            <p class="modal-message">¿Estás seguro que deseas eliminar este producto de la cotización?</p>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" id="cancelRemove">Cancelar</button>
+                <button class="btn btn-accept" id="confirmRemove">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de WhatsApp - Actualizado -->
+    <div class="modal" id="whatsappModal">
+        <div class="modal-content">
+            <h2 class="modal-title whatsapp-title">Enviar Cotización</h2>
+            <p class="modal-message">Asignamos a alguien del equipo de asesores que estará pendiente de ayudarte con todo lo que necesites.</p>
+            
+            <div class="asesor-list" id="asesorList">
+                <!-- Lista de asesores se cargará aquí -->
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-cancel" id="cancelWhatsapp">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de exportación -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h2 class="modal-title export-title">Exportar Cotización</h2>
+            <div class="export-options">
+                <button class="export-option-btn btn-pdf" id="exportPdf">
+                    <i class="fas fa-file-pdf"></i> Exportar como PDF
+                </button>
+                <button class="export-option-btn btn-image" id="exportImage">
+                    <i class="fas fa-image"></i> Exportar como Imagen
+                </button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" id="cancelExport">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación -->
+    <div class="notification" id="notification"></div>
+
+    <script src="../JS/cargarMenu.js"></script>
+
+    <script>
+        // Configuración inicial
+        const { jsPDF } = window.jspdf;
+        let quoteProducts = [];
+        let allProducts = [];
+        let asesores = [];
+        let asesoresDisponibles = [];
+        let asesoresUsados = [];
+        let productToRemove = null;
+        
+        // Cargar productos y asesores
+        async function loadQuoteProducts() {
+            try {
+                // Cargar ambos archivos JSON
+                const [productosResponse, preciosResponse, asesoresResponse] = await Promise.all([
+                    fetch('../JSON/productos_1.json'),
+                    fetch('../JSON/productos_2.json'),
+                    fetch('../JSON/asesores.json')
+                ]);
+                
+                const productosData = await productosResponse.json();
+                const preciosData = await preciosResponse.json();
+                asesores = await asesoresResponse.json();
+                
+                // Combinar los datos de ambos JSON usando el código como clave
+                allProducts = productosData.map(producto => {
+                    const precioInfo = preciosData.find(p => p.codigo === producto.codigo) || {};
+                    return {
+                        ...producto,
+                        precio: precioInfo.precio || 0,
+                        stock: precioInfo.stock || 0,
+                        fechaActualizada: precioInfo.fechaActualizada || '',
+                        estado: precioInfo.estado || 'Desconocido',
+                        etiqueta: precioInfo.etiqueta || ''
+                    };
+                });
+                
+                resetAsesoresDisponibles();
+                
+                const quoteList = JSON.parse(localStorage.getItem('quoteList')) || [];
+                quoteProducts = allProducts.filter(product => quoteList.includes(product.codigo))
+                    .map(product => ({
+                        ...product,
+                        quantity: 1
+                    }));
+                
+                displayQuoteProducts();
+                calculateTotals();
+                lazyLoadImages();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Error al cargar los productos:', error);
+                showNotification('Error al cargar los productos', 'error');
+            }
+        }
+        
+        // Reiniciar lista de asesores disponibles
+        function resetAsesoresDisponibles() {
+            asesoresDisponibles = [...asesores];
+            asesoresUsados = [];
+        }
+        
+        // Obtener asesor aleatorio
+        function getAsesorAleatorio() {
+            if (asesoresDisponibles.length === 0) {
+                resetAsesoresDisponibles();
+            }
+            
+            if (asesoresDisponibles.length === 1) {
+                const asesor = asesoresDisponibles[0];
+                asesoresUsados.push(asesor);
+                asesoresDisponibles = [];
+                return asesor;
+            }
+            
+            if (asesoresDisponibles.length >= 2) {
+                const index1 = Math.floor(Math.random() * asesoresDisponibles.length);
+                let index2;
+                do {
+                    index2 = Math.floor(Math.random() * asesoresDisponibles.length);
+                } while (index2 === index1);
+                
+                const selectedIndex = Math.random() < 0.5 ? index1 : index2;
+                const asesor = asesoresDisponibles[selectedIndex];
+                asesoresUsados.push(asesor);
+                asesoresDisponibles.splice(selectedIndex, 1);
+                return asesor;
+            }
+            
+            return null;
+        }
+        
+        // Mostrar productos en la cotización
+        function displayQuoteProducts() {
+            const container = document.getElementById('quote-container');
+            
+            if (quoteProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h2 class="empty-title">Tu cotización está vacía</h2>
+                        <p class="empty-description">Agrega productos desde el catálogo para comenzar tu cotización</p>
+                        <a href="producto.html" class="empty-btn">Ver Productos</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            quoteProducts.forEach(product => {
+                // Determinar el estado basado en el stock
+                let estado = product.estado;
+                if (product.stock <= 0) {
+                    estado = 'Agotado';
+                } else if (product.stock < 10) {
+                    estado = 'Stock bajo';
+                }
+                
+                const badgeClass = product.etiqueta ? `badge-${product.etiqueta.replace(/\s+/g, '-')}` : '';
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img data-src="${product.portada}" alt="${product.material}">
+                        ${product.etiqueta ? `<span class="product-badge ${badgeClass}">${product.etiqueta}</span>` : ''}
+                        <span class="product-status status-${estado.replace(/\s+/g, '-')}">${estado}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.familia}</h3>
+                        <p class="product-material">${product.material} ${product.acabado}</p>
+                        
+                        <div class="product-specs">
+                            <span class="spec-item">${product.medida}</span>
+                            <span class="spec-item">${product.borde}</span>
+                            <span class="spec-item">${product.calidad}</span>
+                        </div>
+                        
+                        <div class="product-stock-info">
+                            <span class="stock-amount">Stock: ${product.stock} unidades</span>
+                            <span class="stock-date">Actualizado: ${product.fechaActualizada}</span>
+                        </div>
+                        
+                        <div class="quantity-control">
+                            <input type="number" min="1" value="${product.quantity}" 
+                                   class="quantity-input" data-code="${product.codigo}" 
+                                   title="Cantidad">
+                            <span class="quantity-unit">${product.unidadMedida}</span>
+                        </div>
+                        
+                        <div class="product-footer">
+                            <span class="product-price">S/. ${(product.precio * product.quantity).toFixed(2)}</span>
+                            <div class="product-actions">
+                                <button class="action-btn remove-btn" data-code="${product.codigo}" title="Eliminar de cotización">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <a href="detalle.html?codigo=${product.codigo}" class="details-btn">Ver detalles</a>
+                    </div>
+                `;
+                
+                container.appendChild(productCard);
+            });
+        }
+        
+        // Calcular totales
+        function calculateTotals() {
+            const subtotal = quoteProducts.reduce((sum, product) => sum + (product.precio * product.quantity), 0);
+            const total = subtotal;
+            document.getElementById('product-count').textContent = quoteProducts.length;
+            document.getElementById('total').textContent = `S/. ${total.toFixed(2)}`;
+        }
+        
+        // Carga diferida de imágenes
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('.product-image img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.onload = () => img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            lazyImages.forEach(img => imageObserver.observe(img));
+        }
+        
+        // Mostrar modal de WhatsApp - Actualizado
+        function showWhatsappModal() {
+            const modal = document.getElementById('whatsappModal');
+            const asesorList = document.getElementById('asesorList');
+            const asesor = getAsesorAleatorio();
+            
+            asesorList.innerHTML = '';
+            
+            if (asesor) {
+                const asesorItem = document.createElement('div');
+                asesorItem.className = 'asesor-item';
+                asesorItem.innerHTML = `
+                    <div class="asesor-avatar">
+                        <img src="${asesor.foto || 'https://via.placeholder.com/150'}" alt="${asesor.nombre}">
+                    </div>
+                    <div class="asesor-info">
+                        <div class="asesor-name">${asesor.nombre} ${asesor.apellidos}</div>
+                        <div class="asesor-phone">${asesor.celular}</div>
+                        <div class="asesor-specialty">${asesor.especialidad || 'Asesor General'}</div>
+                        <button class="btn btn-contact" data-phone="${asesor.celular}">
+                            <i class="fab fa-whatsapp"></i> Enviar Cotización
+                        </button>
+                    </div>
+                `;
+                asesorList.appendChild(asesorItem);
+                
+                const whatsappBtn = asesorItem.querySelector('.btn-contact');
+                whatsappBtn.addEventListener('click', () => sendWhatsapp(asesor.celular,asesor.nombre));
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Enviar cotización por WhatsApp
+        function sendWhatsapp(phoneNumber,nombreAsesor) {
+            const formattedPhone = phoneNumber.replace(/\D/g, '');
+            const asesorAsignado = nombreAsesor;
+            let message = `Hola ${asesorAsignado}, me interesa la siguiente cotización:\n\n`;
+            
+            quoteProducts.forEach(product => {
+                message += `- ${product.familia} ${product.material} ${product.acabado} ${product.medida} (${product.codigo}): ${product.quantity} ${product.unidadMedida} - S/. ${(product.precio * product.quantity).toFixed(2)}\n`;
+                message += `  Stock disponible: ${product.stock} unidades (Actualizado: ${product.fechaActualizada})\n\n`;
+            });
+            
+            message += `Total: S/. ${quoteProducts.reduce((sum, product) => sum + (product.precio * product.quantity), 0).toFixed(2)}\n\n`;
+            message += `Quedo a la espera de su pronta respuesta. ¡Gracias y que tenga un excelente día!`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${formattedPhone}?text=${encodedMessage}`, '_blank');
+            document.getElementById('whatsappModal').style.display = 'none';
+            showNotification('Cotización enviada por WhatsApp', 'info');
+        }
+        
+        // Mostrar modal de exportación
+        function showExportModal() {
+            if (quoteProducts.length === 0) {
+                showNotification('Agrega productos a la cotización primero', 'error');
+                return;
+            }
+            document.getElementById('exportModal').style.display = 'flex';
+        }
+        
+        // Exportar a PDF con jsPDF
+        function exportToPdf() {
+            showNotification('Generando PDF...', 'info');
+            
+            try {
+                // Configurar PDF en formato horizontal con unidades en mm
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                // Establecer fuente Arial (helvetica en jsPDF)
+                doc.setFont("times", "normal");
+                doc.setFontSize(12);
+                
+                // Margenes
+                const margin = 10;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const contentWidth = pageWidth - margin * 2;
+                
+                // Colores corporativos
+                const primaryColor = [203, 62, 44]; // #CB3E2C
+                const secondaryColor = [139, 115, 85]; // #8B7355
+                const darkColor = [0, 0, 0]; // #000000
+                const lightColor = [245, 245, 245]; // #f5f5f5
+                const textColor = [51, 51, 51]; // #333
+
+                // --- ENCABEZADO ---
+                // Fondo de encabezado
+                doc.setFillColor(...primaryColor);
+                doc.rect(0, 0, pageWidth, 15, 'F');
+                               
+                // Título
+                doc.setFontSize(16);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", 'bold');
+                doc.text("COTIZACIÓN", pageWidth / 2, 10, { align: 'center' });
+                doc.setFont(undefined, "normal");
+                
+                // Fecha y número
+                doc.setFontSize(10);
+                doc.text(`N°: ${Math.floor(1000 + Math.random() * 9000)}`, pageWidth - margin, 8, { align: 'right' });
+                doc.text(`Fecha: ${new Date().toLocaleDateString()}`, pageWidth - margin, 12, { align: 'right' });
+                
+                // --- INFORMACIÓN DE LA EMPRESA ---
+                doc.setFontSize(9);
+                doc.setTextColor(...textColor);
+                
+                // Solo datos de la empresa
+                doc.text("Empresa: Gállos Mármol S.A.", margin, 30);
+                doc.text("RUC: 20123444656", margin, 35);
+
+                // Línea separadora
+                doc.setDrawColor(...primaryColor);
+                doc.setLineWidth(0.5);
+                doc.line(margin, 45, pageWidth - margin, 45);
+                
+                // --- TABLA DE PRODUCTOS ---
+                // Encabezados de tabla
+                doc.setFillColor(...lightColor);
+                doc.rect(margin, 50, contentWidth, 8, 'F');
+                
+                doc.setFontSize(9);
+                doc.setTextColor(...darkColor);
+                doc.setFont(undefined, 'bold');
+                
+                // Columnas con más espacio
+                doc.text("Ítem", margin + 0, 55);
+                doc.text("Descripción", margin +   20, 55);
+                doc.text("Stock", margin + 120, 55, { align: 'left' });
+                doc.text("Cantidad", margin + 140, 55, { align: 'left' });
+                doc.text("P. Unit.", margin + 160, 55, { align: 'left' });
+                doc.text("Total", margin + 180, 55, { align: 'left' });
+                
+                doc.setFont(undefined, 'normal');
+                
+                // Productos
+                let y = 60;
+                const lineHeight = 6; // Altura de línea base
+                const descLineHeight = 5; // Altura adicional por línea de descripción
+
+                quoteProducts.forEach((product, index) => {
+                    if (y > pageHeight - 30) { // Salto de página si no hay espacio
+                        doc.addPage();
+                        y = 20;
+                    }
+                    
+                    // Ítem
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(7);
+                    doc.setTextColor(...textColor);
+                    doc.text((index + 1).toString(), margin + 0, y);
+                    
+                    // Descripción (multilínea)
+                    const descLines = doc.splitTextToSize(
+                        `${product.familia} ${product.material} ${product.acabado} ${product.borde} ${product.calidad} (${product.codigo})`,
+                        90
+                    );
+                    
+                    // Ajustar posición Y para descripción multilínea
+                    let currentY = y;
+                    descLines.forEach((line, i) => {
+                        doc.text(line, margin + 20, currentY);
+                        currentY += (i === 0 ? lineHeight : descLineHeight);
+                    });
+                    
+                    // Stock
+                    doc.text(`${product.stock}`, margin + 120, y, { align: 'left' });
+                    
+                    // Cantidad
+                    doc.text(`${product.quantity} ${product.unidadMedida}`, margin + 140, y, { align: 'left' });
+                    
+                    // Precio Unitario
+                    doc.text(`S/. ${product.precio.toFixed(2)}`, margin + 160, y, { align: 'left' });
+                    
+                    // Total
+                    doc.text(`S/. ${(product.precio * product.quantity).toFixed(2)}`, margin + 180, y, { align: 'left' });
+                    
+                    // Ajustar posición Y según líneas de descripción
+                    y += Math.max(lineHeight, (descLines.length - 1) * descLineHeight + lineHeight);
+                    
+                    // Línea separadora más sutil
+                    doc.setDrawColor(220, 220, 220);
+                    doc.setLineWidth(0.1);
+                    doc.line(margin, y + 2, pageWidth - margin, y + 2);
+                    
+                    y += 7; // Espacio adicional entre productos
+                });
+                
+                doc.setFont(undefined, 'bold');
+
+                // --- TOTAL --- (solo el total, sin subtotal ni IGV)
+                y = Math.max(y, pageHeight - 30);
+                
+                // Fondo de total
+                doc.setFillColor(...lightColor);
+                doc.rect(pageWidth - margin - 60, y, 60, 10, 'F');
+                
+                // Bordes
+                doc.setDrawColor(200, 200, 200);
+                doc.setLineWidth(0.3);
+                doc.rect(pageWidth - margin - 60, y, 60, 10);
+                
+                // Texto de total
+                const total = quoteProducts.reduce((sum, product) => sum + (product.precio * product.quantity), 0);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(...textColor);
+                doc.setFont(undefined, 'bold');
+                doc.text("TOTAL:", pageWidth - margin - 50, y + 7);
+                doc.text(`S/. ${total.toFixed(2)}`, pageWidth - margin - 10, y + 7, { align: 'right' });
+                doc.setFont(undefined, 'normal');
+                
+                // --- PIE DE PÁGINA SIMPLE ---
+                doc.setFontSize(8);
+                doc.setTextColor(...textColor);
+                doc.text("Gracias por su preferencia", pageWidth / 2, pageHeight - 10, { align: 'center' });
+                
+                // Guardar PDF
+                doc.save(`Cotización_${new Date().toISOString().slice(0,10)}.pdf`);
+                
+                // Cerrar modal y mostrar notificación
+                document.getElementById('exportModal').style.display = 'none';
+                showNotification('Cotización exportada como PDF', 'info');
+            } catch (error) {
+                console.error('Error al generar PDF:', error);
+                showNotification('Error al generar el PDF', 'error');
+            }
+        }
+        
+        // Exportar a imagen
+        function exportToImage() {
+            const element = document.querySelector('.quote-page .container');
+            const options = {
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true,
+                scrollY: 0
+            };
+            
+            showNotification('Generando imagen...', 'info');
+            
+            html2canvas(element, options).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Cotización_${new Date().toISOString().slice(0,10)}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                document.getElementById('exportModal').style.display = 'none';
+                showNotification('Cotización exportada como imagen', 'info');
+            }).catch(err => {
+                console.error('Error al generar imagen:', err);
+                showNotification('Error al exportar imagen', 'error');
+            });
+        }
+        
+        // Mostrar modal de confirmación para eliminar producto
+        function showRemoveProductModal(productCode) {
+            productToRemove = productCode;
+            document.getElementById('removeProductModal').style.display = 'flex';
+        }
+        
+        // Eliminar producto de la cotización después de confirmación
+        function confirmRemoveProduct() {
+            if (!productToRemove) return;
+            
+            let quoteList = JSON.parse(localStorage.getItem('quoteList')) || [];
+            quoteList = quoteList.filter(code => code !== productToRemove);
+            localStorage.setItem('quoteList', JSON.stringify(quoteList));
+            
+            quoteProducts = quoteProducts.filter(product => product.codigo !== productToRemove);
+            displayQuoteProducts();
+            calculateTotals();
+            
+            document.getElementById('removeProductModal').style.display = 'none';
+            showNotification('Producto eliminado de la cotización', 'error');
+            productToRemove = null;
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Vaciar cotización
+            document.getElementById('clearQuote').addEventListener('click', () => {
+                if (quoteProducts.length === 0) {
+                    showNotification('La cotización ya está vacía', 'info');
+                    return;
+                }
+                document.getElementById('confirmModal').style.display = 'flex';
+            });
+            
+            // Cancelar vaciado
+            document.getElementById('cancelClear').addEventListener('click', () => {
+                document.getElementById('confirmModal').style.display = 'none';
+            });
+            
+            // Confirmar vaciado
+            document.getElementById('confirmClear').addEventListener('click', () => {
+                localStorage.removeItem('quoteList');
+                quoteProducts = [];
+                displayQuoteProducts();
+                calculateTotals();
+                showNotification('Cotización vaciada', 'error');
+                document.getElementById('confirmModal').style.display = 'none';
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('confirmModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('confirmModal')) {
+                    document.getElementById('confirmModal').style.display = 'none';
+                }
+            });
+            
+            // Solicitar cotización por WhatsApp
+            document.getElementById('requestQuote').addEventListener('click', () => {
+                if (quoteProducts.length === 0) {
+                    showNotification('Agrega productos a la cotización primero', 'error');
+                    return;
+                }
+                showWhatsappModal();
+            });
+            
+            // Exportar cotización
+            document.getElementById('exportQuote').addEventListener('click', showExportModal);
+            document.getElementById('exportPdf').addEventListener('click', exportToPdf);
+            document.getElementById('exportImage').addEventListener('click', exportToImage);
+            
+            // Cancelar exportación
+            document.getElementById('cancelExport').addEventListener('click', () => {
+                document.getElementById('exportModal').style.display = 'none';
+            });
+            
+            // Cerrar modal de exportación al hacer clic fuera
+            document.getElementById('exportModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('exportModal')) {
+                    document.getElementById('exportModal').style.display = 'none';
+                }
+            });
+            
+            // Cancelar eliminación de producto
+            document.getElementById('cancelRemove').addEventListener('click', () => {
+                document.getElementById('removeProductModal').style.display = 'none';
+                productToRemove = null;
+            });
+            
+            // Confirmar eliminación de producto
+            document.getElementById('confirmRemove').addEventListener('click', confirmRemoveProduct);
+                        
+            // Cerrar modal de eliminación al hacer clic fuera
+            document.getElementById('removeProductModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('removeProductModal')) {
+                    document.getElementById('removeProductModal').style.display = 'none';
+                    productToRemove = null;
+                }
+            });
+            
+            // Cancelar WhatsApp
+            document.getElementById('cancelWhatsapp').addEventListener('click', () => {
+                document.getElementById('whatsappModal').style.display = 'none';
+            });
+            
+            // Cerrar modal de WhatsApp al hacer clic fuera
+            document.getElementById('whatsappModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('whatsappModal')) {
+                    document.getElementById('whatsappModal').style.display = 'none';
+                }
+            });
+            
+            // Eliminar producto de la cotización (con confirmación)
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-btn')) {
+                    e.preventDefault();
+                    const btn = e.target.closest('.remove-btn');
+                    const productCode = btn.dataset.code;
+                    showRemoveProductModal(productCode);
+                }
+            });
+            
+            // Actualizar cantidad de producto
+            document.addEventListener('input', (e) => {
+                if (e.target.classList.contains('quantity-input')) {
+                    const input = e.target;
+                    const productCode = input.dataset.code;
+                    const newQuantity = parseInt(input.value) || 1;
+                    
+                    if (newQuantity < 1) {
+                        input.value = 1;
+                        return;
+                    }
+                    
+                    const productIndex = quoteProducts.findIndex(p => p.codigo === productCode);
+                    if (productIndex !== -1) {
+                        quoteProducts[productIndex].quantity = newQuantity;
+                        const priceElement = input.closest('.product-card').querySelector('.product-price');
+                        const unitPrice = quoteProducts[productIndex].precio;
+                        priceElement.textContent = `S/. ${(unitPrice * newQuantity).toFixed(2)}`;
+                        calculateTotals();
+                    }
+                }
+            });
+        }
+        
+        // Mostrar notificación
+        function showNotification(message, type = '') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Inicializar al cargar la página
+        document.addEventListener('DOMContentLoaded', loadQuoteProducts);
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>
