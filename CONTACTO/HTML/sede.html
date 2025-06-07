@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conoce nuestras sedes Gallos Mármol - Showrooms especializados en mármol, granito y cuarzo. Encuentra la más cercana y visita nuestras exposiciones.">
+    <meta name="keywords" content="sucursales Gallos Mármol, tiendas de mármol, showroom Lurín, showroom Miraflores, saldos de exportación, ubicación Gallos Mármol">
+    <link rel="icon" type="image/x-icon" href="../../FOTOS/ICONOS/Icono_6.ico">
+    <title>Gallos Mármol</title>
+    <link rel="preload" href="../../FOTOS/SEDES/Sede_1.webp" as="image">
+    <link rel="preload" href="../../FOTOS/SEDES/Sede_2.webp" as="image">
+    <link rel="preload" href="../../FOTOS/SEDES/Sede_3.webp" as="image">
+    <style>
+        /* Reset y estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #000000;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            text-align: center;
+            font-size: 15px;
+            height: 45px;
+        }
+
+        .btn:hover {
+            background-color: #CB3E2C;
+            transform: translateY(-2px);
+        }
+
+        .btn-disabled {
+            background-color: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            pointer-events: none;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: #000000;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #CB3E2C;
+            margin: 15px auto;
+        }
+
+        /* Header y navegación */
+        header {
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* Hero Section */
+        .hero-sedes {
+            padding-top: 120px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../FOTOS/OTROS/Foto_1.webp') no-repeat center center/cover;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: -40px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Filtro de sedes */
+        .filtro-sedes {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: -40px auto 40px;
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .filtro-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .filtro-btn {
+            padding: 8px 20px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filtro-btn.active, .filtro-btn:hover {
+            background-color: #CB3E2C;
+            color: white;
+        }
+
+        /* Sección Tiendas - Versión mejorada */
+        .stores-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .store-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .store-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .store-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #CB3E2C;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .store-badge.disabled {
+            background-color: #666666;
+        }
+
+        .store-image {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .store-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .store-card:hover .store-image img {
+            transform: scale(1.05);
+        }
+
+        .store-info {
+            padding: 25px;
+        }
+
+        .store-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+
+        .store-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .store-info .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .store-info i {
+            margin-right: 10px;
+            color: #CB3E2C;
+            width: 20px;
+            text-align: center;
+            min-width: 20px;
+        }
+
+        .status-message {
+            color: #CB3E2C;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Mapa interactivo */
+        .mapa-container {
+            margin-top: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            position: relative;
+        }
+
+        #mapa-sedes {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mapa-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .mapa-leyenda {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .mapa-leyenda i {
+            margin-right: 10px;
+            color: #CB3E2C;
+        }
+
+        /* Horario destacado */
+        .horario-destacado {
+            background-color: #f8f8f8;
+            border-left: 4px solid #CB3E2C;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Modal de Sede */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            background: #CB3E2C;
+            color: white;
+        }
+
+        .sede-detalle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .sede-galeria {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .sede-imagen-principal {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sede-info {
+            padding: 10px 0;
+        }
+
+        .sede-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+
+        .sede-horario {
+            margin: 20px 0;
+        }
+
+        .sede-horario h4 {
+            margin-bottom: 10px;
+            color: #CB3E2C;
+        }
+
+        .sede-servicios {
+            margin-top: 20px;
+        }
+
+        .sede-servicios h4 {
+            margin-bottom: 10px;
+            color: #CB3E2C;
+        }
+
+        .servicios-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .servicio-item {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Galería de imágenes */
+        .galeria-miniaturas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .miniatura {
+            height: 80px;
+            cursor: pointer;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .miniatura:hover {
+            transform: scale(1.05);
+            border-color: #CB3E2C;
+        }
+
+        .miniatura img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Lazy loading */
+        img[data-src] {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        img.lazy-loaded {
+            opacity: 1;
+        }
+
+        /* Focus styles para navegación por teclado */
+        a:focus, button:focus, .store-card:focus {
+            outline: 3px solid rgba(203, 62, 44, 0.3);
+            outline-offset: 3px;
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(203, 62, 44, 0.1);
+            border-radius: 50%;
+            border-top-color: #CB3E2C;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state */
+        .error-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            padding: 30px;
+            background-color: #fff9f9;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(203, 62, 44, 0.1);
+            border-left: 5px solid #CB3E2C;
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .error-icon {
+            font-size: 3.5rem;
+            color: #CB3E2C;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            color: #CB3E2C;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .error-description {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-error {
+            background-color: #CB3E2C;
+            color: white;
+        }
+
+        .btn-error:hover {
+            background-color: #a83223;
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .error-contact {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .error-link {
+            color: #CB3E2C;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .error-actions {
+                flex-direction: column;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sede-detalle {
+                grid-template-columns: 1fr;
+            }
+            
+            .sede-galeria {
+                height: 300px;
+            }
+            
+            .galeria-miniaturas {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+           
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stores-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .mapa-container {
+                height: 400px;
+            }
+            
+            .mapa-overlay {
+                max-width: 200px;
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .galeria-miniaturas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filtro-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filtro-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Contenedor para el menú que se cargará externamente -->
+    <div id="menu-container"></div>
+
+    <!-- Hero Section para Sedes -->
+    <section class="hero-sedes">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Sedes</h1>
+                <p>Visita nuestros showrooms y descubre la elegancia del mármol en persona. Encuentra la sede más cercana a ti.</p>
+                <a href="#sedes" class="btn">Ver ubicaciones</a>
+                <a href="#mapa" class="btn">Ver en mapa</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtro de sedes -->
+    <div class="container">
+        <div class="filtro-sedes">
+            <div class="filtro-container">
+                <button class="filtro-btn active" data-filtro="todas">Todas las sedes</button>
+                <button class="filtro-btn" data-filtro="showroom">Showrooms</button>
+                <button class="filtro-btn" data-filtro="saldos">Saldos de Exportación</button>
+                <button class="filtro-btn" data-filtro="outlet">Outlet</button>
+                <button class="filtro-btn" data-filtro="miraflores">Miraflores</button>
+                <button class="filtro-btn" data-filtro="lurin">Lurín</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección Tiendas -->
+    <section id="sedes">
+        <div class="container">
+            <h2 class="section-title">Ubicaciones</h2>
+            <div class="stores-container" id="stores-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mapa Interactivo -->
+    <section id="mapa">
+        <div class="container">
+            <h2 class="section-title">Mapa</h2>
+            <div class="mapa-container">
+                <div id="mapa-sedes"></div>
+                <div class="mapa-overlay">
+                    <h4>Leyenda de sedes</h4>
+                    <div class="mapa-leyenda">
+                        <i class="fas fa-store"></i> Showroom Lurín
+                    </div>
+                    <div class="mapa-leyenda">
+                        <i class="fas fa-city"></i> Showroom Miraflores
+                    </div>                    
+                    <div class="mapa-leyenda">
+                        <i class="fas fa-tags"></i> Saldos de Exportación
+                    </div>
+                    <div class="mapa-leyenda">
+                        <i class="fas fa-tags"></i> Outlet
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Detalle de Sede -->
+    <div id="sede-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="sede-detalle-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para cargar el menú dinámicamente -->
+    <script src="../JS/cargarMenu.js"></script>
+
+    <!-- Script para el mapa (Leaflet) -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Script principal -->
+    <script>
+        // Variables globales
+        let mapa;
+        let marcadores = {};
+        let sedesData = [];
+
+        // Función para cargar los datos de las sedes desde el JSON externo
+        async function cargarDatosSedes() {
+            try {
+                const response = await fetch('../JSON/sedes.json');
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar los datos de las sedes');
+                }
+                const data = await response.json();
+                sedesData = data.sedes;
+                
+                // Una vez cargados los datos, renderizar las sedes
+                renderizarSedes();
+                initMap();
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+                mostrarError();
+            }
+        }
+
+        // Función para mostrar mensaje de error mejorado
+        function mostrarError() {
+            const storesList = document.getElementById('stores-list');
+            storesList.innerHTML = `
+                <div class="error-container">
+                    <div class="error-content">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3 class="error-title">¡Error al cargar los datos!</h3>
+                        <p class="error-description">No se pudieron cargar las sedes disponibles. Por favor verifica tu conexión e inténtalo nuevamente.</p>
+                        <div class="error-actions">
+                            <button class="btn btn-error" onclick="cargarDatosSedes()">
+                                <i class="fas fa-sync-alt"></i> Reintentar
+                            </button>
+                            <button class="btn btn-secondary" onclick="location.reload()">
+                                <i class="fas fa-redo"></i> Recargar página
+                            </button>
+                        </div>
+                        <p class="error-contact">Si el problema persiste, contáctanos: 
+                            <a href="mailto:soporte@gallosmarmol.com.pe" class="error-link">
+                                <i class="fas fa-envelope"></i> soporte@gallosmarmol.com.pe
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Función para renderizar las sedes en el DOM
+        function renderizarSedes() {
+            const storesList = document.getElementById('stores-list');
+          
+            storesList.innerHTML = '';
+
+            sedesData.forEach(sede => {
+                // Determinar el texto del badge según el tipo de sede
+                let badgeText = '';
+                if (sede.tipo === 'showroom') {
+                    badgeText = 'Showroom';
+                } else if (sede.tipo === 'saldos') {
+                    badgeText = 'Ofertas';
+                } else if (sede.tipo === 'outlet') {
+                    badgeText = 'Ofertas';
+                }
+
+                // Determinar si la sede está disponible
+                const noDisponible = sede.estado === "No disponible";
+                const badgeClass = noDisponible ? 'store-badge disabled' : 'store-badge';
+                const btnClass = noDisponible ? 'btn btn-disabled' : 'btn ver-detalle';
+                const btnClassMap = noDisponible ? 'btn btn-disabled' : 'btn';
+                const statusMessage = noDisponible ? '<p class="status-message">No disponible temporalmente</p>' : '';
+
+                // Crear el HTML para cada sede
+                const sedeHTML = `
+                    <div class="store-card" data-categoria="${sede.categorias.join(' ')}">
+                        ${badgeText ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
+                        <div class="store-image">
+                            <img src="${sede.foto}" alt="${sede.nombre}" loading="lazy">
+                        </div>
+                        <div class="store-info">
+                            <h3>${sede.nombre}</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> ${sede.direccion}</p>
+                            ${statusMessage}
+                            <div class="btn-container">
+                                <button class="${btnClass}" data-sede="${sede.id}" ${noDisponible ? 'disabled' : ''}>Ver más</button>
+                                <a href="https://www.google.com/maps?q=${sede.coordenadas[0]},${sede.coordenadas[1]}" target="_blank" class="${btnClassMap}" ${noDisponible ? 'onclick="return false;" style="pointer-events: none;"' : ''}>Cómo llegar</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                storesList.insertAdjacentHTML('beforeend', sedeHTML);
+            });
+
+            // Configurar los botones de ver detalles
+            setupModalButtons();
+            
+            // Configurar animaciones
+            setupAnimations();
+        }
+
+        // Inicializar el mapa
+        function initMap() {
+            // Coordenadas centradas en Lima
+            mapa = L.map('mapa-sedes').setView([-12.0464, -77.0428], 11);
+            
+            // Añadir capa de mapa base
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+            }).addTo(mapa);
+            
+            // Añadir marcadores para cada sede
+            sedesData.forEach(sede => {
+                let icono;
+                const noDisponible = sede.estado === "No disponible";
+                
+                if (sede.tipo === 'showroom' && sede.id === 'miraflores') {
+                    icono = L.divIcon({
+                        className: 'map-marker',
+                        html: `<i class="fas fa-city" style="color: ${noDisponible ? '#666666' : '#CB3E2C'}; font-size: 24px;"></i>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 24]
+                    });
+                } else if (sede.tipo === 'showroom') {
+                    icono = L.divIcon({
+                        className: 'map-marker',
+                        html: `<i class="fas fa-store" style="color: ${noDisponible ? '#666666' : '#CB3E2C'}; font-size: 24px;"></i>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 24]
+                    });            
+                } else {
+                    icono = L.divIcon({
+                        className: 'map-marker',
+                        html: `<i class="fas fa-tags" style="color: ${noDisponible ? '#666666' : '#CB3E2C'}; font-size: 24px;"></i>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 24]
+                    });
+                }
+                
+                const popupContent = noDisponible 
+                    ? `<b>${sede.nombre}</b><br>${sede.direccion}<br><p style="color: #CB3E2C; font-weight: bold;">No disponible temporalmente</p>`
+                    : `<b>${sede.nombre}</b><br>${sede.direccion}<br><button class="btn-ver-detalle" data-sede="${sede.id}" style="background: #CB3E2C; color: white; border: none; padding: 5px 10px; border-radius: 3px; margin-top: 5px; cursor: pointer;">Ver detalles</button>`;
+                
+                marcadores[sede.id] = L.marker(sede.coordenadas, { icon: icono })
+                    .addTo(mapa)
+                    .bindPopup(popupContent);
+                
+                if (!noDisponible) {
+                    marcadores[sede.id].on('popupopen', function() {
+                        document.querySelector(`.btn-ver-detalle[data-sede="${sede.id}"]`).addEventListener('click', () => {
+                            openSedeModal(sede.id);
+                        });
+                    });
+                }
+            });
+        }
+
+        // Filtrado de sedes
+        function setupFiltros() {
+            const filtroBtns = document.querySelectorAll('.filtro-btn');
+            
+            filtroBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remover clase active de todos los botones
+                    filtroBtns.forEach(b => b.classList.remove('active'));
+                    // Añadir clase active al botón clickeado
+                    btn.classList.add('active');
+                    
+                    const filtro = btn.dataset.filtro;
+                    filtrarSedes(filtro);
+                });
+            });
+        }
+
+        function filtrarSedes(filtro) {
+            const storeCards = document.querySelectorAll('.store-card');
+            
+            storeCards.forEach(card => {
+                const categorias = card.dataset.categoria.split(' ');
+                let mostrar = false;
+                
+                if (filtro === 'todas') {
+                    mostrar = true;
+                } else if (filtro === 'showroom') {
+                    mostrar = categorias.includes('showroom');
+                } else if (filtro === 'saldos') {
+                    mostrar = categorias.includes('saldos');
+                } else if (filtro === 'outlet') {
+                    mostrar = categorias.includes('outlet');   
+                } else if (filtro === 'lurin') {
+                    mostrar = categorias.includes('lurin');
+                } else if (filtro === 'miraflores') {
+                    mostrar = categorias.includes('miraflores');
+                }
+                
+                if (mostrar) {
+                    card.style.display = 'block';
+                    // Animación de aparición
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal de sede
+        function setupModalButtons() {
+            document.querySelectorAll('.ver-detalle').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const sedeId = btn.dataset.sede;
+                    const sede = sedesData.find(s => s.id === sedeId);
+                    
+                    if (sede && sede.estado !== "No disponible") {
+                        openSedeModal(sedeId);
+                    }
+                });
+            });
+        }
+
+        function openSedeModal(sedeId) {
+            const modal = document.getElementById('sede-modal');
+            const content = document.getElementById('sede-detalle-content');
+            const sede = sedesData.find(s => s.id === sedeId);
+            
+            if (!sede || sede.estado === "No disponible") return;
+            
+
+            
+            let serviciosHtml = '';
+            if (sede.servicios && sede.servicios.length > 0) {
+                serviciosHtml = `
+                    <div class="sede-servicios">
+                        <h4>Servicios disponibles:</h4>
+                        <div class="servicios-lista">
+                            ${sede.servicios.map(servicio => `
+                                <span class="servicio-item">${servicio}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = `
+                <div class="sede-detalle">
+                    <div class="sede-galeria">
+                        <img src="${sede.foto}" alt="${sede.nombre}" class="sede-imagen-principal" id="sede-imagen-principal">
+
+                    </div>
+                    <div class="sede-info">
+                        <h3>${sede.nombre}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${sede.direccion}</p>
+                        
+                        <div class="sede-horario">
+                            <h4>Horario de atención:</h4>
+                            <p>${sede.horario.semana}</p>
+                            <p>${sede.horario.sabado}</p>
+                            <p>${sede.horario.domingo}</p>
+                        </div>
+                        
+                        ${serviciosHtml}
+                        
+                        <div class="btn-container" style="margin-top: 20px;">
+                            <a href="https://www.google.com/maps?q=${sede.coordenadas[0]},${sede.coordenadas[1]}" target="_blank" class="btn">Cómo llegar</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+                        
+            // Mostrar modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Centrar el mapa en la sede seleccionada
+            mapa.setView(sede.coordenadas, 15);
+            
+            // Abrir el popup del marcador
+            if (marcadores[sedeId]) {
+                marcadores[sedeId].openPopup();
+            }
+        }
+
+        // Cerrar modal
+        function setupModalClose() {
+            document.querySelector('.close-modal').addEventListener('click', () => {
+                document.getElementById('sede-modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === document.getElementById('sede-modal')) {
+                    document.getElementById('sede-modal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('sede-modal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Lazy loading para imágenes
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                        }
+                        img.classList.add('lazy-loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px 100px 0px'
+            });
+
+            lazyImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Configurar animaciones
+        function setupAnimations() {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.store-card');
+                
+                elements.forEach((element, index) => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (elementPosition < screenPosition) {
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                            element.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            };
+
+            document.querySelectorAll('.store-card').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(50px)';
+                element.style.transition = 'all 0.5s ease';
+            });
+
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Ejecutar al cargar para elementos visibles
+        }
+
+        // Smooth scroll para enlaces internos
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configurar componentes que no dependen de los datos
+            setupFiltros();
+            setupModalClose();
+            lazyLoadImages();
+            setupSmoothScroll();
+            
+            // Cargar los datos de las sedes
+            cargarDatosSedes();
+        });
+    </script>
+</body>
+</html>
