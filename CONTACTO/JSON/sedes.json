@@ -7,7 +7,7 @@
       "horario": {
         "semana": "Lunes a Viernes: 09:00 horas - 18:00 horas",
         "sabado": "Sábados: 09:00 horas - 13:00 horas",
-        "domingo": "Domingo: No hay atención"
+        "domingo": "Domingos: No hay atención"
       },
       "servicios": [
         "Exposición completa de productos",
@@ -27,7 +27,7 @@
       "horario": {
         "semana": "Lunes a Viernes: 09:00 horas - 18:00 horas",
         "sabado": "Sábados: 09:00 horas - 13:00 horas",
-        "domingo": "Domingo: No hay atención"
+        "domingo": "Domingos: No hay atención"
       },
       "servicios": [
         "Productos con descuento",
@@ -49,7 +49,7 @@
       "horario": {
         "semana": "Lunes a Viernes: 10:00 horas - 17:00 horas",
         "sabado": "Sábados: 10:00 horas - 17:00 horas",
-        "domingo": "Domingo: 10:00 horas - 17:00 horas"
+        "domingo": "Domingos: 10:00 horas - 17:00 horas"
       },
       "servicios": [
         "Productos con descuento",
@@ -70,7 +70,7 @@
       "horario": {
         "semana": "Lunes a Viernes: 09:00 horas - 18:00 horas",
         "sabado": "Sábados: 10:00 horas - 14:00 horas",
-        "domingo": "Domingo: No hay atención"
+        "domingo": "Domingos: No hay atención"
       },
       "servicios": [
         "Exposición completa de productos",
