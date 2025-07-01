@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- METADATOS BÁSICOS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallos Mármol</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/x-icon" href="../../FOTOS/ICONOS/Icono_6.ico">
+    
+    <!-- FUENTES EXTERNAS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- ESTILOS CSS -->
+    <style>
+        /* VARIABLES CSS PARA MODOS DE COLOR */
+        :root {
+            /* Colores modo claro */
+            --bg-color-light: #f5f5f5;
+            --text-color-light: #000000;
+            --card-bg-light: #f7f6f6;
+            --card-shadow-light: rgba(0, 0, 0, 0.1);
+            --primary-color-light: #CB3E2C;
+            --secondary-color-light: #000000;
+            --accent-color-light: #25D366;
+            --error-bg-light: #fff9f9;
+            --faq-border-light: #eee;
+            --especi-color-dark: #CB3E2C;
+            --btn-color-light: #000000;
+            --especi-color-light: #CB3E2C;  
+            --btn-text-color-light: #ffffff;                        
+            
+            /* Colores modo oscuro */
+            --bg-color-dark: #121212;
+            --text-color-dark: #e0e0e0;
+            --card-bg-dark: #1e1e1e;
+            --card-shadow-dark: rgba(0, 0, 0, 0.3);
+            --primary-color-dark: #CB3E2C;
+            --secondary-color-dark: #ffffff;
+            --accent-color-dark: #25D366;
+            --error-bg-dark: #2a0f0f;
+            --faq-border-dark: #333;
+            --especi-color-dark: #ffffff;
+            --btn-color-dark: #ffffff;
+            --btn-text-color-dark: #000000;              
+        }
+
+        /* APLICAR ESTILOS SEGÚN PREFERENCIA DEL SISTEMA */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: var(--bg-color-dark);
+                --text-color: var(--text-color-dark);
+                --card-bg: var(--card-bg-dark);
+                --card-shadow: var(--card-shadow-dark);
+                --primary-color: var(--primary-color-dark);
+                --secondary-color: var(--secondary-color-dark);
+                --accent-color: var(--accent-color-dark);
+                --error-bg: var(--error-bg-dark);
+                --faq-border: var(--faq-border-dark);
+                --txtbtn-color: var(--btn-color-dark);   
+                --espbtn-color: var(--especi-color-dark);       
+                --esptxtbtn-color: var(--btn-text-color-dark);                                        
+            }
+            
+            /* Ajustes adicionales para modo oscuro */
+            .hero-contacto {
+                background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                            url('../../FOTOS/OTROS/Foto_1.webp') no-repeat center center/cover;
+            }
+            
+            .faq-section, .social-card, .modal-content, .client-type-content,
+            .whatsapp-content-new, .whatsapp-content-existing {
+                border: 1px solid #333;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: var(--bg-color-light);
+                --text-color: var(--text-color-light);
+                --card-bg: var(--card-bg-light);
+                --card-shadow: var(--card-shadow-light);
+                --primary-color: var(--primary-color-light);
+                --secondary-color: var(--secondary-color-light);
+                --accent-color: var(--accent-color-light);
+                --error-bg: var(--error-bg-light);
+                --faq-border: var(--faq-border-light);
+                --txtbtn-color: var(--btn-color-light);   
+                --espbtn-color: var(--especi-color-light);    
+                --esptxtbtn-color: var(--btn-text-color-light);                             
+            }
+            
+            .hero-contacto {
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                            url('../../FOTOS/OTROS/Foto_1.webp') no-repeat center center/cover;
+            }
+        }
+
+        /* RESET Y ESTILOS GLOBALES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            position: relative;
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* CONTENEDORES PRINCIPALES */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* ============================================= -->
+        /* ESTILOS PARA MENSAJES DE ERROR -->
+        /* ============================================= */
+        .error-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            padding: 30px;
+            background-color: var(--error-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(203, 62, 44, 0.1);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .error-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+        }
+
+        .error-title {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .error-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 14px;            
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .error-contact {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 12px;
+        }
+
+        .error-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ESTILOS PARA BOTONES */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn2 {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: var(--txtbtn-color); 
+            color: var(--esptxtbtn-color);;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            text-align: center;
+            font-size: 15px;
+            height: 45px;
+        }
+
+        .btn2:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-contact {
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 1rem;
+            padding: 9px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-contact:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }       
+
+        /* SECCIÓN HERO (ENCABEZADO) */
+        .hero-contacto {
+            padding-top: 120px;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: -40px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* SECCIÓN DE CONTACTO PRINCIPAL */
+        .contact-page {
+            padding-bottom: 60px;
+            margin-top: -20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--text-color);
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #CB3E2C;
+            margin: 15px auto;
+        }
+
+        /* TARJETAS DE REDES SOCIALES */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto 50px;
+        }
+
+        .social-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Colores específicos para cada red social */
+        .facebook-icon { background-color: #3b5998; }
+        .instagram-icon { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); }
+        .tiktok-icon { background-color: #000000; }
+        .whatsapp-icon { background-color: #25D366; }
+        .web-icon { background-color: #CB3E2C; }
+
+        .social-heading {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .social-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .social-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-decoration: none;
+            border: none;
+            color: white;
+        }
+
+        /* Botones para cada red social */
+        .facebook-btn { background-color: #3b5998; }
+        .facebook-btn:hover { background-color: #2d4373; }
+        .instagram-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4); }
+        .instagram-btn:hover { background: linear-gradient(45deg, #344fd6, #4f48d1, #7c32a9); }
+        .tiktok-btn { background-color: #000000; }
+        .tiktok-btn:hover { background-color: #333333; }
+        .whatsapp-btn { background-color: #25D366; }
+        .whatsapp-btn:hover { background-color: #128C7E; }
+        .web-btn { background-color: var(--primary-color); }
+        .web-btn:hover { background-color: #a83223; }
+
+        /* SECCIÓN DE PREGUNTAS FRECUENTES */
+        .faq-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            max-width: 1000px;
+            margin: 0 auto 50px;
+        }
+
+        .faq-title {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .faq-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #CB3E2C;
+            margin: 10px auto;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--faq-border);
+            padding-bottom: 15px;
+        }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #CB3E2C;
+        }
+
+        .faq-question:after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active:after {
+            content: '-';
+        }
+
+        .faq-answer {
+            padding: 0 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            color: var(--text-color);
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        .faq-answer p {
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        .faq-answer.show {
+            padding: 10px;
+            max-height: 500px;
+        }
+
+        /* MODAL DE WHATSAPP */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .modal-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            margin: 10px auto;
+        }
+
+        .whatsapp-title:after {
+            background-color: #CB3E2C;
+        }
+
+        .modal-message {
+            margin-bottom: 20px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        .asesor-list {
+            margin-bottom: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .asesor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid var(--faq-border);
+            transition: background-color 0.3s;
+        }
+
+        .asesor-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .asesor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(245, 245, 245, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .asesor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asesor-info {
+            flex: 1;
+            text-align: center;
+            width: 100%;
+        }
+
+        .asesor-name {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .asesor-phone {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-direction: column;
+        }
+
+        .btn-cancel {
+            background-color: rgba(245, 245, 245, 0.1);
+            color: var(--text-color);
+            border: 1px solid var(--faq-border);
+        }
+        
+        .btn-cancel:hover {
+            background-color: rgba(224, 224, 224, 0.2);
+        }
+        
+        .btn-accept {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-accept:hover {
+            background-color: #a83223;
+        }
+
+        /* MODAL DE SELECCIÓN DE TIPO DE CLIENTE */
+        .client-type-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1003;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .client-type-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .client-type-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .client-type-message {
+            margin-bottom: 25px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .client-type-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .client-type-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .client-type-btn.existing-client {
+            background-color: var(--secondary-color);
+            color: var(--esptxtbtn-color);
+
+        }
+        
+        .client-type-btn.new-client {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .client-type-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* MODAL DE WHATSAPP PARA NUEVOS CLIENTES */
+        .whatsapp-modal-new {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1004;
+            justify-content: center;
+            align-items: center;
+            overscroll-behavior: contain;
+            overflow: auto;
+            overflow-y: auto;
+            overscroll-behavior-y: contain;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .whatsapp-content-new {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            scroll-behavior: auto !important;
+        }
+        
+        .whatsapp-title-new {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .whatsapp-title-new:after {
+            background-color: #CB3E2C;
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            margin: 10px auto;
+        }
+
+        /* MODAL DE WHATSAPP PARA CLIENTES EXISTENTES */
+        .whatsapp-modal-existing {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1005;
+            justify-content: center;
+            align-items: center;
+            overscroll-behavior: contain;
+            overflow: auto;
+            overflow-y: auto;
+            overscroll-behavior-y: contain;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .whatsapp-content-existing {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            scroll-behavior: auto !important;
+        }
+        
+        .search-asesores {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .search-asesores input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--faq-border);
+            border-radius: 30px;
+            font-size: 1rem;
+            padding-left: 45px;
+            transition: all 0.3s;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .search-asesores input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.2);
+        }
+        
+        .search-asesores i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+        
+        .asesores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .asesor-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid var(--faq-border);
+        }
+        
+        .asesor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .asesor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(245, 245, 245, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 3px solid var(--secondary-color);
+        }
+        
+        .asesor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .asesor-info {
+            width: 100%;
+        }
+        
+        .asesor-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .asesor-phone {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        
+        .asesor-specialty {
+            background-color: rgba(245, 245, 245, 0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: var(--espbtn-color);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .btn-contact {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin-top: auto;
+        }
+        
+        .btn-contact:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        .btn-contact i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .whatsapp-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .whatsapp-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-cancel {
+            background-color: rgba(245, 245, 245, 0.1);
+            color: var(--text-color);
+            width: 100%;
+            border: 1px solid var(--faq-border);
+        }
+        
+        .whatsapp-cancel:hover {
+            background-color: rgba(224, 224, 224, 0.2);
+        }
+
+        /* NOTIFICACIONES */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1002;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .notification.error {
+            background-color: var(--primary-color);
+        }
+        
+        .notification.info {
+            background-color: var(--secondary-color);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; bottom: 0; }
+            to { opacity: 1; bottom: 30px; }
+        }
+
+        /* MEDIA QUERIES PARA RESPONSIVIDAD */
+        @media (max-width: 768px) {
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            /* FAQ Responsive */
+            .faq-question {
+                font-size: 1rem;
+                padding: 8px;
+            }
+
+            .faq-answer {
+                padding: 0 8px;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+
+            .faq-answer.show {
+                padding: 8px;
+            }
+
+            .asesores-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .whatsapp-content-existing,
+            .whatsapp-content-new {
+                width: 95%;
+                padding: 20px 15px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .section-title, .faq-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================= -->
+    <!-- CONTENEDOR PARA EL MENÚ (SE CARGA EXTERNAMENTE) -->
+    <!-- ============================================= -->
+    <div id="menu-container"></div>
+
+    <!-- ============================================= -->
+    <!-- SECCIÓN HERO (ENCABEZADO PRINCIPAL) -->
+    <!-- ============================================= -->
+    <section class="hero-contacto">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Contacto</h1>
+                <p>Conéctate con nosotros a través de nuestras redes sociales o escríbenos directamente por WhatsApp. Estamos aquí para ayudarte a transformar tus espacios con la elegancia del mármol.</p>
+                <a href="#contacto" class="btn2">Ver más</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- SECCIÓN PRINCIPAL DE CONTACTO -->
+    <!-- ============================================= -->
+    <section class="contact-page" id="contacto">
+        <div class="container">       
+            <!-- GRID DE TARJETAS DE CONTACTO -->
+            <div class="social-grid">
+                <!-- TARJETA 1: SITIO WEB -->
+                <div class="social-card">
+                    <div class="social-icon web-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="social-heading">Sitio Web</h3>
+                    <p class="social-description">Visita nuestro sitio web principal para conocer todos nuestros productos</p>
+                    <a href="https://gallosmarmol.com.pe/" target="_blank" class="social-btn web-btn">
+                        <i class="fas fa-external-link-alt"></i> Visitar Web
+                    </a>
+                </div>
+
+                <!-- TARJETA 2: WHATSAPP -->
+                <div class="social-card">
+                    <div class="social-icon whatsapp-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="social-heading">WhatsApp</h3>
+                    <p class="social-description">Habla directamente con nuestros asesores para resolver tus dudas</p>
+                    <button class="social-btn whatsapp-btn" id="whatsappBtn">
+                        <i class="fab fa-whatsapp"></i> Contactar Asesor
+                    </button>
+                </div>
+
+                <!-- TARJETA 3: FACEBOOK -->
+                <div class="social-card">
+                    <div class="social-icon facebook-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <h3 class="social-heading">Facebook</h3>
+                    <p class="social-description">Síguenos en Facebook para ver nuestras últimas novedades y proyectos</p>
+                    <a href="https://www.facebook.com/gallosmarmol/" target="_blank" class="social-btn facebook-btn">
+                        <i class="fab fa-facebook-f"></i> Visitar Facebook
+                    </a>
+                </div>
+                
+                <!-- TARJETA 4: INSTAGRAM -->
+                <div class="social-card">
+                    <div class="social-icon instagram-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3 class="social-heading">Instagram</h3>
+                    <p class="social-description">Descubre nuestro trabajo diario y proyectos destacados en Instagram</p>
+                    <a href="https://www.instagram.com/gallosmarmol/" target="_blank" class="social-btn instagram-btn">
+                        <i class="fab fa-instagram"></i> Visitar Instagram
+                    </a>
+                </div>
+                
+                <!-- TARJETA 5: TIKTOK -->
+                <div class="social-card">
+                    <div class="social-icon tiktok-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <h3 class="social-heading">TikTok</h3>
+                    <p class="social-description">Mira nuestros videos y contenido exclusivo en nuestra cuenta de TikTok</p>
+                    <a href="https://www.tiktok.com/@gallos.marmol.ofic" target="_blank" class="social-btn tiktok-btn">
+                        <i class="fab fa-tiktok"></i> Visitar TikTok
+                    </a>
+                </div>
+            </div>
+
+            <!-- ============================================= -->
+            <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) -->
+            <!-- ============================================= -->
+            <div class="faq-section">
+                <h2 class="faq-title">Preguntas Frecuentes</h2>
+                
+                <!-- PREGUNTA 1 -->
+                <div class="faq-item">
+                    <div class="faq-question">¿Cuáles son los horarios de atención?</div>
+                    <div class="faq-answer">
+                        <p>Nuestro horario de atención es:</p>
+                        <p><b>Showroom Lurín: </b>Lunes a viernes de 09:00 horas a 18:00 horas y sábados de 09:00 horas a 13:00 horas.</p>           
+                        <p><b>Showroom Miraflores: </b>Lunes a viernes de 09:00 horas a 18:00 horas y sábados de 10:00 horas a 14:00 horas.</p>
+                        <p><b>Outlet: </b>Lunes a domingos de 10:00 horas a 17:00 horas.</p>           
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- MODAL DE SELECCIÓN DE TIPO DE CLIENTE -->
+    <!-- ============================================= -->
+    <div class="client-type-modal" id="clientTypeModal">
+        <div class="client-type-content">
+            <h2 class="client-type-title">¿Eres cliente de Gallos Mármol?</h2>
+            <p class="client-type-message">Selecciona una opción para continuar con tu solicitud de contacto</p>
+            <div class="client-type-options">
+                <button class="client-type-btn existing-client" id="existingClientBtn">
+                    <i class="fas fa-user-check"></i> Soy cliente
+                </button>
+                <button class="client-type-btn new-client" id="newClientBtn">
+                    <i class="fas fa-user-plus"></i> No soy cliente aún
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- MODAL DE WHATSAPP PARA NUEVOS CLIENTES -->
+    <!-- ============================================= -->
+    <div class="whatsapp-modal-new" id="whatsappModalNewClient">
+        <div class="whatsapp-content-new">
+            <h2 class="whatsapp-title-new">Contactar a un asesor</h2>
+            <p class="modal-message">Uno de nuestros asesores ya está listo para ayudarte con todo lo que necesites.</p>
+            <div id="asesorAleatorioContainer"></div>
+            <div class="whatsapp-buttons">
+                <button class="whatsapp-btn whatsapp-cancel" id="cancelWhatsappNew">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- MODAL DE WHATSAPP PARA CLIENTES EXISTENTES -->
+    <!-- ============================================= -->
+    <div class="whatsapp-modal-existing" id="whatsappModalExistingClient">
+        <div class="whatsapp-content-existing">
+            <h2 class="modal-title whatsapp-title">Selecciona tu asesor</h2>
+            <p class="modal-message">Por favor, selecciona al asesor con el que trabajaste anteriormente.</p>
+            
+            <div class="search-asesores">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchAsesorInput" placeholder="Buscar asesor por nombre o especialidad...">
+            </div>
+            
+            <div class="asesores-grid" id="asesoresListContainer"></div>
+            
+            <div class="whatsapp-buttons">
+                <button class="whatsapp-btn whatsapp-cancel" id="cancelWhatsappExisting">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- NOTIFICACIONES FLOTANTES -->
+    <!-- ============================================= -->
+    <div class="notification" id="notification"></div>
+
+    <!-- ============================================= -->
+    <!-- SCRIPTS JAVASCRIPT -->
+    <!-- ============================================= -->
+    <!-- Script para cargar el menú -->
+    <script src="../JS/cargarMenu.js"></script>
+    
+    <!-- Script principal de la página -->
+    <script>
+        // =============================================
+        // CONFIGURACIÓN INICIAL Y VARIABLES GLOBALES
+        // =============================================
+        let asesores = [];          // Almacena todos los asesores cargados
+        let asesoresDisponibles = []; // Asesores disponibles para contacto
+        let asesoresUsados = [];     // Asesores que ya han sido mostrados
+
+        // =============================================
+        // FUNCIÓN PARA CARGAR ASESORES DESDE JSON
+        // =============================================
+        async function loadAsesores() {
+            try {
+                // 1. Hacer petición al archivo JSON
+                const response = await fetch('../JSON/asesores.json');
+                
+                // 2. Verificar si la respuesta es correcta
+                if (!response.ok) throw new Error('Error al cargar asesores');
+                
+                // 3. Convertir la respuesta a JSON
+                asesores = await response.json();
+                
+                // 4. Verificar si hay asesores disponibles
+                if (!asesores || asesores.length === 0) {
+                    throw new Error('No hay asesores disponibles');
+                }
+                
+                // 5. Inicializar lista de asesores disponibles
+                resetAsesoresDisponibles();
+            } catch (error) {
+                // 6. Manejar errores
+                console.error('Error:', error.message);
+                showNotification('No hay asesores disponibles en este momento', 'error');
+            }
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA REINICIAR LISTA DE ASESORES DISPONIBLES
+        // =============================================
+        function resetAsesoresDisponibles() {
+            asesoresDisponibles = [...asesores]; // Copiar todos los asesores
+            asesoresUsados = []; // Reiniciar lista de usados
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA OBTENER ASESOR ALEATORIO
+        // =============================================
+        function getAsesorAleatorio() {
+            // 1. Si no hay asesores disponibles, reiniciar la lista
+            if (!asesoresDisponibles || asesoresDisponibles.length === 0) {
+                resetAsesoresDisponibles();
+                
+                // Si aún no hay asesores, retornar null
+                if (asesoresDisponibles.length === 0) return null;
+            }
+            
+            // 2. Si solo queda 1 asesor disponible
+            if (asesoresDisponibles.length === 1) {
+                const asesor = asesoresDisponibles[0];
+                asesoresUsados.push(asesor);
+                asesoresDisponibles = [];
+                return asesor;
+            }
+            
+            // 3. Si hay 2 o más asesores disponibles
+            if (asesoresDisponibles.length >= 2) {
+                // Seleccionar 2 índices aleatorios diferentes
+                const index1 = Math.floor(Math.random() * asesoresDisponibles.length);
+                let index2;
+                do {
+                    index2 = Math.floor(Math.random() * asesoresDisponibles.length);
+                } while (index2 === index1);
+                
+                // Elegir aleatoriamente entre los dos índices
+                const selectedIndex = Math.random() < 0.5 ? index1 : index2;
+                const asesor = asesoresDisponibles[selectedIndex];
+                
+                // Mover el asesor a la lista de usados
+                asesoresUsados.push(asesor);
+                asesoresDisponibles.splice(selectedIndex, 1);
+                
+                return asesor;
+            }
+            
+            return null;
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA MOSTRAR MODAL DE WHATSAPP PARA NUEVOS CLIENTES
+        // =============================================
+        function showWhatsappModalNewClient() {
+            const modal = document.getElementById('whatsappModalNewClient');
+            const asesorContainer = document.getElementById('asesorAleatorioContainer');
+            const asesor = getAsesorAleatorio();
+            
+            // Limpiar lista de asesores
+            asesorContainer.innerHTML = '';
+            
+            if (asesor) {
+                // Crear mensaje predeterminado
+                const message = `Hola ${asesor.nombre}, me llamaron mucho la atención los productos de Gallos Mármol. ¿Podrías brindarme más información?`;
+                
+                // Crear elemento HTML para el asesor
+                const asesorItem = document.createElement('div');
+                asesorItem.className = 'asesor-card';
+                asesorItem.innerHTML = `
+                    <div class="asesor-avatar">
+                        <img src="${asesor.foto || '../../FOTOS/ASESORES/Hombre.webp'}" alt="${asesor.nombre}">
+                    </div>
+                    <div class="asesor-info">
+                        <div class="asesor-name">${asesor.nombre} ${asesor.apellidos}</div>
+                        <div class="asesor-phone">${asesor.celular}</div>
+                        <div class="asesor-specialty">${asesor.especialidad || 'Asesor General'}</div>
+                        <button class="btn-contact" data-phone="${asesor.celular}" data-message="${encodeURIComponent(message)}">
+                            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                        </button>
+                    </div>
+                `;
+                
+                // Agregar asesor al modal
+                asesorContainer.appendChild(asesorItem);
+                
+                // Configurar evento click para el botón de WhatsApp
+                const whatsappBtn = asesorItem.querySelector('.btn-contact');
+                whatsappBtn.addEventListener('click', () => {
+                    const phone = whatsappBtn.dataset.phone;
+                    const message = decodeURIComponent(whatsappBtn.dataset.message);
+                    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                    modal.style.display = 'none';
+                });
+            } else {
+                // Mostrar mensaje si no hay asesores
+                asesorContainer.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-content">
+                            <div class="error-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="error-title">¡Error al cargar los asesores!</h3>
+                            <p class="error-description">No hay asesores disponibles en este momento. Por favor, inténtalo más tarde.</p>
+                            <p class="error-contact">Si el problema persiste, contáctanos: 
+                                <a href="mailto:soporte@gallosmarmol.com.pe" class="error-link">
+                                    <i class="fas fa-envelope"></i> soporte@gallosmarmol.com.pe
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Mostrar el modal
+            modal.style.display = 'flex';
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA MOSTRAR MODAL DE WHATSAPP PARA CLIENTES EXISTENTES
+        // =============================================
+        function showWhatsappModalExistingClient() {
+            const modal = document.getElementById('whatsappModalExistingClient');
+            const asesoresContainer = document.getElementById('asesoresListContainer');
+            const searchInput = document.getElementById('searchAsesorInput');
+            const content = modal.querySelector('.whatsapp-content-existing');            
+            
+            // Resetear campo de búsqueda
+            searchInput.value = '';
+            
+            // Resetear cualquier filtro aplicado
+            document.querySelectorAll('.asesor-card').forEach(card => {
+                card.style.display = 'flex';
+            });
+
+            // Resetear el scroll al abrir
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                searchInput.focus();
+                content.scrollTop = 0; // Forzar scroll al inicio
+            }, 10);
+
+            // Limpiar lista de asesores
+            asesoresContainer.innerHTML = '';
+            
+            if (asesores.length > 0) {
+                // Mostrar todos los asesores disponibles
+                asesores.forEach(asesor => {
+                    // Crear mensaje predeterminado
+                    const message = `Hola ${asesor.nombre}, me llamaron mucho la atención los productos de Gallos Mármol. ¿Podrías brindarme más información?`;
+                    
+                    // Crear elemento HTML para el asesor
+                    const asesorItem = document.createElement('div');
+                    asesorItem.className = 'asesor-card';
+                    asesorItem.innerHTML = `
+                        <div class="asesor-avatar">
+                            <img src="${asesor.foto || '../../FOTOS/ASESORES/Hombre.webp'}" alt="${asesor.nombre}">
+                        </div>
+                        <div class="asesor-info">
+                            <div class="asesor-name">${asesor.nombre} ${asesor.apellidos}</div>
+                            <div class="asesor-phone">${asesor.celular}</div>
+                            <div class="asesor-specialty">${asesor.especialidad || 'Asesor Especializado'}</div>
+                            <button class="btn-contact" data-phone="${asesor.celular}" data-message="${encodeURIComponent(message)}">
+                                <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Agregar asesor al modal
+                    asesoresContainer.appendChild(asesorItem);
+                    
+                    // Configurar evento click para el botón de WhatsApp
+                    const whatsappBtn = asesorItem.querySelector('.btn-contact');
+                    whatsappBtn.addEventListener('click', () => {
+                        const phone = whatsappBtn.dataset.phone;
+                        const message = decodeURIComponent(whatsappBtn.dataset.message);
+                        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappUrl, '_blank');
+                        modal.style.display = 'none';
+                    });
+                });
+            } else {
+                // Mostrar mensaje si no hay asesores
+                asesoresContainer.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-content">
+                            <div class="error-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="error-title">¡Error al cargar los asesores!</h3>
+                            <p class="error-description">No hay asesores disponibles en este momento. Por favor, inténtalo más tarde.</p>
+                            <p class="error-contact">Si el problema persiste, contáctanos: 
+                                <a href="mailto:soporte@gallosmarmol.com.pe" class="error-link">
+                                    <i class="fas fa-envelope"></i> soporte@gallosmarmol.com.pe
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Mostrar el modal
+            modal.style.display = 'flex';
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA MOSTRAR NOTIFICACIONES
+        // =============================================
+        function showNotification(message, type = '') {
+            const notification = document.getElementById('notification');
+            
+            // Establecer contenido de la notificación
+            notification.textContent = message;
+            
+            // Configurar clases CSS según el tipo
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Ocultar automáticamente después de 3 segundos
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // =============================================
+        // FUNCIÓN PARA CONFIGURAR EVENT LISTENERS
+        // =============================================
+        function setupEventListeners() {
+            // 1. Botón de WhatsApp en las tarjetas
+            document.getElementById('whatsappBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                // Mostrar modal de selección de tipo de cliente
+                document.getElementById('clientTypeModal').style.display = 'flex';
+            });
+            
+            // 2. Botón para clientes existentes
+            document.getElementById('existingClientBtn').addEventListener('click', () => {
+                document.getElementById('clientTypeModal').style.display = 'none';
+                showWhatsappModalExistingClient();
+            });
+            
+            // 3. Botón para nuevos clientes
+            document.getElementById('newClientBtn').addEventListener('click', () => {
+                document.getElementById('clientTypeModal').style.display = 'none';
+                showWhatsappModalNewClient();
+            });
+            
+            // 4. Cerrar modal de selección de cliente
+            document.getElementById('clientTypeModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('clientTypeModal')) {
+                    document.getElementById('clientTypeModal').style.display = 'none';
+                }
+            });
+            
+            // 5. Cerrar modal de WhatsApp para nuevos clientes
+            document.getElementById('cancelWhatsappNew').addEventListener('click', () => {
+                document.getElementById('whatsappModalNewClient').style.display = 'none';
+            });
+            
+            // 6. Cerrar modal de WhatsApp para clientes existentes
+            document.getElementById('cancelWhatsappExisting').addEventListener('click', () => {
+                document.getElementById('whatsappModalExistingClient').style.display = 'none';
+            });
+            
+            // 7. Cerrar modales de WhatsApp al hacer clic fuera
+            document.getElementById('whatsappModalNewClient').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('whatsappModalNewClient')) {
+                    document.getElementById('whatsappModalNewClient').style.display = 'none';
+                }
+            });
+            
+            document.getElementById('whatsappModalExistingClient').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('whatsappModalExistingClient')) {
+                    document.getElementById('whatsappModalExistingClient').style.display = 'none';
+                }
+            });
+            
+            // 8. Función de búsqueda para asesores
+            document.getElementById('searchAsesorInput').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const asesorCards = document.querySelectorAll('.asesor-card');
+                
+                asesorCards.forEach(card => {
+                    const name = card.querySelector('.asesor-name').textContent.toLowerCase();
+                    const specialty = card.querySelector('.asesor-specialty').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || specialty.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // 9. Configurar preguntas frecuentes (FAQ)
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', () => {
+                    const wasActive = question.classList.contains('active');
+                    
+                    // Cerrar todas las preguntas primero
+                    document.querySelectorAll('.faq-question').forEach(q => {
+                        q.classList.remove('active');
+                        q.nextElementSibling.classList.remove('show');
+                    });
+                    
+                    // Abrir la pregunta clickeada si no estaba activa
+                    if (!wasActive) {
+                        question.classList.add('active');
+                        question.nextElementSibling.classList.add('show');
+                    }
+                });
+            });
+        }
+        
+        // =============================================
+        // INICIALIZACIÓN AL CARGAR LA PÁGINA
+        // =============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Cargar lista de asesores
+            loadAsesores();
+            
+            // 2. Configurar eventos
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>
