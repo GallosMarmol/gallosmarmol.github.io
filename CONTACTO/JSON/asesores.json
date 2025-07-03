@@ -1,0 +1,37 @@
+[
+    {  
+      "nombre": "Hugo", 
+      "apellidos": "Vidal", 
+      "celular": "51954306470",
+      "especialidad":"Asesor de Proyectos",
+      "foto":"../../FOTOS/ASESORES/Hombre.webp"
+    },
+    { 
+      "nombre": "Luis", 
+      "apellidos": "Torres", 
+      "celular": "51940368184",
+      "especialidad":"Asesor de Proyectos",
+      "foto":"../../FOTOS/ASESORES/Hombre.webp"
+    },
+    { 
+      "nombre": "Angie", 
+      "apellidos": "Ardian", 
+      "celular": "51964345293",
+      "especialidad":"Asesora de Ventas",
+      "foto":"../../FOTOS/ASESORES/Mujer.webp"
+    },
+    { 
+      "nombre": "Katerin", 
+      "apellidos": "Chafloque", 
+      "celular": "51969337434",
+      "especialidad":"Asesora de Exterior",
+      "foto":"../../FOTOS/ASESORES/Mujer.webp"
+    },
+    { 
+      "nombre": "Elder", 
+      "apellidos": "Chavarry", 
+      "celular": "51954308253",
+      "especialidad":"Asesor de Ventas",
+      "foto":"../../FOTOS/ASESORES/Hombre.webp"
+    }       
+]
