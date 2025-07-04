@@ -1,0 +1,5450 @@
+[
+  {
+    "codigo": "1BRR1PPC18363",
+    "precio": 85,
+    "stock": 426.43,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "1BRR1PPC12323",
+    "precio": 85,
+    "stock": 227.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "5SPR1PPC05151",
+    "precio": 59,
+    "stock": 15,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAHFB1RUA08361",
+    "precio": 150.95,
+    "stock": 39.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAPFB1RUX08361",
+    "precio": 150.95,
+    "stock": 117.06,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAHFB1RUX08241",
+    "precio": 214.06,
+    "stock": 30.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAPFB1RUX08241",
+    "precio": 53.1,
+    "stock": 39.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAPFB1RTD08391",
+    "precio": 150.95,
+    "stock": 114.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "AAPFB1RTD08401",
+    "precio": 99.9,
+    "stock": 56.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR2RUC18362",
+    "precio": 78.92,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RUC30601",
+    "precio": 103.13,
+    "stock": 172.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB118518362",
+    "precio": 89.9,
+    "stock": 86.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR1RUCA736A12",
+    "precio": 79.37,
+    "stock": 240.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR2RUCA736A12",
+    "precio": 105.82,
+    "stock": 270.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2FIO24481",
+    "precio": 125.32,
+    "stock": 3785.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD40A631",
+    "precio": 120.1,
+    "stock": 742.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TUS16241",
+    "precio": 105.82,
+    "stock": 53.25,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMM1CRXA134A1352",
+    "precio": 67.33,
+    "stock": 113.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1FIO05202",
+    "precio": 62.78,
+    "stock": 149.89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2RUA08121",
+    "precio": 62.78,
+    "stock": 217.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR218518362",
+    "precio": 78.92,
+    "stock": 102.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2KRA07302",
+    "precio": 80.71,
+    "stock": 311.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD40801",
+    "precio": 101,
+    "stock": 75.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD12121",
+    "precio": 41.3,
+    "stock": 33.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2STM06302",
+    "precio": 69.9,
+    "stock": 68.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD30602",
+    "precio": 86.9,
+    "stock": 383.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPA20302",
+    "precio": 49.9,
+    "stock": 691.14,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD30602",
+    "precio": 86.9,
+    "stock": 1559.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2FIO24242",
+    "precio": 80.71,
+    "stock": 41.62,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1KRP60A632",
+    "precio": 138.1,
+    "stock": 15.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXBR2FIOAB16AB172",
+    "precio": 30.42,
+    "stock": 30.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TRX24242",
+    "precio": 74.68,
+    "stock": 162.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD12361",
+    "precio": 89.9,
+    "stock": 100.34,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD18362",
+    "precio": 89.9,
+    "stock": 585.29,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD12A71",
+    "precio": 65.22,
+    "stock": 15.05,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PPC08122",
+    "precio": 30,
+    "stock": 13.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BUOR1RUC30902",
+    "precio": 101,
+    "stock": 87.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB2RUC12241",
+    "precio": 65.22,
+    "stock": 1017.85,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2STM08241",
+    "precio": 52.91,
+    "stock": 16.72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD40A1362",
+    "precio": 79.92,
+    "stock": 101.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TRX16241",
+    "precio": 112.1,
+    "stock": 59.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR218518482",
+    "precio": 125.32,
+    "stock": 61.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHUB1STM12241",
+    "precio": 65.22,
+    "stock": 25.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR2RUC24482",
+    "precio": 125.32,
+    "stock": 217.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1YUR12241",
+    "precio": 65.22,
+    "stock": 13.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ATH18361",
+    "precio": 89.9,
+    "stock": 37.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXBR1TRXAB16AB172",
+    "precio": 70.8,
+    "stock": 40.47,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RTD15601",
+    "precio": 89.68,
+    "stock": 379.17,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO18181",
+    "precio": 101.65,
+    "stock": 579.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1ADA08081",
+    "precio": 67.26,
+    "stock": 222.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1YUR06061",
+    "precio": 69.62,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1STM18361",
+    "precio": 122.53,
+    "stock": 353.69,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1FIO08161",
+    "precio": 103.96,
+    "stock": 16.22,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1KRA08081",
+    "precio": 85.5,
+    "stock": 36.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1ANG24361",
+    "precio": 79.37,
+    "stock": 18.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PPC18181",
+    "precio": 124.95,
+    "stock": 31.65,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2STMA7481",
+    "precio": 125.32,
+    "stock": 568.57,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD24482",
+    "precio": 108.09,
+    "stock": 848.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIB1RTD30601",
+    "precio": 103.13,
+    "stock": 74.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD20A1362",
+    "precio": 79.92,
+    "stock": 259.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RUC40A631",
+    "precio": 120.1,
+    "stock": 451.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RUC40A631",
+    "precio": 120.1,
+    "stock": 13.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2RUC24482",
+    "precio": 100.3,
+    "stock": 21.55,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PPA0408P",
+    "precio": 99.9,
+    "stock": 474.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1CRE0408P",
+    "precio": 99.9,
+    "stock": 262.61,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1STM0408P",
+    "precio": 69.9,
+    "stock": 53.27,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1SOM12121",
+    "precio": 69.62,
+    "stock": 22.43,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1MIX08121",
+    "precio": 64.9,
+    "stock": 114.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1FIO24361",
+    "precio": 147.87,
+    "stock": 40.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1KRW12241",
+    "precio": 65.22,
+    "stock": 36.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1STM24481",
+    "precio": 146.04,
+    "stock": 1304.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2RUC30601",
+    "precio": 65.22,
+    "stock": 936,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RC212241",
+    "precio": 65.22,
+    "stock": 249.72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RUA24482",
+    "precio": 108.09,
+    "stock": 120.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR2RUC18362",
+    "precio": 78.92,
+    "stock": 146.32,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUA30601",
+    "precio": 89.43,
+    "stock": 324,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2FIO24482",
+    "precio": 100.3,
+    "stock": 3130.06,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1TRX24482",
+    "precio": 108.09,
+    "stock": 193.98,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2RUC15601",
+    "precio": 53.81,
+    "stock": 151.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1MMZ30601",
+    "precio": 89.43,
+    "stock": 251.28,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPC0612P",
+    "precio": 102.49,
+    "stock": 54.63,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1STM0808P",
+    "precio": 124.9,
+    "stock": 49.55,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1STM0606P",
+    "precio": 84.68,
+    "stock": 32.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1PPG08361",
+    "precio": 79.9,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1KRA03121",
+    "precio": 10.99,
+    "stock": 20.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2CVJ15151",
+    "precio": 94.9,
+    "stock": 18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFM1NOC04041",
+    "precio": 43.05,
+    "stock": 39.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTCM1MIX0808P",
+    "precio": 99.9,
+    "stock": 57.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTCM1MIX0812P",
+    "precio": 99.9,
+    "stock": 204.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD40601",
+    "precio": 66.8,
+    "stock": 14.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD40A1362",
+    "precio": 79.92,
+    "stock": 21.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR1RTD60A632",
+    "precio": 138.1,
+    "stock": 542.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ABT12241",
+    "precio": 65.22,
+    "stock": 292.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR1RTD60902",
+    "precio": 101,
+    "stock": 349.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC0404P",
+    "precio": 53.1,
+    "stock": 45.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2PPC16241",
+    "precio": 69.22,
+    "stock": 34.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1ABT30601",
+    "precio": 89.43,
+    "stock": 72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC0408P",
+    "precio": 34.9,
+    "stock": 32.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RTD18361",
+    "precio": 122.53,
+    "stock": 153.85,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PDR18361",
+    "precio": 89.9,
+    "stock": 240.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1STM20302",
+    "precio": 49.9,
+    "stock": 88.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAV2KRA20302",
+    "precio": 90.71,
+    "stock": 58.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC0408P",
+    "precio": 99.9,
+    "stock": 107.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TCU24481",
+    "precio": 146.04,
+    "stock": 222.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PDR12242",
+    "precio": 69.9,
+    "stock": 120.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1STM08122",
+    "precio": 95.88,
+    "stock": 260.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ADT18181",
+    "precio": 103.13,
+    "stock": 119.14,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2RUC08362",
+    "precio": 73.92,
+    "stock": 19.32,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZUR2PDR45901",
+    "precio": 84.84,
+    "stock": 121.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZUR2RUC45901",
+    "precio": 84.84,
+    "stock": 40.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2FIO05201",
+    "precio": 54.99,
+    "stock": 42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1TCU40A631",
+    "precio": 120.1,
+    "stock": 123.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1FIO30601",
+    "precio": 89.43,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2FIO30601",
+    "precio": 65.22,
+    "stock": 108,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TRX30601",
+    "precio": 89.43,
+    "stock": 72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1RTD12242",
+    "precio": 69.9,
+    "stock": 84.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUM18361",
+    "precio": 122.53,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSFR1RTD24362",
+    "precio": 79.37,
+    "stock": 139.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RUA24482",
+    "precio": 108.09,
+    "stock": 66.89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2FIO60A631",
+    "precio": 94.9,
+    "stock": 86.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV2STMAB11AB112",
+    "precio": 69.03,
+    "stock": 215.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2FIO05202",
+    "precio": 54.99,
+    "stock": 75.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD60A632",
+    "precio": 138.1,
+    "stock": 232.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV1MIXAB11AB112",
+    "precio": 69.96,
+    "stock": 23.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2RUC24482",
+    "precio": 125.32,
+    "stock": 200.67,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1KRA60A632",
+    "precio": 138.1,
+    "stock": 21.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TRX60A631",
+    "precio": 138.1,
+    "stock": 129.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2RUC18362",
+    "precio": 78.92,
+    "stock": 20.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV3STMAB11AB112",
+    "precio": 45.9,
+    "stock": 49.43,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV2MARAB11AB112",
+    "precio": 69.03,
+    "stock": 92.21,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAV2KRAAB11AB112",
+    "precio": 69.03,
+    "stock": 1096.34,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPG08121",
+    "precio": 59.24,
+    "stock": 82.99,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1ANZ24481",
+    "precio": 146.04,
+    "stock": 178.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO30601",
+    "precio": 65.22,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RTD12241",
+    "precio": 65.22,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ABE30601",
+    "precio": 89.43,
+    "stock": 135.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAV2KRA10102",
+    "precio": 59.63,
+    "stock": 18.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TMXZ18Z8",
+    "precio": 56.1,
+    "stock": 38.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1PPC04082",
+    "precio": 69.9,
+    "stock": 42.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1STM1212P",
+    "precio": 63.2,
+    "stock": 48.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PPC0808P",
+    "precio": 124.9,
+    "stock": 21.06,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZBM1FIO05202",
+    "precio": 91.6,
+    "stock": 52.79,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1RTD18362",
+    "precio": 180.54,
+    "stock": 292.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RUC20202",
+    "precio": 35.99,
+    "stock": 14.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1STM0606P",
+    "precio": 84.68,
+    "stock": 25.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1STM0808P",
+    "precio": 124.9,
+    "stock": 87.54,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTZR1RUC08082",
+    "precio": 69.9,
+    "stock": 30.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1RUC0404P",
+    "precio": 53.1,
+    "stock": 19.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1YURV1151",
+    "precio": 34.9,
+    "stock": 13.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPCZ10Z101",
+    "precio": 44.84,
+    "stock": 14.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1CRX04041",
+    "precio": 43.05,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1PRA03061",
+    "precio": 69.62,
+    "stock": 111.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1PPC08121",
+    "precio": 89.9,
+    "stock": 23.78,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPG16242",
+    "precio": 55.55,
+    "stock": 17.34,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RTD12361",
+    "precio": 89.9,
+    "stock": 200.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPC10101",
+    "precio": 56.5,
+    "stock": 141.28,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1RUC20541",
+    "precio": 69.9,
+    "stock": 19.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2CMX06081",
+    "precio": 44.84,
+    "stock": 126.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1RUC08121",
+    "precio": 89.9,
+    "stock": 20.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1ACX24241",
+    "precio": 74.68,
+    "stock": 13.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ADT08081",
+    "precio": 44.84,
+    "stock": 1189.11,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD30602",
+    "precio": 103.13,
+    "stock": 1128.78,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1PPC04041",
+    "precio": 43.05,
+    "stock": 16.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC10202",
+    "precio": 35.99,
+    "stock": 1312.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX16161",
+    "precio": 80.71,
+    "stock": 33.04,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX18361",
+    "precio": 89.9,
+    "stock": 637.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2YUR18361",
+    "precio": 78.92,
+    "stock": 167.19,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RUX12241",
+    "precio": 65.22,
+    "stock": 405.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1PPT02082",
+    "precio": 75.6,
+    "stock": 254.05,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1KRA04041",
+    "precio": 43.05,
+    "stock": 16.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX24241",
+    "precio": 74.68,
+    "stock": 558.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX18181",
+    "precio": 124.95,
+    "stock": 1359.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1YURA7A7A12",
+    "precio": 74.68,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1RUC05201",
+    "precio": 69.9,
+    "stock": 49.61,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2RUC05201",
+    "precio": 54.99,
+    "stock": 169,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPG0408P",
+    "precio": 34.9,
+    "stock": 52.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPA0408P",
+    "precio": 34.9,
+    "stock": 297.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2NOC04041",
+    "precio": 39.9,
+    "stock": 923.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC24242",
+    "precio": 74.68,
+    "stock": 712.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1MIX03061",
+    "precio": 69.62,
+    "stock": 40.65,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBHM1KRA05201",
+    "precio": 62.78,
+    "stock": 66.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC18182",
+    "precio": 135.52,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXBR1ROM24242",
+    "precio": 74.68,
+    "stock": 239.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BUOR1TRX12241",
+    "precio": 65.22,
+    "stock": 19.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC08122",
+    "precio": 95.88,
+    "stock": 61.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2MIX04041",
+    "precio": 39.9,
+    "stock": 108.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RUC12361",
+    "precio": 69.9,
+    "stock": 25.09,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PDR18181",
+    "precio": 121.69,
+    "stock": 209.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2PPG0408P",
+    "precio": 34.9,
+    "stock": 81.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RUA16241",
+    "precio": 89.9,
+    "stock": 173.42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2SOM04041",
+    "precio": 39.9,
+    "stock": 25.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAD1SOM1624P",
+    "precio": 76.58,
+    "stock": 30.47,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1KMC0404P",
+    "precio": 53.1,
+    "stock": 13.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPG04046",
+    "precio": 64.95,
+    "stock": 69.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2MIX04041",
+    "precio": 39.9,
+    "stock": 148.54,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2MIX06061",
+    "precio": 34.9,
+    "stock": 93.18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2RUC16241",
+    "precio": 69.22,
+    "stock": 257.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBHM2KRA05201",
+    "precio": 54.99,
+    "stock": 737.98,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZXR1PPG02042",
+    "precio": 43.05,
+    "stock": 23.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2MIX08121",
+    "precio": 62.78,
+    "stock": 322.06,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1FIO60A632",
+    "precio": 138.1,
+    "stock": 69.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD16241",
+    "precio": 89.9,
+    "stock": 27.25,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXBR1FIO24242",
+    "precio": 74.68,
+    "stock": 26.65,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ORE06061",
+    "precio": 34.9,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2MIX04081",
+    "precio": 36.9,
+    "stock": 21.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXBR2ROM24242",
+    "precio": 80.71,
+    "stock": 27.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BOUR2RUC30602",
+    "precio": 65.22,
+    "stock": 120.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1CRE16322",
+    "precio": 132.28,
+    "stock": 31.05,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2NOC0808P",
+    "precio": 34.9,
+    "stock": 18.21,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMM1CRX9090E",
+    "precio": 62.33,
+    "stock": 58.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1RUA08081",
+    "precio": 67.26,
+    "stock": 111.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPO1212A12",
+    "precio": 26,
+    "stock": 128.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPG0505A06",
+    "precio": 69.95,
+    "stock": 17.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZXO2MIX0206A12",
+    "precio": 29.5,
+    "stock": 19.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BEIR1RTD18362",
+    "precio": 89.9,
+    "stock": 46.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BEIR1RTD20501",
+    "precio": 76,
+    "stock": 45.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1YUR45452",
+    "precio": 64.95,
+    "stock": 19.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPG04081",
+    "precio": 36.9,
+    "stock": 78.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1SOM1616Q",
+    "precio": 80.71,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTBM1MNG0404P",
+    "precio": 69.9,
+    "stock": 22.11,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1CLS18181",
+    "precio": 124.95,
+    "stock": 25.15,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1FIO16161",
+    "precio": 103.96,
+    "stock": 18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1KRA08121",
+    "precio": 59.24,
+    "stock": 18.55,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1KRA04041",
+    "precio": 43.05,
+    "stock": 178.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTDD1KRA04041",
+    "precio": 43.05,
+    "stock": 236.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1FIO08081",
+    "precio": 85.5,
+    "stock": 47.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1FIO16241",
+    "precio": 89.68,
+    "stock": 31.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO24241",
+    "precio": 80.71,
+    "stock": 545.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO12241",
+    "precio": 65.22,
+    "stock": 1965.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB2FIO18181",
+    "precio": 67.26,
+    "stock": 1220.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTWM1CRE0808P",
+    "precio": 99.9,
+    "stock": 13.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1DOR18361",
+    "precio": 89.9,
+    "stock": 22.99,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1FIO08081",
+    "precio": 96.03,
+    "stock": 20.98,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO16241",
+    "precio": 69.22,
+    "stock": 138.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ADB18181",
+    "precio": 103.13,
+    "stock": 209.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2PDR18181",
+    "precio": 67.26,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PDR12241",
+    "precio": 65.22,
+    "stock": 71.22,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1STM08121",
+    "precio": 79.8,
+    "stock": 423.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2STM12241",
+    "precio": 65.22,
+    "stock": 649.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1STM04081",
+    "precio": 81.5,
+    "stock": 117.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2STM24241",
+    "precio": 80.71,
+    "stock": 508.15,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1STM18181",
+    "precio": 124.95,
+    "stock": 41.93,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2STM18181",
+    "precio": 67.26,
+    "stock": 167.27,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2YUO18181",
+    "precio": 67.26,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2YUR24241",
+    "precio": 80.71,
+    "stock": 125.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUX08361",
+    "precio": 79.9,
+    "stock": 145.13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2RUC08361",
+    "precio": 73.92,
+    "stock": 71.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1MIX06061",
+    "precio": 69.62,
+    "stock": 47.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1YUX24481",
+    "precio": 125.32,
+    "stock": 162.79,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRX12121",
+    "precio": 81.41,
+    "stock": 13.75,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1PPC02062",
+    "precio": 69.62,
+    "stock": 29.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC16161",
+    "precio": 80.71,
+    "stock": 48.89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1SOM04041",
+    "precio": 43.05,
+    "stock": 260.62,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1CRX18181",
+    "precio": 89.8,
+    "stock": 17.15,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1TRX12121",
+    "precio": 81.41,
+    "stock": 65.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1YUX18361",
+    "precio": 122.53,
+    "stock": 109.53,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1PPC02082",
+    "precio": 75.6,
+    "stock": 606.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1PPO02082",
+    "precio": 75.6,
+    "stock": 14.34,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1YUO18361",
+    "precio": 122.53,
+    "stock": 41.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1STC24481",
+    "precio": 146.04,
+    "stock": 44.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TRX24481",
+    "precio": 125.32,
+    "stock": 2025.11,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPC06081",
+    "precio": 56.5,
+    "stock": 43.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRX12241",
+    "precio": 65.22,
+    "stock": 28.06,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTBM1PPG0404P",
+    "precio": 76,
+    "stock": 30.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRXA7481",
+    "precio": 146.04,
+    "stock": 224.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1STM02082",
+    "precio": 75.6,
+    "stock": 96.09,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYP2PPO08121",
+    "precio": 62.78,
+    "stock": 22.29,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1167Z181",
+    "precio": 67.33,
+    "stock": 26.51,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ACD08081",
+    "precio": 67.26,
+    "stock": 334.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR2CRX03061",
+    "precio": 29.5,
+    "stock": 149.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPT04081",
+    "precio": 81.5,
+    "stock": 21.91,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1YUO18361",
+    "precio": 89.9,
+    "stock": 17.47,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1PPC08081",
+    "precio": 96.03,
+    "stock": 67.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2KRW08121",
+    "precio": 62.78,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2NOC04081",
+    "precio": 36.9,
+    "stock": 57.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1KMLA7361",
+    "precio": 79.37,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1PPG02042",
+    "precio": 43.05,
+    "stock": 18.05,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2STM08121",
+    "precio": 62.78,
+    "stock": 1518.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ADT08121",
+    "precio": 62.78,
+    "stock": 989.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BVAR1167Z181",
+    "precio": 57.06,
+    "stock": 14.25,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1YUO18181",
+    "precio": 124.95,
+    "stock": 37.63,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RUX18362",
+    "precio": 127.44,
+    "stock": 41.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1RUX18362",
+    "precio": 127.44,
+    "stock": 40.55,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2STM08081",
+    "precio": 44.84,
+    "stock": 220.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2KRA04081",
+    "precio": 36.9,
+    "stock": 45.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2STM04081",
+    "precio": 36.9,
+    "stock": 350.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ADT04081",
+    "precio": 36.9,
+    "stock": 97.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC08122",
+    "precio": 95.88,
+    "stock": 182.71,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2RUC12241",
+    "precio": 65.22,
+    "stock": 1547.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2NOC08081",
+    "precio": 44.84,
+    "stock": 342.71,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2NOC08121",
+    "precio": 62.78,
+    "stock": 161.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZCM2KRA04041",
+    "precio": 39.9,
+    "stock": 82.99,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2STM18361",
+    "precio": 78.92,
+    "stock": 424.75,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1CVJ12241",
+    "precio": 65.22,
+    "stock": 26.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPG08081",
+    "precio": 44.84,
+    "stock": 188.66,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPG08121",
+    "precio": 62.78,
+    "stock": 295.91,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPA08081",
+    "precio": 44.84,
+    "stock": 111.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPA16241",
+    "precio": 69.22,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TRX16161",
+    "precio": 80.71,
+    "stock": 162.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1YUX12241",
+    "precio": 65.22,
+    "stock": 76.54,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ANG18361",
+    "precio": 89.9,
+    "stock": 83.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1CLS24481",
+    "precio": 146.04,
+    "stock": 89.18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1ANG16241",
+    "precio": 89.68,
+    "stock": 18.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUA12241",
+    "precio": 65.22,
+    "stock": 423.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1NOC04041",
+    "precio": 43.05,
+    "stock": 178.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RUA12241",
+    "precio": 65.22,
+    "stock": 37.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1ACD08081",
+    "precio": 86.03,
+    "stock": 154.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2RUC18361",
+    "precio": 78.92,
+    "stock": 374.17,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPG08081",
+    "precio": 85.5,
+    "stock": 74.32,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1D2324241",
+    "precio": 74.68,
+    "stock": 33.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1STC24241",
+    "precio": 74.68,
+    "stock": 16.72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1CVJ16241",
+    "precio": 132.28,
+    "stock": 29.72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPC06121",
+    "precio": 45.6,
+    "stock": 118.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PDX18361",
+    "precio": 89.9,
+    "stock": 29.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2PEO18361",
+    "precio": 78.92,
+    "stock": 30.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1CVX18361",
+    "precio": 89.9,
+    "stock": 23.82,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1CRX12121",
+    "precio": 48.73,
+    "stock": 30.66,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PGX24241",
+    "precio": 74.68,
+    "stock": 185.78,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1CRA18361",
+    "precio": 122.53,
+    "stock": 41.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1YUX24241",
+    "precio": 74.68,
+    "stock": 51.28,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1TRX18181",
+    "precio": 124.95,
+    "stock": 803.09,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX12121",
+    "precio": 68.99,
+    "stock": 27.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX16241",
+    "precio": 69.9,
+    "stock": 138.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX12241",
+    "precio": 65.22,
+    "stock": 2435.63,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRX24241",
+    "precio": 74.68,
+    "stock": 302.88,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ATH24241",
+    "precio": 74.68,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2PDR12241",
+    "precio": 65.22,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1ATX24241",
+    "precio": 74.68,
+    "stock": 44.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC12242",
+    "precio": 69.9,
+    "stock": 316.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPG12122",
+    "precio": 74.6,
+    "stock": 52.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUX12241",
+    "precio": 65.22,
+    "stock": 1473.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC08161",
+    "precio": 80.71,
+    "stock": 66.89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUX18181",
+    "precio": 89.9,
+    "stock": 27.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1PGX12241",
+    "precio": 65.22,
+    "stock": 97.91,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1PGX12241",
+    "precio": 65.22,
+    "stock": 17.09,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1CRX03061",
+    "precio": 69.62,
+    "stock": 58.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1FIO24481",
+    "precio": 146.04,
+    "stock": 19.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ACD12241",
+    "precio": 65.22,
+    "stock": 14.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1ORE06061",
+    "precio": 69.62,
+    "stock": 167.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB2RUC08361",
+    "precio": 73.92,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1PGX24481",
+    "precio": 167.09,
+    "stock": 401.34,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1YUO24481",
+    "precio": 125.32,
+    "stock": 69.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1KRW16241",
+    "precio": 89.68,
+    "stock": 34.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX08161",
+    "precio": 80.71,
+    "stock": 34.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2FIO18361",
+    "precio": 78.92,
+    "stock": 1253.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RUX18361",
+    "precio": 89.9,
+    "stock": 58.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB2RUC18361",
+    "precio": 78.92,
+    "stock": 41.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1RUC07252",
+    "precio": 62.92,
+    "stock": 35.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMY1TRX12242",
+    "precio": 69.9,
+    "stock": 83.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RTD18362",
+    "precio": 89.9,
+    "stock": 150.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RUC18362",
+    "precio": 179.22,
+    "stock": 338.62,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1PDR0725A12",
+    "precio": 49.9,
+    "stock": 554.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TRX18361",
+    "precio": 89.9,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2RUC15601",
+    "precio": 53.81,
+    "stock": 415.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ACD08121",
+    "precio": 62.78,
+    "stock": 668.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1STM06302",
+    "precio": 69.9,
+    "stock": 55.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR2RUC30602",
+    "precio": 65.22,
+    "stock": 84.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2RUC08482",
+    "precio": 100.32,
+    "stock": 54.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC08081",
+    "precio": 44.84,
+    "stock": 79.54,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC08121",
+    "precio": 62.78,
+    "stock": 1449,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC04081",
+    "precio": 36.9,
+    "stock": 766.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BVAM1MIX08081",
+    "precio": 67.26,
+    "stock": 153.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BVAM1MIX04041",
+    "precio": 43.05,
+    "stock": 89.19,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTCM1MIX0408P",
+    "precio": 99.9,
+    "stock": 1148.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1FIO13252",
+    "precio": 62.66,
+    "stock": 1409.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2RUC06481",
+    "precio": 100.32,
+    "stock": 135.27,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PGX1624P",
+    "precio": 55.55,
+    "stock": 18.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2RUA04081",
+    "precio": 36.9,
+    "stock": 29.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD40601",
+    "precio": 66.8,
+    "stock": 34.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR2RUC20A1362",
+    "precio": 90.99,
+    "stock": 157.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRX08361",
+    "precio": 79.9,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD40901",
+    "precio": 101,
+    "stock": 30.96,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RTD12241",
+    "precio": 65.22,
+    "stock": 543.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR2RUC12242",
+    "precio": 65.22,
+    "stock": 55.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1RTD12241",
+    "precio": 65.22,
+    "stock": 642.89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RUA40A631",
+    "precio": 120.1,
+    "stock": 81.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD20A1362",
+    "precio": 79.92,
+    "stock": 129.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TXX24481",
+    "precio": 125.32,
+    "stock": 624.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2FIO16241",
+    "precio": 69.22,
+    "stock": 34.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2MRX08362",
+    "precio": 73.92,
+    "stock": 30.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR2RUC20A1362",
+    "precio": 90.99,
+    "stock": 32.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1MRX08362",
+    "precio": 79.9,
+    "stock": 120.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC040888",
+    "precio": 61.5,
+    "stock": 583.27,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2MRX08362",
+    "precio": 73.92,
+    "stock": 30.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1MRX08362",
+    "precio": 79.9,
+    "stock": 230.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1TRX08241",
+    "precio": 62.66,
+    "stock": 39.02,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1TRX30601",
+    "precio": 89.43,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1PPC20202",
+    "precio": 35.99,
+    "stock": 160,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2ADT18181",
+    "precio": 67.26,
+    "stock": 80.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1STC1624P",
+    "precio": 76,
+    "stock": 18.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD24482",
+    "precio": 108.09,
+    "stock": 78.74,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1FIO24482",
+    "precio": 108.09,
+    "stock": 15.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RUC20A1362",
+    "precio": 79.92,
+    "stock": 60.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD30502",
+    "precio": 49.9,
+    "stock": 32.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2ADT18361",
+    "precio": 78.92,
+    "stock": 334.45,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR1PPC10202",
+    "precio": 35.99,
+    "stock": 84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR3FIO24482",
+    "precio": 56.9,
+    "stock": 200.67,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1TBGX121",
+    "precio": 76.58,
+    "stock": 31.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1PPC0520P",
+    "precio": 69.9,
+    "stock": 22.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC08082",
+    "precio": 124.9,
+    "stock": 385.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1TRX18361",
+    "precio": 89.9,
+    "stock": 30.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPG15151",
+    "precio": 34.9,
+    "stock": 14.63,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1YUR15151",
+    "precio": 34.9,
+    "stock": 31.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1PPC20202",
+    "precio": 69.9,
+    "stock": 80,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPN15151",
+    "precio": 94.9,
+    "stock": 108,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1PPC04081",
+    "precio": 67.5,
+    "stock": 33.09,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RUC18241",
+    "precio": 62.92,
+    "stock": 27.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM1MIX15151",
+    "precio": 34.9,
+    "stock": 32.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ABT30601",
+    "precio": 89.43,
+    "stock": 434.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1FIO30601",
+    "precio": 103.13,
+    "stock": 108,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2FIO08122",
+    "precio": 62.78,
+    "stock": 111.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1MIX040888",
+    "precio": 56.5,
+    "stock": 510.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB2KRW12241",
+    "precio": 65.22,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC04082",
+    "precio": 56.5,
+    "stock": 443.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PDR18362",
+    "precio": 89.9,
+    "stock": 163.05,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR2RUC30602",
+    "precio": 65.22,
+    "stock": 38.88,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2RUC24481",
+    "precio": 125.32,
+    "stock": 44.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC20302",
+    "precio": 49.9,
+    "stock": 664.14,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR2RUC30601",
+    "precio": 65.22,
+    "stock": 72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSSR1RUA30601",
+    "precio": 89.43,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSSR2RUC30601",
+    "precio": 65.22,
+    "stock": 180,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2RUA08081",
+    "precio": 34.9,
+    "stock": 111.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUC30601",
+    "precio": 103.13,
+    "stock": 106.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD08482",
+    "precio": 108.09,
+    "stock": 37.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV1MARAB11602",
+    "precio": 89.43,
+    "stock": 18.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV1MARAB11302",
+    "precio": 49.9,
+    "stock": 53.88,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTD30601",
+    "precio": 103.13,
+    "stock": 216,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2PDR59AB142",
+    "precio": 90.51,
+    "stock": 37.91,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RTD30601",
+    "precio": 89.43,
+    "stock": 1689.66,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ROM16241",
+    "precio": 89.9,
+    "stock": 26.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBV1STMAB11AB112",
+    "precio": 35.99,
+    "stock": 13.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD18361",
+    "precio": 122.53,
+    "stock": 177.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2ITD24361",
+    "precio": 105.82,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ADT18361",
+    "precio": 89.9,
+    "stock": 177.69,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1RTD08241",
+    "precio": 62.66,
+    "stock": 447.42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2FIO06A71",
+    "precio": 59.9,
+    "stock": 51.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RTDAB1336A12",
+    "precio": 127.44,
+    "stock": 62.71,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BZAR1RUCAB1336A12",
+    "precio": 89.9,
+    "stock": 20.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2RUC07252",
+    "precio": 80.71,
+    "stock": 103.53,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR1RTD20501",
+    "precio": 76,
+    "stock": 343.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PDR2030A12",
+    "precio": 49.9,
+    "stock": 252,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PDR08081",
+    "precio": 67.26,
+    "stock": 107.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2STM0620A12",
+    "precio": 54.99,
+    "stock": 179.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2KRA08081",
+    "precio": 34.9,
+    "stock": 35.19,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC18181",
+    "precio": 67.26,
+    "stock": 31.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RTD24481",
+    "precio": 146.04,
+    "stock": 36.42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2PDR06202",
+    "precio": 54.99,
+    "stock": 63,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ADB18361",
+    "precio": 89.9,
+    "stock": 167.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1ADX18361",
+    "precio": 89.9,
+    "stock": 209.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAM1TUS40602",
+    "precio": 66.8,
+    "stock": 18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1PPC15151",
+    "precio": 69.9,
+    "stock": 74.25,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2RUC18361",
+    "precio": 78.92,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFR2RUC15601",
+    "precio": 53.81,
+    "stock": 16.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB2PDR18361",
+    "precio": 78.92,
+    "stock": 31.35,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFM1PPGV1151",
+    "precio": 34.9,
+    "stock": 26.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1PPN24241",
+    "precio": 74.68,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSPR1MIX04082",
+    "precio": 56.5,
+    "stock": 22.54,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1ABT12241",
+    "precio": 65.22,
+    "stock": 148.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2MAR08082",
+    "precio": 44.84,
+    "stock": 58.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2PPC06121",
+    "precio": 45.6,
+    "stock": 227.61,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAR2RUC10602",
+    "precio": 53.81,
+    "stock": 122.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2ADT06121",
+    "precio": 34.9,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2RUC04241",
+    "precio": 52.91,
+    "stock": 132.17,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1TRX30601",
+    "precio": 89.43,
+    "stock": 288,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BXIR2RUC40A631",
+    "precio": 94.9,
+    "stock": 123.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2RUC60A632",
+    "precio": 94.9,
+    "stock": 128.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2RUCA6306Z5",
+    "precio": 99.99,
+    "stock": 68.03,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTDA63042",
+    "precio": 108.09,
+    "stock": 37.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR2RUC40A631",
+    "precio": 94.9,
+    "stock": 165.12,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR2RUC30602",
+    "precio": 65.22,
+    "stock": 19.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR2FIO04121",
+    "precio": 23.99,
+    "stock": 39.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RTD18361",
+    "precio": 122.53,
+    "stock": 125.42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2FIO30601",
+    "precio": 65.22,
+    "stock": 324,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFB1RUM12241",
+    "precio": 80.22,
+    "stock": 285.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC20202",
+    "precio": 35.99,
+    "stock": 343,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR2PPC30301",
+    "precio": 90.71,
+    "stock": 73.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBHM1KRA0520P",
+    "precio": 69.62,
+    "stock": 18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFC1PPG08161",
+    "precio": 80.71,
+    "stock": 18.99,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1MMZ12241",
+    "precio": 65.22,
+    "stock": 110.93,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTCM1MIX1020P",
+    "precio": 35.99,
+    "stock": 164.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD40901",
+    "precio": 101,
+    "stock": 144,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPR1PPG08161",
+    "precio": 80.71,
+    "stock": 68.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1PPG0808P",
+    "precio": 124.9,
+    "stock": 15.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPR1PPG20201",
+    "precio": 35.99,
+    "stock": 36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1MIX20302",
+    "precio": 49.9,
+    "stock": 13.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1STM0816P",
+    "precio": 103.96,
+    "stock": 92.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPR1KRA04081",
+    "precio": 81.5,
+    "stock": 16.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM2KRA08082",
+    "precio": 44.84,
+    "stock": 16.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BVAM1MIX08121",
+    "precio": 64.9,
+    "stock": 59.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1MIX08121",
+    "precio": 64.9,
+    "stock": 170.32,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSAV2KRWAB11AB112",
+    "precio": 69.03,
+    "stock": 33.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RTD40A631",
+    "precio": 120.1,
+    "stock": 123.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPD1ANZ18181",
+    "precio": 121.69,
+    "stock": 22.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RUC24482",
+    "precio": 108.09,
+    "stock": 17.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC12A72",
+    "precio": 69.9,
+    "stock": 31.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPFB1PEO08361",
+    "precio": 79.9,
+    "stock": 87.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1KCO3636U",
+    "precio": 79.9,
+    "stock": 36.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMC1PPCA7A71",
+    "precio": 74.68,
+    "stock": 100.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTMR1RUA18361",
+    "precio": 89.9,
+    "stock": 104.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1PPC20301",
+    "precio": 69.9,
+    "stock": 35.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR1PPC04042",
+    "precio": 54.99,
+    "stock": 726.75,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BTPM1STM16A7P",
+    "precio": 55.55,
+    "stock": 403.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPAR1RUC12A71",
+    "precio": 65.22,
+    "stock": 37.97,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBRR2STM04046",
+    "precio": 44.84,
+    "stock": 18.62,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BBXR1RTD25701",
+    "precio": 86.9,
+    "stock": 218.75,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBM1RUC05202",
+    "precio": 62.78,
+    "stock": 821.93,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BSBR1RUC12A71",
+    "precio": 80.22,
+    "stock": 20.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BPYM2OSV08081",
+    "precio": 34.9,
+    "stock": 37.16,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "BHFR1RTD1836A12",
+    "precio": 127.44,
+    "stock": 22.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBK1CDA592",
+    "precio": 2.99,
+    "stock": 194,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1067587",
+    "precio": 2.99,
+    "stock": 1633,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1FCA599",
+    "precio": 2.99,
+    "stock": 381,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBK1127583",
+    "precio": 2.99,
+    "stock": 352,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1013576Q",
+    "precio": 2.99,
+    "stock": 80,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1DFY577",
+    "precio": 2.99,
+    "stock": 864,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1SOM006",
+    "precio": 15.51,
+    "stock": 13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1KRP006",
+    "precio": 15.51,
+    "stock": 26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFL1KRA711",
+    "precio": 2.99,
+    "stock": 220,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1201702",
+    "precio": 2.99,
+    "stock": 50,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1079006",
+    "precio": 15.51,
+    "stock": 220,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFL1KRA712",
+    "precio": 2.99,
+    "stock": 238.61,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1013577Q",
+    "precio": 2.99,
+    "stock": 240,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1YUR006",
+    "precio": 15.51,
+    "stock": 24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBV1108F22",
+    "precio": 2.99,
+    "stock": 4321,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBV1109F28",
+    "precio": 2.99,
+    "stock": 620,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBV1109F28Q",
+    "precio": 2.99,
+    "stock": 90,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBV1111FM",
+    "precio": 2.99,
+    "stock": 409,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1CAY582",
+    "precio": 2.99,
+    "stock": 2416,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1PPG006",
+    "precio": 2.99,
+    "stock": 145,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBV1013F23Q",
+    "precio": 2.99,
+    "stock": 50,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DTBO1DFY577Q",
+    "precio": 2.99,
+    "stock": 557,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "DHFR1ANG006",
+    "precio": 15.51,
+    "stock": 18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JTPY1TUS122488",
+    "precio": 83.54,
+    "stock": 89.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JPAM1STM1218P",
+    "precio": 80.19,
+    "stock": 320,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JEIAA1FIO12245",
+    "precio": 83.54,
+    "stock": 27.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JPAT1ITC1535P",
+    "precio": 62.09,
+    "stock": 13.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JTPT1FIO1224P",
+    "precio": 83.54,
+    "stock": 62.04,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JTPT1TUS1224P",
+    "precio": 83.54,
+    "stock": 59.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JPAT2FIO1218P",
+    "precio": 80.19,
+    "stock": 29.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JPAT1YUR1218P",
+    "precio": 76.58,
+    "stock": 20.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "JTMT1TUS12A7P",
+    "precio": 83.54,
+    "stock": 26.62,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KSBR1FIO2",
+    "precio": 304.92,
+    "stock": 150.11,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KSBR1RUC2",
+    "precio": 304.92,
+    "stock": 89.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KSBV1STMAB11302",
+    "precio": 220.22,
+    "stock": 85.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KHFR1PDR2",
+    "precio": 304.92,
+    "stock": 17.31,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KZUR2PDR1",
+    "precio": 118,
+    "stock": 81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KSBR1PDRA12",
+    "precio": 304.92,
+    "stock": 45.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KBRR1PPC2030A12",
+    "precio": 49.95,
+    "stock": 2662.41,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KHFR1YUX45452",
+    "precio": 112.1,
+    "stock": 126.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KXIR1RUC2",
+    "precio": 304.92,
+    "stock": 173.99,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KZAR1RUC2",
+    "precio": 304.92,
+    "stock": 137.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KHFR1TRX2",
+    "precio": 304.92,
+    "stock": 27.68,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "KUOR1RTD1",
+    "precio": 118,
+    "stock": 391.43,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1MOL01011",
+    "precio": 59,
+    "stock": 16.71,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1OAH01011",
+    "precio": 59,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1031MM18",
+    "precio": 59,
+    "stock": 32.41,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1KRAMM2",
+    "precio": 59,
+    "stock": 18.39,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1ANG02021",
+    "precio": 59,
+    "stock": 23.22,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1057MM10",
+    "precio": 59,
+    "stock": 23.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1IMP01011",
+    "precio": 59,
+    "stock": 14.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHUJ1IMPMM5",
+    "precio": 59,
+    "stock": 41.78,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ADTMM12",
+    "precio": 59,
+    "stock": 144.83,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1KRAMM10",
+    "precio": 59,
+    "stock": 70.6,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1CLSMM12",
+    "precio": 59,
+    "stock": 31.59,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1STMMM12",
+    "precio": 59,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MSPO1NOCMM57",
+    "precio": 59,
+    "stock": 13.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1PPGMM3",
+    "precio": 59,
+    "stock": 30.66,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBM1ABLMM4",
+    "precio": 59,
+    "stock": 41.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM84TBV1NOC12121",
+    "precio": 59,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM80TMR118712121",
+    "precio": 59,
+    "stock": 21.36,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM119HFR1RUA05161",
+    "precio": 59,
+    "stock": 32,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1PPCMM10",
+    "precio": 59,
+    "stock": 42.71,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MLMR1INVMM36",
+    "precio": 59,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1CVJWW1",
+    "precio": 59,
+    "stock": 23.23,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1IMPMM2",
+    "precio": 59,
+    "stock": 13.92,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1SOM02021",
+    "precio": 59,
+    "stock": 13,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1SOM02021",
+    "precio": 59,
+    "stock": 15.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFJ1SOMMM1",
+    "precio": 59,
+    "stock": 13.93,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTLR1STMMM105",
+    "precio": 59,
+    "stock": 56.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "M02021HFR118712121",
+    "precio": 59,
+    "stock": 13.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ABL02021",
+    "precio": 59,
+    "stock": 17.65,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1YURMM6",
+    "precio": 59,
+    "stock": 24.14,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1IMPMM6",
+    "precio": 59,
+    "stock": 20.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1CLSMM2",
+    "precio": 59,
+    "stock": 15.79,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFJ1025MM16",
+    "precio": 59,
+    "stock": 35.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ARMMM10",
+    "precio": 59,
+    "stock": 29.72,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ADTMM13",
+    "precio": 59,
+    "stock": 13.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ANGMM12",
+    "precio": 59,
+    "stock": 28.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBM1IMPMM17",
+    "precio": 59,
+    "stock": 67.78,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ADTMM17",
+    "precio": 59,
+    "stock": 32.51,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ANGMM17",
+    "precio": 59,
+    "stock": 42.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1KRAMM17",
+    "precio": 59,
+    "stock": 19.42,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ANGMM10",
+    "precio": 59,
+    "stock": 25.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1IMPMM10",
+    "precio": 59,
+    "stock": 46.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1STMWW1",
+    "precio": 59,
+    "stock": 13.94,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ADA04041",
+    "precio": 59,
+    "stock": 43.69,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1IMPMM11",
+    "precio": 59,
+    "stock": 33.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ANGMM6",
+    "precio": 59,
+    "stock": 48.67,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1ADAWW1",
+    "precio": 59,
+    "stock": 14.84,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1IMP02021",
+    "precio": 59,
+    "stock": 22.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFJ1IMPMM1",
+    "precio": 59,
+    "stock": 22.1,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBM1MIXMM4",
+    "precio": 59,
+    "stock": 25.04,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ADTMM11",
+    "precio": 59,
+    "stock": 28.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1CAS02021",
+    "precio": 59,
+    "stock": 44.22,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFJ1CVJMM1",
+    "precio": 59,
+    "stock": 17.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1STMMM7",
+    "precio": 59,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBO1PPGMM38",
+    "precio": 59,
+    "stock": 39.95,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1KRPMM37",
+    "precio": 59,
+    "stock": 14.83,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1KRPMM44",
+    "precio": 59,
+    "stock": 16.57,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1CRVMM110",
+    "precio": 59,
+    "stock": 26.93,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1KRWMM110",
+    "precio": 59,
+    "stock": 28.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1STMMM80",
+    "precio": 59,
+    "stock": 26.4,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1KRWMM80",
+    "precio": 59,
+    "stock": 48.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1RUAMM80",
+    "precio": 59,
+    "stock": 19.5,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1PPGWW1",
+    "precio": 59,
+    "stock": 13.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1BRV02021",
+    "precio": 59,
+    "stock": 18.56,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBM1DYNMM4",
+    "precio": 59,
+    "stock": 16.44,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPFR1KRAMM109",
+    "precio": 59,
+    "stock": 36.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MSPO1GFAMM21",
+    "precio": 59,
+    "stock": 24.9,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM57HFR1KRA12121",
+    "precio": 59,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1PDRMM40",
+    "precio": 59,
+    "stock": 17.28,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1PDRMM81",
+    "precio": 59,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1KRW02021",
+    "precio": 59,
+    "stock": 16.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM2TBK1NOC12121",
+    "precio": 59,
+    "stock": 28.61,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1RUCMM103",
+    "precio": 59,
+    "stock": 14.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1094MM18",
+    "precio": 59,
+    "stock": 77.08,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MPYM2PPC04041",
+    "precio": 59,
+    "stock": 37.79,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1STM03031",
+    "precio": 59,
+    "stock": 22.3,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBV1ABLMM10",
+    "precio": 59,
+    "stock": 27.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1RUCMM80",
+    "precio": 59,
+    "stock": 28.8,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MHFR1SOMMM81",
+    "precio": 59,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1ABLMM2",
+    "precio": 59,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MTBK1ANCMM2",
+    "precio": 59,
+    "stock": 17.64,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM12BTBV1IMP12121",
+    "precio": 59,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM13TBV105712121",
+    "precio": 59,
+    "stock": 14.86,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "MMM4TBM1ONI12121",
+    "precio": 59,
+    "stock": 32.52,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PPAO1CRAA12",
+    "precio": 221.78,
+    "stock": 104.33,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PHUO1FIO2",
+    "precio": 170.95,
+    "stock": 31.2,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PSBR1RUC2",
+    "precio": 221.78,
+    "stock": 60.51,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PSBO2RUC2",
+    "precio": 221.96,
+    "stock": 127.18,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PHFO2RUAA12",
+    "precio": 201.78,
+    "stock": 79.24,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1STM0606P",
+    "precio": 99.9,
+    "stock": 22.76,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1STM0812P",
+    "precio": 99.9,
+    "stock": 111.48,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1KRW2424P",
+    "precio": 64.9,
+    "stock": 14.87,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVSRM2PPC0408P",
+    "precio": 57.9,
+    "stock": 66.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1YUO1624P",
+    "precio": 44.99,
+    "stock": 83.73,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1PPG0408P",
+    "precio": 99.9,
+    "stock": 160.7,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1FIO1624P",
+    "precio": 61.9,
+    "stock": 19.81,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1PGX1624P",
+    "precio": 61.9,
+    "stock": 28.49,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVPYM2PPO0408P",
+    "precio": 57.9,
+    "stock": 42.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1STC1624P",
+    "precio": 61.9,
+    "stock": 24.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1TUS0808P",
+    "precio": 99.9,
+    "stock": 64.46,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1PPC0808P",
+    "precio": 99.9,
+    "stock": 24.77,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPR1MIX0408P",
+    "precio": 99.9,
+    "stock": 49.55,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "PVTPM1TUS16A7P",
+    "precio": 61.9,
+    "stock": 40.37,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "RTMR1PPA1",
+    "precio": 102.11,
+    "stock": 16.53,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "RTMR1PPC1",
+    "precio": 85,
+    "stock": 13.01,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "SPFR1ITL0909W",
+    "precio": 35.4,
+    "stock": 47,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "WHFT1FIO26452",
+    "precio": 297.99,
+    "stock": 525.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "WHFAB1FIO26452",
+    "precio": 297.99,
+    "stock": 110.38,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2MIX521",
+    "precio": 1,
+    "stock": 160,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUO1FIO548",
+    "precio": 1,
+    "stock": 120,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XTBO2IMP543",
+    "precio": 1,
+    "stock": 1600,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO514",
+    "precio": 1,
+    "stock": 1064,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO518",
+    "precio": 1,
+    "stock": 2418,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO539",
+    "precio": 1,
+    "stock": 126,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO547",
+    "precio": 1,
+    "stock": 4119,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2IMP513",
+    "precio": 1,
+    "stock": 1123,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO538",
+    "precio": 1,
+    "stock": 6060.83,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO519",
+    "precio": 1,
+    "stock": 2370.29,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO523",
+    "precio": 1,
+    "stock": 1287,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO516",
+    "precio": 1,
+    "stock": 1196,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO512",
+    "precio": 1,
+    "stock": 1465,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2CVJ542",
+    "precio": 1,
+    "stock": 624,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO522",
+    "precio": 1,
+    "stock": 1744,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUR2FIO534",
+    "precio": 1,
+    "stock": 526,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XBRR1PPG518",
+    "precio": 1,
+    "stock": 1108.26,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHCO1YUR611",
+    "precio": 1,
+    "stock": 88,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUO1FIO517",
+    "precio": 1,
+    "stock": 89,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "XHUO1FIO537",
+    "precio": 1,
+    "stock": 576,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  },
+  {
+    "codigo": "ZHFR1STM04121",
+    "precio": 34.99,
+    "stock": 18.58,
+    "fechaActualizada": "24/06/2025",
+    "estado": "Disponible",
+    "etiqueta": "Sin Etiqueta"
+  }
+]

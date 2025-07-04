@@ -1,0 +1,58 @@
+{
+  "galerias": [
+    {
+      "id": 1,
+      "titulo": "Nuestras Canteras",
+      "descripcion": "El origen de nuestra elegancia: así nacen nuestros mármoles.",
+      "foto_principal": "../../FOTOS/GALERIA/GALERIA_1/Foto_1.webp",
+      "fotos": [
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_1.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_2.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_3.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_4.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_5.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_6.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_7.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_8.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_9.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_10.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_11.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_12.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_13.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_14.webp"
+        },
+        {
+          "imagen": "../../FOTOS/GALERIA/GALERIA_1/Foto_15.webp"
+        }                                                                               
+      ]
+    }
+
+  ]
+}

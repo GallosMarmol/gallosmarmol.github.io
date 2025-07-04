@@ -1,0 +1,12 @@
+{
+  "videos": [
+    {
+      "id": 1,
+      "titulo": "Showroom - Lurín",
+      "descripcion": "Visita nuestro showroom en Lurín y descubre la elegancia del mármol para transformar tus espacios con estilo y calidad.",
+      "url": "../../VIDEOS/Video_1.mp4",
+      "miniatura": "../../FOTOS/MINIATURA/Foto_1.png",
+      "orientacion": "vertical"
+    }
+  ]
+}
