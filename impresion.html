@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiqueta Baldosas PDF</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+  }
+  .etiqueta {
+    width: 264px;
+    border: 2px solid black;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  .titulo {
+    font-weight: bold;
+    text-align: center;
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  td {
+    border: 1px solid black;
+    padding: 2px;
+    font-size: 8px;
+    vertical-align: middle;
+    word-wrap: break-word;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  .center {
+    text-align: center;
+  }
+  button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="etiqueta" class="etiqueta">
+  <div class="titulo" id="titulo">BALDOSAS HONED FILLED RECTO STORM (BHFR1STM24481)</div>
+  <table>
+    <tr>
+      <td class="bold">LARGO</td>
+      <td id="largo">48,0000000000</td>
+      <td class="bold">UBICACIÓN</td>
+      <td id="ubicacion">1 CAJA AL LADO DERECHO DE LA SECCIÓN B - 1</td>
+    </tr>
+    <tr>
+      <td class="bold">UNIDAD DE MEDIDA</td>
+      <td class="bold" id="unidad">PULGADAS</td>
+      <td class="bold">FECHA DE CREACIÓN</td>
+      <td class="bold center" id="fecha">17/07/2025</td>
+    </tr>
+    <tr>
+      <td class="bold">ANCHO</td>
+      <td id="ancho">24,0000000000</td>
+      <td class="bold">CREADO POR</td>
+      <td id="creado">JAVIER VASQUEZ</td>
+    </tr>
+    <tr>
+      <td class="bold">UNIDAD DE MEDIDA</td>
+      <td class="bold" id="unidad2">PULGADAS</td>
+      <td class="bold">CÓDIGO DE REGISTRO</td>
+      <td id="codigo">REG17072309aba35137</td>
+    </tr>
+    <tr>
+      <td class="bold">CANTIDAD</td>
+      <td id="cantidad">6.300,0000000000</td>
+      <td class="bold">METRAJE TOTAL</td>
+      <td id="metraje">4.682,3319452700</td>
+    </tr>
+  </table>
+</div>
+
+<button onclick="generarPDF()">Descargar PDF</button>
+
+<script>
+// Leer parámetros de URL y colocar en etiquetas
+function getParams() {
+    const params = new URLSearchParams(window.location.search);
+
+    const dataMap = {
+        titulo: 'titulo',
+        largo: 'largo',
+        ancho: 'ancho',
+        ubicacion: 'ubicacion',
+        unidad: 'unidad',
+        unidad2: 'unidad2',
+        fecha: 'fecha',
+        creado: 'creado',
+        codigo: 'codigo',
+        cantidad: 'cantidad',
+        metraje: 'metraje'
+    };
+
+    for (const key in dataMap) {
+        const elementId = dataMap[key];
+        const value = params.get(key);
+        if (value !== null) {
+            document.getElementById(elementId).textContent = value;
+        }
+    }
+}
+
+function generarPDF() {
+    const element = document.getElementById('etiqueta');
+    const opt = {
+        margin: 0,
+        filename: 'etiqueta.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 4 },
+        jsPDF: { unit: 'mm', format: [50, 70], orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+
+window.onload = getParams;
+</script>
+
+</body>
+</html>
