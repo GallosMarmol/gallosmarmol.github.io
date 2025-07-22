@@ -317,7 +317,7 @@
 
             const parts = num
                 .toLocaleString('fr-FR', { // 'fr-FR' usa espacio como miles y coma decimal
-                    maximumFractionDigits: 3
+                    maximumFractionDigits: 10
                 })
                 .split(',');
 
@@ -354,8 +354,8 @@
                 fecha: {id: 'fecha'},
                 creado: {id: 'creado', maxLength: 100, shortenName: false},
                 codigo: {id: 'codigo', maxLength: 100},
-                cantidad: {id: 'cantidad', format: false},
-                metraje: {id: 'metraje', format: false}
+                cantidad: {id: 'cantidad', format: true},
+                metraje: {id: 'metraje', format: true}
             };
 
             for (const key in dataMap) {
