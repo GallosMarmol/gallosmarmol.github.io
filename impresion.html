@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiqueta Baldosas PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #000000;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --border-radius: 5px;
+            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 10px;
+            color: var(--dark-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+
+        .etiqueta {
+            width: 265px;
+            border: 1px solid #ffffff;
+            border-radius: var(--border-radius);
+            padding: 7px;
+            background-color: white;
+            position: relative;
+            font-size: 0;
+        }
+
+        .etiqueta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .titulo {
+            font-weight: bold;
+            text-align: center;
+            font-size: 11px;
+            margin-bottom: 6px;
+            color: var(--secondary-color);
+            padding-bottom: 2px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            line-height: 1.2;
+        }
+
+        .titulo i {
+            color: var(--primary-color);
+            font-size: 11px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: none;
+        }
+
+        tr {
+            height: 18px;
+        }
+
+        td {
+        border: none; /* Elimina bordes de todas las celdas */
+        padding: 1px 1px;
+        font-size: 9px;
+        font-weight: 600;
+        vertical-align: middle;
+        word-wrap: break-word;
+        line-height: 1.1;
+        }
+
+        tr:not(:last-child) {
+        border-bottom: 1px solid #f0f0f0; /* Línea muy sutil entre filas */
+        }
+
+        tr:last-child {
+        border-top: 2px solid #000000; 
+        font-weight: bold; 
+        }
+
+        tr:last-child td {
+        padding-top: 6px; /* Más espacio arriba */
+        padding-bottom: 6px; /* Más espacio abajo */
+        }
+
+        .col-med-1 {
+        width: 17% !important;
+        font-size: 7px; 
+        text-align: left;
+
+        }
+
+        .col-med-2 {
+        width: 23% !important;
+        color: #000000; 
+        text-align: left;
+        font-size: 9.1px;
+        }        
+
+        .col-med-3 {
+        width: 20% !important; 
+        font-size: 7px;
+        text-align: left; 
+        }
+
+        .col-med-4 {
+        width: 40% !important; 
+        color: #000000;
+        text-align: left;     
+        font-size: 9.1px;           
+        }
+
+        .bold {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #CB3E2C;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #000000;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+            font-size: 12px;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .fa-xs {
+            font-size: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .etiqueta {
+                padding: 6px;
+            }
+            
+            .titulo {
+                font-size: 10px;
+            }
+            
+            td {
+                font-size: 8px;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .etiqueta {
+                padding: 5px;
+            }
+            
+            td {
+                font-size: 6px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 264px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div id="etiqueta" class="etiqueta">
+                <div class="titulo">
+                    <i class="fas fa-tags fa-xs"></i>
+                    <span id="titulo">BALDOSAS HONED FILLED RECTO STORM (BHFR1STM24481)</span>
+                </div>
+                <table>
+                    <tr>
+                        <td class="bold col-med-1">LARGO</td>
+                        <td id="largo" class="col-med-2">48,00</td>
+                        <td class="bold col-med-3">UBICACIÓN</td>
+                        <td id="ubicacion" class="col-med-4">1 CAJA AL LADO DERECHO DE LA SECCIÓN B - 1</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">UNIDAD</td>
+                        <td id="unidad" class="col-med-2">MILÍMETROS</td>
+                        <td class="bold col-med-3">FECHA</td>
+                        <td id="fecha" class="col-med-4">17/07/2025</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">ANCHO</td>
+                        <td id="ancho" class="col-med-2">24,00</td>
+                        <td class="bold col-med-3">CREADO POR</td>
+                        <td id="creado" class="col-med-4">RAIMOND ALBARRACIN PEÑA</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1"></i> UNIDAD</td>
+                        <td id="unidad2" class="col-med-2">PULGADAS</td>
+                        <td class="bold col-med-3"></i> CÓDIGO</td>
+                        <td id="codigo" class="col-med-4">12345678912345678</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1"></i> CANTIDAD</td>
+                        <td id="cantidad" class="col-med-2">6.300,00</td>
+                        <td class="bold col-med-3"></i> METRAJE</td>
+                        <td id="metraje" class="col-med-4">4.682,123456789</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn" onclick="generarPDF()">
+            <i class="fas fa-file-pdf"></i> Descargar PDF
+        </button>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Etiqueta exportada exitosamente</span>
+    </div>
+
+    <script>
+        // Función para formatear números con decimales opcionales
+        function formatNumber(numStr) {
+            if (!numStr) return '';
+            
+            const num = parseFloat(numStr.replace(',', '.'));
+            if (isNaN(num)) return numStr;
+        
+            const parts = num.toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            return parts.join(',');
+            
+            return num.toLocaleString('es-ES', { 
+                maximumFractionDigits: 5
+            });
+        }
+
+        // Función para acortar texto
+        function shortenText(text, maxLength) {
+            if (text.length > maxLength) {
+                return text.substring(0, maxLength - 3) + '...';
+            }
+            return text;
+        }
+
+        // Leer parámetros de URL y colocar en etiquetas
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+
+            const dataMap = {
+                titulo: {id: 'titulo', maxLength: 100},
+                largo: {id: 'largo', format: true},
+                ancho: {id: 'ancho', format: true},
+                ubicacion: {id: 'ubicacion', maxLength: 100},
+                unidad: {id: 'unidad', shorten: false},
+                unidad2: {id: 'unidad2', shorten: false},
+                fecha: {id: 'fecha'},
+                creado: {id: 'creado', maxLength: 100, shortenName: false},
+                codigo: {id: 'codigo', maxLength: 100},
+                cantidad: {id: 'cantidad', format: false},
+                metraje: {id: 'metraje', format: false}
+            };
+
+            for (const key in dataMap) {
+                const config = dataMap[key];
+                let value = params.get(key);
+                
+                if (value !== null) {
+                    // Formatear números
+                    if (config.format) {
+                        value = formatNumber(value);
+                    }
+                    // Acortar texto
+                    if (config.maxLength) {
+                        value = shortenText(value, config.maxLength);
+                    }
+                    // Acortar unidades
+                    if (config.shorten) {
+                        value = value.substring(0, 3).toUpperCase();
+                    }
+                    // Acortar nombres
+                    if (config.shortenName) {
+                        const parts = value.split(' ');
+                        if (parts.length > 1) {
+                            value = parts[0].charAt(0) + '. ' + parts[1];
+                        }
+                    }
+                    
+                    document.getElementById(config.id).textContent = value;
+                }
+            }
+        }
+
+        // Mostrar notificación
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        function getCodigoFromTitulo() {
+            const titulo = document.getElementById('titulo').textContent;
+            const inicio = titulo.indexOf('(') + 1;
+            const fin = titulo.indexOf(')');
+            return inicio > 0 && fin > inicio 
+                ? titulo.substring(inicio, fin) 
+                : 'ETIQUETA';
+        }
+
+        function generarPDF() {
+            const codigoProducto = getCodigoFromTitulo();   
+            
+            const ahora = new Date();
+            const fecha = [
+                ahora.getHours().toString().padStart(2, '0'),
+                ahora.getMinutes().toString().padStart(2, '0'),
+                ahora.getSeconds().toString().padStart(2, '0')
+                ].join('');
+
+            const nombreArchivo = `etiqueta-${codigoProducto}-${fecha}.pdf`;
+
+            const element = document.getElementById('etiqueta');
+
+            const opt = {
+                margin: [2, 2, 2, 2],
+                filename: nombreArchivo,
+                image: { 
+                    type: 'jpeg', 
+                    quality: 0.95 
+                },
+                html2canvas: { 
+                    scale: 3,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    width: 264,
+                    height: element.offsetHeight + 10
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: [53, 75], 
+                    orientation: 'landscape',
+                    hotfixes: ["px_scaling"] 
+                }
+            };
+            
+            const btn = document.querySelector('.btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+            btn.disabled = true;
+
+            // Mostrar notificación con el nombre del archivo
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>Etiqueta guardada como <strong>${nombreArchivo}</strong> en tus descargas</span>
+            `;            
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                notification.classList.add('show');  
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+
+                
+            });
+        }
+
+        window.onload = getParams;
+    </script>
+</body>
+</html>
