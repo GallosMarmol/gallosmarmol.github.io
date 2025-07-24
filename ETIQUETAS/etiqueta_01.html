@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallos Mármol</title>
+    <link rel="icon" type="image/x-icon" href="../FOTOS/ICONOS/Icono_6.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #000000;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #000000;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            width: fit-content;
+            transition: var(--transition);
+        }
+
+        .etiqueta {
+            width: 265px;
+            border: 1px solid #ffffff;
+            border-radius: var(--border-radius);
+            padding: 7px;
+            background-color: white;
+            position: relative;
+            font-size: 0;
+        }
+
+        .etiqueta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .titulo {
+            font-weight: bold;
+            text-align: center;
+            font-size: 11px;
+            margin-bottom: 6px;
+            color: var(--secondary-color);
+            padding-bottom: 2px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            line-height: 1.2;
+        }
+
+        .titulo i {
+            color: var(--primary-color);
+            font-size: 11px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: none;
+        }
+
+        tr {
+            height: 18px;
+        }
+
+        td {
+            border: none;
+            padding: 1px 1px;
+            font-size: 9px;
+            font-weight: 600;
+            vertical-align: middle;
+            word-wrap: break-word;
+            line-height: 1.1;
+        }
+
+        tr:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child {
+            border-top: 2px solid #000000; 
+            font-weight: bold; 
+        }
+
+        tr:last-child td {
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        .col-med-1 {
+            width: 17% !important;
+            font-size: 7px; 
+            text-align: left;
+        }
+
+        .col-med-2 {
+            width: 23% !important;
+            color: #000000; 
+            text-align: left;
+            font-size: 9.1px;
+        }        
+
+        .col-med-3 {
+            width: 20% !important; 
+            font-size: 7px;
+            text-align: left; 
+        }
+
+        .col-med-4 {
+            width: 40% !important; 
+            color: #000000;
+            text-align: left;     
+            font-size: 9.1px;           
+        }
+
+        .bold {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        /* Botones mejorados */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;          
+            gap: 12px;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background-color: #CB3E2C;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            background-color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: #3498db;
+        }
+
+        .btn-tertiary {
+            background-color: #2ecc71;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        /* Panel de historial mejorado */
+        .history-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 600px;
+            max-height: 1000px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #eee;
+        }
+        
+        .history-panel h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+        
+        .history-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .history-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--dark-color);
+            font-size: 15px;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .history-btn:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+
+        .history-btn.view {
+            color: #3498db;
+        }
+
+        .history-btn.delete {
+            color: #e74c3c;
+        }
+
+        /* Modal para vista de etiqueta */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        /* Modal de confirmación */
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+        }
+
+        .confirmation-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .confirmation-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .confirmation-modal.show .confirmation-content {
+            transform: translateY(0);
+        }
+
+        .confirmation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .confirmation-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .confirmation-message {
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .confirmation-btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .confirmation-btn.cancel {
+            background-color: #f0f0f0;
+            color: var(--dark-color);
+        }
+
+        .confirmation-btn.confirm {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .confirmation-btn.cancel:hover {
+            background-color: #e0e0e0;
+        }
+
+        .confirmation-btn.confirm:hover {
+            background-color: #c0392b;
+        }
+
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .notification.error {
+            background-color: #e74c3c;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        /* Configuración de PDF */
+        .settings-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .settings-panel h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .setting-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .setting-group select, 
+        .setting-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+
+        .dimension-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dimension-inputs input {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Loader mejorado */
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+
+        .loader-overlay.show {
+            display: flex;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        .loader-text {
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .confirmation-content {
+                width: 95%;
+            }
+
+            .notification{
+                bottom: 8px;
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .history-actions {
+                align-self: flex-end;
+            }
+
+            .confirmation-buttons {
+                flex-direction: column;
+            }
+
+            .confirmation-btn {
+                width: 100%;
+            }
+
+            .notification{
+                bottom: 8px;
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div id="etiqueta" class="etiqueta">
+                <div class="titulo">
+                    <i class="fas fa-tags fa-xs"></i>
+                    <span id="titulo">BALDOSAS HONED FILLED RECTO STORM (BHFR1STM24481)</span>
+                </div>
+                <table>
+                    <tr>
+                        <td class="bold col-med-1">LARGO</td>
+                        <td id="largo" class="col-med-2">48,123499</td>
+                        <td class="bold col-med-3">UBICACIÓN</td>
+                        <td id="ubicacion" class="col-med-4">1 CAJA AL LADO DERECHO DE LA SECCIÓN B - 1</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">UNIDAD</td>
+                        <td id="unidad" class="col-med-2">MILÍMETROS</td>
+                        <td class="bold col-med-3">FECHA</td>
+                        <td id="fecha" class="col-med-4">17/07/2025</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">ANCHO</td>
+                        <td id="ancho" class="col-med-2">24,00</td>
+                        <td class="bold col-med-3">CREADO POR</td>
+                        <td id="creado" class="col-med-4">RAIMOND ALBARRACIN PEÑA</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">UNIDAD</td>
+                        <td id="unidad2" class="col-med-2">PULGADAS</td>
+                        <td class="bold col-med-3">CÓDIGO</td>
+                        <td id="codigo" class="col-med-4">12345678912345678</td>
+                    </tr>
+                    <tr>
+                        <td class="bold col-med-1">CANTIDAD</td>
+                        <td id="cantidad" class="col-med-2">6 300,00</td>
+                        <td class="bold col-med-3">METRAJE</td>
+                        <td id="metraje" class="col-med-4">4 682,123456789</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn" onclick="generarPDF()">
+                <i class="fas fa-file-pdf"></i> Descargar etiqueta
+            </button>
+            <button class="btn btn-secondary" onclick="saveCurrentLabel()">
+                <i class="fas fa-save"></i> Guardar etiqueta
+            </button>
+        </div>
+
+        <div class="history-panel" id="historyPanel">
+            <h3>Etiquetas guardadas</h3>
+            <div class="btn-group" style="margin-top: 15px;">
+                <button class="btn btn-tertiary" onclick="generateCombinedPDF()">
+                    <i class="fas fa-file-pdf"></i>Descargar etiquetas
+                </button>
+                <button class="btn btn-danger" onclick="showClearAllConfirmation()">
+                    <i class="fas fa-trash"></i> Eliminar todas las etiquetas
+                </button>
+            </div>            
+            <div id="savedLabelsList"></div>
+        </div>
+
+        <div class="settings-panel">
+            <h3><i class="fas fa-cog"></i> Configuración de la etiqueta</h3>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="pdfSize">Tamaño de página:</label>
+                    <select id="pdfSize" onchange="updatePdfSize()">
+                        <option value="A4">A4 (210x297 mm)</option>
+                        <option value="A5">A5 (148x210 mm)</option>                        
+                        <option value="A6">A6 (105x148 mm)</option>                     
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div class="setting-group" id="customSizeGroup" style="display: none;">
+                    <label>Dimensiones personalizadas (mm):</label>
+                    <div class="dimension-inputs">
+                        <input type="number" id="customWidth" placeholder="Ancho" min="10" max="500" value="58">
+                        <span>x</span>
+                        <input type="number" id="customHeight" placeholder="Alto" min="10" max="500" value="78">
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label for="pdfOrientation">Orientación:</label>
+                    <select id="pdfOrientation">
+                        <option value="landscape">Horizontal</option>
+                        <option value="portrait">Vertical</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="pdfMargin">Margen (mm):</label>
+                    <input type="number" id="pdfMargin" min="0" max="20" value="3">
+                </div>
+            </div>
+            <div class="btn-group" style="margin-top: 10px;">
+                <button class="btn btn-tertiary" onclick="savePdfSettings()">
+                    <i class="fas fa-save"></i> Guardar configuración
+                </button>
+            </div>
+        </div>        
+    </div>
+
+    <!-- Modal para vista de etiqueta -->
+    <div class="modal" id="labelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Vista previa de etiqueta</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalLabelContent">
+                <!-- Contenido de la etiqueta se insertará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="confirmation-content">
+            <div class="confirmation-header">
+                <h3 class="confirmation-title" id="confirmationTitle">Confirmar acción</h3>
+                <button class="modal-close" onclick="closeConfirmationModal()">&times;</button>
+            </div>
+            <div class="confirmation-message" id="confirmationMessage">
+                ¿Estás seguro de que deseas realizar esta acción?
+            </div>
+            <div class="confirmation-buttons">
+                <button class="confirmation-btn cancel" onclick="closeConfirmationModal()">Cancelar</button>
+                <button class="confirmation-btn confirm" onclick="executeConfirmedAction()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader mejorado -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+        <div class="loader-text" id="loaderText">Generando PDF...</div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Etiqueta exportada exitosamente</span>
+    </div>
+
+    <script>
+        // Variables para manejar las acciones de confirmación
+        let pendingAction = null;
+        let pendingActionData = null;
+
+        // Configuración de PDF
+        const pdfSettings = {
+            size: '58x78',
+            customWidth: 58,
+            customHeight: 78,
+            orientation: 'landscape',
+            margin: 3
+        };
+
+        // Función para formatear números
+        function formatNumber(numStr) {
+            if (!numStr) return '';
+
+            const num = parseFloat(numStr.replace(',', '.'));
+            if (isNaN(num)) return numStr;
+
+            const parts = num
+                .toLocaleString('fr-FR', {
+                    maximumFractionDigits: 3
+                })
+                .split(',');
+
+            if (parts[1]) {
+                parts[1] = parts[1].replace(/0+$/, '');
+                return parts[1] ? parts.join(',') : parts[0];
+            }
+
+            return parts[0];
+        }
+
+        // Función para acortar texto
+        function shortenText(text, maxLength) {
+            if (!text) return '';
+            if (text.length > maxLength) {
+                return text.substring(0, maxLength - 3) + '...';
+            }
+            return text;
+        }
+
+        // Validar parámetros de entrada
+        function validateInputParams(params) {
+            const validParams = {};
+            
+            if (params.get('titulo')) {
+                validParams.titulo = params.get('titulo').substring(0, 100);
+            }
+            
+            ['largo', 'ancho', 'cantidad', 'metraje'].forEach(key => {
+                if (params.get(key)) {
+                    const num = parseFloat(params.get(key).replace(',', '.'));
+                    validParams[key] = isNaN(num) ? '0' : num.toString().replace('.', ',');
+                }
+            });
+            
+            ['ubicacion', 'unidad', 'unidad2', 'fecha', 'creado', 'codigo'].forEach(key => {
+                if (params.get(key)) {
+                    validParams[key] = params.get(key).substring(0, 100);
+                }
+            });
+            
+            return validParams;
+        }
+
+        // Leer parámetros de URL y colocar en etiquetas
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+            const validParams = validateInputParams(params);
+
+            const dataMap = {
+                titulo: {id: 'titulo', maxLength: 100},
+                largo: {id: 'largo', format: true},
+                ancho: {id: 'ancho', format: true},
+                ubicacion: {id: 'ubicacion', maxLength: 100},
+                unidad: {id: 'unidad', shorten: false},
+                unidad2: {id: 'unidad2', shorten: false},
+                fecha: {id: 'fecha'},
+                creado: {id: 'creado', maxLength: 100, shortenName: false},
+                codigo: {id: 'codigo', maxLength: 100},
+                cantidad: {id: 'cantidad', format: false},
+                metraje: {id: 'metraje', format: false}
+            };
+
+            for (const key in dataMap) {
+                const config = dataMap[key];
+                let value = validParams[key] || document.getElementById(config.id).textContent;
+                
+                if (value !== null) {
+                    if (config.format) {
+                        value = formatNumber(value);
+                    }
+                    if (config.maxLength) {
+                        value = shortenText(value, config.maxLength);
+                    }
+                    if (config.shorten) {
+                        value = value.substring(0, 3).toUpperCase();
+                    }
+                    if (config.shortenName) {
+                        const parts = value.split(' ');
+                        if (parts.length > 1) {
+                            value = parts[0].charAt(0) + '. ' + parts[1];
+                        }
+                    }
+                    
+                    document.getElementById(config.id).textContent = value;
+                }
+            }
+        }
+
+        // Mostrar notificación
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.className = isError ? 'notification error show' : 'notification show';
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, isError ? 4000 : 2000);
+        }
+
+        // Mostrar loader
+        function showLoader(text = 'Generando PDF...') {
+            document.getElementById('loaderText').textContent = text;
+            document.getElementById('loaderOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Ocultar loader
+        function hideLoader() {
+            document.getElementById('loaderOverlay').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Abrir modal
+        function openModal(content) {
+            const modal = document.getElementById('labelModal');
+            const modalContent = document.getElementById('modalLabelContent');
+            modalContent.innerHTML = content;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            const modal = document.getElementById('labelModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Mostrar modal de confirmación
+        function showConfirmationModal(title, message, action, data = null) {
+            document.getElementById('confirmationTitle').textContent = title;
+            document.getElementById('confirmationMessage').textContent = message;
+            pendingAction = action;
+            pendingActionData = data;
+            document.getElementById('confirmationModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal de confirmación
+        function closeConfirmationModal() {
+            document.getElementById('confirmationModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+            pendingAction = null;
+            pendingActionData = null;
+        }
+
+        // Ejecutar acción confirmada
+        function executeConfirmedAction() {
+            if (pendingAction) {
+                if (pendingActionData) {
+                    pendingAction(pendingActionData);
+                } else {
+                    pendingAction();
+                }
+            }
+            closeConfirmationModal();
+        }
+
+        // Mostrar confirmación para limpiar todas las etiquetas
+        function showClearAllConfirmation() {
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            if (savedLabels.length === 0) {
+                showNotification('No hay etiquetas guardadas para eliminar', true);
+                return;
+            }
+            
+            showConfirmationModal(
+                'Eliminar todas las etiquetas',
+                `¿Estás seguro de que deseas eliminar las ${savedLabels.length} etiquetas guardadas?`,
+                clearAllLabels
+            );
+        }
+
+        // Mostrar confirmación para eliminar una etiqueta individual
+        function showDeleteLabelConfirmation(labelId) {
+            showConfirmationModal(
+                'Eliminar etiqueta',
+                '¿Estás seguro de que deseas eliminar esta etiqueta?',
+                removeLabel,
+                labelId
+            );
+        }
+
+        function getCodigoFromTitulo() {
+            const titulo = document.getElementById('titulo').textContent;
+            const inicio = titulo.indexOf('(') + 1;
+            const fin = titulo.indexOf(')');
+            return inicio > 0 && fin > inicio 
+                ? titulo.substring(inicio, fin) 
+                : 'ETIQUETA';
+        }
+
+        // Guardar la etiqueta actual
+        function saveCurrentLabel() {
+            const labelData = {
+                id: Date.now().toString(),
+                titulo: document.getElementById('titulo').textContent,
+                largo: document.getElementById('largo').textContent,
+                ancho: document.getElementById('ancho').textContent,
+                ubicacion: document.getElementById('ubicacion').textContent,
+                unidad: document.getElementById('unidad').textContent,
+                unidad2: document.getElementById('unidad2').textContent,
+                fecha: document.getElementById('fecha').textContent,
+                creado: document.getElementById('creado').textContent,
+                codigo: document.getElementById('codigo').textContent,
+                cantidad: document.getElementById('cantidad').textContent,
+                metraje: document.getElementById('metraje').textContent,
+                timestamp: new Date().toISOString(),
+                html: document.getElementById('etiqueta').outerHTML
+            };
+            
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            // Agregar la nueva etiqueta al inicio del array
+            savedLabels.unshift(labelData);
+            localStorage.setItem('savedLabels', JSON.stringify(savedLabels));
+            
+            updateSavedLabelsList();
+            showNotification('Etiqueta guardada para PDF combinado');
+        }
+
+        // Actualizar la lista de etiquetas guardadas
+        function updateSavedLabelsList() {
+            let savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            
+            // Ordenar por timestamp (ya deberían estar ordenados por el unshift, pero por si acaso)
+            savedLabels.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            const listContainer = document.getElementById('savedLabelsList');
+            listContainer.innerHTML = '';
+            
+            if (savedLabels.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: #777; padding: 10px;">No hay etiquetas guardadas</p>';
+                return;
+            }
+            
+            savedLabels.forEach(label => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                
+                item.innerHTML = `
+                    <span>${shortenText(label.codigo, 30)} - ${label.fecha}</span>
+                    <div class="history-actions">
+                        <button class="history-btn view" onclick="viewLabel('${label.id}')" title="Ver">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="history-btn delete" onclick="showDeleteLabelConfirmation('${label.id}')" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Ver una etiqueta guardada
+        function viewLabel(labelId) {
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            const label = savedLabels.find(l => l.id === labelId);
+            
+            if (label) {
+                openModal(`
+                    <div style="display: flex; justify-content: center;">
+                        ${label.html}
+                    </div>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button class="btn" onclick="useLabel('${label.id}')">
+                            <i class="fas fa-undo"></i> Usar esta etiqueta
+                        </button>
+                    </div>
+                `);
+            }
+        }
+
+        // Usar una etiqueta guardada
+        function useLabel(labelId) {
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            const label = savedLabels.find(l => l.id === labelId);
+            
+            if (label) {
+                document.getElementById('titulo').textContent = label.titulo;
+                document.getElementById('largo').textContent = label.largo;
+                document.getElementById('ancho').textContent = label.ancho;
+                document.getElementById('ubicacion').textContent = label.ubicacion;
+                document.getElementById('unidad').textContent = label.unidad;
+                document.getElementById('unidad2').textContent = label.unidad2;
+                document.getElementById('fecha').textContent = label.fecha;
+                document.getElementById('creado').textContent = label.creado;
+                document.getElementById('codigo').textContent = label.codigo;
+                document.getElementById('cantidad').textContent = label.cantidad;
+                document.getElementById('metraje').textContent = label.metraje;
+                
+                closeModal();
+                showNotification('Etiqueta cargada correctamente');
+            }
+        }
+
+        // Eliminar una etiqueta guardada
+        function removeLabel(labelId) {
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            const updatedLabels = savedLabels.filter(l => l.id !== labelId);
+            
+            localStorage.setItem('savedLabels', JSON.stringify(updatedLabels));
+            updateSavedLabelsList();
+            showNotification('Etiqueta eliminada');
+        }
+
+        // Limpiar todas las etiquetas
+        function clearAllLabels() {
+            localStorage.removeItem('savedLabels');
+            updateSavedLabelsList();
+            showNotification('Todas las etiquetas han sido eliminadas');
+        }
+
+        // Actualizar configuración de tamaño de PDF
+        function updatePdfSize() {
+            const pdfSize = document.getElementById('pdfSize').value;
+            const customSizeGroup = document.getElementById('customSizeGroup');
+            
+            if (pdfSize === 'custom') {
+                customSizeGroup.style.display = 'block';
+            } else {
+                customSizeGroup.style.display = 'none';
+                
+                // Actualizar valores según tamaño seleccionado
+                if (pdfSize === 'A6') {
+                    pdfSettings.size = 'A6';
+                    pdfSettings.customWidth = 105;
+                    pdfSettings.customHeight = 148;
+                } else if (pdfSize === 'A5') {
+                    pdfSettings.size = 'A5';
+                    pdfSettings.customWidth = 148;
+                    pdfSettings.customHeight = 210;
+                } else if (pdfSize === 'A4') {
+                    pdfSettings.size = 'A4';
+                    pdfSettings.customWidth = 210;
+                    pdfSettings.customHeight = 297;
+                } 
+            }
+        }
+
+        // Guardar configuración de PDF
+        function savePdfSettings() {
+            pdfSettings.size = document.getElementById('pdfSize').value;
+            pdfSettings.orientation = document.getElementById('pdfOrientation').value;
+            pdfSettings.margin = parseInt(document.getElementById('pdfMargin').value);
+            
+            if (pdfSettings.size === 'custom') {
+                pdfSettings.customWidth = parseInt(document.getElementById('customWidth').value);
+                pdfSettings.customHeight = parseInt(document.getElementById('customHeight').value);
+            }
+            
+            localStorage.setItem('pdfSettings', JSON.stringify(pdfSettings));
+            showNotification('Configuración de PDF guardada');
+        }
+
+        // Cargar configuración de PDF
+        function loadPdfSettings() {
+            const savedSettings = localStorage.getItem('pdfSettings');
+            if (savedSettings) {
+                Object.assign(pdfSettings, JSON.parse(savedSettings));
+            }
+            
+            // Aplicar configuración cargada a los controles
+            document.getElementById('pdfSize').value = pdfSettings.size;
+            document.getElementById('pdfOrientation').value = pdfSettings.orientation;
+            document.getElementById('pdfMargin').value = pdfSettings.margin;
+            document.getElementById('customWidth').value = pdfSettings.customWidth;
+            document.getElementById('customHeight').value = pdfSettings.customHeight;
+            
+            if (pdfSettings.size === 'custom') {
+                document.getElementById('customSizeGroup').style.display = 'block';
+            }
+        }
+
+        async function generateCombinedPDF() {
+            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
+            
+            if (savedLabels.length === 0) {
+                showNotification('No hay etiquetas guardadas para combinar', true);
+                return;
+            }
+            
+            showLoader(`Generando PDF con ${savedLabels.length} etiquetas...`);
+            
+            try {
+                // 1. Crear un PDF maestro
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    unit: 'mm',
+                    orientation: pdfSettings.orientation,
+                    format: pdfSettings.size === 'custom' 
+                        ? [pdfSettings.customWidth, pdfSettings.customHeight] 
+                        : pdfSettings.size
+                });
+
+                // Configuración de márgenes
+                const marginBottom = 10; // Margen inferior entre etiquetas (en mm)
+                
+                // 2. Generar cada etiqueta como imagen y añadirla al PDF
+                for (let i = 0; i < savedLabels.length; i++) {
+                    if (i > 0) pdf.addPage(); // Nueva página para cada etiqueta
+
+                    const labelDiv = document.createElement('div');
+                    labelDiv.innerHTML = savedLabels[i].html;
+
+                    document.body.appendChild(labelDiv);
+                    
+                    const canvas = await html2canvas(labelDiv, {
+                        scale: 3,
+                        logging: true,
+                        useCORS: true
+                    });
+                    
+                    document.body.removeChild(labelDiv);
+                    
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth() - (pdfSettings.margin * 2);
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
+                    pdf.addImage(imgData, 'JPEG', 
+                        pdfSettings.margin, 
+                        pdfSettings.margin, 
+                        pdfWidth, 
+                        pdfHeight);
+                }
+
+                // 3. Guardar el PDF combinado
+                pdf.save(`etiquetas-${new Date().toLocaleDateString()}.pdf`);
+                showNotification(`PDF generado correctamente con ${savedLabels.length} etiquetas`);
+            } catch (error) {
+                console.error('Error al generar PDF:', error);
+                showNotification('Error al generar PDF', true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        // Generar PDF individual
+        async function generarPDF() {
+            const codigoProducto = getCodigoFromTitulo();   
+            
+            const ahora = new Date();
+            const fecha = [
+                ahora.getHours().toString().padStart(2, '0'),
+                ahora.getMinutes().toString().padStart(2, '0'),
+                ahora.getSeconds().toString().padStart(2, '0')
+                ].join('');
+
+            const nombreArchivo = `etiqueta-${codigoProducto}-${fecha}.pdf`;
+
+            const element = document.getElementById('etiqueta');
+            
+            showLoader('Generando etiqueta...');
+
+            try {
+                let format, width, height;
+                
+                if (pdfSettings.size === 'custom') {
+                    width = pdfSettings.customWidth;
+                    height = pdfSettings.customHeight;
+                    format = [width, height];
+                } else {
+                    format = pdfSettings.size;
+                }
+                
+                const opt = {
+                    margin: [pdfSettings.margin, pdfSettings.margin, pdfSettings.margin, pdfSettings.margin],
+                    filename: nombreArchivo,
+                    image: { 
+                        type: 'jpeg', 
+                        quality: 0.95 
+                    },
+                    html2canvas: { 
+                        scale: 3,
+                        logging: false,
+                        useCORS: true,
+                        allowTaint: true,
+                        scrollX: 0,
+                        scrollY: 0,
+                        width: 264,
+                        height: element.offsetHeight + 10
+                    },
+                    jsPDF: { 
+                        unit: 'mm', 
+                        format: format,
+                        orientation: pdfSettings.orientation,
+                        hotfixes: ["px_scaling"] 
+                    }
+                };
+                
+                await html2pdf().set(opt).from(element).save();
+                showNotification(`Etiqueta guardada como <strong>${nombreArchivo}</strong>`);
+            } catch (error) {
+                console.error('Error al generar PDF:', error);
+                showNotification('Error al generar el PDF. Intente nuevamente.', true);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        // Inicialización
+        window.onload = function() {
+            getParams();
+            loadPdfSettings();
+            updateSavedLabelsList();
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            document.getElementById('labelModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Cerrar modal de confirmación al hacer clic fuera del contenido
+            document.getElementById('confirmationModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeConfirmationModal();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
