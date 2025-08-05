@@ -61,7 +61,7 @@
       "coordenadas": [-12.3019221, -76.8377681],
       "tipo": "outlet",
       "categorias": ["outlet", "lurin"],
-      "estado":"Disponible" 
+      "estado":"No disponible" 
     },
     {
       "id": "miraflores",
@@ -84,4 +84,5 @@
       "estado":"Disponible" 
     }
   ]
+
 }
