@@ -1,0 +1,3162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Gallos Mármol</title>
+    <meta name="description" content="Portal de sistemas para Gallos Mármol">
+    <meta name="keywords" content="gallos mármol, sistema, tickets, suministro, activo, despacho">
+    <meta name="author" content="Gallos Mármol">
+    <link rel="icon" type="image/x-icon" href="FOTO/ICONO/Icono_01.ico">
+    
+    <!-- Librerías externas -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Script de configuración de Firebase (externo) -->
+    <script src="JS/CONFIG/firebase-config.js"></script>
+
+    <style>
+        /* ===== VARIABLES Y RESET ===== */
+        :root {
+            --primary-color: #CB3E2C;
+            --primary-light: #006494;
+            --secondary-color: #0078d4;
+            --secondary-light: #5dade2;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --success-light: #58d68d;
+            --warning-color: #f39c12;
+            --warning-light: #f8c471;
+            --danger-color: #e74c3c;
+            --danger-light: #ec7063;
+            --light-color: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #fff;
+            --text-muted: #6c757d;
+            --bg-color: #f7f7f7;
+            --card-bg: #fff;
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius-sm: 8px;
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --header-height: 70px;
+            --safe-area-top: env(safe-area-inset-top);
+            --safe-area-bottom: env(safe-area-inset-bottom);
+        }
+
+        .dark-mode {
+            --primary-color: #CB3E2C;
+            --primary-light: #006494;
+            --secondary-color: #0078d4;
+            --secondary-light: #5dade2;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --success-light: #58d68d;
+            --warning-color: #d68910;
+            --warning-light: #f8c471;
+            --danger-color: #cb4335;
+            --danger-light: #ec7063;
+            --light-color: #2c2c2c;
+            --light-gray: #1e1e1e;
+            --dark-color: #121212;
+            --text-color: #e0e0e0;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--header-height);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-top: var(--safe-area-top);
+            padding-bottom: var(--safe-area-bottom);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== HEADER MOBILE-FIRST ===== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            max-width: 60%;
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius-sm);
+            object-fit: contain;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle, .fullscreen-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover, .fullscreen-btn:hover {
+            background-color: var(--light-color);
+            transform: scale(1.05);
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            padding-top: calc(var(--header-height) + 1rem);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== PORTAL DE SISTEMAS ===== */
+        .portal-container {
+            width: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+            margin-top: 70px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .portal-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .portal-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .portal-logo-img {
+            height: 120px;
+            width: 120px;
+            margin: 0 auto 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .portal-logo-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .portal-header h1 {
+            color: var(--text-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--primary-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .portal-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .system-card {
+            background-color: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .system-card.selected {
+            border: 2px solid var(--success-color);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
+        }
+
+        .system-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .system-card.disabled:hover {
+            transform: none;
+        }
+
+        .system-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: var(--transition);
+            background: var(--primary-color);
+        }
+
+        .system-card.selected .system-icon {
+            transform: scale(1.1);
+        }
+
+        .system-card h3 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .system-card p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .system-roles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .role-tag {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .login-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+
+        .selected-system-info {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1.25rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+            text-align: left;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .selected-system-info h4 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .selected-system-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            padding: 1rem;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-error {
+            background-color: var(--danger-color);
+        }
+
+        .toast-warning {
+            background-color: var(--warning-color);
+        }
+
+        .toast-info {
+            background-color: var(--secondary-color);
+        }
+
+        .toast-icon {
+            font-size: 1.25rem;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            color: white;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+        }
+
+        /* ===== BOTONES ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .login-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            transition: var(--transition);
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            background: var(--light-color);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== ERROR MESSAGES ===== */
+        .error-message {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-message.warning {
+            background-color: var(--warning-color);
+        }
+
+        .error-message.info {
+            background-color: var(--secondary-color);
+        }
+
+        .error-message.show {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* ===== USER INFO ===== */
+        .user-info {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+            text-align: left;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .user-info h4 {
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            border: 3px solid var(--primary-color);
+        }
+
+        .user-welcome {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* ===== REDIRECT INFO ===== */
+        .redirect-info {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .redirect-countdown {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin: 1rem 0;
+        }
+
+        .countdown-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .countdown-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .countdown-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        .redirect-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ===== ESTILOS PARA EL NUEVO SISTEMA DE REDIRECCIÓN ===== */
+        .redirect-content {
+            text-align: center;
+        }
+
+        .redirect-details {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .redirect-details p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .countdown-text {
+            font-size: 1rem;
+            margin: 1rem 0;
+        }
+
+        .redirect-error {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: var(--danger-color);
+            margin-bottom: 1rem;
+        }
+
+        .error-detail {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 1rem 0;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        /* Animación para la cuenta regresiva */
+        .countdown-circle {
+            transition: transform 0.3s ease;
+        }
+
+        /* ===== ESTILOS PARA PANTALLAS DE ERROR MEJORADAS ===== */
+        .error-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--danger-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .error-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .error-footer {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .no-access-message {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .access-details {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .retry-status {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .retry-status .loading-spinner {
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .error-buttons,
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .error-buttons .btn,
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+
+        /* ===== ESTILOS MEJORADOS PARA SISTEMAS DESHABILITADOS ===== */
+        .system-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .system-card.disabled::after {
+            content: '🔒 Inicia sesión';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .system-card.disabled:hover::after {
+            opacity: 1;
+        }
+
+        .system-card.disabled .system-icon {
+            background: var(--light-color) !important;
+        }
+
+        .system-card.disabled .system-icon i {
+            color: var(--text-muted) !important;
+        }
+
+        .system-card.disabled h3 {
+            color: var(--text-muted);
+        }
+
+        .system-card.disabled p {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ===== ESTILOS PARA PANTALLAS DE ERROR MEJORADAS ===== */
+        .error-screen {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .error-message-content {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid currentColor;
+        }
+
+        .error-message-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .error-action {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .error-action p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .error-details {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .error-details summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            list-style: none;
+        }
+
+        .error-details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .error-details summary::after {
+            content: '▶';
+            float: right;
+            transition: transform 0.3s ease;
+        }
+
+        .error-details[open] summary::after {
+            transform: rotate(90deg);
+        }
+
+        .error-details-content {
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .error-details-content p {
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .error-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .error-footer {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-tertiary:hover {
+            background: var(--light-gray);
+            border-color: var(--text-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .error-screen {
+                padding: 1.5rem 1rem;
+            }
+            
+            .error-buttons {
+                flex-direction: column;
+            }
+            
+            .error-buttons .btn {
+                width: 100%;
+            }
+        }
+
+        /* Modo oscuro mejoras */
+        .dark-mode .error-message-content {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dark-mode .error-action {
+            background: rgba(52, 152, 219, 0.15);
+        }
+
+        .dark-mode .error-details {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (min-width: 576px) {
+            html {
+                font-size: 15px;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .toast {
+                left: auto;
+                right: 1rem;
+                margin: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+            
+            .systems-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .portal-header h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .systems-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .main-content {
+                padding-top: calc(var(--header-height) + 2rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .portal-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .system-card h3 {
+                font-size: 1.3rem;
+            }
+            
+            .redirect-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .login-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .header-content {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="../FOTO/LOGO/Logo_01.webp" alt="Gallos Mármol" class="logo-img">
+            </div>
+            <div class="header-actions">
+                <button class="fullscreen-btn" id="fullscreenBtn" title="Pantalla completa" aria-label="Pantalla completa">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay de carga -->
+    <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Cargando...</div>
+    </div>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Portal Principal -->
+            <div class="portal-container">
+                <div class="portal-header">
+                    <h1>Gallos Mármol te da la bienvenida</h1>
+                    <p>Selecciona el sistema al que deseas acceder e inicia sesión con tu cuenta de Google</p>
+                </div>
+
+                <div class="systems-grid">
+                    <div class="system-card system-suministro" data-system="sistemaSuministro">
+                        <div class="system-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <h3>Sistema de Suministro</h3>
+                    </div>
+
+                    <div class="system-card system-ticket" data-system="sistemaTicket">
+                        <div class="system-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <h3>Sistema de Tickets</h3>
+                    </div>
+
+                    <div class="system-card system-activo" data-system="sistemaActivo">
+                        <div class="system-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <h3>Sistema de Activos</h3>
+                    </div>
+
+                    <div class="system-card system-despacho" data-system="sistemaDespacho">
+                        <div class="system-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h3>Sistema de Despacho</h3>
+                    </div>
+                </div>
+
+                <div class="login-section">
+                    <div class="selected-system-info" id="selectedSystemInfo" style="display: none;">
+                        <h4><i class="fas fa-check-circle"></i> Sistema seleccionado</h4>
+                        <p id="selectedSystemText">Has seleccionado el <strong id="systemName"></strong></p>
+                    </div>
+
+                    <div class="error-message" id="errorMessage">
+                        <i class="fas fa-exclamation-triangle error-icon"></i>
+                        <div class="error-content">
+                            <span id="errorText"></span>
+                            <div id="errorDetails" class="error-details"></div>
+                            <div id="errorSuggestion" class="error-suggestion"></div>
+                        </div>
+                    </div>
+
+                    <!-- Información del usuario cuando ya está logueado -->
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <div class="user-header">
+                            <div class="user-avatar-large" id="userAvatarLarge">C</div>
+                            <div>
+                                <div class="user-welcome" id="userWelcome">¡Bienvenido de nuevo!</div>
+                                <div class="user-email" id="userEmail"></div>
+                            </div>
+                        </div>
+                        <h4><i class="fas fa-user-check"></i> Sesión activa</h4>
+                        <div id="userDetails"></div>
+                        
+                        <button class="logout-btn" id="logoutBtnMain">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </button>
+                    </div>
+
+                    <!-- Información de redirección -->
+                    <div class="redirect-info" id="redirectInfo" style="display: none;">
+                        <p><i class="fas fa-arrow-right"></i> Redirigiendo al sistema seleccionado...</p>
+                        <div class="countdown-container">
+                            <div class="countdown-circle" id="redirectCountdown">5</div>
+                        </div>
+                        <p>Serás redirigido automáticamente en <span id="countdownValue">5</span> segundos</p>
+                        
+                        <div class="redirect-actions">
+                            <button class="action-btn primary" id="redirectNowBtn">
+                                <i class="fas fa-rocket"></i> Ir ahora
+                            </button>
+                            <button class="action-btn secondary" id="skipRedirectBtn">
+                                <i class="fas fa-times"></i> Saltar cuenta regresiva
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="login-btn" id="loginBtn" disabled>
+                        <span id="loginText">Selecciona un sistema primero</span>
+                    </button>
+
+                    <div class="footer">
+                        <p><i class="fas fa-lock"></i> Solo usuarios autorizados pueden acceder a los sistemas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast notifications -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toastMessage">Operación completada con éxito</span>
+        <button class="toast-close" aria-label="Cerrar notificación">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        // ===== SISTEMAS DE OPTIMIZACIÓN =====
+
+        // 🔥 1. SISTEMA DE CACHÉ AVANZADO
+        class CacheManager {
+            constructor() {
+                this.cache = new Map();
+                this.defaultTTL = 10 * 60 * 1000; // 10 minutos
+            }
+
+            set(key, data, ttl = this.defaultTTL) {
+                this.cache.set(key, {
+                    data,
+                    expiry: Date.now() + ttl,
+                    timestamp: new Date().toISOString()
+                });
+                console.log('💾 [CACHE] Saved:', key);
+            }
+
+            get(key) {
+                const item = this.cache.get(key);
+                if (!item) return null;
+
+                if (Date.now() > item.expiry) {
+                    this.cache.delete(key);
+                    console.log('🗑️ [CACHE] Expired:', key);
+                    return null;
+                }
+
+                console.log('📦 [CACHE] Hit:', key);
+                return item.data;
+            }
+
+            delete(key) {
+                this.cache.delete(key);
+            }
+
+            clearByPattern(pattern) {
+                for (const key of this.cache.keys()) {
+                    if (key.includes(pattern)) {
+                        this.cache.delete(key);
+                    }
+                }
+            }
+        }
+
+        const AppCache = new CacheManager();
+
+        // 🔥 2. SISTEMA DE SESIONES OFFLINE
+        class SessionManager {
+            constructor() {
+                this.SESSION_KEY = 'gm_user_session';
+                this.SESSION_DURATION = 30 * 60 * 1000; // 30 minutos
+            }
+
+            getValidSession() {
+                try {
+                    const sessionData = localStorage.getItem(this.SESSION_KEY);
+                    if (!sessionData) return null;
+
+                    const session = JSON.parse(sessionData);
+                    const now = Date.now();
+                    
+                    if (now - session.lastActivity > this.SESSION_DURATION) {
+                        this.clearSession();
+                        return null;
+                    }
+
+                    session.lastActivity = now;
+                    this.saveSession(session);
+                    
+                    console.log('🔄 [SESSION] Reusing cached session');
+                    return session;
+                    
+                } catch (error) {
+                    this.clearSession();
+                    return null;
+                }
+            }
+
+            saveSession(sessionData) {
+                const enhancedSession = {
+                    ...sessionData,
+                    lastActivity: Date.now(),
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem(this.SESSION_KEY, JSON.stringify(enhancedSession));
+            }
+
+            clearSession() {
+                localStorage.removeItem(this.SESSION_KEY);
+                AppCache.clearByPattern('userSystems_');
+            }
+
+            async saveEssentialSessionData(user, systemData) {
+                try {
+                    const peruTime = getPeruTime();
+                    const essentialData = {
+                        ultimoLogin: peruTime.isoString,
+                        ultimoSistema: systemData.key,
+                        nombreSistema: systemData.name,
+                        contadorIniciosSesion: firebase.firestore.FieldValue.increment(1),
+                        agenteUsuario: navigator.userAgent.substring(0, 100),
+                        usuarioEmail: user.email,
+                        usuarioNombre: user.displayName || 'Usuario',
+                        fechaRegistro: peruTime.isoString
+                    };
+
+                    await BatchProcessor.addWrite('sesionesUsuarios', user.uid, essentialData, 'set');
+                    console.log('📝 [SESION] Datos esenciales guardados en Firebase');
+                    
+                } catch (error) {
+                    console.warn('⚠️ [SESION] No se pudo guardar en Firebase, continuando offline');
+                }
+            }
+        }
+
+        const AppSession = new SessionManager();
+
+        // 🔥 3. SISTEMA DE ESCRITURAS POR LOTES
+        class BatchManager {
+            constructor() {
+                this.pendingWrites = [];
+                this.batchTimeout = null;
+                this.MAX_BATCH_SIZE = 10;
+                this.BATCH_TIMEOUT_MS = 5000;
+            }
+
+            async addWrite(collection, docId, data, operation = 'set') {
+                this.pendingWrites.push({ collection, docId, data, operation });
+                
+                if (this.pendingWrites.length >= this.MAX_BATCH_SIZE) {
+                    await this.executeBatch();
+                    return;
+                }
+                
+                this.scheduleBatch();
+            }
+
+            scheduleBatch() {
+                if (this.batchTimeout) {
+                    clearTimeout(this.batchTimeout);
+                }
+                
+                this.batchTimeout = setTimeout(() => {
+                    this.executeBatch();
+                }, this.BATCH_TIMEOUT_MS);
+            }
+
+            async executeBatch() {
+                if (this.pendingWrites.length === 0) return;
+
+                const batch = firebase.firestore().batch();
+                const writesCount = this.pendingWrites.length;
+
+                try {
+                    for (const write of this.pendingWrites) {
+                        const docRef = firebase.firestore()
+                            .collection(write.collection)
+                            .doc(write.docId);
+                        
+                        if (write.operation === 'set') {
+                            batch.set(docRef, write.data, { merge: true });
+                        } else if (write.operation === 'update') {
+                            batch.update(docRef, write.data);
+                        }
+                    }
+
+                    await batch.commit();
+                    console.log(`📦 [BATCH] Successfully executed ${writesCount} writes`);
+                    this.pendingWrites = [];
+                    
+                } catch (error) {
+                    console.error('❌ [BATCH] Error:', error);
+                }
+            }
+
+            async immediateWrite(collection, docId, data) {
+                await firebase.firestore()
+                    .collection(collection)
+                    .doc(docId)
+                    .set(data, { merge: true });
+            }
+        }
+
+        const BatchProcessor = new BatchManager();
+
+        // 🔥 4. SISTEMA DE MÉTRICAS (SOLO DESARROLLO)
+        class FirebaseMetrics {
+            static operations = {
+                reads: 0,
+                writes: 0,
+                deletes: 0
+            };
+
+            static startMonitoring() {
+                const originalGet = firebase.firestore.CollectionReference.prototype.get;
+                firebase.firestore.CollectionReference.prototype.get = function(...args) {
+                    FirebaseMetrics.operations.reads++;
+                    console.log('📖 [METRICS] Firestore Read #' + FirebaseMetrics.operations.reads);
+                    return originalGet.apply(this, args);
+                };
+            }
+
+            static getMetrics() {
+                return { ...this.operations };
+            }
+        }
+
+        // ===== CONFIGURACIÓN Y ESTADO DE LA APLICACIÓN =====
+        const AppState = {
+            isLoading: false,
+            userData: null,
+            sessionTimer: null,
+            activityDebounce: null,
+            firebaseLoaded: false,
+            darkMode: localStorage.getItem('darkMode') === 'true'
+        };
+
+        // ===== SISTEMA CENTRALIZADO DE MANEJO DE ERRORES =====
+        class ErrorHandler {
+            static handle(error, context = 'Sistema', userFriendlyMessage = null) {
+                console.error(`❌ [${context}] Error:`, error);
+                
+                const errorInfo = this.classifyError(error, context);
+                this.showUserError(errorInfo.userMessage || userFriendlyMessage, errorInfo.type);
+                this.logError(error, context, errorInfo);
+                this.attemptRecovery(error, context);
+                
+                return errorInfo;
+            }
+            
+            static classifyError(error, context) {
+                if (error.code?.startsWith('auth/')) {
+                    return this.handleAuthError(error, context);
+                }
+                
+                if (error.code?.startsWith('firestore/') || error.code === 'failed-precondition') {
+                    return this.handleFirestoreError(error, context);
+                }
+                
+                if (error.message?.includes('Network') || error.code === 'network-request-failed') {
+                    return {
+                        type: 'network',
+                        userMessage: 'Error de conexión. Verifica tu internet e intenta nuevamente.',
+                        canRetry: true
+                    };
+                }
+                
+                return {
+                    type: 'unknown',
+                    userMessage: 'Ocurrió un error inesperado. Por favor, intenta nuevamente.',
+                    canRetry: true
+                };
+            }
+            
+            static handleAuthError(error, context) {
+                const authErrors = {
+                    'auth/user-not-found': {
+                        type: 'auth',
+                        userMessage: 'Usuario no encontrado. Verifica tu correo electrónico.',
+                        canRetry: true
+                    },
+                    'auth/wrong-password': {
+                        type: 'auth', 
+                        userMessage: 'Contraseña incorrecta. Intenta nuevamente.',
+                        canRetry: true
+                    },
+                    'auth/network-request-failed': {
+                        type: 'network',
+                        userMessage: 'Error de conexión durante la autenticación.',
+                        canRetry: true
+                    },
+                    'auth/popup-closed-by-user': {
+                        type: 'auth',
+                        userMessage: 'Autenticación cancelada por el usuario.',
+                        canRetry: true
+                    }
+                };
+                
+                return authErrors[error.code] || {
+                    type: 'auth',
+                    userMessage: `Error de autenticación: ${error.message}`,
+                    canRetry: true
+                };
+            }
+            
+            static handleFirestoreError(error, context) {
+                return {
+                    type: 'database',
+                    userMessage: 'Error al acceder a los datos. Intenta nuevamente.',
+                    canRetry: true
+                };
+            }
+            
+            static showUserError(message, type = 'error') {
+                showToast(message, type);
+            }
+            
+            static logError(error, context, errorInfo) {
+                const logEntry = {
+                    timestamp: new Date().toISOString(),
+                    context: context,
+                    error: error.message || error,
+                    code: error.code,
+                    type: errorInfo.type,
+                    userAgent: navigator.userAgent,
+                    url: window.location.href
+                };
+                
+                console.group(`🚨 Error en ${context}`);
+                console.table(logEntry);
+                console.groupEnd();
+            }
+            
+            static attemptRecovery(error, context) {
+                switch (error.type) {
+                    case 'network':
+                        setTimeout(() => {
+                            if (context === 'Firebase Init') {
+                                initializeFirebase();
+                            }
+                        }, 5000);
+                        break;
+                }
+            }
+        }
+
+        // ===== SISTEMA UNIFICADO DE REDIRECCIÓN =====
+        class RedirectSystem {
+            static init() {
+                this.selectedSystem = null;
+                this.redirectTimer = null;
+            }
+            
+            static selectSystem(systemData, event) {
+                try {
+                    console.log('🎯 Seleccionando sistema:', systemData);
+                    
+                    if (!this.validateSystemData(systemData)) {
+                        throw new Error('Datos del sistema inválidos');
+                    }
+                    
+                    this.clearPreviousSelection();
+                    this.selectedSystem = systemData;
+                    this.updateUISelection(event.currentTarget);
+                    this.showSystemInfo(systemData);
+                    this.prepareRedirect(systemData);
+                    
+                    return true;
+                    
+                } catch (error) {
+                    ErrorHandler.handle(error, 'System Selection', 'Error al seleccionar el sistema');
+                    return false;
+                }
+            }
+            
+            static validateSystemData(system) {
+                const requiredFields = ['key', 'name', 'rol'];
+                const missingFields = requiredFields.filter(field => !system[field]);
+                
+                if (missingFields.length > 0) {
+                    throw new Error(`Campos requeridos faltantes: ${missingFields.join(', ')}`);
+                }
+                
+                if (!SystemPages[system.key]) {
+                    throw new Error(`Sistema no configurado: ${system.key}`);
+                }
+                
+                if (!SystemPages[system.key][system.rol]) {
+                    throw new Error(`Rol '${system.rol}' no configurado para sistema '${system.key}'`);
+                }
+                
+                return true;
+            }
+            
+            static clearPreviousSelection() {
+                document.querySelectorAll('.system-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                if (this.redirectTimer) {
+                    clearInterval(this.redirectTimer);
+                    this.redirectTimer = null;
+                }
+            }
+            
+            static updateUISelection(selectedCard) {
+                selectedCard.classList.add('selected');
+                selectedCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    selectedCard.style.transform = 'scale(1)';
+                }, 150);
+            }
+            
+            static showSystemInfo(system) {
+                const selectedSystemInfo = document.getElementById('selectedSystemInfo');
+                const systemName = document.getElementById('systemName');
+                const selectedSystemText = document.getElementById('selectedSystemText');
+                
+                if (!selectedSystemInfo || !systemName) return;
+                
+                systemName.textContent = system.name;
+                selectedSystemText.innerHTML = 
+                    `Has seleccionado el <strong>${system.name}</strong> con rol <strong>${system.rol}</strong>`;
+                
+                selectedSystemInfo.style.display = 'block';
+                showToast(`${system.name} seleccionado - Rol: ${system.rol}`, 'success');
+            }
+            
+            static prepareRedirect(system) {
+                setTimeout(() => {
+                    this.showRedirectSection(system);
+                }, 800);
+            }
+            
+            static showRedirectSection(system) {
+                try {
+                    const redirectInfo = document.getElementById('redirectInfo');
+                    
+                    if (!redirectInfo) {
+                        throw new Error('Elemento de redirección no encontrado');
+                    }
+                    
+                    redirectInfo.innerHTML = `
+                        <div class="redirect-content">
+                            <h4><i class="fas fa-arrow-right"></i> Redirigiendo a ${system.name}</h4>
+                            <div class="countdown-container">
+                                <div class="countdown-circle" id="redirectCountdown">5</div>
+                            </div>
+                            <p class="countdown-text">Serás redirigido automáticamente en <span id="countdownValue">5</span> segundos</p>
+                            <div class="redirect-actions">
+                                <button class="action-btn primary" id="redirectNowBtn">
+                                    <i class="fas fa-rocket"></i> Ir ahora
+                                </button>
+                                <button class="action-btn secondary" id="cancelRedirectBtn">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    redirectInfo.style.display = 'block';
+                    this.setupRedirectEventListeners(system);
+                    this.startRedirectCountdown(system);
+                    
+                } catch (error) {
+                    ErrorHandler.handle(error, 'Redirect Section', 'Error al preparar la redirección');
+                }
+            }
+            
+            static setupRedirectEventListeners(system) {
+                document.getElementById('redirectNowBtn').addEventListener('click', () => {
+                    this.executeRedirect(system);
+                });
+                
+                document.getElementById('cancelRedirectBtn').addEventListener('click', () => {
+                    this.cancelRedirect();
+                });
+            }
+            
+            static startRedirectCountdown(system) {
+                const countdownValue = document.getElementById('countdownValue');
+                const redirectCountdown = document.getElementById('redirectCountdown');
+                
+                let countdown = 5;
+                
+                const updateCountdown = () => {
+                    countdownValue.textContent = countdown;
+                    redirectCountdown.textContent = countdown;
+                    redirectCountdown.style.transform = `scale(${1 + (5 - countdown) * 0.05})`;
+                    
+                    if (countdown <= 0) {
+                        this.executeRedirect(system);
+                        return;
+                    }
+                    
+                    countdown--;
+                };
+                
+                updateCountdown();
+                this.redirectTimer = setInterval(updateCountdown, 1000);
+            }
+            
+            static executeRedirect(system) {
+                try {
+                    console.log('🚀 Ejecutando redirección a:', system);
+                    
+                    if (!this.validateSystemData(system)) {
+                        throw new Error('Validación falló antes de redirección');
+                    }
+                    
+                    const page = SystemPages[system.key][system.rol];
+                    
+                    if (!page) {
+                        throw new Error(`Página no encontrada para ${system.key} - ${system.rol}`);
+                    }
+                    
+                    this.saveSessionData(system);
+                    
+                    if (this.redirectTimer) {
+                        clearInterval(this.redirectTimer);
+                        this.redirectTimer = null;
+                    }
+                    
+                    showLoadingOverlay(true, `Redirigiendo a ${system.name}...`);
+                    
+                    setTimeout(() => {
+                        console.log('📍 Redirigiendo a:', page);
+                        window.location.href = page;
+                    }, 500);
+                    
+                } catch (error) {
+                    ErrorHandler.handle(error, 'Execute Redirect', 'Error al redirigir al sistema');
+                    this.showRedirectError(system, error);
+                }
+            }
+            
+            static saveSessionData(system) {
+                try {
+                    const sessionData = {
+                        userRole: system.rol,
+                        userSystem: system.key,
+                        userName: system.userData?.nombre || 'Usuario',
+                        lastLogin: new Date().toISOString(),
+                        lastActivity: new Date().getTime(),
+                        redirectTimestamp: Date.now()
+                    };
+                    
+                    localStorage.setItem('userSession', JSON.stringify(sessionData));
+                    localStorage.setItem('userRole', system.rol);
+                    localStorage.setItem('userSystem', system.key);
+                    
+                } catch (storageError) {
+                    console.warn('No se pudieron guardar datos de sesión:', storageError);
+                }
+            }
+            
+            static cancelRedirect() {
+                try {
+                    if (this.redirectTimer) {
+                        clearInterval(this.redirectTimer);
+                        this.redirectTimer = null;
+                    }
+                    
+                    const redirectInfo = document.getElementById('redirectInfo');
+                    if (redirectInfo) {
+                        redirectInfo.style.display = 'none';
+                    }
+                    
+                    this.clearPreviousSelection();
+                    this.selectedSystem = null;
+                    
+                    showToast('Redirección cancelada', 'info');
+                    
+                } catch (error) {
+                    ErrorHandler.handle(error, 'Cancel Redirect', 'Error al cancelar redirección');
+                }
+            }
+            
+            static showRedirectError(system, error) {
+                const redirectInfo = document.getElementById('redirectInfo');
+                
+                if (!redirectInfo) return;
+                
+                redirectInfo.innerHTML = `
+                    <div class="redirect-error">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4>Error de Redirección</h4>
+                        <p>No pudimos redirigirte al sistema <strong>${system.name}</strong>.</p>
+                        <p class="error-detail">${error.message}</p>
+                        <div class="error-actions">
+                            <button class="action-btn primary" id="retryRedirectBtn">
+                                <i class="fas fa-redo"></i> Reintentar
+                            </button>
+                            <button class="action-btn secondary" id="closeErrorBtn">
+                                <i class="fas fa-times"></i> Cerrar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('retryRedirectBtn').addEventListener('click', () => {
+                    this.executeRedirect(system);
+                });
+                
+                document.getElementById('closeErrorBtn').addEventListener('click', () => {
+                    redirectInfo.style.display = 'none';
+                });
+            }
+        }
+
+        // Inicializar sistema de redirección
+        RedirectSystem.init();
+
+        // Mapeo de sistemas a páginas según rol
+        const SystemPages = {
+            sistemaSuministro: {
+                colaborador: '/SUMINISTRO/COLABORADOR/index.html',
+                supervisor: '/SUMINISTRO/SUPERVISOR/index.html',
+                administrador: '/SUMINISTRO/ADMINISTRADOR/index.html'
+            },
+            sistemaTicket: {
+                colaborador: '/TICKET/colaborador.html',
+                soporte: '/TICKET/soporte.html',
+                gerente: '/TICKET/gerente.html',
+                administrador: '/TICKET/admin.html'
+            },
+            sistemaActivo: {
+                colaborador: '/ACTIVO/colaborador.html',
+                administrador: '/ACTIVO/admin.html'
+            },
+            sistemaDespacho: {
+                colaborador: '/DESPACHO/colaborador.html',
+                supervisor: '/DESPACHO/supervisor.html',
+                administrador: '/DESPACHO/admin.html'
+            }
+        };
+
+        // Nombres amigables de sistemas
+        const SystemNames = {
+            sistemaSuministro: 'Sistema de Suministro',
+            sistemaTicket: 'Sistema de Tickets',
+            sistemaActivo: 'Sistema de Activos',
+            sistemaDespacho: 'Sistema de Despacho'
+        };
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        // ===== FUNCIÓN PARA OBTENER HORA DE PERÚ =====
+        function getPeruTime() {
+            // Perú está en UTC-5 (sin horario de verano)
+            const now = new Date();
+            const peruOffset = -5 * 60; // UTC-5 en minutos
+            const peruTime = new Date(now.getTime() + peruOffset * 60 * 1000);
+            
+            return {
+                timestamp: peruTime,
+                isoString: peruTime.toISOString(),
+                readable: peruTime.toLocaleString('es-PE', {
+                    timeZone: 'America/Lima',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                })
+            };
+        }
+
+        // ===== FUNCIONES DE UTILIDAD =====
+        function showLoadingOverlay(show, message = 'Cargando...') {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            
+            if (show) {
+                loadingText.textContent = message;
+                loadingOverlay.classList.add('active');
+            } else {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('.toast-icon');
+            
+            if (!toast || !toastMessage) return;
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            
+            const toastConfig = {
+                success: { icon: 'check-circle', color: 'toast' },
+                error: { icon: 'exclamation-circle', color: 'toast-error' },
+                warning: { icon: 'exclamation-triangle', color: 'toast-warning' },
+                info: { icon: 'info-circle', color: 'toast-info' }
+            };
+            
+            const config = toastConfig[type] || toastConfig.success;
+            toastIcon.className = `fas fa-${config.icon} toast-icon`;
+            toast.classList.add(config.color);
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // ===== INICIALIZACIÓN DE FIREBASE =====
+        function initializeFirebase() {
+            if (typeof firebase === 'undefined') {
+                console.error('❌ Firebase no está disponible');
+                showToast('Error: Firebase no se cargó correctamente', 'error');
+                return false;
+            }
+            
+            if (typeof firebaseConfig === 'undefined') {
+                showToast('Error de configuración: No se pudo cargar la configuración de Firebase.', 'error');
+                return false;
+            }
+            
+            try {
+                firebase.initializeApp(firebaseConfig);
+                AppState.firebaseLoaded = true;
+                return true;
+            } catch (error) {
+                showToast('Error de conexión con la base de datos', 'error');
+                return false;
+            }
+        }
+
+        // ===== INICIALIZACIÓN DE LA APLICACIÓN =====
+        async function initializeApp() {
+            try {
+                console.log('🚀 [APP] Inicializando aplicación...');
+                
+                // ✅ LIMPIAR UI INMEDIATAMENTE
+                resetUIState();
+                
+                // Aplicar tema
+                if (AppState.darkMode) {
+                    document.body.classList.add('dark-mode');
+                    const themeToggle = document.getElementById('themeToggle');
+                    if (themeToggle) {
+                        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    }
+                }
+                
+                // Configurar event listeners
+                setupEventListeners();
+                
+                // Mostrar estado de carga
+                showLoadingOverlay(true, 'Inicializando sistema...');
+                
+                // Inicializar Firebase
+                if (!initializeFirebase()) {
+                    showLoadingOverlay(false);
+                    showLoginScreen(); // ✅ Fallback seguro
+                    return;
+                }
+                
+                // Iniciar monitoreo de métricas
+                FirebaseMetrics.startMonitoring();
+                
+                // Pequeña pausa para mejor UX
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Inicializar autenticación optimizada
+                await initializeAuthFlow();
+                
+                // Mostrar métricas en consola para desarrollo
+                setTimeout(() => {
+                    const metrics = FirebaseMetrics.getMetrics();
+                    console.log('📊 [METRICS] Final Count:', metrics);
+                }, 3000);
+                
+                showToast('¡Gracias por ser parte de Gallos Mármol!', 'success');
+                
+            } catch (error) {
+                console.error('❌ [APP] Error crítico en inicialización:', error);
+                ErrorHandler.handle(error, 'App Initialization', 'Error al inicializar la aplicación');
+                
+                // ✅ FALLBACK CRÍTICO: Mostrar pantalla de login
+                showLoadingOverlay(false);
+                showLoginScreen();
+                
+            } finally {
+                // ✅ ASEGURAR QUE EL LOADING SE OCULTE
+                setTimeout(() => {
+                    showLoadingOverlay(false);
+                }, 500);
+            }
+        }
+
+        // DETECTAR SI ES UNA RECARGA DE PÁGINA
+        let isPageReload = false;
+
+        window.addEventListener('beforeunload', () => {
+            isPageReload = true;
+            sessionStorage.setItem('isReloading', 'true');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const wasReloaded = sessionStorage.getItem('isReloading') === 'true';
+            
+            if (wasReloaded) {
+                console.log('🔄 [APP] Página recargada, limpiando estado...');
+                sessionStorage.removeItem('isReloading');
+                
+                // Limpiar estado persistente no deseado
+                localStorage.removeItem('lastSystemSelected');
+                sessionStorage.removeItem('userDisplayState');
+            }
+            
+            initializeApp();
+        });
+
+        async function initializeAuthFlow() {
+            try {
+                const auth = firebase.auth();
+                
+                // ✅ LIMPIAR ESTADO VISUAL AL INICIAR
+                resetUIState();
+                
+                // ✅ CONFIGURAR EVENT LISTENER DEL BOTÓN DE LOGIN PRIMERO
+                setupLoginButton();
+                
+                auth.onAuthStateChanged(async (user) => {
+                    try {
+                        if (user) {
+                            await handleAuthenticatedUser(user);
+                        } else {
+                            // ✅ FORZAR LIMPIEZA COMPLETA
+                            resetUIState();
+                            showLoginScreen();
+                        }
+                    } catch (error) {
+                        ErrorHandler.handle(error, 'Auth State Change', 'Error al verificar tu sesión');
+                        resetUIState();
+                        showLoginScreen();
+                    }
+                });
+                
+            } catch (error) {
+                ErrorHandler.handle(error, 'Auth Flow Initialization', 'Error al inicializar la autenticación');
+                resetUIState();
+                showLoginScreen();
+            }
+        }
+
+        // Configurar el botón de login correctamente
+        function setupLoginButton() {
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (!loginBtn) {
+                console.error('❌ [LOGIN] Botón de login no encontrado en el DOM');
+                return;
+            }
+            
+            console.log('🔧 [LOGIN] Configurando botón de login...');
+            
+            // ✅ REMOVER EVENT LISTENERS EXISTENTES (prevenir duplicados)
+            loginBtn.replaceWith(loginBtn.cloneNode(true));
+            
+            // ✅ OBTENER NUEVA REFERENCIA
+            const newLoginBtn = document.getElementById('loginBtn');
+            
+            // ✅ AGREGAR EVENT LISTENER CORRECTAMENTE
+            newLoginBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('🎯 [LOGIN] Clic en botón de login detectado');
+                await triggerGoogleLogin();
+            });
+            
+            // ✅ HABILITAR BOTÓN
+            newLoginBtn.disabled = false;
+            
+            console.log('✅ [LOGIN] Botón configurado correctamente');
+        }
+
+        async function triggerGoogleLogin() {
+            console.log('🚀 [LOGIN] Iniciando proceso de autenticación Google...');
+            
+            // ✅ VERIFICAR QUE FIREBASE ESTÉ CARGADO
+            if (typeof firebase === 'undefined' || !firebase.auth) {
+                console.error('❌ [LOGIN] Firebase no está disponible');
+                showToast('Error: Firebase no se cargó correctamente. Recarga la página.', 'error');
+                return;
+            }
+            
+            const auth = firebase.auth();
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            // ✅ AGREGAR SCOPES ADICIONALES SI ES NECESARIO
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            try {
+                console.log('🔄 [LOGIN] Mostrando popup de autenticación...');
+                showLoadingOverlay(true, 'Conectando con Google...');
+                
+                // ✅ VERIFICAR SI EL POPUP SERÁ BLOQUEADO
+                const popupBlocked = await checkPopupBlocked();
+                if (popupBlocked) {
+                    showToast('¡Permite ventanas emergentes para este sitio!', 'warning');
+                    return;
+                }
+                
+                const result = await auth.signInWithPopup(provider);
+                console.log('✅ [LOGIN] Autenticación exitosa:', result.user.email);
+                
+                showToast(`¡Bienvenido ${result.user.displayName || result.user.email}!`, 'success');
+                
+            } catch (error) {
+                console.error('❌ [LOGIN] Error en autenticación:', error);
+                
+                let errorMessage = 'Error al iniciar sesión: ';
+                let errorType = 'error';
+                
+                switch (error.code) {
+                    case 'auth/popup-closed-by-user':
+                        errorMessage = 'Autenticación cancelada. Por favor, completa el proceso.';
+                        errorType = 'info';
+                        break;
+                    case 'auth/popup-blocked':
+                        errorMessage = 'Popup bloqueado. Permite ventanas emergentes para este sitio y vuelve a intentar.';
+                        errorType = 'warning';
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMessage = 'Error de conexión. Verifica tu internet e intenta nuevamente.';
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = 'La autenticación con Google no está habilitada. Contacta al administrador.';
+                        break;
+                    case 'auth/internal-error':
+                        errorMessage = 'Error interno del servidor. Intenta nuevamente en unos momentos.';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                
+                showToast(errorMessage, errorType);
+                
+                // ✅ DEBUG: Mostrar error completo en consola
+                console.group('🔍 [LOGIN] Detalles del error:');
+                console.log('Código:', error.code);
+                console.log('Mensaje:', error.message);
+                console.log('Stack:', error.stack);
+                console.groupEnd();
+                
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        // Verificar si los popups están bloqueados
+        async function checkPopupBlocked() {
+            return new Promise((resolve) => {
+                const popup = window.open('', '_blank', 'width=100,height=100');
+                
+                if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+                    console.warn('⚠️ [LOGIN] Los popups pueden estar bloqueados');
+                    resolve(true);
+                } else {
+                    popup.close();
+                    resolve(false);
+                }
+            });
+        }
+
+        // Sin creación automática de usuarios
+        async function getUserAccessibleSystems(userEmail, user) {
+            try {
+                // ✅ PRIMERO: Buscar en caché
+                const cacheKey = `userSystems_${userEmail}`;
+                const cachedData = AppCache.get(cacheKey);
+                
+                if (cachedData) {
+                    console.log('🚀 [OPTIMIZED] Using cached user data');
+                    return cachedData;
+                }
+
+                // ✅ SEGUNDO: Buscar en la colección 'usuarios'
+                console.log('🔥 [FIRESTORE] Reading user data from DB:', userEmail);
+                const userQuery = await firebase.firestore()
+                    .collection('usuarios')
+                    .where('correo', '==', userEmail)
+                    .limit(1)
+                    .get();
+
+                // ✅ MODIFICADO: Si no existe el usuario, LANZAR ERROR directamente
+                if (userQuery.empty) {
+                    console.log('❌ [USER] Usuario no encontrado en colección usuarios');
+                    const error = new Error('Usuario no registrado en el sistema');
+                    error.code = 'USER_NOT_REGISTERED';
+                    throw error;
+                }
+
+                // ✅ Obtener datos del usuario existente
+                const userDoc = userQuery.docs[0];
+                const userData = userDoc.data();
+                console.log('✅ [USER] Usuario encontrado:', userData.nombre);
+
+                // ✅ TERCERO: Validar que el usuario esté activo
+                if (!userData.activo) {
+                    const error = new Error('Cuenta desactivada');
+                    error.code = 'USER_DEACTIVATED';
+                    throw error;
+                }
+
+                // ✅ CUARTO: Procesar sistemas accesibles
+                const accessibleSystems = [];
+                
+                if (userData.sistemasAcceso) {
+                    Object.keys(userData.sistemasAcceso).forEach(systemKey => {
+                        const systemAccess = userData.sistemasAcceso[systemKey];
+                        
+                        // Verificar que el sistema esté activo y tenga rol
+                        if (systemAccess?.activo && systemAccess.rol && SystemPages[systemKey]) {
+                            accessibleSystems.push({
+                                key: systemKey,
+                                name: SystemNames[systemKey],
+                                rol: systemAccess.rol,
+                                userData: userData
+                            });
+                            
+                            console.log(`✅ [ACCESS] Sistema ${systemKey} - Rol: ${systemAccess.rol}`);
+                        }
+                    });
+                }
+
+                // ✅ QUINTO: Si no tiene acceso a ningún sistema
+                if (accessibleSystems.length === 0) {
+                    console.warn('⚠️ [USER] Usuario sin acceso a sistemas:', userEmail);
+                    const error = new Error('No tienes acceso a ningún sistema');
+                    error.code = 'NO_SYSTEM_ACCESS';
+                    throw error;
+                }
+
+                // ✅ GUARDAR EN CACHÉ por 10 minutos
+                AppCache.set(cacheKey, accessibleSystems);
+                
+                return accessibleSystems;
+
+            } catch (error) {
+                // Invalidar caché en caso de error
+                AppCache.delete(`userSystems_${userEmail}`);
+                throw error;
+            }
+        }
+
+        function getSystemIcon(systemKey) {
+            const icons = {
+                sistemaSuministro: 'fas fa-boxes',
+                sistemaTicket: 'fas fa-ticket-alt',
+                sistemaActivo: 'fas fa-laptop',
+                sistemaDespacho: 'fas fa-shipping-fast'
+            };
+            return icons[systemKey] || 'fas fa-cube';
+        }
+
+        function showLoginScreen() {
+            console.log('🔐 [AUTH] Mostrando pantalla de login');
+            
+            // ✅ EJECUTAR LIMPIEZA PRIMERO
+            resetUIState();
+            
+            // ✅ CONFIGURAR UI PARA LOGIN
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.style.display = 'flex';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = `
+                    <i class="fab fa-google"></i>
+                    <span id="loginText">Iniciar sesión con Google</span>
+                `;
+                
+                // ✅ RE-CONFIGURAR EL EVENT LISTENER
+                setupLoginButton();
+            }
+            
+            // ... resto del código igual ...
+        }
+
+        // FLUJO OPTIMIZADO DE AUTENTICACIÓN
+        async function handleAuthenticatedUser(user) {
+            try {
+                showLoadingOverlay(true, 'Verificando tus permisos...');
+                
+                // ✅ PRIMERO: Verificar sesión existente
+                const existingSession = AppSession.getValidSession();
+                if (existingSession && existingSession.user.email === user.email) {
+                    console.log('🎯 [OPTIMIZED] Using existing session');
+                    displayAccessibleSystems(existingSession.systems, user);
+                    AppSession.saveSession(existingSession);
+                    return;
+                }
+
+                // ✅ SEGUNDO: Obtener sistemas (usará caché automáticamente)
+                const userSystems = await getUserAccessibleSystems(user.email, user);
+                
+                // ✅ TERCERO: Guardar nueva sesión
+                const newSession = {
+                    user: {
+                        email: user.email,
+                        name: user.displayName,
+                        uid: user.uid
+                    },
+                    systems: userSystems,
+                    timestamp: new Date().toISOString()
+                };
+                
+                AppSession.saveSession(newSession);
+                
+                // ✅ CUARTO: Guardar en Firebase (solo datos esenciales, no bloqueante)
+                AppSession.saveEssentialSessionData(user, userSystems[0]);
+                
+                displayAccessibleSystems(userSystems, user);
+                
+            } catch (error) {
+                // ✅ MODIFICADO: No mostrar error en consola para "Usuario no registrado"
+                if (error.code === 'USER_NOT_REGISTERED' || error.message === 'Usuario no registrado en el sistema') {
+                    // ❌ SUPRIMIR console.error - solo mostrar en pantalla
+                    console.log('🔐 [AUTH] Usuario no registrado - Mostrando pantalla de acceso denegado');
+                    showErrorScreen(user, {
+                        code: 'USER_NOT_REGISTERED',
+                        message: 'Usuario no registrado en el sistema'
+                    });
+                } else if (error.code === 'USER_DEACTIVATED') {
+                    console.log('🔐 [AUTH] Usuario desactivado');
+                    showErrorScreen(user, {
+                        code: 'USER_DEACTIVATED', 
+                        message: 'Cuenta desactivada'
+                    });
+                } else if (error.code === 'NO_SYSTEM_ACCESS') {
+                    console.log('🔐 [AUTH] Usuario sin acceso a sistemas');
+                    showNoAccessScreen(user);
+                } else {
+                    // ✅ Solo mostrar error en consola para errores REALES del sistema
+                    console.error('❌ [AUTH] Error real del sistema:', error);
+                    ErrorHandler.handle(error, 'User Systems Access', 'Error al verificar tus permisos');
+                }
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        function displayAccessibleSystems(systems, user) {
+            const userName = getUserDisplayName(user, systems);
+            
+            document.querySelector('.portal-header h1').textContent = `¡Hola, ${userName}!`;
+            document.querySelector('.portal-header p').innerHTML = `
+                <span class="system-count">Tienes acceso a <strong>${systems.length}</strong> sistema(s)</span>
+                <br>
+                <small class="instruction-subtitle">Haz clic en cualquier sistema para comenzar</small>
+            `;
+            
+            document.getElementById('loginBtn').style.display = 'none';
+            displayUserInfo(user, systems.length, userName);
+            
+            const systemsGrid = document.querySelector('.systems-grid');
+            systemsGrid.innerHTML = '';
+            
+            systems.forEach(system => {
+                const systemCard = createSystemCard(system);
+                systemsGrid.appendChild(systemCard);
+            });
+            
+            systemsGrid.style.display = 'grid';
+        }
+
+        function getUserDisplayName(user, systems) {           
+            if (systems.length > 0 && systems[0].userData) {                
+                if (systems[0].userData.nombre) {
+                    return systems[0].userData.nombre;
+                }
+            }
+            if (user.displayName) {
+                return user.displayName;
+            }
+            if (user.email) {
+                const nameFromEmail = user.email.split('@')[0];
+                const formattedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+                return formattedName;
+            }
+
+            return 'Usuario';
+        }
+
+        function createSystemCard(system) {
+            const card = document.createElement('div');
+            card.className = `system-card system-${system.key.split('sistema')[1].toLowerCase()}`;
+            card.dataset.system = system.key;
+            
+            card.innerHTML = `
+                <div class="system-icon">
+                    <i class="${getSystemIcon(system.key)}"></i>
+                </div>
+                <h3>${system.name}</h3>
+                <div class="system-roles">
+                    <span class="role-tag">
+                        <i class="fas fa-user-tag"></i> ${system.rol}
+                    </span>
+                </div>
+                <div class="access-indicator">
+                    <i class="fas fa-check-circle"></i> Acceso permitido
+                </div>
+            `;
+            
+            card.addEventListener('click', (event) => {
+                RedirectSystem.selectSystem(system, event);
+            });
+            
+            return card;
+        }
+
+        function displayUserInfo(user, systemCount = 0, displayName = '') {
+            try {
+                const userInfo = document.getElementById('userInfo');
+                if (!userInfo) {
+                    throw new Error('Elemento userInfo no encontrado en el DOM');
+                }
+
+                const userName = displayName || user.displayName || user.email.split('@')[0] || 'Usuario';
+                const avatarText = userName.charAt(0).toUpperCase();
+                const avatarColor = getAvatarColor(avatarText);
+
+                userInfo.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-avatar-large" style="background: ${avatarColor}">
+                            ${avatarText}
+                        </div>
+                        <div>
+                            <div class="user-welcome" id="userWelcome">${userName}</div>
+                            <div class="user-email" id="userEmail">${user.email}</div>
+                        </div>
+                    </div>
+                    <h4><i class="fas fa-user-check"></i> Sesión activa</h4>
+                    <div id="userDetails" style="display: none;"></div>
+                    <button class="logout-btn" id="logoutBtnMain">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </button>
+                `;
+
+                userInfo.style.display = 'block';
+                setupLogoutButton();
+
+            } catch (error) {
+                console.error('Error en displayUserInfo:', error);
+                ErrorHandler.handle(error, 'User Info Display', 'Error al mostrar información del usuario');
+            }
+        }
+
+        function setupLogoutButton() {
+            const logoutBtn = document.getElementById('logoutBtnMain');
+            if (logoutBtn) {
+                logoutBtn.replaceWith(logoutBtn.cloneNode(true));
+                
+                document.getElementById('logoutBtnMain').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    try {
+                        await handleLogout();
+                    } catch (error) {
+                        console.error('Error cerrando sesión:', error);
+                        showToast('Error al cerrar sesión', 'error');
+                    }
+                });
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                showLoadingOverlay(true, 'Cerrando sesión...');
+                
+                // Limpiar caché y sesión local
+                AppSession.clearSession();
+                
+                // Cerrar sesión en Firebase
+                await firebase.auth().signOut();
+                
+                showToast('Sesión cerrada correctamente', 'success');
+                
+                // Recargar para limpiar estado completamente
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Error en logout:', error);
+                showToast('Error al cerrar sesión', 'error');
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        function getAvatarColor(letter) {
+            const colors = ['#CB3E2C'];
+            const index = letter.charCodeAt(0) % colors.length;
+            return colors[index];
+        }
+
+        function showNoAccessScreen(user) {
+            document.querySelector('.systems-grid').style.display = 'none';
+            document.getElementById('loginBtn').style.display = 'none';
+            
+            const loginSection = document.querySelector('.login-section');
+            
+            loginSection.innerHTML = `
+                <div class="user-info">
+                    <div class="user-header">
+                        <div class="user-avatar-large" style="background: ${getAvatarColor(user.displayName?.charAt(0) || 'U')}">
+                            ${user.displayName?.charAt(0) || 'U'}
+                        </div>
+                        <div>
+                            <div class="user-welcome">Hola, ${user.displayName || 'Usuario'}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="no-access-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Sin acceso a sistemas</h3>
+                        <p>Tu cuenta está autenticada pero no tienes permisos para acceder a ningún sistema.</p>
+                        <p class="support-text">Contacta al administrador para solicitar acceso.</p>
+                        
+                        <div class="access-details">
+                            <small>
+                                <i class="fas fa-info-circle"></i> 
+                                Usuario: ${user.email}<br>
+                                Estado: Autenticado pero sin permisos
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" id="tryDifferentAccountBtn">
+                            <i class="fas fa-user-plus"></i> Usar otra cuenta
+                        </button>
+                        <button class="logout-btn" id="logoutBtnNoAccess">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('tryDifferentAccountBtn').addEventListener('click', async () => {
+                await handleTryDifferentAccount();
+            });
+            
+            document.getElementById('logoutBtnNoAccess').addEventListener('click', () => {
+                handleLogout();
+            });
+        }
+
+        function setupEventListeners() {           
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+            
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+            }                       
+        }
+
+        function toggleTheme() {
+            AppState.darkMode = !AppState.darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', AppState.darkMode);
+            
+            const icon = document.getElementById('themeToggle').querySelector('i');
+            icon.className = AppState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    showToast('No se pudo activar el modo pantalla completa', 'error');
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function showErrorScreen(user, error) {
+            const loginSection = document.querySelector('.login-section');
+            
+            if (!loginSection) {
+                console.error('❌ [ERROR] No se encontró el elemento login-section');
+                return;
+            }
+
+            // CONFIGURACIÓN DE ERRORES ESPECÍFICOS
+            const errorConfig = {
+                // 🔐 ERRORES DE AUTENTICACIÓN FIREBASE
+                'auth/user-not-found': {
+                    title: 'Usuario No Encontrado',
+                    message: 'No existe una cuenta con este correo electrónico.',
+                    action: 'Verifica tu correo o contacta al administrador.',
+                    icon: 'fas fa-user-times',
+                    allowRetry: true,
+                    type: 'auth'
+                },
+                'auth/wrong-password': {
+                    title: 'Contraseña Incorrecta',
+                    message: 'La contraseña ingresada no es correcta.',
+                    action: 'Verifica tu contraseña e intenta nuevamente.',
+                    icon: 'fas fa-key',
+                    allowRetry: true,
+                    type: 'auth'
+                },
+                'auth/invalid-email': {
+                    title: 'Correo Inválido',
+                    message: 'El formato del correo electrónico no es válido.',
+                    action: 'Verifica que tu correo esté escrito correctamente.',
+                    icon: 'fas fa-envelope',
+                    allowRetry: true,
+                    type: 'auth'
+                },
+                'auth/user-disabled': {
+                    title: 'Cuenta Deshabilitada',
+                    message: 'Esta cuenta ha sido deshabilitada por el administrador.',
+                    action: 'Contacta al administrador del sistema.',
+                    icon: 'fas fa-user-slash',
+                    allowRetry: false,
+                    type: 'auth'
+                },
+                'auth/too-many-requests': {
+                    title: 'Demasiados Intentos',
+                    message: 'Demasiados intentos fallidos. La cuenta ha sido temporalmente bloqueada.',
+                    action: 'Espera unos minutos e intenta nuevamente.',
+                    icon: 'fas fa-shield-alt',
+                    allowRetry: true,
+                    type: 'auth'
+                },
+                'auth/network-request-failed': {
+                    title: 'Error de Conexión',
+                    message: 'No se pudo conectar con el servidor de autenticación.',
+                    action: 'Verifica tu conexión a internet e intenta nuevamente.',
+                    icon: 'fas fa-wifi',
+                    allowRetry: true,
+                    type: 'network'
+                },
+                'auth/popup-closed-by-user': {
+                    title: 'Autenticación Cancelada',
+                    message: 'Cerraste la ventana de autenticación de Google.',
+                    action: 'Completa el proceso de autenticación para continuar.',
+                    icon: 'fas fa-window-close',
+                    allowRetry: true,
+                    type: 'auth'
+                },
+                'auth/popup-blocked': {
+                    title: 'Popup Bloqueado',
+                    message: 'El navegador bloqueó la ventana de autenticación.',
+                    action: 'Permite ventanas emergentes para este sitio y vuelve a intentar.',
+                    icon: 'fas fa-window-restore',
+                    allowRetry: true,
+                    type: 'browser'
+                },
+                'auth/operation-not-allowed': {
+                    title: 'Método No Habilitado',
+                    message: 'La autenticación con Google no está habilitada.',
+                    action: 'Contacta al administrador del sistema.',
+                    icon: 'fas fa-cog',
+                    allowRetry: false,
+                    type: 'config'
+                },
+                'auth/operation-not-supported-in-this-environment': {
+                    title: 'Entorno No Soportado',
+                    message: 'La autenticación con popup no está disponible en este entorno.',
+                    action: 'Intenta usar un navegador diferente o actualiza tu navegador.',
+                    icon: 'fas fa-exclamation-triangle',
+                    allowRetry: false,
+                    type: 'browser'
+                },
+
+                // 🚫 ERRORES PERSONALIZADOS DE LA APLICACIÓN
+                'USER_NOT_REGISTERED': {
+                    title: 'Usuario No Registrado',
+                    message: 'Tu cuenta de Google no está registrada en nuestros sistemas.',
+                    action: 'Contacta al administrador para solicitar acceso.',
+                    icon: 'fas fa-user-plus',
+                    allowRetry: false,
+                    type: 'app'
+                },
+                'USER_DEACTIVATED': {
+                    title: 'Cuenta Desactivada', 
+                    message: 'Tu cuenta ha sido desactivada en nuestros sistemas.',
+                    action: 'Contacta al administrador para reactivar tu cuenta.',
+                    icon: 'fas fa-user-slash',
+                    allowRetry: false,
+                    type: 'app'
+                },
+                'NO_SYSTEM_ACCESS': {
+                    title: 'Sin Acceso a Sistemas',
+                    message: 'No tienes permisos para acceder a ningún sistema.',
+                    action: 'Solicita los permisos necesarios al administrador.',
+                    icon: 'fas fa-lock',
+                    allowRetry: false,
+                    type: 'app'
+                },
+                'USER_NOT_FOUND': {
+                    title: 'Usuario No Encontrado',
+                    message: 'No se encontró tu usuario en la base de datos del sistema.',
+                    action: 'Contacta al administrador para verificar tu registro.',
+                    icon: 'fas fa-search',
+                    allowRetry: false,
+                    type: 'app'
+                },
+
+                // 🌐 ERRORES DE RED Y FIRESTORE
+                'firestore/unavailable': {
+                    title: 'Servicio No Disponible',
+                    message: 'El servicio de base de datos no está disponible en este momento.',
+                    action: 'Intenta nuevamente en unos minutos.',
+                    icon: 'fas fa-database',
+                    allowRetry: true,
+                    type: 'database'
+                },
+                'firestore/permission-denied': {
+                    title: 'Permiso Denegado',
+                    message: 'No tienes permisos para acceder a estos datos.',
+                    action: 'Contacta al administrador del sistema.',
+                    icon: 'fas fa-ban',
+                    allowRetry: false,
+                    type: 'permission'
+                },
+                'network-error': {
+                    title: 'Error de Red',
+                    message: 'No se pudo establecer conexión con el servidor.',
+                    action: 'Verifica tu conexión a internet e intenta nuevamente.',
+                    icon: 'fas fa-globe',
+                    allowRetry: true,
+                    type: 'network'
+                }
+            };
+
+            // OBTENER CONFIGURACIÓN DEL ERROR O USAR CONFIGURACIÓN POR DEFECTO
+            const config = errorConfig[error.code || error.message] || {
+                title: 'Error del Sistema',
+                message: error.message || 'Ocurrió un error inesperado en el sistema.',
+                action: 'Por favor, intenta nuevamente o contacta al administrador.',
+                icon: 'fas fa-exclamation-triangle',
+                allowRetry: true,
+                type: 'unknown'
+            };
+
+            // DETERMINAR COLOR BASADO EN EL TIPO DE ERROR
+            const getErrorColor = (type) => {
+                const colors = {
+                    auth: '#e74c3c',        // Rojo - Errores de autenticación
+                    network: '#f39c12',     // Naranja - Errores de red
+                    database: '#8e44ad',    // Púrpura - Errores de base de datos
+                    permission: '#c0392b',  // Rojo oscuro - Permisos
+                    browser: '#16a085',     // Verde azulado - Navegador
+                    config: '#7f8c8d',      // Gris - Configuración
+                    app: '#d35400',         // Naranja oscuro - App personalizada
+                    unknown: '#2c3e50'      // Azul oscuro - Desconocido
+                };
+                return colors[type] || colors.unknown;
+            };
+
+            const errorColor = getErrorColor(config.type);
+
+            // CONSTRUIR EL HTML DE LA PANTALLA DE ERROR
+            loginSection.innerHTML = `
+                <div class="error-screen">
+                    <div class="error-icon" style="color: ${errorColor}">
+                        <i class="${config.icon}"></i>
+                    </div>
+                    
+                    <h3 style="color: ${errorColor}">${config.title}</h3>
+                    
+                    <div class="error-message-content">
+                        <p>${config.message}</p>
+                    </div>
+                    
+                    <div class="error-action">
+                        <p><i class="fas fa-lightbulb"></i> ${config.action}</p>
+                    </div>
+
+                    <!-- DETALLES TÉCNICOS (solo en desarrollo) -->
+                    ${(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? `
+                        <details class="error-details">
+                            <summary><i class="fas fa-bug"></i> Detalles técnicos (solo desarrollo)</summary>
+                            <div class="error-details-content">
+                                <p><strong>Código:</strong> ${error.code || 'N/A'}</p>
+                                <p><strong>Mensaje:</strong> ${error.message || 'N/A'}</p>
+                                <p><strong>Tipo:</strong> ${config.type}</p>
+                                <p><strong>Timestamp:</strong> ${new Date().toLocaleString('es-PE')}</p>
+                                ${user && user.email ? `<p><strong>Usuario:</strong> ${user.email}</p>` : ''}
+                            </div>
+                        </details>
+                    ` : ''}
+
+                    <div class="error-buttons">
+                        ${config.allowRetry ? `
+                            <button class="btn btn-primary" id="retryAuthBtn" style="background: ${errorColor}">
+                                <i class="fas fa-redo"></i> Reintentar Autenticación
+                            </button>
+                        ` : ''}
+                        
+                        <button class="btn btn-secondary" id="logoutErrorBtn">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                        
+                        ${!config.allowRetry ? `
+                            <button class="btn btn-tertiary" id="contactAdminBtn">
+                                <i class="fas fa-headset"></i> Contactar Administrador
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    ${!config.allowRetry ? `
+                        <div class="error-footer">
+                            <small><i class="fas fa-info-circle"></i> El reintento no está disponible para este tipo de error</small>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // CONFIGURAR EVENT LISTENERS DE LOS BOTONES
+            if (config.allowRetry) {
+                const retryBtn = document.getElementById('retryAuthBtn');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔄 [ERROR] Reintentando autenticación...');
+                        await handleRetryAuthentication();
+                    });
+                }
+            }
+
+            const logoutBtn = document.getElementById('logoutErrorBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🚪 [ERROR] Cerrando sesión desde pantalla de error...');
+                    handleLogout();
+                });
+            }
+
+            const contactAdminBtn = document.getElementById('contactAdminBtn');
+            if (contactAdminBtn) {
+                contactAdminBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('📞 [ERROR] Redirigiendo para contacto con administrador...');
+                    showContactAdminModal(error, user);
+                });
+            }
+
+            // LOG DEL ERROR PARA ANÁLISIS
+            console.group('🚨 Pantalla de Error Mostrada');
+            console.log('Tipo:', config.type);
+            console.log('Código:', error.code);
+            console.log('Mensaje:', error.message);
+            console.log('Usuario:', user?.email || 'No autenticado');
+            console.log('Permite reintento:', config.allowRetry);
+            console.groupEnd();
+        }
+
+        // MODAL DE CONTACTO CON ADMINISTRADOR
+        function showContactAdminModal(error, user) {
+            const modalHTML = `
+                <div class="contact-admin-modal" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                ">
+                    <div style="
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 12px;
+                        max-width: 500px;
+                        width: 90%;
+                        color: #333;
+                    ">
+                        <h3 style="color: #e74c3c; margin-bottom: 1rem;">
+                            <i class="fas fa-headset"></i> Contactar al Administrador
+                        </h3>
+                        
+                        <p>Para resolver este problema, contacta al administrador del sistema:</p>
+                        
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                            <p><strong>Información del error:</strong></p>
+                            <ul style="margin-left: 1.5rem;">
+                                <li><strong>Error:</strong> ${error.message || 'Error desconocido'}</li>
+                                <li><strong>Código:</strong> ${error.code || 'N/A'}</li>
+                                <li><strong>Usuario:</strong> ${user?.email || 'No autenticado'}</li>
+                                <li><strong>Fecha:</strong> ${new Date().toLocaleString('es-PE')}</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>Opciones de contacto:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+                            <li><strong>Email:</strong> soporte@gallosmarmol.com.pe</li>
+                        </ul>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button id="closeModalBtn" style="
+                                padding: 0.75rem 1.5rem;
+                                border: 1px solid #ccc;
+                                background: white;
+                                border-radius: 6px;
+                                cursor: pointer;
+                            ">Cerrar</button>
+                            
+                            <button id="copyErrorBtn" style="
+                                padding: 0.75rem 1.5rem;
+                                background: #3498db;
+                                color: white;
+                                border: none;
+                                border-radius: 6px;
+                                cursor: pointer;
+                            ">
+                                <i class="fas fa-copy"></i> Copiar Información
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // AGREGAR MODAL AL DOM
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer);
+
+            // CONFIGURAR EVENT LISTENERS DEL MODAL
+            document.getElementById('closeModalBtn').addEventListener('click', () => {
+                document.body.removeChild(modalContainer);
+            });
+
+            document.getElementById('copyErrorBtn').addEventListener('click', () => {
+                const errorInfo = `
+        Error: ${error.message || 'Error desconocido'}
+        Código: ${error.code || 'N/A'}
+        Usuario: ${user?.email || 'No autenticado'}
+        Fecha: ${new Date().toLocaleString('es-PE')}
+                `.trim();
+
+                navigator.clipboard.writeText(errorInfo).then(() => {
+                    showToast('Información del error copiada al portapapeles', 'success');
+                }).catch(() => {
+                    showToast('No se pudo copiar la información', 'error');
+                });
+            });
+
+            // CERRAR MODAL AL HACER CLIC FUERA
+            modalContainer.addEventListener('click', (e) => {
+                if (e.target === modalContainer) {
+                    document.body.removeChild(modalContainer);
+                }
+            });
+        }
+
+        async function handleRetryAuthentication() {
+            try {
+                showLoadingOverlay(true, 'Reintentando autenticación...');
+                
+                // Limpiar estado de error previo
+                const loginSection = document.querySelector('.login-section');
+                loginSection.innerHTML = `
+                    <div class="retry-status">
+                        <div class="loading-spinner"></div>
+                        <p>Reintentando conexión...</p>
+                    </div>
+                `;
+                
+                // Forzar cierre de cualquier sesión previa
+                await firebase.auth().signOut();
+                
+                // Limpiar caché y sesiones
+                AppSession.clearSession();
+                AppCache.clearByPattern('userSystems_');
+                
+                // Pequeña pausa para limpiar estado
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Reintentar autenticación completa
+                await triggerGoogleLogin();
+                
+            } catch (error) {
+                console.error('Error en reintento:', error);
+                
+                // Mostrar pantalla de error actualizada
+                const user = firebase.auth().currentUser;
+                showErrorScreen(user || {}, error);
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        async function handleTryDifferentAccount() {
+            try {
+                showLoadingOverlay(true, 'Preparando para cambiar de cuenta...');
+                
+                // Cerrar sesión actual
+                await firebase.auth().signOut();
+                AppSession.clearSession();
+                AppCache.clearByPattern('userSystems_');
+                
+                // Limpiar UI
+                document.querySelector('.login-section').innerHTML = `
+                    <div class="retry-status">
+                        <p>Preparando para nueva autenticación...</p>
+                    </div>
+                `;
+                
+                // Pequeña pausa para limpiar estado
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Mostrar pantalla de login normal
+                showLoginScreen();
+                
+                // Disparar autenticación automáticamente
+                setTimeout(() => {
+                    document.getElementById('loginBtn').click();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Error cambiando cuenta:', error);
+                showToast('Error al cambiar de cuenta', 'error');
+                showLoginScreen(); // Fallback a pantalla de login
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        // Limpiar completamente el estado de la UI
+        function resetUIState() {
+            console.log('🔄 [UI] Reseteando estado visual...');
+            
+            // 1. Ocultar todos los sistemas
+            const systemsGrid = document.querySelector('.systems-grid');
+            if (systemsGrid) {
+                systemsGrid.style.display = 'none';
+                systemsGrid.innerHTML = ''; // Limpiar contenido
+            }
+            
+            // 2. Ocultar información de sistema seleccionado
+            const selectedSystemInfo = document.getElementById('selectedSystemInfo');
+            if (selectedSystemInfo) {
+                selectedSystemInfo.style.display = 'none';
+            }
+            
+            // 3. Ocultar información de usuario
+            const userInfo = document.getElementById('userInfo');
+            if (userInfo) {
+                userInfo.style.display = 'none';
+            }
+            
+            // 4. Ocultar redirección
+            const redirectInfo = document.getElementById('redirectInfo');
+            if (redirectInfo) {
+                redirectInfo.style.display = 'none';
+            }
+            
+            // 5. Limpiar mensajes de error
+            const errorMessage = document.getElementById('errorMessage');
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+                errorMessage.className = 'error-message';
+            }
+            
+            // 6. Resetear botón de login
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = `
+                    <span id="loginText">Selecciona un sistema primero</span>
+                `;
+            }
+            
+            // 7. Resetear header a estado inicial
+            const portalHeader = document.querySelector('.portal-header');
+            if (portalHeader) {
+                const h1 = portalHeader.querySelector('h1');
+                const p = portalHeader.querySelector('p');
+                
+                if (h1) h1.textContent = 'Gallos Mármol te da la bienvenida';
+                if (p) p.textContent = 'Selecciona el sistema al que deseas acceder e inicia sesión con tu cuenta de Google';
+            }
+            
+            // 8. Limpiar cualquier selección visual
+            document.querySelectorAll('.system-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 9. Limpiar caché de sesión visual (no la de Firebase)
+            sessionStorage.removeItem('lastSystemSelected');
+            sessionStorage.removeItem('userDisplayState');
+        }
+
+        // Limpiar caché al cerrar la pestaña (opcional)
+        window.addEventListener('beforeunload', () => {
+            // Opcional: limpiar caché específica si es necesario
+        });
+    </script>
+</body>
+</html>
