@@ -59,7 +59,7 @@ class AuthChecker {
             
             if (!esPaginaPrincipal) {
                 console.log('🔐 Verificando acceso a página protegida...');
-                if (!this.verificarSesionCompleta()) {
+                if (!this.verificarSesion()) {
                     console.log('🚫 Acceso denegado - Redirigiendo...');
                     this.redirigirInmediatamente();
                     return false;
@@ -390,4 +390,5 @@ class AuthChecker {
     console.log('   - AuthChecker.cerrarSesionGlobal()');
     console.log('   - AuthChecker.mostrarEstadoSesiones()');
     console.log('   - AuthChecker.tieneAcceso()');
+
 })();
