@@ -2033,11 +2033,13 @@
                         try {
                             showLoadingOverlay(true, 'Preparando configuración de PIN...');
                             
-                            // Primero autenticar al usuario
+                            const baseUrl = 'https://gallosmarmol.github.io/SISTEMAS';
+                            const redirectUrl = `${baseUrl}/index.html`;
+                            
                             const { data, error } = await supabase.auth.signInWithOtp({
                                 email: email,
                                 options: {
-                                    emailRedirectTo: window.location.origin,
+                                    emailRedirectTo: redirectUrl,  // ← URL COMPLETA
                                     shouldCreateUser: true
                                 }
                             });
@@ -2045,8 +2047,6 @@
                             if (error) throw error;
                             
                             showToast('📧 Revisa tu email para autenticarte y configurar el PIN', 'success');
-                            
-                            // Esperar a que el usuario se autentique
                             this.esperarAutenticacionYConfigurarPIN(email, usuarioId);
                             
                         } catch (error) {
@@ -7645,4 +7645,5 @@
 </body>
 
 </html>
+
 
