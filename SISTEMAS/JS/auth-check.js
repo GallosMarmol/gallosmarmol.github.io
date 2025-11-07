@@ -2,7 +2,7 @@
 class AuthChecker {
     static CONFIG = {
         SESSION_DURATION: 8 * 60 * 60 * 1000, // 8 horas
-        REDIRECT_URL: '/index.html', // Portal principal
+        REDIRECT_URL: '/SISTEMAS/index.html', // Portal principal
         SESSION_KEYS: [
             'sb-auth-token',
             'sesion_pin_gm', 
@@ -574,4 +574,5 @@ class AuthChecker {
     console.log('   - AuthChecker.cerrarSesionGlobal()');
     console.log('   - AuthChecker.mostrarEstadoSesiones()');
     console.log('   - AuthChecker.tieneAcceso()');
+
 })();
