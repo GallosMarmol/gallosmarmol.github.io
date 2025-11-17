@@ -8704,10 +8704,21 @@
 
         // ===== FUNCIÓN PARA MANEJAR CAMBIO DE PÁGINA =====
         function goToAssetsPage(page) {
-            if (page < 1 || page > AppState.assetsPagination.totalPages) return;
+            console.log('🔄 Intentando ir a página:', page);
+            
+            if (page < 1 || page > AppState.assetsPagination.totalPages) {
+                console.warn('❌ Página fuera de rango:', page);
+                return;
+            }
             
             AppState.assetsPagination.currentPage = page;
-            applyAssetsFilters(); // Vuelve a aplicar filtros para la nueva página
+            console.log('✅ Cambiando a página:', page);
+            
+            // Renderizar la lista de activos para la nueva página
+            renderAssetsList();
+            
+            // Actualizar la UI de paginación
+            updateAssetsPaginationUI();
         }
 
         // ===== FUNCIÓN PARA APLICAR FILTROS =====
@@ -12015,4 +12026,5 @@
         console.log('✅ Sistema de Activos TI para Administradores completamente inicializado');
     </script>
 </body>
+
 </html>
