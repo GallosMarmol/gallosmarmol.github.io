@@ -1145,144 +1145,214 @@
                 pdf.setFont('helvetica', 'bold');
                 pdf.text('GALLOS MÁRMOL', margin + contentWidth / 2, footerY - 0.05, { align: 'center' });
                 
-                // ✅ SOLUCIÓN PARA APP PREDETERMINADA
-                const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
+                // ✅ SOLUCIÓN DEFINITIVA PARA QU PRINTING
+                const fileName = `GM_${params.codigo}_${formato}.pdf`;
                 const pdfBlob = pdf.output('blob');
-                const blobUrl = URL.createObjectURL(pdfBlob);
                 
-                // Método 1: Abrir en nueva pestaña (activará QU Printing como predeterminada)
-                const nuevaPestaña = window.open(blobUrl, '_blank');
+                // Intentar método WhatsApp-style primero
+                let abierto = await metodoWhatsAppStyle(pdfBlob, fileName);
                 
-                if (nuevaPestaña) {
-                    // Éxito - se abrió en QU Printing automáticamente
-                    showToast("✅ Abriendo en QU Printing...", 'success');
-                    
-                    // Cerrar la pestaña del navegador después de 3 segundos (opcional)
-                    setTimeout(() => {
-                        try {
-                            nuevaPestaña.close();
-                        } catch (e) {
-                            // Ignorar errores de cierre
-                        }
-                    }, 3000);
-                } else {
-                    // Fallback: descargar y abrir manualmente
-                    throw new Error('No se pudo abrir automáticamente');
+                if (!abierto) {
+                    // Fallback: método de descarga con intent
+                    abierto = await metodoDescargaConIntent(pdfBlob, fileName);
                 }
                 
-                // Limpiar memoria después de 10 segundos
-                setTimeout(() => {
-                    URL.revokeObjectURL(blobUrl);
-                }, 10000);
+                if (!abierto) {
+                    // Último fallback: descarga simple
+                    descargaSimple(pdfBlob, fileName);
+                    showToast("📥 PDF descargado - Ábrelo con QU Printing", 'info');
+                }
                 
             } catch (error) {
                 console.error('Error:', error);
-                
-                // Fallback: descargar normalmente
-                try {
-                    const pdfBlob = pdf.output('blob');
-                    const blobUrl = URL.createObjectURL(pdfBlob);
-                    const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
-                    
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = fileName;
-                    link.click();
-                    
-                    setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
-                    
-                    showToast("📥 PDF descargado - Ábrelo con QU Printing", 'info');
-                } catch (fallbackError) {
-                    showToast('Error al generar PDF', 'error');
-                }
+                showToast('Error al generar PDF', 'error');
             } finally {
                 showLoadingOverlay(false);
             }
         }
 
-
-// FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
-function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
-    const fontSizeLabel = esPrimario ? 5.5 : 5;
-    const fontSizeValue = esPrimario ? 6.5 : 6;
-    
-    // Label en negro con diferente peso
-    pdf.setFontSize(fontSizeLabel);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(0, 0, 0); // Negro
-    
-    // POSICIONES CON ESPACIADO VERTICAL
-    const labelY = y + (height * 0.3);
-    pdf.text(parametro.label + ":", x, labelY);
-    
-    // Valor en negro
-    pdf.setFontSize(fontSizeValue);
-    pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
-    pdf.setTextColor(0, 0, 0); // Negro
-    
-    // Ajustar valor si es muy largo
-    const maxValueWidth = width - 0.3;
-    let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
-    
-    // POSICIÓN DEL VALOR
-    const valueStartY = y + (height * 0.6);
-    const lineHeightValue = 0.18;
-    
-    // Dibujar cada línea del valor
-    valueLines.forEach((line, index) => {
-        if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
-            pdf.text(line, x, valueStartY + (index * lineHeightValue));
+        // MÉTODO 1: Estilo WhatsApp - Intent directo
+        async function metodoWhatsAppStyle(pdfBlob, fileName) {
+            return new Promise((resolve) => {
+                try {
+                    // Convertir blob a base64
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        const base64Data = reader.result.split(',')[1];
+                        
+                        // Crear Intent de Android estilo WhatsApp
+                        const intentUrl = `intent://open?type=application/pdf&data=${encodeURIComponent(base64Data)}&filename=${encodeURIComponent(fileName)}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;scheme=content;end`;
+                        
+                        // Intent alternativo
+                        const intentUrl2 = `intent://open?type=application/pdf&file=${encodeURIComponent(base64Data)}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;S.title=${encodeURIComponent(fileName)};end`;
+                        
+                        // Intent para cualquier app PDF
+                        const intentUrl3 = `intent://open?type=application/pdf&file=${encodeURIComponent(base64Data)}#Intent;action=android.intent.action.VIEW;type=application/pdf;S.title=${encodeURIComponent(fileName)};end`;
+                        
+                        // Probar los intents en orden
+                        const intents = [intentUrl, intentUrl2, intentUrl3];
+                        let intentIndex = 0;
+                        
+                        const probarSiguienteIntent = () => {
+                            if (intentIndex >= intents.length) {
+                                resolve(false);
+                                return;
+                            }
+                            
+                            const intentWindow = window.open(intents[intentIndex], '_blank');
+                            
+                            // Verificar si se abrió correctamente
+                            setTimeout(() => {
+                                if (intentWindow && !intentWindow.closed) {
+                                    showToast("✅ Abriendo en QU Printing...", 'success');
+                                    // Cerrar ventana después de 2 segundos
+                                    setTimeout(() => {
+                                        try {
+                                            intentWindow.close();
+                                        } catch (e) {}
+                                    }, 2000);
+                                    resolve(true);
+                                } else {
+                                    intentIndex++;
+                                    probarSiguienteIntent();
+                                }
+                            }, 1000);
+                        };
+                        
+                        probarSiguienteIntent();
+                    };
+                    
+                    reader.readAsDataURL(pdfBlob);
+                    
+                } catch (error) {
+                    console.log('Método WhatsApp falló:', error);
+                    resolve(false);
+                }
+            });
         }
-    });
-    
-    // Borde sutil en gris claro
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.003);
-    pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
-}
 
-// FUNCIÓN 10x5cm EN BLANCO Y NEGRO
-function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
-    const fontSizeLabel = esPrimario ? 6.5 : 6;
-    const fontSizeValue = esPrimario ? 7.5 : 7;
-    
-    // Label en negro
-    pdf.setFontSize(fontSizeLabel);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(0, 0, 0); // Negro
-    
-    // POSICIONES CON ESPACIADO VERTICAL
-    const labelY = y + (height * 0.3);
-    pdf.text(parametro.label + ":", x, labelY);
-    
-    // Valor en negro
-    pdf.setFontSize(fontSizeValue);
-    pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
-    pdf.setTextColor(0, 0, 0); // Negro
-    
-    // Ajustar valor si es muy largo
-    const maxValueWidth = width - 0.4;
-    let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
-    
-    // POSICIÓN DEL VALOR
-    const valueStartY = y + (height * 0.6);
-    const lineHeightValue = 0.2;
-    
-    // Dibujar cada línea del valor
-    valueLines.forEach((line, index) => {
-        if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
-            pdf.text(line, x, valueStartY + (index * lineHeightValue));
+        // MÉTODO 2: Descarga + Intent de apertura
+        async function metodoDescargaConIntent(pdfBlob, fileName) {
+            return new Promise((resolve) => {
+                try {
+                    const blobUrl = URL.createObjectURL(pdfBlob);
+                    
+                    // Descargar primero
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Después de descargar, intentar abrir con Intent
+                    setTimeout(() => {
+                        // Intent de apertura para archivo descargado
+                        const openIntent = `intent://file:///storage/emulated/0/Download/${fileName}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;end`;
+                        
+                        const openWindow = window.open(openIntent, '_blank');
+                        
+                        setTimeout(() => {
+                            if (openWindow && !openWindow.closed) {
+                                showToast("✅ Abriendo archivo en QU Printing...", 'success');
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        }, 1500);
+                        
+                    }, 2000);
+                    
+                    // Limpiar memoria
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+                    
+                } catch (error) {
+                    console.log('Método descarga+intent falló:', error);
+                    resolve(false);
+                }
+            });
         }
-    });
-    
-    // Borde sutil en gris claro
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.003);
-    pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
-}
 
+        // MÉTODO 3: Descarga simple
+        function descargaSimple(pdfBlob, fileName) {
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+        }
 
+        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
+        function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+            const fontSizeLabel = esPrimario ? 5.5 : 5;
+            const fontSizeValue = esPrimario ? 6.5 : 6;
+            
+            pdf.setFontSize(fontSizeLabel);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(0, 0, 0);
+            
+            const labelY = y + (height * 0.3);
+            pdf.text(parametro.label + ":", x, labelY);
+            
+            pdf.setFontSize(fontSizeValue);
+            pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+            pdf.setTextColor(0, 0, 0);
+            
+            const maxValueWidth = width - 0.3;
+            let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+            
+            const valueStartY = y + (height * 0.6);
+            const lineHeightValue = 0.18;
+            
+            valueLines.forEach((line, index) => {
+                if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+                    pdf.text(line, x, valueStartY + (index * lineHeightValue));
+                }
+            });
+            
+            pdf.setDrawColor(200, 200, 200);
+            pdf.setLineWidth(0.003);
+            pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
+        }
 
+        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO
+        function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+            const fontSizeLabel = esPrimario ? 6.5 : 6;
+            const fontSizeValue = esPrimario ? 7.5 : 7;
+            
+            pdf.setFontSize(fontSizeLabel);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(0, 0, 0);
+            
+            const labelY = y + (height * 0.3);
+            pdf.text(parametro.label + ":", x, labelY);
+            
+            pdf.setFontSize(fontSizeValue);
+            pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+            pdf.setTextColor(0, 0, 0);
+            
+            const maxValueWidth = width - 0.4;
+            let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+            
+            const valueStartY = y + (height * 0.6);
+            const lineHeightValue = 0.2;
+            
+            valueLines.forEach((line, index) => {
+                if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+                    pdf.text(line, x, valueStartY + (index * lineHeightValue));
+                }
+            });
+            
+            pdf.setDrawColor(200, 200, 200);
+            pdf.setLineWidth(0.003);
+            pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
+        }
 
 
 
