@@ -957,7 +957,7 @@
         }
 
         async function generarPDFIndividual() {
-            showLoadingOverlay(true, 'Generando etiqueta...');
+            showLoadingOverlay(true, 'Generando PDF individual...');
             
             try {
                 const { jsPDF } = window.jspdf;
@@ -1006,7 +1006,7 @@
                 
                 // ENCABEZADO EN BLANCO Y NEGRO
                 const headerHeight = formato === '75x5' ? 0.8 : 0.9;
-                pdf.setFillColor(255, 255, 255);
+                pdf.setFillColor(255, 255, 255); // Fondo blanco
                 pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
                 
                 // Borde inferior del header
@@ -1017,7 +1017,7 @@
                 // TÍTULO EN NEGRO
                 pdf.setFontSize(formato === '75x5' ? 6 : 7);
                 pdf.setFont('helvetica', 'bold');
-                pdf.setTextColor(0, 0, 0);
+                pdf.setTextColor(0, 0, 0); // Texto negro
                 
                 const maxTituloWidth = contentWidth - 0.3;
                 const tituloLines = pdf.splitTextToSize(params.titulo.toUpperCase(), maxTituloWidth);
@@ -1032,7 +1032,7 @@
                 const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.08;
                 
                 // Dibujar cada línea del título
-                tituloDisplayLines.forEach((line, index) => {
+                tituloDisplayLines.forEach((line, index) =>  {
                     pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
                 });
                 
@@ -1073,6 +1073,7 @@
                     // DISEÑO 7.5x5 - 3 filas × 2 columnas
                     const colWidth = contentWidth / 2;
                     
+                    // DISTRIBUCIÓN CON MÁS ALTURA PARA CADA FILA
                     const fila1Height = 1.2;
                     const fila2Height = 0.9; 
                     const fila3Height = 0.9;
@@ -1080,22 +1081,12 @@
                     // Fila 1: Código (ocupa ancho completo)
                     dibujarParametro75x5BN(pdf, parametros[0], margin + 0.15, currentY, contentWidth - 0.3, fila1Height, true);
                     currentY += fila1Height;
-                    
-                    // Línea divisoria en negro
-                    pdf.setDrawColor(0, 0, 0);
-                    pdf.setLineWidth(0.01);
-                    pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
-                    currentY += 0.05;
-                    
+                                        
                     // Fila 2: Medidas y Cantidad
                     dibujarParametro75x5BN(pdf, parametros[1], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
                     dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila2Height, false);
                     currentY += fila2Height;
-                    
-                    // Línea divisoria
-                    pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
-                    currentY += 0.05;
-                    
+
                     // Fila 3: Metraje y Ubicación
                     dibujarParametro75x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila3Height, false);
                     dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila3Height, false);
@@ -1104,6 +1095,7 @@
                     // DISEÑO 10x5 - 2 filas × 3 columnas
                     const colWidth = contentWidth / 3;
                     
+                    // DISTRIBUCIÓN CON MÁS ALTURA
                     const fila1Height = 1.1;
                     const fila2Height = 1.0;
                     
@@ -1112,13 +1104,7 @@
                     dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.1, currentY, colWidth - 0.2, fila1Height, false);
                     dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.2, fila1Height, false);
                     currentY += fila1Height;
-                    
-                    // Línea divisoria en negro
-                    pdf.setDrawColor(0, 0, 0);
-                    pdf.setLineWidth(0.01);
-                    pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
-                    currentY += 0.05;
-                    
+                                        
                     // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
                     dibujarParametro10x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
                     dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.1, currentY, (colWidth * 2) - 0.3, fila2Height, false);
@@ -1126,176 +1112,109 @@
                 
                 // PIE DE PÁGINA EN BLANCO Y NEGRO
                 const footerY = margin + contentHeight - 0.15;
-                
-                // Línea divisoria antes del pie
-                pdf.setDrawColor(0, 0, 0);
-                pdf.setLineWidth(0.008);
-                pdf.line(margin + 0.15, footerY - 0.1, margin + contentWidth - 0.15, footerY - 0.1);
-                
+                                
                 // Información de creación
                 pdf.setFontSize(4);
                 pdf.setFont('helvetica', 'normal');
-                pdf.setTextColor(0, 0, 0);
+                pdf.setTextColor(0, 0, 0); // Texto negro
                 
                 const creadoInfo = `${params.creado} | ${formatearFecha(params.fecha)}`;
                 pdf.text(creadoInfo, margin + 0.15, footerY - 0.05);
+                                
+                // Guardar PDF
+                const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
+                pdf.save(fileName);
                 
-                // Marca de la empresa
-                pdf.setFont('helvetica', 'bold');
-                pdf.text('GALLOS MÁRMOL', margin + contentWidth / 2, footerY - 0.05, { align: 'center' });
-                
-                // ✅ SOLUCIÓN DEFINITIVA: Descarga automática
-                const fileName = `GM_${params.codigo}_${formato}.pdf`;
-                const pdfBlob = pdf.output('blob');
-                const blobUrl = URL.createObjectURL(pdfBlob);
-                
-                // Descargar automáticamente
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = fileName;
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                // Limpiar memoria
-                setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
-                
-                // Mostrar instrucciones QU Printing
-                setTimeout(() => {
-                    mostrarInstruccionesQUPrinting(formato, params.codigo);
-                }, 500);
-                
-                showToast("✅ PDF descargado automáticamente", 'success');
+                showToast("PDF individual generado correctamente", 'success');
                 
             } catch (error) {
-                console.error('Error:', error);
-                showToast('Error al generar PDF', 'error');
+                console.error('Error generando PDF individual:', error);
+                showToast('Error al generar el PDF individual: ' + error.message, 'error');
             } finally {
                 showLoadingOverlay(false);
             }
         }
 
-        // FUNCIÓN PARA MOSTRAR INSTRUCCIONES QU PRINTING
-        function mostrarInstruccionesQUPrinting(formato, codigo) {
-            const modalHTML = `
-                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;">
-                    <div style="background:white;padding:25px;border-radius:15px;max-width:500px;width:100%;">
-                        <h2 style="color:#CB3E2C;text-align:center;margin-bottom:20px;">🖨️ Abrir en QU Printing</h2>
-                        
-                        <div style="background:#e8f5e8;padding:15px;border-radius:8px;margin-bottom:15px;">
-                            <h4 style="color:#2e7d32;margin-top:0;">📁 El PDF ya está en tus DESCARGAS</h4>
-                            <p><strong>Archivo:</strong> GM_${codigo}_${formato}.pdf</p>
-                        </div>
-                        
-                        <div style="margin-bottom:20px;">
-                            <h4 style="color:#333;">📱 Para abrir en QU Printing:</h4>
-                            <ol style="padding-left:20px;">
-                                <li>Ve a tu app de <strong>Archivos o Administrador de archivos</strong></li>
-                                <li>Abre la carpeta <strong>"Descargas"</strong></li>
-                                <li>Busca: <strong>GM_${codigo}_${formato}.pdf</strong></li>
-                                <li><strong>Mantén presionado</strong> el archivo PDF</li>
-                                <li>Selecciona <strong>"Abrir con"</strong> o <strong>"Compartir"</strong></li>
-                                <li>Elige <strong>QU Printing</strong> de la lista</li>
-                            </ol>
-                        </div>
-                        
-                        <div style="background:#fff3cd;padding:15px;border-radius:8px;margin-bottom:20px;">
-                            <h4 style="color:#856404;margin-top:0;">⚙️ Configuración en QU Printing:</h4>
-                            <ul style="padding-left:20px;margin-bottom:0;">
-                                <li><strong>Tamaño:</strong> ${formato === '75x5' ? '7.5 x 5 cm' : '10 x 5 cm'}</li>
-                                <li><strong>Orientación:</strong> Horizontal</li>
-                                <li><strong>Márgenes:</strong> Mínimos o Ninguno</li>
-                            </ul>
-                        </div>
-                        
-                        <button onclick="cerrarInstruccionesQUPrinting()" style="background:#CB3E2C;color:white;border:none;padding:15px;border-radius:8px;cursor:pointer;width:100%;font-size:16px;font-weight:bold;">
-                            ✅ Entendido - PDF Listo en Descargas
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            const modal = document.createElement('div');
-            modal.innerHTML = modalHTML;
-            modal.id = 'modal-qu-printing-instructions';
-            document.body.appendChild(modal);
-        }
-
-        function cerrarInstruccionesQUPrinting() {
-            const modal = document.getElementById('modal-qu-printing-instructions');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        // FUNCIONES AUXILIARES DE DIBUJO (se mantienen igual)
+        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
         function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
             const fontSizeLabel = esPrimario ? 5.5 : 5;
             const fontSizeValue = esPrimario ? 6.5 : 6;
             
+            // Label en negro con diferente peso
             pdf.setFontSize(fontSizeLabel);
             pdf.setFont('helvetica', 'bold');
-            pdf.setTextColor(0, 0, 0);
+            pdf.setTextColor(0, 0, 0); // Negro
             
+            // POSICIONES CON ESPACIADO VERTICAL
             const labelY = y + (height * 0.3);
             pdf.text(parametro.label + ":", x, labelY);
             
+            // Valor en negro
             pdf.setFontSize(fontSizeValue);
             pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
-            pdf.setTextColor(0, 0, 0);
+            pdf.setTextColor(0, 0, 0); // Negro
             
+            // Ajustar valor si es muy largo
             const maxValueWidth = width - 0.3;
             let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
             
+            // POSICIÓN DEL VALOR
             const valueStartY = y + (height * 0.6);
             const lineHeightValue = 0.18;
             
+            // Dibujar cada línea del valor
             valueLines.forEach((line, index) => {
                 if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
                     pdf.text(line, x, valueStartY + (index * lineHeightValue));
                 }
             });
             
+            // Borde sutil en gris claro
             pdf.setDrawColor(200, 200, 200);
             pdf.setLineWidth(0.003);
             pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
         }
 
+        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO
         function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
             const fontSizeLabel = esPrimario ? 6.5 : 6;
             const fontSizeValue = esPrimario ? 7.5 : 7;
             
+            // Label en negro
             pdf.setFontSize(fontSizeLabel);
             pdf.setFont('helvetica', 'bold');
-            pdf.setTextColor(0, 0, 0);
+            pdf.setTextColor(0, 0, 0); // Negro
             
+            // POSICIONES CON ESPACIADO VERTICAL
             const labelY = y + (height * 0.3);
             pdf.text(parametro.label + ":", x, labelY);
             
+            // Valor en negro
             pdf.setFontSize(fontSizeValue);
             pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
-            pdf.setTextColor(0, 0, 0);
+            pdf.setTextColor(0, 0, 0); // Negro
             
+            // Ajustar valor si es muy largo
             const maxValueWidth = width - 0.4;
             let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
             
+            // POSICIÓN DEL VALOR
             const valueStartY = y + (height * 0.6);
             const lineHeightValue = 0.2;
             
+            // Dibujar cada línea del valor
             valueLines.forEach((line, index) => {
                 if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
                     pdf.text(line, x, valueStartY + (index * lineHeightValue));
                 }
             });
             
+            // Borde sutil en gris claro
             pdf.setDrawColor(200, 200, 200);
             pdf.setLineWidth(0.003);
             pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
         }
-
-
-
+        
         async function generarPDFMasivo() {
             if (AppState.etiquetasGuardadas.length === 0) {
                 showToast('No hay etiquetas guardadas para generar PDF masivo', 'warning');
