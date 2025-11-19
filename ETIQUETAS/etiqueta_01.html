@@ -956,9 +956,8 @@
             `).join('');
         }
 
-
         async function generarPDFIndividual() {
-            showLoadingOverlay(true, 'Abriendo en QU Printing...');
+            showLoadingOverlay(true, 'Generando etiqueta...');
             
             try {
                 const { jsPDF } = window.jspdf;
@@ -1145,23 +1144,29 @@
                 pdf.setFont('helvetica', 'bold');
                 pdf.text('GALLOS MÁRMOL', margin + contentWidth / 2, footerY - 0.05, { align: 'center' });
                 
-                // ✅ SOLUCIÓN DEFINITIVA PARA QU PRINTING
+                // ✅ SOLUCIÓN DEFINITIVA: Descarga automática
                 const fileName = `GM_${params.codigo}_${formato}.pdf`;
                 const pdfBlob = pdf.output('blob');
+                const blobUrl = URL.createObjectURL(pdfBlob);
                 
-                // Intentar método WhatsApp-style primero
-                let abierto = await metodoWhatsAppStyle(pdfBlob, fileName);
+                // Descargar automáticamente
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = fileName;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 
-                if (!abierto) {
-                    // Fallback: método de descarga con intent
-                    abierto = await metodoDescargaConIntent(pdfBlob, fileName);
-                }
+                // Limpiar memoria
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
                 
-                if (!abierto) {
-                    // Último fallback: descarga simple
-                    descargaSimple(pdfBlob, fileName);
-                    showToast("📥 PDF descargado - Ábrelo con QU Printing", 'info');
-                }
+                // Mostrar instrucciones QU Printing
+                setTimeout(() => {
+                    mostrarInstruccionesQUPrinting(formato, params.codigo);
+                }, 500);
+                
+                showToast("✅ PDF descargado automáticamente", 'success');
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1171,124 +1176,60 @@
             }
         }
 
-        // MÉTODO 1: Estilo WhatsApp - Intent directo
-        async function metodoWhatsAppStyle(pdfBlob, fileName) {
-            return new Promise((resolve) => {
-                try {
-                    // Convertir blob a base64
-                    const reader = new FileReader();
-                    reader.onload = function() {
-                        const base64Data = reader.result.split(',')[1];
+        // FUNCIÓN PARA MOSTRAR INSTRUCCIONES QU PRINTING
+        function mostrarInstruccionesQUPrinting(formato, codigo) {
+            const modalHTML = `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;">
+                    <div style="background:white;padding:25px;border-radius:15px;max-width:500px;width:100%;">
+                        <h2 style="color:#CB3E2C;text-align:center;margin-bottom:20px;">🖨️ Abrir en QU Printing</h2>
                         
-                        // Crear Intent de Android estilo WhatsApp
-                        const intentUrl = `intent://open?type=application/pdf&data=${encodeURIComponent(base64Data)}&filename=${encodeURIComponent(fileName)}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;scheme=content;end`;
+                        <div style="background:#e8f5e8;padding:15px;border-radius:8px;margin-bottom:15px;">
+                            <h4 style="color:#2e7d32;margin-top:0;">📁 El PDF ya está en tus DESCARGAS</h4>
+                            <p><strong>Archivo:</strong> GM_${codigo}_${formato}.pdf</p>
+                        </div>
                         
-                        // Intent alternativo
-                        const intentUrl2 = `intent://open?type=application/pdf&file=${encodeURIComponent(base64Data)}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;S.title=${encodeURIComponent(fileName)};end`;
+                        <div style="margin-bottom:20px;">
+                            <h4 style="color:#333;">📱 Para abrir en QU Printing:</h4>
+                            <ol style="padding-left:20px;">
+                                <li>Ve a tu app de <strong>Archivos o Administrador de archivos</strong></li>
+                                <li>Abre la carpeta <strong>"Descargas"</strong></li>
+                                <li>Busca: <strong>GM_${codigo}_${formato}.pdf</strong></li>
+                                <li><strong>Mantén presionado</strong> el archivo PDF</li>
+                                <li>Selecciona <strong>"Abrir con"</strong> o <strong>"Compartir"</strong></li>
+                                <li>Elige <strong>QU Printing</strong> de la lista</li>
+                            </ol>
+                        </div>
                         
-                        // Intent para cualquier app PDF
-                        const intentUrl3 = `intent://open?type=application/pdf&file=${encodeURIComponent(base64Data)}#Intent;action=android.intent.action.VIEW;type=application/pdf;S.title=${encodeURIComponent(fileName)};end`;
+                        <div style="background:#fff3cd;padding:15px;border-radius:8px;margin-bottom:20px;">
+                            <h4 style="color:#856404;margin-top:0;">⚙️ Configuración en QU Printing:</h4>
+                            <ul style="padding-left:20px;margin-bottom:0;">
+                                <li><strong>Tamaño:</strong> ${formato === '75x5' ? '7.5 x 5 cm' : '10 x 5 cm'}</li>
+                                <li><strong>Orientación:</strong> Horizontal</li>
+                                <li><strong>Márgenes:</strong> Mínimos o Ninguno</li>
+                            </ul>
+                        </div>
                         
-                        // Probar los intents en orden
-                        const intents = [intentUrl, intentUrl2, intentUrl3];
-                        let intentIndex = 0;
-                        
-                        const probarSiguienteIntent = () => {
-                            if (intentIndex >= intents.length) {
-                                resolve(false);
-                                return;
-                            }
-                            
-                            const intentWindow = window.open(intents[intentIndex], '_blank');
-                            
-                            // Verificar si se abrió correctamente
-                            setTimeout(() => {
-                                if (intentWindow && !intentWindow.closed) {
-                                    showToast("✅ Abriendo en QU Printing...", 'success');
-                                    // Cerrar ventana después de 2 segundos
-                                    setTimeout(() => {
-                                        try {
-                                            intentWindow.close();
-                                        } catch (e) {}
-                                    }, 2000);
-                                    resolve(true);
-                                } else {
-                                    intentIndex++;
-                                    probarSiguienteIntent();
-                                }
-                            }, 1000);
-                        };
-                        
-                        probarSiguienteIntent();
-                    };
-                    
-                    reader.readAsDataURL(pdfBlob);
-                    
-                } catch (error) {
-                    console.log('Método WhatsApp falló:', error);
-                    resolve(false);
-                }
-            });
-        }
-
-        // MÉTODO 2: Descarga + Intent de apertura
-        async function metodoDescargaConIntent(pdfBlob, fileName) {
-            return new Promise((resolve) => {
-                try {
-                    const blobUrl = URL.createObjectURL(pdfBlob);
-                    
-                    // Descargar primero
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = fileName;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    // Después de descargar, intentar abrir con Intent
-                    setTimeout(() => {
-                        // Intent de apertura para archivo descargado
-                        const openIntent = `intent://file:///storage/emulated/0/Download/${fileName}#Intent;action=android.intent.action.VIEW;type=application/pdf;package=com.qr.printer;end`;
-                        
-                        const openWindow = window.open(openIntent, '_blank');
-                        
-                        setTimeout(() => {
-                            if (openWindow && !openWindow.closed) {
-                                showToast("✅ Abriendo archivo en QU Printing...", 'success');
-                                resolve(true);
-                            } else {
-                                resolve(false);
-                            }
-                        }, 1500);
-                        
-                    }, 2000);
-                    
-                    // Limpiar memoria
-                    setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
-                    
-                } catch (error) {
-                    console.log('Método descarga+intent falló:', error);
-                    resolve(false);
-                }
-            });
-        }
-
-        // MÉTODO 3: Descarga simple
-        function descargaSimple(pdfBlob, fileName) {
-            const blobUrl = URL.createObjectURL(pdfBlob);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = fileName;
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+                        <button onclick="cerrarInstruccionesQUPrinting()" style="background:#CB3E2C;color:white;border:none;padding:15px;border-radius:8px;cursor:pointer;width:100%;font-size:16px;font-weight:bold;">
+                            ✅ Entendido - PDF Listo en Descargas
+                        </button>
+                    </div>
+                </div>
+            `;
             
-            setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+            const modal = document.createElement('div');
+            modal.innerHTML = modalHTML;
+            modal.id = 'modal-qu-printing-instructions';
+            document.body.appendChild(modal);
         }
 
-        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
+        function cerrarInstruccionesQUPrinting() {
+            const modal = document.getElementById('modal-qu-printing-instructions');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // FUNCIONES AUXILIARES DE DIBUJO (se mantienen igual)
         function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
             const fontSizeLabel = esPrimario ? 5.5 : 5;
             const fontSizeValue = esPrimario ? 6.5 : 6;
@@ -1321,7 +1262,6 @@
             pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
         }
 
-        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO
         function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
             const fontSizeLabel = esPrimario ? 6.5 : 6;
             const fontSizeValue = esPrimario ? 7.5 : 7;
@@ -1653,4 +1593,5 @@
     </script>
 </body>
 </html>
+
 
