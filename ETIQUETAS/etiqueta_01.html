@@ -2,1337 +2,1603 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Gallos Mármol</title>
-    <link rel="icon" type="image/x-icon" href="../FOTOS/ICONOS/Icono_6.ico">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta name="description" content="Sistema de generación de etiquetas para productos terminados de Gallos Mármol">
+    <meta name="keywords" content="gallos mármol, etiquetas, productos terminados, inventario">
+    <meta name="author" content="Gallos Mármol">
+    <link rel="icon" type="image/x-icon" href="../../FOTO/ICONO/Icono_01.ico">
+    
+    <!-- Librerías externas -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
+        /* ===== VARIABLES Y RESET ===== */
         :root {
-            --primary-color: #000000;
-            --secondary-color: #000000;
+            --primary-color: #CB3E2C;
+            --primary-light: #e74c3c;
+            --secondary-color: #2c3e50;
             --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
             --light-color: #ecf0f1;
-            --dark-color: #000000;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --light-gray: #f8f9fa;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #fff;
+            --text-muted: #6c757d;
+            --bg-color: #f7f7f7;
+            --card-bg: #fff;
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius-sm: 8px;
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --header-height: 70px;
+        }
+
+        .dark-mode {
+            --primary-color: #CB3E2C;
+            --primary-light: #e74c3c;
+            --secondary-color: #34495e;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #d68910;
+            --danger-color: #cb4335;
+            --light-color: #2c2c2c;
+            --light-gray: #1e1e1e;
+            --dark-color: #121212;
+            --text-color: #e0e0e0;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.5;
             min-height: 100vh;
-            padding: 20px;
-            color: var(--dark-color);
-            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+        /* ===== ESTRUCTURA PRINCIPAL ===== */
+        #app {
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER MOBILE-FIRST ===== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            padding: 0 1rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
         }
 
-        .card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
-            width: fit-content;
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            max-width: 60%;
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius-sm);
+            object-fit: contain;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle, .fullscreen-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
             transition: var(--transition);
         }
 
-        .etiqueta {
-            width: 265px;
-            border: 1px solid #ffffff;
-            border-radius: var(--border-radius);
-            padding: 7px;
-            background-color: white;
-            position: relative;
-            font-size: 0;
+        .theme-toggle:hover, .fullscreen-btn:hover {
+            background-color: var(--light-color);
         }
 
-        .etiqueta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--primary-color);
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            padding-top: var(--header-height);
+            min-height: 100vh;
         }
 
-        .titulo {
-            font-weight: bold;
-            text-align: center;
-            font-size: 11px;
-            margin-bottom: 6px;
-            color: var(--secondary-color);
-            padding-bottom: 2px;
-            border-bottom: 1px solid #eee;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* ===== SECCIONES ===== */
+        .section-title {
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
-            line-height: 1.2;
-        }
-
-        .titulo i {
-            color: var(--primary-color);
-            font-size: 11px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            border: none;
-        }
-
-        tr {
-            height: 18px;
-        }
-
-        td {
-            border: none;
-            padding: 1px 1px;
-            font-size: 9px;
-            font-weight: 600;
-            vertical-align: middle;
-            word-wrap: break-word;
-            line-height: 1.1;
-        }
-
-        tr:not(:last-child) {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        tr:last-child {
-            border-top: 2px solid #000000; 
-            font-weight: bold; 
-        }
-
-        tr:last-child td {
-            padding-top: 6px;
-            padding-bottom: 6px;
-        }
-
-        .col-med-1 {
-            width: 17% !important;
-            font-size: 7px; 
-            text-align: left;
-        }
-
-        .col-med-2 {
-            width: 23% !important;
-            color: #000000; 
-            text-align: left;
-            font-size: 9.1px;
-        }        
-
-        .col-med-3 {
-            width: 20% !important; 
-            font-size: 7px;
-            text-align: left; 
-        }
-
-        .col-med-4 {
-            width: 40% !important; 
-            color: #000000;
-            text-align: left;     
-            font-size: 9.1px;           
-        }
-
-        .bold {
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-
-        /* Botones mejorados */
-        .btn-group {
-            display: flex;
+            justify-content: space-between;
             flex-wrap: wrap;
-            flex-direction: column;          
-            gap: 12px;
-            justify-content: center;
-            width: 100%;
-            max-width: 600px;
-            margin-top: 10px;
+            gap: 1rem;
         }
 
+        /* ===== BOTONES ===== */
         .btn {
-            background-color: #CB3E2C;
-            color: white;
+            padding: 0.75rem 1.5rem;
             border: none;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            font-size: 14px;
+            border-radius: var(--border-radius-sm);
             cursor: pointer;
+            font-weight: 500;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            min-width: 200px;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-decoration: none;
         }
 
-        .btn:hover {
-            background-color: #000000;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
         }
 
-        .btn:active {
-            transform: translateY(0);
+        .btn-primary:hover {
+            background-color: var(--primary-light);
         }
 
         .btn-secondary {
-            background-color: #3498db;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
         }
 
-        .btn-tertiary {
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
             background-color: #2ecc71;
         }
 
         .btn-danger {
-            background-color: #e74c3c;
-        }
-
-        /* Panel de historial mejorado */
-        .history-panel {
-            background-color: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            width: 100%;
-            max-width: 600px;
-            max-height: 1000px;
-            overflow-y: auto;
-            margin-top: 20px;
-            border: 1px solid #eee;
-        }
-        
-        .history-panel h3 {
-            color: var(--dark-color);
-            margin-bottom: 15px;
-            font-size: 18px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .history-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
-            border-radius: 4px;
-        }
-        
-        .history-item:hover {
-            background-color: #f9f9f9;
-        }
-        
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        
-        .history-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .history-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--dark-color);
-            font-size: 15px;
-            padding: 5px;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .history-btn:hover {
-            background-color: #f0f0f0;
-            color: var(--primary-color);
-        }
-
-        .history-btn.view {
-            color: #3498db;
-        }
-
-        .history-btn.delete {
-            color: #e74c3c;
-        }
-
-        /* Modal para vista de etiqueta */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
-            padding: 20px;
-            position: relative;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal.show .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #777;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            color: var(--primary-color);
-        }
-
-        .modal-body {
-            max-height: 70vh;
-            overflow-y: auto;
-            padding: 10px 0;
-        }
-
-        /* Modal de confirmación */
-        .confirmation-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            text-align: center;
-        }
-
-        .confirmation-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .confirmation-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            position: relative;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        .confirmation-modal.show .confirmation-content {
-            transform: translateY(0);
-        }
-
-        .confirmation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .confirmation-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-
-        .confirmation-message {
-            margin: 15px 0;
-            line-height: 1.5;
-        }
-
-        .confirmation-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .confirmation-btn {
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .confirmation-btn.cancel {
-            background-color: #f0f0f0;
-            color: var(--dark-color);
-        }
-
-        .confirmation-btn.confirm {
-            background-color: #e74c3c;
+            background-color: var(--danger-color);
             color: white;
         }
 
-        .confirmation-btn.cancel:hover {
-            background-color: #e0e0e0;
-        }
-
-        .confirmation-btn.confirm:hover {
+        .btn-danger:hover {
             background-color: #c0392b;
         }
 
-        /* Notificaciones */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 24px;
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ===== SELECT FORMATO ===== */
+        .format-selector {
+            background-color: var(--card-bg);
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .format-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .format-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .format-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .format-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(203, 62, 44, 0.1);
+        }
+
+        .format-size {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .format-description {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            padding: 1rem;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 3000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
+            transform: translateY(100px);
             opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            font-size: 14px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
-        .notification.error {
-            background-color: #e74c3c;
-        }
-
-        .notification.show {
+        .toast.show {
+            transform: translateY(0);
             opacity: 1;
         }
 
-        /* Configuración de PDF */
-        .settings-panel {
-            background-color: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
+        .toast-error {
+            background-color: var(--danger-color);
         }
 
-        .settings-panel h3 {
-            color: var(--dark-color);
-            margin-bottom: 15px;
-            font-size: 18px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+        .toast-warning {
+            background-color: var(--warning-color);
         }
 
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+        .toast-info {
+            background-color: var(--secondary-color);
         }
 
-        .setting-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+        .toast-icon {
+            font-size: 1.25rem;
         }
 
-        .setting-group label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--dark-color);
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.8;
         }
 
-        .setting-group select, 
-        .setting-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 14px;
+        .toast-close:hover {
+            opacity: 1;
         }
 
-        .dimension-inputs {
-            display: flex;
-            gap: 10px;
-        }
-
-        .dimension-inputs input {
-            flex: 1;
-            text-align: center;
-        }
-
-        /* Loader mejorado */
-        .loader-overlay {
-            display: none;
+        /* ===== LOADING STATES ===== */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
             align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            display: none;
             flex-direction: column;
+            gap: 1rem;
             color: white;
         }
 
-        .loader-overlay.show {
+        .loading-overlay.active {
             display: flex;
         }
 
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
+        .loading-spinner {
             width: 50px;
             height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        .loader-text {
-            font-size: 18px;
-            margin-top: 15px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
+        .loading-text {
+            font-size: 1.1rem;
+        }
+
+        /* ===== ESTILOS PARA ETIQUETA ===== */
+        .etiqueta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .etiqueta-preview {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .etiqueta-content {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.3cm;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .etiqueta-content.formato-75x5 {
+            width: 7.5cm;
+            height: 5cm;
+        }
+
+        .etiqueta-content.formato-10x5 {
+            width: 10cm;
+            height: 5cm;
+        }
+
+        .etiqueta-header {
+            text-align: center;
+            padding-bottom: 0.1cm;
+            margin-bottom: 0.1cm;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .etiqueta-titulo {
+            font-weight: bold;
+            margin: 0;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-titulo {
+            font-size: 10px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-titulo {
+            font-size: 12px;
+        }
+
+        .etiqueta-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .etiqueta-info {
+            display: grid;
+            gap: 0.1cm;
+            margin-bottom: 0.1cm;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-info {
+            grid-template-columns: 1fr 1fr;
+            font-size: 8px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-info {
+            grid-template-columns: 1fr 1fr 1fr;
+            font-size: 9px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #000;
+            font-size: 0.9em;
+        }
+
+        .info-value {
+            color: #000;
+            font-size: 0.85em;
+        }
+
+        .etiqueta-footer {
+            text-align: center;
+            border-top: 1px solid #ddd;
+            padding-top: 0.1cm;
+            margin-top: 0.1cm;
+            color: #666;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-footer {
+            font-size: 6px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-footer {
+            font-size: 7px;
+        }
+
+        .etiqueta-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ===== HISTORIAL DE ETIQUETAS ===== */
+        .historial-section {
+            margin-top: 2rem;
+        }
+
+        .historial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .etiquetas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .etiqueta-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .etiqueta-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .etiqueta-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .etiqueta-card-codigo {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .etiqueta-card-titulo {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .etiqueta-card-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .etiqueta-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .btn-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .btn {
+            .etiqueta-content {
                 width: 100%;
+                max-width: 7.5cm;
             }
             
-            .settings-grid {
+            .etiqueta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .etiquetas-grid {
                 grid-template-columns: 1fr;
             }
-
-            .confirmation-content {
-                width: 95%;
-            }
-
-            .notification{
-                bottom: 8px;
-                width: 80%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
             
-            .history-item {
+            .format-options {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .history-actions {
-                align-self: flex-end;
-            }
-
-            .confirmation-buttons {
-                flex-direction: column;
-            }
-
-            .confirmation-btn {
-                width: 100%;
-            }
-
-            .notification{
-                bottom: 8px;
-                width: 80%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div id="etiqueta" class="etiqueta">
-                <div class="titulo">
-                    <i class="fas fa-tags fa-xs"></i>
-                    <span id="titulo">BALDOSAS HONED FILLED RECTO STORM (BHFR1STM24481)</span>
+    <!-- Aplicación principal -->
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../../FOTO/LOGO/Logo_01.webp" alt="Gallos Mármol" class="logo-img">
                 </div>
-                <table>
-                    <tr>
-                        <td class="bold col-med-1">LARGO</td>
-                        <td id="largo" class="col-med-2">48,123499</td>
-                        <td class="bold col-med-3">UBICACIÓN</td>
-                        <td id="ubicacion" class="col-med-4">1 CAJA AL LADO DERECHO DE LA SECCIÓN B - 1</td>
-                    </tr>
-                    <tr>
-                        <td class="bold col-med-1">UNIDAD</td>
-                        <td id="unidad" class="col-med-2">MILÍMETROS</td>
-                        <td class="bold col-med-3">FECHA</td>
-                        <td id="fecha" class="col-med-4">17/07/2025</td>
-                    </tr>
-                    <tr>
-                        <td class="bold col-med-1">ANCHO</td>
-                        <td id="ancho" class="col-med-2">24,00</td>
-                        <td class="bold col-med-3">CREADO POR</td>
-                        <td id="creado" class="col-med-4">RAIMOND ALBARRACIN PEÑA</td>
-                    </tr>
-                    <tr>
-                        <td class="bold col-med-1">UNIDAD</td>
-                        <td id="unidad2" class="col-med-2">PULGADAS</td>
-                        <td class="bold col-med-3">CÓDIGO</td>
-                        <td id="codigo" class="col-med-4">12345678912345678</td>
-                    </tr>
-                    <tr>
-                        <td class="bold col-med-1">CANTIDAD</td>
-                        <td id="cantidad" class="col-med-2">6 300,00</td>
-                        <td class="bold col-med-3">METRAJE</td>
-                        <td id="metraje" class="col-med-4">4 682,123456789</td>
-                    </tr>
-                </table>
+                <div class="header-actions">
+                    <button class="fullscreen-btn" id="fullscreenBtn" title="Pantalla completa" aria-label="Pantalla completa">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
             </div>
-        </div>
+        </header>
 
-        <div class="btn-group">
-            <button class="btn" onclick="generarPDF()">
-                <i class="fas fa-file-pdf"></i> Descargar etiqueta
-            </button>
-            <button class="btn btn-secondary" onclick="saveCurrentLabel()">
-                <i class="fas fa-save"></i> Guardar etiqueta
-            </button>
-        </div>
-
-        <div class="history-panel" id="historyPanel">
-            <h3>Etiquetas guardadas</h3>
-            <div class="btn-group" style="margin-top: 15px;">
-                <button class="btn btn-tertiary" onclick="generateCombinedPDF()">
-                    <i class="fas fa-file-pdf"></i>Descargar etiquetas
-                </button>
-                <button class="btn btn-danger" onclick="showClearAllConfirmation()">
-                    <i class="fas fa-trash"></i> Eliminar todas las etiquetas
-                </button>
-            </div>            
-            <div id="savedLabelsList"></div>
-        </div>
-
-        <div class="settings-panel">
-            <h3><i class="fas fa-cog"></i> Configuración de la etiqueta</h3>
-            <div class="settings-grid">
-                <div class="setting-group">
-                    <label for="pdfSize">Tamaño de página:</label>
-                    <select id="pdfSize" onchange="updatePdfSize()">
-                        <option value="A4">A4 (210x297 mm)</option>
-                        <option value="A5">A5 (148x210 mm)</option>                        
-                        <option value="A6">A6 (105x148 mm)</option>                     
-                        <option value="custom">Personalizado</option>
-                    </select>
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Generador de Etiquetas</h2>
+                    <small>Crea etiquetas para productos terminados del inventario</small>
                 </div>
-                <div class="setting-group" id="customSizeGroup" style="display: none;">
-                    <label>Dimensiones personalizadas (mm):</label>
-                    <div class="dimension-inputs">
-                        <input type="number" id="customWidth" placeholder="Ancho" min="10" max="500" value="58">
-                        <span>x</span>
-                        <input type="number" id="customHeight" placeholder="Alto" min="10" max="500" value="78">
+
+                <!-- Selector de formato -->
+                <div class="format-selector">
+                    <h3>Selecciona el formato de etiqueta</h3>
+                    <div class="format-options">
+                        <div class="format-option selected" data-format="75x5">
+                            <div class="format-size">7.5 x 5 cm</div>
+                            <div class="format-description">Formato estándar</div>
+                        </div>
+                        <div class="format-option" data-format="10x5">
+                            <div class="format-size">10 x 5 cm</div>
+                            <div class="format-description">Formato ampliado</div>
+                        </div>
                     </div>
                 </div>
-                <div class="setting-group">
-                    <label for="pdfOrientation">Orientación:</label>
-                    <select id="pdfOrientation">
-                        <option value="landscape">Horizontal</option>
-                        <option value="portrait">Vertical</option>
-                    </select>
+
+                <!-- Vista previa de etiqueta -->
+                <div class="etiqueta-container">
+                    <div class="etiqueta-preview">
+                        <div class="etiqueta-content formato-75x5" id="etiquetaContent">
+                            <div class="etiqueta-header">
+                                <h3 class="etiqueta-titulo" id="etiquetaTitulo">Título del Producto</h3>
+                            </div>
+                            <div class="etiqueta-body">
+                                <div class="etiqueta-info">
+                                    <div class="info-item">
+                                        <span class="info-label">Largo:</span>
+                                        <span class="info-value" id="etiquetaLargo">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Ancho:</span>
+                                        <span class="info-value" id="etiquetaAncho">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Cantidad:</span>
+                                        <span class="info-value" id="etiquetaCantidad">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Metraje:</span>
+                                        <span class="info-value" id="etiquetaMetraje">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Ubicación:</span>
+                                        <span class="info-value" id="etiquetaUbicacion">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Fecha:</span>
+                                        <span class="info-value" id="etiquetaFecha">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Creado por:</span>
+                                        <span class="info-value" id="etiquetaCreado">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Código:</span>
+                                        <span class="info-value" id="etiquetaCodigo">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="etiqueta-footer">
+                                <p>Gallos Mármol - Sistema de Inventario</p>
+                            </div>
+                        </div>
+                        
+                        <div class="etiqueta-actions">
+                            <button class="btn btn-primary" id="generarPdfIndividualBtn">
+                                <i class="fas fa-file-pdf"></i> Generar PDF Individual
+                            </button>
+                            <button class="btn btn-success" id="guardarEtiquetaBtn">
+                                <i class="fas fa-save"></i> Guardar para PDF Masivo
+                            </button>
+                            <button class="btn btn-secondary" id="generarPdfMasivoBtn">
+                                <i class="fas fa-file-pdf"></i> Generar PDF Masivo
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="setting-group">
-                    <label for="pdfMargin">Margen (mm):</label>
-                    <input type="number" id="pdfMargin" min="0" max="20" value="3">
+
+                <!-- Historial de etiquetas guardadas -->
+                <div class="historial-section">
+                    <div class="historial-header">
+                        <h3>Etiquetas Guardadas para PDF Masivo</h3>
+                        <button class="btn btn-danger btn-small" id="limpiarHistorialBtn">
+                            <i class="fas fa-trash"></i> Limpiar Todo
+                        </button>
+                    </div>
+                    
+                    <div class="etiquetas-grid" id="etiquetasGrid">
+                        <!-- Las etiquetas guardadas aparecerán aquí -->
+                    </div>
+                    
+                    <div class="empty-state" id="emptyHistorial">
+                        <i class="fas fa-tags"></i>
+                        <h3>No hay etiquetas guardadas</h3>
+                        <p>Guarda etiquetas para generarlas en un PDF masivo posteriormente</p>
+                    </div>
                 </div>
             </div>
-            <div class="btn-group" style="margin-top: 10px;">
-                <button class="btn btn-tertiary" onclick="savePdfSettings()">
-                    <i class="fas fa-save"></i> Guardar configuración
-                </button>
-            </div>
-        </div>        
+        </main>
     </div>
 
-    <!-- Modal para vista de etiqueta -->
-    <div class="modal" id="labelModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Vista previa de etiqueta</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalLabelContent">
-                <!-- Contenido de la etiqueta se insertará aquí -->
-            </div>
-        </div>
+    <!-- Toast notifications -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toastMessage">Operación completada con éxito</span>
+        <button class="toast-close" aria-label="Cerrar notificación">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
-    <!-- Modal de confirmación -->
-    <div class="confirmation-modal" id="confirmationModal">
-        <div class="confirmation-content">
-            <div class="confirmation-header">
-                <h3 class="confirmation-title" id="confirmationTitle">Confirmar acción</h3>
-                <button class="modal-close" onclick="closeConfirmationModal()">&times;</button>
-            </div>
-            <div class="confirmation-message" id="confirmationMessage">
-                ¿Estás seguro de que deseas realizar esta acción?
-            </div>
-            <div class="confirmation-buttons">
-                <button class="confirmation-btn cancel" onclick="closeConfirmationModal()">Cancelar</button>
-                <button class="confirmation-btn confirm" onclick="executeConfirmedAction()">Confirmar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loader mejorado -->
-    <div class="loader-overlay" id="loaderOverlay">
-        <div class="loader"></div>
-        <div class="loader-text" id="loaderText">Generando PDF...</div>
-    </div>
-
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span>Etiqueta exportada exitosamente</span>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Cargando...</div>
     </div>
 
     <script>
-        // Variables para manejar las acciones de confirmación
-        let pendingAction = null;
-        let pendingActionData = null;
-
-        // Configuración de PDF
-        const pdfSettings = {
-            size: '58x78',
-            customWidth: 58,
-            customHeight: 78,
-            orientation: 'landscape',
-            margin: 3
+        // ===== ESTADO DE LA APLICACIÓN =====
+        const AppState = {
+            darkMode: localStorage.getItem('darkMode') === 'true',
+            etiquetasGuardadas: JSON.parse(localStorage.getItem('etiquetasGuardadas')) || [],
+            parametrosURL: {},
+            formatoSeleccionado: '75x5'
         };
 
-        // Función para formatear números
-        function formatNumber(numStr) {
-            if (!numStr) return '';
-
-            const num = parseFloat(numStr.replace(',', '.'));
-            if (isNaN(num)) return numStr;
-
-            const parts = num
-                .toLocaleString('fr-FR', {
-                    maximumFractionDigits: 3
-                })
-                .split(',');
-
-            if (parts[1]) {
-                parts[1] = parts[1].replace(/0+$/, '');
-                return parts[1] ? parts.join(',') : parts[0];
-            }
-
-            return parts[0];
-        }
-
-        // Función para acortar texto
-        function shortenText(text, maxLength) {
-            if (!text) return '';
-            if (text.length > maxLength) {
-                return text.substring(0, maxLength - 3) + '...';
-            }
-            return text;
-        }
-
-        // Validar parámetros de entrada
-        function validateInputParams(params) {
-            const validParams = {};
+        // ===== FUNCIONES DE UTILIDAD =====
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('.toast-icon');
             
-            if (params.get('titulo')) {
-                validParams.titulo = params.get('titulo').substring(0, 100);
-            }
+            if (!toast || !toastMessage) return;
             
-            ['largo', 'ancho', 'cantidad', 'metraje'].forEach(key => {
-                if (params.get(key)) {
-                    const num = parseFloat(params.get(key).replace(',', '.'));
-                    validParams[key] = isNaN(num) ? '0' : num.toString().replace('.', ',');
-                }
-            });
+            toastMessage.textContent = message;
+            toast.className = 'toast';
             
-            ['ubicacion', 'unidad', 'unidad2', 'fecha', 'creado', 'codigo'].forEach(key => {
-                if (params.get(key)) {
-                    validParams[key] = params.get(key).substring(0, 100);
-                }
-            });
-            
-            return validParams;
-        }
-
-        // Leer parámetros de URL y colocar en etiquetas
-        function getParams() {
-            const params = new URLSearchParams(window.location.search);
-            const validParams = validateInputParams(params);
-
-            const dataMap = {
-                titulo: {id: 'titulo', maxLength: 100},
-                largo: {id: 'largo', format: true},
-                ancho: {id: 'ancho', format: true},
-                ubicacion: {id: 'ubicacion', maxLength: 100},
-                unidad: {id: 'unidad', shorten: false},
-                unidad2: {id: 'unidad2', shorten: false},
-                fecha: {id: 'fecha'},
-                creado: {id: 'creado', maxLength: 100, shortenName: false},
-                codigo: {id: 'codigo', maxLength: 100},
-                cantidad: {id: 'cantidad', format: false},
-                metraje: {id: 'metraje', format: false}
+            const toastConfig = {
+                success: { icon: 'check-circle', color: 'toast' },
+                error: { icon: 'exclamation-circle', color: 'toast-error' },
+                warning: { icon: 'exclamation-triangle', color: 'toast-warning' },
+                info: { icon: 'info-circle', color: 'toast-info' }
             };
-
-            for (const key in dataMap) {
-                const config = dataMap[key];
-                let value = validParams[key] || document.getElementById(config.id).textContent;
-                
-                if (value !== null) {
-                    if (config.format) {
-                        value = formatNumber(value);
-                    }
-                    if (config.maxLength) {
-                        value = shortenText(value, config.maxLength);
-                    }
-                    if (config.shorten) {
-                        value = value.substring(0, 3).toUpperCase();
-                    }
-                    if (config.shortenName) {
-                        const parts = value.split(' ');
-                        if (parts.length > 1) {
-                            value = parts[0].charAt(0) + '. ' + parts[1];
-                        }
-                    }
-                    
-                    document.getElementById(config.id).textContent = value;
-                }
-            }
-        }
-
-        // Mostrar notificación
-        function showNotification(message, isError = false) {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = `
-                <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-                <span>${message}</span>
-            `;
             
-            notification.className = isError ? 'notification error show' : 'notification show';
+            const config = toastConfig[type] || toastConfig.success;
+            toastIcon.className = `fas fa-${config.icon} toast-icon`;
+            toast.classList.add(config.color);
+            
+            toast.classList.add('show');
             
             setTimeout(() => {
-                notification.className = 'notification';
-            }, isError ? 4000 : 2000);
+                toast.classList.remove('show');
+            }, 4000);
         }
 
-        // Mostrar loader
-        function showLoader(text = 'Generando PDF...') {
-            document.getElementById('loaderText').textContent = text;
-            document.getElementById('loaderOverlay').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Ocultar loader
-        function hideLoader() {
-            document.getElementById('loaderOverlay').classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Abrir modal
-        function openModal(content) {
-            const modal = document.getElementById('labelModal');
-            const modalContent = document.getElementById('modalLabelContent');
-            modalContent.innerHTML = content;
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Cerrar modal
-        function closeModal() {
-            const modal = document.getElementById('labelModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Mostrar modal de confirmación
-        function showConfirmationModal(title, message, action, data = null) {
-            document.getElementById('confirmationTitle').textContent = title;
-            document.getElementById('confirmationMessage').textContent = message;
-            pendingAction = action;
-            pendingActionData = data;
-            document.getElementById('confirmationModal').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Cerrar modal de confirmación
-        function closeConfirmationModal() {
-            document.getElementById('confirmationModal').classList.remove('show');
-            document.body.style.overflow = 'auto';
-            pendingAction = null;
-            pendingActionData = null;
-        }
-
-        // Ejecutar acción confirmada
-        function executeConfirmedAction() {
-            if (pendingAction) {
-                if (pendingActionData) {
-                    pendingAction(pendingActionData);
-                } else {
-                    pendingAction();
-                }
+        function showLoadingOverlay(show, message = 'Cargando...') {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            
+            if (show) {
+                loadingText.textContent = message;
+                loadingOverlay.classList.add('active');
+            } else {
+                loadingOverlay.classList.remove('active');
             }
-            closeConfirmationModal();
         }
 
-        // Mostrar confirmación para limpiar todas las etiquetas
-        function showClearAllConfirmation() {
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            if (savedLabels.length === 0) {
-                showNotification('No hay etiquetas guardadas para eliminar', true);
+        // ===== FUNCIONES PARA PARÁMETROS URL =====
+        function obtenerParametrosURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const parametros = {};
+            
+            parametros.titulo = urlParams.get('titulo') || 'Producto Sin Título';
+            parametros.largo = urlParams.get('largo') || 'N/A';
+            parametros.unidad = urlParams.get('unidad') || '';
+            parametros.ancho = urlParams.get('ancho') || 'N/A';
+            parametros.unidad2 = urlParams.get('unidad2') || '';
+            parametros.cantidad = urlParams.get('cantidad') || 'N/A';
+            parametros.metraje = urlParams.get('metraje') || 'N/A';
+            parametros.ubicacion = urlParams.get('ubicacion') || 'N/A';
+            parametros.fecha = urlParams.get('fecha') || 'N/A';
+            parametros.creado = urlParams.get('creado') || 'N/A';
+            parametros.codigo = urlParams.get('codigo') || 'N/A';
+            
+            AppState.parametrosURL = parametros;
+            return parametros;
+        }
+
+        function actualizarVistaPrevia() {
+            const params = AppState.parametrosURL;
+            
+            document.getElementById('etiquetaTitulo').textContent = params.titulo;
+            document.getElementById('etiquetaLargo').textContent = `${params.largo} ${params.unidad}`;
+            document.getElementById('etiquetaAncho').textContent = `${params.ancho} ${params.unidad2}`;
+            document.getElementById('etiquetaCantidad').textContent = params.cantidad;
+            document.getElementById('etiquetaMetraje').textContent = `${params.metraje} m²`;
+            document.getElementById('etiquetaUbicacion').textContent = params.ubicacion;
+            document.getElementById('etiquetaFecha').textContent = formatearFecha(params.fecha);
+            document.getElementById('etiquetaCreado').textContent = params.creado;
+            document.getElementById('etiquetaCodigo').textContent = params.codigo;
+        }
+
+        function formatearFecha(fechaStr) {
+            if (!fechaStr || fechaStr === 'N/A') return 'N/A';
+            
+            try {
+                const fecha = new Date(fechaStr);
+                if (isNaN(fecha.getTime())) return fechaStr;
+                
+                return fecha.toLocaleDateString('es-ES');
+            } catch (e) {
+                return fechaStr;
+            }
+        }
+
+        // ===== FUNCIONES PARA FORMATO DE ETIQUETA =====
+        function cambiarFormatoEtiqueta(formato) {
+            AppState.formatoSeleccionado = formato;
+            
+            const etiquetaContent = document.getElementById('etiquetaContent');
+            etiquetaContent.className = 'etiqueta-content';
+            etiquetaContent.classList.add(`formato-${formato}`);
+            
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`.format-option[data-format="${formato}"]`).classList.add('selected');
+        }
+
+        // ===== FUNCIONES PARA GUARDAR ETIQUETAS =====
+        function guardarEtiqueta() {
+            const params = AppState.parametrosURL;
+            
+            const existe = AppState.etiquetasGuardadas.some(
+                etiqueta => etiqueta.codigo === params.codigo
+            );
+            
+            if (existe) {
+                showToast('Ya existe una etiqueta con este código', 'warning');
                 return;
             }
             
-            showConfirmationModal(
-                'Eliminar todas las etiquetas',
-                `¿Estás seguro de que deseas eliminar las ${savedLabels.length} etiquetas guardadas?`,
-                clearAllLabels
-            );
-        }
-
-        // Mostrar confirmación para eliminar una etiqueta individual
-        function showDeleteLabelConfirmation(labelId) {
-            showConfirmationModal(
-                'Eliminar etiqueta',
-                '¿Estás seguro de que deseas eliminar esta etiqueta?',
-                removeLabel,
-                labelId
-            );
-        }
-
-        function getCodigoFromTitulo() {
-            const titulo = document.getElementById('titulo').textContent;
-            const inicio = titulo.indexOf('(') + 1;
-            const fin = titulo.indexOf(')');
-            return inicio > 0 && fin > inicio 
-                ? titulo.substring(inicio, fin) 
-                : 'ETIQUETA';
-        }
-
-        // Guardar la etiqueta actual
-        function saveCurrentLabel() {
-            const labelData = {
-                id: Date.now().toString(),
-                titulo: document.getElementById('titulo').textContent,
-                largo: document.getElementById('largo').textContent,
-                ancho: document.getElementById('ancho').textContent,
-                ubicacion: document.getElementById('ubicacion').textContent,
-                unidad: document.getElementById('unidad').textContent,
-                unidad2: document.getElementById('unidad2').textContent,
-                fecha: document.getElementById('fecha').textContent,
-                creado: document.getElementById('creado').textContent,
-                codigo: document.getElementById('codigo').textContent,
-                cantidad: document.getElementById('cantidad').textContent,
-                metraje: document.getElementById('metraje').textContent,
+            const etiqueta = {
+                id: Date.now(),
+                titulo: params.titulo,
+                largo: params.largo,
+                unidad: params.unidad,
+                ancho: params.ancho,
+                unidad2: params.unidad2,
+                cantidad: params.cantidad,
+                metraje: params.metraje,
+                ubicacion: params.ubicacion,
+                fecha: params.fecha,
+                creado: params.creado,
+                codigo: params.codigo,
                 timestamp: new Date().toISOString(),
-                html: document.getElementById('etiqueta').outerHTML
+                formato: AppState.formatoSeleccionado
             };
             
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            // Agregar la nueva etiqueta al inicio del array
-            savedLabels.unshift(labelData);
-            localStorage.setItem('savedLabels', JSON.stringify(savedLabels));
+            AppState.etiquetasGuardadas.push(etiqueta);
+            localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
+            actualizarHistorial();
             
-            updateSavedLabelsList();
-            showNotification('Etiqueta guardada para PDF combinado');
+            showToast('Etiqueta guardada para PDF masivo', 'success');
         }
 
-        // Actualizar la lista de etiquetas guardadas
-        function updateSavedLabelsList() {
-            let savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            
-            // Ordenar por timestamp (ya deberían estar ordenados por el unshift, pero por si acaso)
-            savedLabels.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            const listContainer = document.getElementById('savedLabelsList');
-            listContainer.innerHTML = '';
-            
-            if (savedLabels.length === 0) {
-                listContainer.innerHTML = '<p style="text-align: center; color: #777; padding: 10px;">No hay etiquetas guardadas</p>';
+        function eliminarEtiqueta(id) {
+            AppState.etiquetasGuardadas = AppState.etiquetasGuardadas.filter(etiqueta => etiqueta.id !== id);
+            localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
+            actualizarHistorial();
+            showToast('Etiqueta eliminada', 'info');
+        }
+
+        function limpiarHistorial() {
+            if (AppState.etiquetasGuardadas.length === 0) {
+                showToast('No hay etiquetas para limpiar', 'info');
                 return;
             }
             
-            savedLabels.forEach(label => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                
-                item.innerHTML = `
-                    <span>${shortenText(label.codigo, 30)} - ${label.fecha}</span>
-                    <div class="history-actions">
-                        <button class="history-btn view" onclick="viewLabel('${label.id}')" title="Ver">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="history-btn delete" onclick="showDeleteLabelConfirmation('${label.id}')" title="Eliminar">
-                            <i class="fas fa-trash"></i>
+            if (confirm('¿Estás seguro de que quieres eliminar todas las etiquetas guardadas?')) {
+                AppState.etiquetasGuardadas = [];
+                localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
+                actualizarHistorial();
+                showToast('Todas las etiquetas han sido eliminadas', 'success');
+            }
+        }
+
+        function actualizarHistorial() {
+            const grid = document.getElementById('etiquetasGrid');
+            const emptyState = document.getElementById('emptyHistorial');
+            
+            if (AppState.etiquetasGuardadas.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            grid.innerHTML = AppState.etiquetasGuardadas.map(etiqueta => `
+                <div class="etiqueta-card">
+                    <div class="etiqueta-card-header">
+                        <span class="etiqueta-card-codigo">${etiqueta.codigo}</span>
+                        <small>${new Date(etiqueta.timestamp).toLocaleDateString()}</small>
+                    </div>
+                    <h4 class="etiqueta-card-titulo">${etiqueta.titulo}</h4>
+                    <div class="etiqueta-card-details">
+                        <div><strong>Formato:</strong> ${etiqueta.formato === '75x5' ? '7.5x5 cm' : '10x5 cm'}</div>
+                        <div><strong>Largo:</strong> ${etiqueta.largo} ${etiqueta.unidad}</div>
+                        <div><strong>Ancho:</strong> ${etiqueta.ancho} ${etiqueta.unidad2}</div>
+                        <div><strong>Cantidad:</strong> ${etiqueta.cantidad}</div>
+                        <div><strong>Ubicación:</strong> ${etiqueta.ubicacion}</div>
+                    </div>
+                    <div class="etiqueta-card-actions">
+                        <button class="btn btn-danger btn-small" onclick="eliminarEtiqueta(${etiqueta.id})">
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </div>
-                `;
-                
-                listContainer.appendChild(item);
+                </div>
+            `).join('');
+        }
+
+
+async function generarPDFIndividual() {
+    showLoadingOverlay(true, 'Preparando impresión...');
+    
+    try {
+        const { jsPDF } = window.jspdf;
+        
+        if (typeof jsPDF === 'undefined') {
+            throw new Error('Librería PDF no disponible');
+        }
+        
+        const params = AppState.parametrosURL;
+        const formato = AppState.formatoSeleccionado;
+        
+        // Configurar PDF con tamaño real
+        let pdf, etiquetaWidth, etiquetaHeight;
+        
+        if (formato === '75x5') {
+            etiquetaWidth = 7.5;
+            etiquetaHeight = 5;
+            pdf = new jsPDF({
+                orientation: "landscape",
+                unit: "cm",
+                format: [etiquetaWidth, etiquetaHeight]
+            });
+        } else {
+            etiquetaWidth = 10;
+            etiquetaHeight = 5;
+            pdf = new jsPDF({
+                orientation: "landscape", 
+                unit: "cm",
+                format: [etiquetaWidth, etiquetaHeight]
             });
         }
-
-        // Ver una etiqueta guardada
-        function viewLabel(labelId) {
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            const label = savedLabels.find(l => l.id === labelId);
-            
-            if (label) {
-                openModal(`
-                    <div style="display: flex; justify-content: center;">
-                        ${label.html}
-                    </div>
-                    <div style="margin-top: 20px; text-align: center;">
-                        <button class="btn" onclick="useLabel('${label.id}')">
-                            <i class="fas fa-undo"></i> Usar esta etiqueta
-                        </button>
-                    </div>
-                `);
+        
+        // Márgenes optimizados
+        const margin = 0.15;
+        const contentWidth = etiquetaWidth - (margin * 2);
+        const contentHeight = etiquetaHeight - (margin * 2);
+        
+        // Fondo blanco
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(margin, margin, contentWidth, contentHeight, 'F');
+        
+        // Borde negro
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.04);
+        pdf.rect(margin, margin, contentWidth, contentHeight);
+        
+        // ENCABEZADO EN BLANCO Y NEGRO
+        const headerHeight = formato === '75x5' ? 0.8 : 0.9;
+        pdf.setFillColor(255, 255, 255); // Fondo blanco
+        pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
+        
+        // Borde inferior del header
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.02);
+        pdf.line(margin, margin + headerHeight, margin + contentWidth, margin + headerHeight);
+        
+        // TÍTULO EN NEGRO
+        pdf.setFontSize(formato === '75x5' ? 6 : 7);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(0, 0, 0); // Texto negro
+        
+        const maxTituloWidth = contentWidth - 0.3;
+        const tituloLines = pdf.splitTextToSize(params.titulo.toUpperCase(), maxTituloWidth);
+        
+        // Limitar a máximo 4 líneas
+        const tituloDisplayLines = tituloLines.slice(0, 4);
+        const lineHeight = 0.18;
+        const tituloTotalHeight = tituloDisplayLines.length * lineHeight;
+        
+        // Centrar verticalmente en el header
+        const headerCenterY = margin + (headerHeight / 2);
+        const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.08;
+        
+        // Dibujar cada línea del título
+        tituloDisplayLines.forEach((line, index) => {
+            pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
+        });
+        
+        // CONFIGURACIÓN DE PARÁMETROS EN BLANCO Y NEGRO
+        const parametros = [
+            { 
+                label: "CÓDIGO", 
+                value: params.codigo,
+                type: "primary"
+            },
+            { 
+                label: "MEDIDAS", 
+                value: `${params.largo} ${params.unidad}  ×  ${params.ancho} ${params.unidad2}`,
+                type: "secondary"
+            },
+            { 
+                label: "CANTIDAD", 
+                value: params.cantidad,
+                type: "secondary"
+            },
+            { 
+                label: "METRAJE", 
+                value: `${params.metraje} M²`,
+                type: "secondary"
+            },
+            { 
+                label: "UBICACIÓN", 
+                value: params.ubicacion,
+                type: "secondary"
             }
-        }
+        ];
 
-        // Usar una etiqueta guardada
-        function useLabel(labelId) {
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            const label = savedLabels.find(l => l.id === labelId);
+        // ESPACIO DISPONIBLE PARA PARÁMETROS
+        const espacioParametros = contentHeight - headerHeight - 0.25;
+        let currentY = margin + headerHeight + 0.1;
+
+        if (formato === '75x5') {
+            // DISEÑO 7.5x5 - 3 filas × 2 columnas
+            const colWidth = contentWidth / 2;
             
-            if (label) {
-                document.getElementById('titulo').textContent = label.titulo;
-                document.getElementById('largo').textContent = label.largo;
-                document.getElementById('ancho').textContent = label.ancho;
-                document.getElementById('ubicacion').textContent = label.ubicacion;
-                document.getElementById('unidad').textContent = label.unidad;
-                document.getElementById('unidad2').textContent = label.unidad2;
-                document.getElementById('fecha').textContent = label.fecha;
-                document.getElementById('creado').textContent = label.creado;
-                document.getElementById('codigo').textContent = label.codigo;
-                document.getElementById('cantidad').textContent = label.cantidad;
-                document.getElementById('metraje').textContent = label.metraje;
+            // DISTRIBUCIÓN CON MÁS ALTURA PARA CADA FILA
+            const fila1Height = 1.2;
+            const fila2Height = 0.9; 
+            const fila3Height = 0.9;
+            
+            // Fila 1: Código (ocupa ancho completo)
+            dibujarParametro75x5BN(pdf, parametros[0], margin + 0.15, currentY, contentWidth - 0.3, fila1Height, true);
+            currentY += fila1Height;
+            
+            // Línea divisoria en negro
+            pdf.setDrawColor(0, 0, 0);
+            pdf.setLineWidth(0.01);
+            pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
+            currentY += 0.05;
+            
+            // Fila 2: Medidas y Cantidad
+            dibujarParametro75x5BN(pdf, parametros[1], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
+            dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila2Height, false);
+            currentY += fila2Height;
+            
+            // Línea divisoria
+            pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
+            currentY += 0.05;
+            
+            // Fila 3: Metraje y Ubicación
+            dibujarParametro75x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila3Height, false);
+            dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila3Height, false);
+            
+        } else {
+            // DISEÑO 10x5 - 2 filas × 3 columnas
+            const colWidth = contentWidth / 3;
+            
+            // DISTRIBUCIÓN CON MÁS ALTURA
+            const fila1Height = 1.1;
+            const fila2Height = 1.0;
+            
+            // Fila 1: Código, Medidas, Cantidad
+            dibujarParametro10x5BN(pdf, parametros[0], margin + 0.15, currentY, colWidth - 0.2, fila1Height, true);
+            dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.1, currentY, colWidth - 0.2, fila1Height, false);
+            dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.2, fila1Height, false);
+            currentY += fila1Height;
+            
+            // Línea divisoria en negro
+            pdf.setDrawColor(0, 0, 0);
+            pdf.setLineWidth(0.01);
+            pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
+            currentY += 0.05;
+            
+            // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
+            dibujarParametro10x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
+            dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.1, currentY, (colWidth * 2) - 0.3, fila2Height, false);
+        }
+        
+        // PIE DE PÁGINA EN BLANCO Y NEGRO
+        const footerY = margin + contentHeight - 0.15;
+        
+        // Línea divisoria antes del pie
+        pdf.setDrawColor(0, 0, 0);
+        pdf.setLineWidth(0.008);
+        pdf.line(margin + 0.15, footerY - 0.1, margin + contentWidth - 0.15, footerY - 0.1);
+        
+        // Información de creación
+        pdf.setFontSize(4);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(0, 0, 0); // Texto negro
+        
+        const creadoInfo = `${params.creado} | ${formatearFecha(params.fecha)}`;
+        pdf.text(creadoInfo, margin + 0.15, footerY - 0.05);
+        
+        // Marca de la empresa
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('GALLOS MÁRMOL', margin + contentWidth / 2, footerY - 0.05, { align: 'center' });
+        
+        // ✅ SOLUCIÓN PARA QU PRINTING
+        const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
+        
+        // Convertir PDF a blob
+        const pdfBlob = pdf.output('blob');
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        
+        // Intentar abrir directamente con Web Share API (dispositivos móviles)
+        if (navigator.share) {
+            try {
+                const pdfFile = new File([pdfBlob], fileName, { 
+                    type: 'application/pdf' 
+                });
                 
-                closeModal();
-                showNotification('Etiqueta cargada correctamente');
+                if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                    await navigator.share({
+                        files: [pdfFile],
+                        title: 'Imprimir Etiqueta - Gallos Mármol',
+                        text: `Etiqueta: ${params.titulo}`
+                    });
+                    showToast("Compartiendo con QU Printing...", 'success');
+                    URL.revokeObjectURL(blobUrl);
+                    return;
+                }
+            } catch (shareError) {
+                console.log('Web Share falló:', shareError);
             }
         }
-
-        // Eliminar una etiqueta guardada
-        function removeLabel(labelId) {
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            const updatedLabels = savedLabels.filter(l => l.id !== labelId);
+        
+        // Método 2: Abrir en nueva pestaña para forzar selector de apps
+        const newTab = window.open(blobUrl, '_blank');
+        
+        if (newTab) {
+            // Éxito - se abrió nueva pestaña
+            showToast("Selecciona QU Printing para imprimir", 'success');
             
-            localStorage.setItem('savedLabels', JSON.stringify(updatedLabels));
-            updateSavedLabelsList();
-            showNotification('Etiqueta eliminada');
+            // Limpiar memoria después de 15 segundos
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+            }, 15000);
+        } else {
+            // Fallback: Bloqueador de popups activado
+            throw new Error('Bloqueador de ventanas activado');
         }
-
-        // Limpiar todas las etiquetas
-        function clearAllLabels() {
-            localStorage.removeItem('savedLabels');
-            updateSavedLabelsList();
-            showNotification('Todas las etiquetas han sido eliminadas');
+        
+    } catch (error) {
+        console.error('Error generando PDF:', error);
+        
+        // Fallback final: descarga normal
+        try {
+            const pdfBlob = pdf.output('blob');
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = blobUrl;
+            downloadLink.download = fileName;
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+            
+            showToast("PDF descargado, ábrelo con QU Printing", 'info');
+        } catch (fallbackError) {
+            showToast('Error al generar el PDF: ' + error.message, 'error');
         }
+    } finally {
+        showLoadingOverlay(false);
+    }
+}
 
-        // Actualizar configuración de tamaño de PDF
-        function updatePdfSize() {
-            const pdfSize = document.getElementById('pdfSize').value;
-            const customSizeGroup = document.getElementById('customSizeGroup');
-            
-            if (pdfSize === 'custom') {
-                customSizeGroup.style.display = 'block';
-            } else {
-                customSizeGroup.style.display = 'none';
-                
-                // Actualizar valores según tamaño seleccionado
-                if (pdfSize === 'A6') {
-                    pdfSettings.size = 'A6';
-                    pdfSettings.customWidth = 105;
-                    pdfSettings.customHeight = 148;
-                } else if (pdfSize === 'A5') {
-                    pdfSettings.size = 'A5';
-                    pdfSettings.customWidth = 148;
-                    pdfSettings.customHeight = 210;
-                } else if (pdfSize === 'A4') {
-                    pdfSettings.size = 'A4';
-                    pdfSettings.customWidth = 210;
-                    pdfSettings.customHeight = 297;
-                } 
-            }
+// FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
+function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+    const fontSizeLabel = esPrimario ? 5.5 : 5;
+    const fontSizeValue = esPrimario ? 6.5 : 6;
+    
+    // Label en negro con diferente peso
+    pdf.setFontSize(fontSizeLabel);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 0, 0); // Negro
+    
+    // POSICIONES CON ESPACIADO VERTICAL
+    const labelY = y + (height * 0.3);
+    pdf.text(parametro.label + ":", x, labelY);
+    
+    // Valor en negro
+    pdf.setFontSize(fontSizeValue);
+    pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+    pdf.setTextColor(0, 0, 0); // Negro
+    
+    // Ajustar valor si es muy largo
+    const maxValueWidth = width - 0.3;
+    let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+    
+    // POSICIÓN DEL VALOR
+    const valueStartY = y + (height * 0.6);
+    const lineHeightValue = 0.18;
+    
+    // Dibujar cada línea del valor
+    valueLines.forEach((line, index) => {
+        if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+            pdf.text(line, x, valueStartY + (index * lineHeightValue));
         }
+    });
+    
+    // Borde sutil en gris claro
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.003);
+    pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
+}
 
-        // Guardar configuración de PDF
-        function savePdfSettings() {
-            pdfSettings.size = document.getElementById('pdfSize').value;
-            pdfSettings.orientation = document.getElementById('pdfOrientation').value;
-            pdfSettings.margin = parseInt(document.getElementById('pdfMargin').value);
-            
-            if (pdfSettings.size === 'custom') {
-                pdfSettings.customWidth = parseInt(document.getElementById('customWidth').value);
-                pdfSettings.customHeight = parseInt(document.getElementById('customHeight').value);
-            }
-            
-            localStorage.setItem('pdfSettings', JSON.stringify(pdfSettings));
-            showNotification('Configuración de PDF guardada');
+// FUNCIÓN 10x5cm EN BLANCO Y NEGRO
+function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+    const fontSizeLabel = esPrimario ? 6.5 : 6;
+    const fontSizeValue = esPrimario ? 7.5 : 7;
+    
+    // Label en negro
+    pdf.setFontSize(fontSizeLabel);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 0, 0); // Negro
+    
+    // POSICIONES CON ESPACIADO VERTICAL
+    const labelY = y + (height * 0.3);
+    pdf.text(parametro.label + ":", x, labelY);
+    
+    // Valor en negro
+    pdf.setFontSize(fontSizeValue);
+    pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+    pdf.setTextColor(0, 0, 0); // Negro
+    
+    // Ajustar valor si es muy largo
+    const maxValueWidth = width - 0.4;
+    let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+    
+    // POSICIÓN DEL VALOR
+    const valueStartY = y + (height * 0.6);
+    const lineHeightValue = 0.2;
+    
+    // Dibujar cada línea del valor
+    valueLines.forEach((line, index) => {
+        if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+            pdf.text(line, x, valueStartY + (index * lineHeightValue));
         }
+    });
+    
+    // Borde sutil en gris claro
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.003);
+    pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
+}
 
-        // Cargar configuración de PDF
-        function loadPdfSettings() {
-            const savedSettings = localStorage.getItem('pdfSettings');
-            if (savedSettings) {
-                Object.assign(pdfSettings, JSON.parse(savedSettings));
-            }
-            
-            // Aplicar configuración cargada a los controles
-            document.getElementById('pdfSize').value = pdfSettings.size;
-            document.getElementById('pdfOrientation').value = pdfSettings.orientation;
-            document.getElementById('pdfMargin').value = pdfSettings.margin;
-            document.getElementById('customWidth').value = pdfSettings.customWidth;
-            document.getElementById('customHeight').value = pdfSettings.customHeight;
-            
-            if (pdfSettings.size === 'custom') {
-                document.getElementById('customSizeGroup').style.display = 'block';
-            }
-        }
 
-        async function generateCombinedPDF() {
-            const savedLabels = JSON.parse(localStorage.getItem('savedLabels')) || [];
-            
-            if (savedLabels.length === 0) {
-                showNotification('No hay etiquetas guardadas para combinar', true);
+
+
+
+
+        async function generarPDFMasivo() {
+            if (AppState.etiquetasGuardadas.length === 0) {
+                showToast('No hay etiquetas guardadas para generar PDF masivo', 'warning');
                 return;
             }
             
-            showLoader(`Generando PDF con ${savedLabels.length} etiquetas...`);
+            showLoadingOverlay(true, 'Generando PDF masivo...');
             
             try {
-                // 1. Crear un PDF maestro
                 const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    unit: 'mm',
-                    orientation: pdfSettings.orientation,
-                    format: pdfSettings.size === 'custom' 
-                        ? [pdfSettings.customWidth, pdfSettings.customHeight] 
-                        : pdfSettings.size
-                });
-
-                // Configuración de márgenes
-                const marginBottom = 10; // Margen inferior entre etiquetas (en mm)
                 
-                // 2. Generar cada etiqueta como imagen y añadirla al PDF
-                for (let i = 0; i < savedLabels.length; i++) {
-                    if (i > 0) pdf.addPage(); // Nueva página para cada etiqueta
-
-                    const labelDiv = document.createElement('div');
-                    labelDiv.innerHTML = savedLabels[i].html;
-
-                    document.body.appendChild(labelDiv);
-                    
-                    const canvas = await html2canvas(labelDiv, {
-                        scale: 3,
-                        logging: true,
-                        useCORS: true
-                    });
-                    
-                    document.body.removeChild(labelDiv);
-                    
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const imgProps = pdf.getImageProperties(imgData);
-                    const pdfWidth = pdf.internal.pageSize.getWidth() - (pdfSettings.margin * 2);
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    
-                    pdf.addImage(imgData, 'JPEG', 
-                        pdfSettings.margin, 
-                        pdfSettings.margin, 
-                        pdfWidth, 
-                        pdfHeight);
-                }
-
-                // 3. Guardar el PDF combinado
-                pdf.save(`etiquetas-${new Date().toLocaleDateString()}.pdf`);
-                showNotification(`PDF generado correctamente con ${savedLabels.length} etiquetas`);
-            } catch (error) {
-                console.error('Error al generar PDF:', error);
-                showNotification('Error al generar PDF', true);
-            } finally {
-                hideLoader();
-            }
-        }
-
-        // Generar PDF individual
-        async function generarPDF() {
-            const codigoProducto = getCodigoFromTitulo();   
-            
-            const ahora = new Date();
-            const fecha = [
-                ahora.getHours().toString().padStart(2, '0'),
-                ahora.getMinutes().toString().padStart(2, '0'),
-                ahora.getSeconds().toString().padStart(2, '0')
-                ].join('');
-
-            const nombreArchivo = `etiqueta-${codigoProducto}-${fecha}.pdf`;
-
-            const element = document.getElementById('etiqueta');
-            
-            showLoader('Generando etiqueta...');
-
-            try {
-                let format, width, height;
-                
-                if (pdfSettings.size === 'custom') {
-                    width = pdfSettings.customWidth;
-                    height = pdfSettings.customHeight;
-                    format = [width, height];
-                } else {
-                    format = pdfSettings.size;
+                if (typeof jsPDF === 'undefined') {
+                    throw new Error('Librería PDF no disponible');
                 }
                 
-                const opt = {
-                    margin: [pdfSettings.margin, pdfSettings.margin, pdfSettings.margin, pdfSettings.margin],
-                    filename: nombreArchivo,
-                    image: { 
-                        type: 'jpeg', 
-                        quality: 0.95 
-                    },
-                    html2canvas: { 
-                        scale: 3,
-                        logging: false,
-                        useCORS: true,
-                        allowTaint: true,
-                        scrollX: 0,
-                        scrollY: 0,
-                        width: 264,
-                        height: element.offsetHeight + 10
-                    },
-                    jsPDF: { 
-                        unit: 'mm', 
-                        format: format,
-                        orientation: pdfSettings.orientation,
-                        hotfixes: ["px_scaling"] 
+                let pdf = null;
+                let etiquetaCount = 0;
+                
+                // Agrupar etiquetas por formato
+                const etiquetas75x5 = AppState.etiquetasGuardadas.filter(e => e.formato === '75x5');
+                const etiquetas10x5 = AppState.etiquetasGuardadas.filter(e => e.formato === '10x5');
+                
+                // Función para agregar etiquetas de un formato específico
+                const agregarEtiquetas = (etiquetas, formato) => {
+                    if (etiquetas.length === 0) return;
+                    
+                    let etiquetaWidth, etiquetaHeight;
+                    
+                    if (formato === '75x5') {
+                        etiquetaWidth = 7.5;
+                        etiquetaHeight = 5;
+                    } else {
+                        etiquetaWidth = 10;
+                        etiquetaHeight = 5;
+                    }
+                    
+                    for (const etiqueta of etiquetas) {
+                        // Crear nueva página para cada etiqueta
+                        if (pdf) {
+                            pdf.addPage([etiquetaWidth, etiquetaHeight], 'landscape');
+                        } else {
+                            pdf = new jsPDF({
+                                orientation: "landscape",
+                                unit: "cm",
+                                format: [etiquetaWidth, etiquetaHeight]
+                            });
+                        }
+                        
+                        // Márgenes optimizados
+                        const margin = 0.15;
+                        const contentWidth = etiquetaWidth - (margin * 2);
+                        const contentHeight = etiquetaHeight - (margin * 2);
+                        
+                        // Fondo blanco
+                        pdf.setFillColor(255, 255, 255);
+                        pdf.rect(margin, margin, contentWidth, contentHeight, 'F');
+                        
+                        // Borde negro
+                        pdf.setDrawColor(0, 0, 0);
+                        pdf.setLineWidth(0.04);
+                        pdf.rect(margin, margin, contentWidth, contentHeight);
+                        
+                        // ENCABEZADO EN BLANCO Y NEGRO
+                        const headerHeight = formato === '75x5' ? 0.8 : 0.9;
+                        pdf.setFillColor(255, 255, 255); // Fondo blanco
+                        pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
+                        
+                        // Borde inferior del header
+                        pdf.setDrawColor(0, 0, 0);
+                        pdf.setLineWidth(0.02);
+                        pdf.line(margin, margin + headerHeight, margin + contentWidth, margin + headerHeight);
+                        
+                        // TÍTULO EN NEGRO
+                        pdf.setFontSize(formato === '75x5' ? 6 : 7);
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setTextColor(0, 0, 0); // Texto negro
+                        
+                        const maxTituloWidth = contentWidth - 0.3;
+                        const tituloLines = pdf.splitTextToSize(etiqueta.titulo.toUpperCase(), maxTituloWidth);
+                        
+                        // Limitar a máximo 4 líneas
+                        const tituloDisplayLines = tituloLines.slice(0, 4);
+                        const lineHeight = 0.18;
+                        const tituloTotalHeight = tituloDisplayLines.length * lineHeight;
+                        
+                        // Centrar verticalmente en el header
+                        const headerCenterY = margin + (headerHeight / 2);
+                        const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.08;
+                        
+                        // Dibujar cada línea del título
+                        tituloDisplayLines.forEach((line, index) => {
+                            pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
+                        });
+                        
+                        // CONFIGURACIÓN DE PARÁMETROS EN BLANCO Y NEGRO
+                        const parametros = [
+                            { 
+                                label: "CÓDIGO", 
+                                value: etiqueta.codigo,
+                                type: "primary"
+                            },
+                            { 
+                                label: "MEDIDAS", 
+                                value: `${etiqueta.largo} ${etiqueta.unidad}  ×  ${etiqueta.ancho} ${etiqueta.unidad2}`,
+                                type: "secondary"
+                            },
+                            { 
+                                label: "CANTIDAD", 
+                                value: etiqueta.cantidad,
+                                type: "secondary"
+                            },
+                            { 
+                                label: "METRAJE", 
+                                value: `${etiqueta.metraje} M²`,
+                                type: "secondary"
+                            },
+                            { 
+                                label: "UBICACIÓN", 
+                                value: etiqueta.ubicacion,
+                                type: "secondary"
+                            }
+                        ];
+
+                        // ESPACIO DISPONIBLE PARA PARÁMETROS
+                        const espacioParametros = contentHeight - headerHeight - 0.25;
+                        let currentY = margin + headerHeight + 0.1;
+
+                        if (formato === '75x5') {
+                            // DISEÑO 7.5x5 - 3 filas × 2 columnas
+                            const colWidth = contentWidth / 2;
+                            
+                            // DISTRIBUCIÓN CON MÁS ALTURA PARA CADA FILA
+                            const fila1Height = 1.2;
+                            const fila2Height = 0.9; 
+                            const fila3Height = 0.9;
+                            
+                            // Fila 1: Código (ocupa ancho completo)
+                            dibujarParametro75x5BN(pdf, parametros[0], margin + 0.15, currentY, contentWidth - 0.3, fila1Height, true);
+                            currentY += fila1Height;
+                                                        
+                            // Fila 2: Medidas y Cantidad
+                            dibujarParametro75x5BN(pdf, parametros[1], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
+                            dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila2Height, false);
+                            currentY += fila2Height;
+                            
+                            // Línea divisoria
+                            pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
+                            currentY += 0.05;
+                            
+                            // Fila 3: Metraje y Ubicación
+                            dibujarParametro75x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila3Height, false);
+                            dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila3Height, false);
+                            
+                        } else {
+                            // DISEÑO 10x5 - 2 filas × 3 columnas
+                            const colWidth = contentWidth / 3;
+                            
+                            // DISTRIBUCIÓN CON MÁS ALTURA
+                            const fila1Height = 1.1;
+                            const fila2Height = 1.0;
+                            
+                            // Fila 1: Código, Medidas, Cantidad
+                            dibujarParametro10x5BN(pdf, parametros[0], margin + 0.15, currentY, colWidth - 0.2, fila1Height, true);
+                            dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.1, currentY, colWidth - 0.2, fila1Height, false);
+                            dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.2, fila1Height, false);
+                            currentY += fila1Height;
+                            
+                            // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
+                            dibujarParametro10x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
+                            dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.1, currentY, (colWidth * 2) - 0.3, fila2Height, false);
+                        }
+                        
+                        // PIE DE PÁGINA EN BLANCO Y NEGRO
+                        const footerY = margin + contentHeight - 0.15;
+                                                
+                        // Información de creación
+                        pdf.setFontSize(4);
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setTextColor(0, 0, 0); // Texto negro
+                        
+                        const creadoInfo = `${etiqueta.creado} | ${formatearFecha(etiqueta.fecha)}`;
+                        pdf.text(creadoInfo, margin + 0.15, footerY - 0.05);
+                                               
+                        etiquetaCount++;
                     }
                 };
                 
-                await html2pdf().set(opt).from(element).save();
-                showNotification(`Etiqueta guardada como <strong>${nombreArchivo}</strong>`);
+                // Agregar etiquetas de ambos formatos
+                agregarEtiquetas(etiquetas75x5, '75x5');
+                agregarEtiquetas(etiquetas10x5, '10x5');
+                
+                if (pdf) {
+                    const fileName = "etiquetas_masivo_gallos_marmol_" + new Date().getTime() + ".pdf";
+                    pdf.save(fileName);
+                    showToast("PDF masivo generado con " + etiquetaCount + " etiquetas", 'success');
+                }
+                
             } catch (error) {
-                console.error('Error al generar PDF:', error);
-                showNotification('Error al generar el PDF. Intente nuevamente.', true);
+                console.error('Error generando PDF masivo:', error);
+                showToast('Error al generar el PDF masivo: ' + error.message, 'error');
             } finally {
-                hideLoader();
+                showLoadingOverlay(false);
             }
         }
 
-        // Inicialización
-        window.onload = function() {
-            getParams();
-            loadPdfSettings();
-            updateSavedLabelsList();
+        // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Toggle de tema
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
             
-            // Cerrar modal al hacer clic fuera del contenido
-            document.getElementById('labelModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
+            // Pantalla completa
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+            }
+            
+            // Selector de formato
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const formato = this.getAttribute('data-format');
+                    cambiarFormatoEtiqueta(formato);
+                });
             });
+            
+            // Botones de etiqueta
+            document.getElementById('generarPdfIndividualBtn').addEventListener('click', generarPDFIndividual);
+            document.getElementById('guardarEtiquetaBtn').addEventListener('click', guardarEtiqueta);
+            document.getElementById('generarPdfMasivoBtn').addEventListener('click', generarPDFMasivo);
+            document.getElementById('limpiarHistorialBtn').addEventListener('click', limpiarHistorial);
+            
+            // Cerrar toast
+            const toastClose = document.querySelector('.toast-close');
+            if (toastClose) {
+                toastClose.addEventListener('click', function() {
+                    document.getElementById('toast').classList.remove('show');
+                });
+            }
+        }
 
-            // Cerrar modal de confirmación al hacer clic fuera del contenido
-            document.getElementById('confirmationModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeConfirmationModal();
+        function toggleTheme() {
+            AppState.darkMode = !AppState.darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', AppState.darkMode);
+            
+            const icon = document.getElementById('themeToggle').querySelector('i');
+            icon.className = AppState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            
+            showToast("Modo " + (AppState.darkMode ? 'oscuro' : 'claro') + " activado", 'success');
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(function(err) {
+                    console.error('Error al activar pantalla completa:', err);
+                    showToast('No se pudo activar el modo pantalla completa', 'error');
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
                 }
-            });
-        };
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando sistema de etiquetas...');
+            
+            // Aplicar tema guardado
+            if (AppState.darkMode) {
+                document.body.classList.add('dark-mode');
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            }
+            
+            // Obtener parámetros de la URL
+            const parametros = obtenerParametrosURL();
+            console.log('📋 Parámetros recibidos:', parametros);
+            
+            // Actualizar vista previa
+            actualizarVistaPrevia();
+            
+            // Actualizar historial
+            actualizarHistorial();
+            
+            // Configurar event listeners
+            setupEventListeners();
+            
+            showToast('Sistema de etiquetas cargado correctamente', 'success');
+        });
     </script>
 </body>
 </html>
