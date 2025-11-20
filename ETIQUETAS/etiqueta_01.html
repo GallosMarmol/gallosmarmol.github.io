@@ -6,16 +6,17 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Gallos Mármol</title>
+    <title>Etiqueta - Gallos Mármol</title>
     <meta name="description" content="Sistema de generación de etiquetas para productos terminados de Gallos Mármol">
     <meta name="keywords" content="gallos mármol, etiquetas, productos terminados, inventario">
     <meta name="author" content="Gallos Mármol">
     <link rel="icon" type="image/x-icon" href="../../FOTO/ICONO/Icono_01.ico">
     
-    <!-- Librerías externas -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Librerías externas optimizadas -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
     <style>
         /* ===== VARIABLES Y RESET ===== */
@@ -510,81 +511,6 @@
             flex-wrap: wrap;
         }
 
-        /* ===== HISTORIAL DE ETIQUETAS ===== */
-        .historial-section {
-            margin-top: 2rem;
-        }
-
-        .historial-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .etiquetas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .etiqueta-card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-
-        .etiqueta-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .etiqueta-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
-        }
-
-        .etiqueta-card-codigo {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .etiqueta-card-titulo {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .etiqueta-card-details {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-
-        .etiqueta-card-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-muted);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .etiqueta-content {
@@ -595,10 +521,6 @@
             .etiqueta-actions {
                 flex-direction: column;
                 align-items: center;
-            }
-            
-            .etiquetas-grid {
-                grid-template-columns: 1fr;
             }
             
             .format-options {
@@ -699,36 +621,10 @@
                         </div>
                         
                         <div class="etiqueta-actions">
-                            <button class="btn btn-primary" id="generarPdfIndividualBtn">
-                                <i class="fas fa-file-pdf"></i> Generar PDF Individual
-                            </button>
-                            <button class="btn btn-success" id="guardarEtiquetaBtn">
-                                <i class="fas fa-save"></i> Guardar para PDF Masivo
-                            </button>
-                            <button class="btn btn-secondary" id="generarPdfMasivoBtn">
-                                <i class="fas fa-file-pdf"></i> Generar PDF Masivo
+                            <button class="btn btn-primary" id="generarPdfBtn">
+                                <i class="fas fa-file-pdf"></i> Generar PDF
                             </button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Historial de etiquetas guardadas -->
-                <div class="historial-section">
-                    <div class="historial-header">
-                        <h3>Etiquetas Guardadas para PDF Masivo</h3>
-                        <button class="btn btn-danger btn-small" id="limpiarHistorialBtn">
-                            <i class="fas fa-trash"></i> Limpiar Todo
-                        </button>
-                    </div>
-                    
-                    <div class="etiquetas-grid" id="etiquetasGrid">
-                        <!-- Las etiquetas guardadas aparecerán aquí -->
-                    </div>
-                    
-                    <div class="empty-state" id="emptyHistorial">
-                        <i class="fas fa-tags"></i>
-                        <h3>No hay etiquetas guardadas</h3>
-                        <p>Guarda etiquetas para generarlas en un PDF masivo posteriormente</p>
                     </div>
                 </div>
             </div>
@@ -754,7 +650,6 @@
         // ===== ESTADO DE LA APLICACIÓN =====
         const AppState = {
             darkMode: localStorage.getItem('darkMode') === 'true',
-            etiquetasGuardadas: JSON.parse(localStorage.getItem('etiquetasGuardadas')) || [],
             parametrosURL: {},
             formatoSeleccionado: '75x5'
         };
@@ -817,6 +712,15 @@
             parametros.creado = urlParams.get('creado') || 'N/A';
             parametros.codigo = urlParams.get('codigo') || 'N/A';
             
+            // Validar parámetros críticos
+            if (!parametros.codigo || parametros.codigo === 'N/A') {
+                showToast('Advertencia: No se proporcionó código del producto', 'warning');
+            }
+            
+            if (!parametros.titulo || parametros.titulo === 'Producto Sin Título') {
+                showToast('Advertencia: No se proporcionó título del producto', 'warning');
+            }
+            
             AppState.parametrosURL = parametros;
             return parametros;
         }
@@ -828,7 +732,7 @@
             document.getElementById('etiquetaLargo').textContent = `${params.largo} ${params.unidad}`;
             document.getElementById('etiquetaAncho').textContent = `${params.ancho} ${params.unidad2}`;
             document.getElementById('etiquetaCantidad').textContent = params.cantidad;
-            document.getElementById('etiquetaMetraje').textContent = `${params.metraje} m²`;
+            document.getElementById('etiquetaMetraje').textContent = `${params.metraje} M²`;
             document.getElementById('etiquetaUbicacion').textContent = params.ubicacion;
             document.getElementById('etiquetaFecha').textContent = formatearFecha(params.fecha);
             document.getElementById('etiquetaCreado').textContent = params.creado;
@@ -862,102 +766,17 @@
             document.querySelector(`.format-option[data-format="${formato}"]`).classList.add('selected');
         }
 
-        // ===== FUNCIONES PARA GUARDAR ETIQUETAS =====
-        function guardarEtiqueta() {
+        // ===== FUNCIONES PARA GENERAR PDF =====
+        async function generarPDF() {
+            // Validar parámetros antes de generar PDF
             const params = AppState.parametrosURL;
             
-            const existe = AppState.etiquetasGuardadas.some(
-                etiqueta => etiqueta.codigo === params.codigo
-            );
-            
-            if (existe) {
-                showToast('Ya existe una etiqueta con este código', 'warning');
+            if (!params.codigo || params.codigo === 'N/A') {
+                showToast('Error: No se puede generar PDF sin código de producto', 'error');
                 return;
             }
             
-            const etiqueta = {
-                id: Date.now(),
-                titulo: params.titulo,
-                largo: params.largo,
-                unidad: params.unidad,
-                ancho: params.ancho,
-                unidad2: params.unidad2,
-                cantidad: params.cantidad,
-                metraje: params.metraje,
-                ubicacion: params.ubicacion,
-                fecha: params.fecha,
-                creado: params.creado,
-                codigo: params.codigo,
-                timestamp: new Date().toISOString(),
-                formato: AppState.formatoSeleccionado
-            };
-            
-            AppState.etiquetasGuardadas.push(etiqueta);
-            localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
-            actualizarHistorial();
-            
-            showToast('Etiqueta guardada para PDF masivo', 'success');
-        }
-
-        function eliminarEtiqueta(id) {
-            AppState.etiquetasGuardadas = AppState.etiquetasGuardadas.filter(etiqueta => etiqueta.id !== id);
-            localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
-            actualizarHistorial();
-            showToast('Etiqueta eliminada', 'info');
-        }
-
-        function limpiarHistorial() {
-            if (AppState.etiquetasGuardadas.length === 0) {
-                showToast('No hay etiquetas para limpiar', 'info');
-                return;
-            }
-            
-            if (confirm('¿Estás seguro de que quieres eliminar todas las etiquetas guardadas?')) {
-                AppState.etiquetasGuardadas = [];
-                localStorage.setItem('etiquetasGuardadas', JSON.stringify(AppState.etiquetasGuardadas));
-                actualizarHistorial();
-                showToast('Todas las etiquetas han sido eliminadas', 'success');
-            }
-        }
-
-        function actualizarHistorial() {
-            const grid = document.getElementById('etiquetasGrid');
-            const emptyState = document.getElementById('emptyHistorial');
-            
-            if (AppState.etiquetasGuardadas.length === 0) {
-                grid.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            grid.style.display = 'grid';
-            emptyState.style.display = 'none';
-            
-            grid.innerHTML = AppState.etiquetasGuardadas.map(etiqueta => `
-                <div class="etiqueta-card">
-                    <div class="etiqueta-card-header">
-                        <span class="etiqueta-card-codigo">${etiqueta.codigo}</span>
-                        <small>${new Date(etiqueta.timestamp).toLocaleDateString()}</small>
-                    </div>
-                    <h4 class="etiqueta-card-titulo">${etiqueta.titulo}</h4>
-                    <div class="etiqueta-card-details">
-                        <div><strong>Formato:</strong> ${etiqueta.formato === '75x5' ? '7.5x5 cm' : '10x5 cm'}</div>
-                        <div><strong>Largo:</strong> ${etiqueta.largo} ${etiqueta.unidad}</div>
-                        <div><strong>Ancho:</strong> ${etiqueta.ancho} ${etiqueta.unidad2}</div>
-                        <div><strong>Cantidad:</strong> ${etiqueta.cantidad}</div>
-                        <div><strong>Ubicación:</strong> ${etiqueta.ubicacion}</div>
-                    </div>
-                    <div class="etiqueta-card-actions">
-                        <button class="btn btn-danger btn-small" onclick="eliminarEtiqueta(${etiqueta.id})">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function generarPDFIndividual() {
-            showLoadingOverlay(true, 'Generando PDF individual...');
+            showLoadingOverlay(true, 'Generando PDF...');
             
             try {
                 const { jsPDF } = window.jspdf;
@@ -966,7 +785,6 @@
                     throw new Error('Librería PDF no disponible');
                 }
                 
-                const params = AppState.parametrosURL;
                 const formato = AppState.formatoSeleccionado;
                 
                 // Configurar PDF con tamaño real
@@ -998,14 +816,9 @@
                 // Fondo blanco
                 pdf.setFillColor(255, 255, 255);
                 pdf.rect(margin, margin, contentWidth, contentHeight, 'F');
-                
-                // Borde negro
-                pdf.setDrawColor(0, 0, 0);
-                pdf.setLineWidth(0.04);
-                pdf.rect(margin, margin, contentWidth, contentHeight);
-                
+                                
                 // ENCABEZADO EN BLANCO Y NEGRO
-                const headerHeight = formato === '75x5' ? 0.8 : 0.9;
+                const headerHeight = formato === '75x5' ? 0.7 : 0.8; // Reducido para dar más espacio al contenido
                 pdf.setFillColor(255, 255, 255); // Fondo blanco
                 pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
                 
@@ -1014,34 +827,69 @@
                 pdf.setLineWidth(0.02);
                 pdf.line(margin, margin + headerHeight, margin + contentWidth, margin + headerHeight);
                 
-                // TÍTULO EN NEGRO
-                pdf.setFontSize(formato === '75x5' ? 6 : 7);
-                pdf.setFont('helvetica', 'bold');
-                pdf.setTextColor(0, 0, 0); // Texto negro
-                
+                // TÍTULO EN NEGRO - CONTROL COMPLETO DE LÍNEAS
+                let fontSizeTitulo = formato === '75x5' ? 7 : 8; // Reducido para caber mejor
+                let tituloLines = [];
+                let tituloDisplayLines = [];
+                let tituloTruncado = false;
                 const maxTituloWidth = contentWidth - 0.3;
-                const tituloLines = pdf.splitTextToSize(params.titulo.toUpperCase(), maxTituloWidth);
-                
-                // Limitar a máximo 4 líneas
-                const tituloDisplayLines = tituloLines.slice(0, 4);
-                const lineHeight = 0.18;
+
+                // Intentar con diferentes tamaños de fuente
+                for (let i = 0; i < 3; i++) {
+                    pdf.setFontSize(fontSizeTitulo);
+                    tituloLines = pdf.splitTextToSize(params.titulo.toUpperCase(), maxTituloWidth);
+                    
+                    if (tituloLines.length <= 3) { // Máximo 3 líneas para el título
+                        break; // Tamaño adecuado encontrado
+                    }
+                    
+                    // Reducir tamaño de fuente para siguiente intento
+                    fontSizeTitulo -= 1;
+                    
+                    // Si ya es el último intento y sigue teniendo muchas líneas, truncar
+                    if (i === 2 && tituloLines.length > 3) {
+                        tituloDisplayLines = tituloLines.slice(0, 2);
+                        const terceraLinea = tituloLines[2];
+                        tituloDisplayLines.push(terceraLinea.substring(0, Math.max(terceraLinea.length - 3, 5)) + '...');
+                        tituloTruncado = true;
+                        break;
+                    }
+                }
+
+                // Aplicar el tamaño de fuente final
+                pdf.setFontSize(fontSizeTitulo);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setTextColor(0, 0, 0);
+
+                // Si no se truncó, usar todas las líneas (máximo 3)
+                if (!tituloTruncado) {
+                    tituloDisplayLines = tituloLines.slice(0, 3);
+                }
+
+                // LINE HEIGHT OPTIMIZADO
+                const lineHeight = 0.2;
                 const tituloTotalHeight = tituloDisplayLines.length * lineHeight;
-                
+
                 // Centrar verticalmente en el header
                 const headerCenterY = margin + (headerHeight / 2);
-                const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.08;
-                
+                const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.06;
+
                 // Dibujar cada línea del título
                 tituloDisplayLines.forEach((line, index) =>  {
                     pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
                 });
+
+                // Mostrar advertencia si fue necesario truncar o reducir tamaño
+                if (tituloTruncado || fontSizeTitulo < (formato === '75x5' ? 7 : 8)) {
+                    showToast('El título fue ajustado para caber en el espacio disponible', 'warning');
+                }
                 
                 // CONFIGURACIÓN DE PARÁMETROS EN BLANCO Y NEGRO
                 const parametros = [
                     { 
                         label: "CÓDIGO", 
                         value: params.codigo,
-                        type: "primary"
+                        type: "secondary"
                     },
                     { 
                         label: "MEDIDAS", 
@@ -1065,101 +913,106 @@
                     }
                 ];
 
-                // ESPACIO DISPONIBLE PARA PARÁMETROS
-                const espacioParametros = contentHeight - headerHeight - 0.25;
-                let currentY = margin + headerHeight + 0.1;
+                // ESPACIO DISPONIBLE PARA PARÁMETROS (más espacio ahora)
+                const espacioParametros = contentHeight - headerHeight - 0.3;
+                
+                // POSICIÓN INICIAL OPTIMIZADA
+                let currentY = margin + headerHeight + 0.2;
 
                 if (formato === '75x5') {
-                    // DISEÑO 7.5x5 - 3 filas × 2 columnas
+                    // DISEÑO 7.5x5 - 3 filas × 2 columnas CON ALTURAS OPTIMIZADAS
                     const colWidth = contentWidth / 2;
                     
-                    // DISTRIBUCIÓN CON MÁS ALTURA PARA CADA FILA
-                    const fila1Height = 1.2;
-                    const fila2Height = 0.9; 
-                    const fila3Height = 0.9;
+                    // DISTRIBUCIÓN CON ALTURAS BALANCEADAS
+                    const fila1Height = 1.0;  // Código
+                    const fila2Height = 0.9;  // Medidas y Cantidad
+                    const fila3Height = 0.9;  // Metraje y Ubicación
                     
                     // Fila 1: Código (ocupa ancho completo)
-                    dibujarParametro75x5BN(pdf, parametros[0], margin + 0.15, currentY, contentWidth - 0.3, fila1Height, true);
+                    dibujarParametro75x5BN(pdf, parametros[0], margin + 0.1, currentY, contentWidth - 0.2, fila1Height, false);
                     currentY += fila1Height;
                                         
                     // Fila 2: Medidas y Cantidad
-                    dibujarParametro75x5BN(pdf, parametros[1], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
-                    dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila2Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[1], margin + 0.1, currentY, colWidth - 0.15, fila2Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila2Height, false);
                     currentY += fila2Height;
 
                     // Fila 3: Metraje y Ubicación
-                    dibujarParametro75x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila3Height, false);
-                    dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila3Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[3], margin + 0.1, currentY, colWidth - 0.15, fila3Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila3Height, false);
                     
                 } else {
-                    // DISEÑO 10x5 - 2 filas × 3 columnas
+                    // DISEÑO 10x5 - 2 filas × 3 columnas CON ALTURAS OPTIMIZADAS
                     const colWidth = contentWidth / 3;
                     
-                    // DISTRIBUCIÓN CON MÁS ALTURA
-                    const fila1Height = 1.1;
-                    const fila2Height = 1.0;
+                    // DISTRIBUCIÓN BALANCEADA
+                    const fila1Height = 1.0;  // Código, Medidas, Cantidad
+                    const fila2Height = 1.0;  // Metraje y Ubicación
                     
                     // Fila 1: Código, Medidas, Cantidad
-                    dibujarParametro10x5BN(pdf, parametros[0], margin + 0.15, currentY, colWidth - 0.2, fila1Height, true);
-                    dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.1, currentY, colWidth - 0.2, fila1Height, false);
-                    dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.2, fila1Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[0], margin + 0.1, currentY, colWidth - 0.15, fila1Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila1Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.15, fila1Height, false);
                     currentY += fila1Height;
                                         
                     // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
-                    dibujarParametro10x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
-                    dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.1, currentY, (colWidth * 2) - 0.3, fila2Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[3], margin + 0.1, currentY, colWidth - 0.15, fila2Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, (colWidth * 2) - 0.2, fila2Height, false);
                 }
                 
                 // PIE DE PÁGINA EN BLANCO Y NEGRO
-                const footerY = margin + contentHeight - 0.15;
+                const footerY = margin + contentHeight - 0.1;
                                 
                 // Información de creación
-                pdf.setFontSize(4);
+                pdf.setFontSize(4); // Reducido para caber mejor
                 pdf.setFont('helvetica', 'normal');
                 pdf.setTextColor(0, 0, 0); // Texto negro
                 
                 const creadoInfo = `${params.creado} | ${formatearFecha(params.fecha)}`;
-                pdf.text(creadoInfo, margin + 0.15, footerY - 0.05);
+                pdf.text(creadoInfo, margin + 0.1, footerY - 0.05);
                                 
                 // Guardar PDF
                 const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
                 pdf.save(fileName);
                 
-                showToast("PDF individual generado correctamente", 'success');
+                showToast("PDF generado correctamente", 'success');
                 
             } catch (error) {
-                console.error('Error generando PDF individual:', error);
-                showToast('Error al generar el PDF individual: ' + error.message, 'error');
+                console.error('Error generando PDF:', error);
+                showToast('Error al generar el PDF: ' + error.message, 'error');
             } finally {
                 showLoadingOverlay(false);
             }
         }
 
-        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO
+        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO - CON TAMAÑOS OPTIMIZADOS
         function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
-            const fontSizeLabel = esPrimario ? 5.5 : 5;
-            const fontSizeValue = esPrimario ? 6.5 : 6;
+            // TAMAÑOS DE FUENTE OPTIMIZADOS PARA CABER
+            const fontSizeLabel = 6; // Reducido para caber mejor
+            const fontSizeValue = 7; // Reducido para caber mejor
             
             // Label en negro con diferente peso
             pdf.setFontSize(fontSizeLabel);
             pdf.setFont('helvetica', 'bold');
             pdf.setTextColor(0, 0, 0); // Negro
             
-            // POSICIONES CON ESPACIADO VERTICAL
+            // POSICIONES CON ESPACIADO OPTIMIZADO
             const labelY = y + (height * 0.3);
             pdf.text(parametro.label + ":", x, labelY);
             
             // Valor en negro
             pdf.setFontSize(fontSizeValue);
-            pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+            pdf.setFont('helvetica', 'normal');
             pdf.setTextColor(0, 0, 0); // Negro
             
             // Ajustar valor si es muy largo
-            const maxValueWidth = width - 0.3;
+            const maxValueWidth = width - 0.2;
             let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
             
-            // POSICIÓN DEL VALOR
+            // POSICIÓN DEL VALOR OPTIMIZADA
             const valueStartY = y + (height * 0.6);
+            
+            // LINE HEIGHT OPTIMIZADO
             const lineHeightValue = 0.18;
             
             // Dibujar cada línea del valor
@@ -1168,39 +1021,37 @@
                     pdf.text(line, x, valueStartY + (index * lineHeightValue));
                 }
             });
-            
-            // Borde sutil en gris claro
-            pdf.setDrawColor(200, 200, 200);
-            pdf.setLineWidth(0.003);
-            pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
         }
 
-        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO
+        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO - CON TAMAÑOS OPTIMIZADOS
         function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
-            const fontSizeLabel = esPrimario ? 6.5 : 6;
-            const fontSizeValue = esPrimario ? 7.5 : 7;
+            // TAMAÑOS DE FUENTE OPTIMIZADOS PARA CABER
+            const fontSizeLabel = 6; // Reducido para caber mejor
+            const fontSizeValue = 7; // Reducido para caber mejor
             
             // Label en negro
             pdf.setFontSize(fontSizeLabel);
             pdf.setFont('helvetica', 'bold');
             pdf.setTextColor(0, 0, 0); // Negro
             
-            // POSICIONES CON ESPACIADO VERTICAL
+            // POSICIONES CON ESPACIADO OPTIMIZADO
             const labelY = y + (height * 0.3);
             pdf.text(parametro.label + ":", x, labelY);
             
             // Valor en negro
             pdf.setFontSize(fontSizeValue);
-            pdf.setFont('helvetica', esPrimario ? 'bold' : 'normal');
+            pdf.setFont('helvetica', 'normal');
             pdf.setTextColor(0, 0, 0); // Negro
             
             // Ajustar valor si es muy largo
-            const maxValueWidth = width - 0.4;
+            const maxValueWidth = width - 0.3;
             let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
             
-            // POSICIÓN DEL VALOR
+            // POSICIÓN DEL VALOR OPTIMIZADA
             const valueStartY = y + (height * 0.6);
-            const lineHeightValue = 0.2;
+            
+            // LINE HEIGHT OPTIMIZADO
+            const lineHeightValue = 0.18;
             
             // Dibujar cada línea del valor
             valueLines.forEach((line, index) => {
@@ -1208,216 +1059,6 @@
                     pdf.text(line, x, valueStartY + (index * lineHeightValue));
                 }
             });
-            
-            // Borde sutil en gris claro
-            pdf.setDrawColor(200, 200, 200);
-            pdf.setLineWidth(0.003);
-            pdf.rect(x - 0.03, y - 0.03, width + 0.06, height + 0.06);
-        }
-        
-        async function generarPDFMasivo() {
-            if (AppState.etiquetasGuardadas.length === 0) {
-                showToast('No hay etiquetas guardadas para generar PDF masivo', 'warning');
-                return;
-            }
-            
-            showLoadingOverlay(true, 'Generando PDF masivo...');
-            
-            try {
-                const { jsPDF } = window.jspdf;
-                
-                if (typeof jsPDF === 'undefined') {
-                    throw new Error('Librería PDF no disponible');
-                }
-                
-                let pdf = null;
-                let etiquetaCount = 0;
-                
-                // Agrupar etiquetas por formato
-                const etiquetas75x5 = AppState.etiquetasGuardadas.filter(e => e.formato === '75x5');
-                const etiquetas10x5 = AppState.etiquetasGuardadas.filter(e => e.formato === '10x5');
-                
-                // Función para agregar etiquetas de un formato específico
-                const agregarEtiquetas = (etiquetas, formato) => {
-                    if (etiquetas.length === 0) return;
-                    
-                    let etiquetaWidth, etiquetaHeight;
-                    
-                    if (formato === '75x5') {
-                        etiquetaWidth = 7.5;
-                        etiquetaHeight = 5;
-                    } else {
-                        etiquetaWidth = 10;
-                        etiquetaHeight = 5;
-                    }
-                    
-                    for (const etiqueta of etiquetas) {
-                        // Crear nueva página para cada etiqueta
-                        if (pdf) {
-                            pdf.addPage([etiquetaWidth, etiquetaHeight], 'landscape');
-                        } else {
-                            pdf = new jsPDF({
-                                orientation: "landscape",
-                                unit: "cm",
-                                format: [etiquetaWidth, etiquetaHeight]
-                            });
-                        }
-                        
-                        // Márgenes optimizados
-                        const margin = 0.15;
-                        const contentWidth = etiquetaWidth - (margin * 2);
-                        const contentHeight = etiquetaHeight - (margin * 2);
-                        
-                        // Fondo blanco
-                        pdf.setFillColor(255, 255, 255);
-                        pdf.rect(margin, margin, contentWidth, contentHeight, 'F');
-                        
-                        // Borde negro
-                        pdf.setDrawColor(0, 0, 0);
-                        pdf.setLineWidth(0.04);
-                        pdf.rect(margin, margin, contentWidth, contentHeight);
-                        
-                        // ENCABEZADO EN BLANCO Y NEGRO
-                        const headerHeight = formato === '75x5' ? 0.8 : 0.9;
-                        pdf.setFillColor(255, 255, 255); // Fondo blanco
-                        pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
-                        
-                        // Borde inferior del header
-                        pdf.setDrawColor(0, 0, 0);
-                        pdf.setLineWidth(0.02);
-                        pdf.line(margin, margin + headerHeight, margin + contentWidth, margin + headerHeight);
-                        
-                        // TÍTULO EN NEGRO
-                        pdf.setFontSize(formato === '75x5' ? 6 : 7);
-                        pdf.setFont('helvetica', 'bold');
-                        pdf.setTextColor(0, 0, 0); // Texto negro
-                        
-                        const maxTituloWidth = contentWidth - 0.3;
-                        const tituloLines = pdf.splitTextToSize(etiqueta.titulo.toUpperCase(), maxTituloWidth);
-                        
-                        // Limitar a máximo 4 líneas
-                        const tituloDisplayLines = tituloLines.slice(0, 4);
-                        const lineHeight = 0.18;
-                        const tituloTotalHeight = tituloDisplayLines.length * lineHeight;
-                        
-                        // Centrar verticalmente en el header
-                        const headerCenterY = margin + (headerHeight / 2);
-                        const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.08;
-                        
-                        // Dibujar cada línea del título
-                        tituloDisplayLines.forEach((line, index) => {
-                            pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
-                        });
-                        
-                        // CONFIGURACIÓN DE PARÁMETROS EN BLANCO Y NEGRO
-                        const parametros = [
-                            { 
-                                label: "CÓDIGO", 
-                                value: etiqueta.codigo,
-                                type: "primary"
-                            },
-                            { 
-                                label: "MEDIDAS", 
-                                value: `${etiqueta.largo} ${etiqueta.unidad}  ×  ${etiqueta.ancho} ${etiqueta.unidad2}`,
-                                type: "secondary"
-                            },
-                            { 
-                                label: "CANTIDAD", 
-                                value: etiqueta.cantidad,
-                                type: "secondary"
-                            },
-                            { 
-                                label: "METRAJE", 
-                                value: `${etiqueta.metraje} M²`,
-                                type: "secondary"
-                            },
-                            { 
-                                label: "UBICACIÓN", 
-                                value: etiqueta.ubicacion,
-                                type: "secondary"
-                            }
-                        ];
-
-                        // ESPACIO DISPONIBLE PARA PARÁMETROS
-                        const espacioParametros = contentHeight - headerHeight - 0.25;
-                        let currentY = margin + headerHeight + 0.1;
-
-                        if (formato === '75x5') {
-                            // DISEÑO 7.5x5 - 3 filas × 2 columnas
-                            const colWidth = contentWidth / 2;
-                            
-                            // DISTRIBUCIÓN CON MÁS ALTURA PARA CADA FILA
-                            const fila1Height = 1.2;
-                            const fila2Height = 0.9; 
-                            const fila3Height = 0.9;
-                            
-                            // Fila 1: Código (ocupa ancho completo)
-                            dibujarParametro75x5BN(pdf, parametros[0], margin + 0.15, currentY, contentWidth - 0.3, fila1Height, true);
-                            currentY += fila1Height;
-                                                        
-                            // Fila 2: Medidas y Cantidad
-                            dibujarParametro75x5BN(pdf, parametros[1], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
-                            dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila2Height, false);
-                            currentY += fila2Height;
-                            
-                            // Línea divisoria
-                            pdf.line(margin + 0.15, currentY - 0.05, margin + contentWidth - 0.15, currentY - 0.05);
-                            currentY += 0.05;
-                            
-                            // Fila 3: Metraje y Ubicación
-                            dibujarParametro75x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila3Height, false);
-                            dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.2, fila3Height, false);
-                            
-                        } else {
-                            // DISEÑO 10x5 - 2 filas × 3 columnas
-                            const colWidth = contentWidth / 3;
-                            
-                            // DISTRIBUCIÓN CON MÁS ALTURA
-                            const fila1Height = 1.1;
-                            const fila2Height = 1.0;
-                            
-                            // Fila 1: Código, Medidas, Cantidad
-                            dibujarParametro10x5BN(pdf, parametros[0], margin + 0.15, currentY, colWidth - 0.2, fila1Height, true);
-                            dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.1, currentY, colWidth - 0.2, fila1Height, false);
-                            dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.2, fila1Height, false);
-                            currentY += fila1Height;
-                            
-                            // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
-                            dibujarParametro10x5BN(pdf, parametros[3], margin + 0.15, currentY, colWidth - 0.2, fila2Height, false);
-                            dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.1, currentY, (colWidth * 2) - 0.3, fila2Height, false);
-                        }
-                        
-                        // PIE DE PÁGINA EN BLANCO Y NEGRO
-                        const footerY = margin + contentHeight - 0.15;
-                                                
-                        // Información de creación
-                        pdf.setFontSize(4);
-                        pdf.setFont('helvetica', 'normal');
-                        pdf.setTextColor(0, 0, 0); // Texto negro
-                        
-                        const creadoInfo = `${etiqueta.creado} | ${formatearFecha(etiqueta.fecha)}`;
-                        pdf.text(creadoInfo, margin + 0.15, footerY - 0.05);
-                                               
-                        etiquetaCount++;
-                    }
-                };
-                
-                // Agregar etiquetas de ambos formatos
-                agregarEtiquetas(etiquetas75x5, '75x5');
-                agregarEtiquetas(etiquetas10x5, '10x5');
-                
-                if (pdf) {
-                    const fileName = "etiquetas_masivo_gallos_marmol_" + new Date().getTime() + ".pdf";
-                    pdf.save(fileName);
-                    showToast("PDF masivo generado con " + etiquetaCount + " etiquetas", 'success');
-                }
-                
-            } catch (error) {
-                console.error('Error generando PDF masivo:', error);
-                showToast('Error al generar el PDF masivo: ' + error.message, 'error');
-            } finally {
-                showLoadingOverlay(false);
-            }
         }
 
         // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
@@ -1442,11 +1083,8 @@
                 });
             });
             
-            // Botones de etiqueta
-            document.getElementById('generarPdfIndividualBtn').addEventListener('click', generarPDFIndividual);
-            document.getElementById('guardarEtiquetaBtn').addEventListener('click', guardarEtiqueta);
-            document.getElementById('generarPdfMasivoBtn').addEventListener('click', generarPDFMasivo);
-            document.getElementById('limpiarHistorialBtn').addEventListener('click', limpiarHistorial);
+            // Botón de generar PDF
+            document.getElementById('generarPdfBtn').addEventListener('click', generarPDF);
             
             // Cerrar toast
             const toastClose = document.querySelector('.toast-close');
@@ -1501,9 +1139,6 @@
             // Actualizar vista previa
             actualizarVistaPrevia();
             
-            // Actualizar historial
-            actualizarHistorial();
-            
             // Configurar event listeners
             setupEventListeners();
             
@@ -1512,5 +1147,6 @@
     </script>
 </body>
 </html>
+
 
 
