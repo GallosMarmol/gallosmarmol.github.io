@@ -1,0 +1,37 @@
+[
+    {
+        "codigo": 1,
+        "nombre": "Hugo",
+        "especialidad": "Asesor de Proyectos",
+        "foto": "FOTO/OTROS/Foto_2.webp",
+        "celular": "+51954306470"
+    },
+    {
+        "codigo": 2,
+        "nombre": "Luis",
+        "especialidad": "Asesor de Proyectos",
+        "foto": "FOTO/OTROS/Foto_2.webp",
+        "celular": "+51940368184"
+    },
+    {
+        "codigo": 3,
+        "nombre": "Angie",
+        "especialidad": "Asesora de Ventas",
+        "foto": "FOTO/OTROS/Foto_2.webp",
+        "celular": "+51964345293"
+    },
+    {
+        "codigo": 4,
+        "nombre": "Katerin",
+        "especialidad": "Asesora de Exterior",
+        "foto": "FOTO/OTROS/Foto_2.webp",
+        "celular": "+51969337434"
+    },
+    {
+        "codigo": 5,
+        "nombre": "Elder",
+        "especialidad": "Asesor de Ventas",
+        "foto": "FOTO/OTROS/Foto_2.webp",
+        "celular": "+51954308253"
+    }        
+]
