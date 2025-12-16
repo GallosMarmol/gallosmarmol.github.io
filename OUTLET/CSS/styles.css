@@ -75,6 +75,9 @@ body {
     --header-height: 80px;
     --mobile-menu-height: 65px;
     --container-padding: clamp(16px, 4vw, 24px);
+    
+    /* Logos */
+    --logo-url: url('../FOTO/LOGO/Logo_02.webp');    
 }
 
 /* ===== MODO OSCURO ===== */
@@ -107,6 +110,8 @@ body.dark-mode {
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+    --logo-url: url('../FOTO/LOGO/Logo_03.webp');
 }
 
 /* ===== ACCESIBILIDAD ===== */
@@ -197,6 +202,7 @@ header {
     width: auto;
     object-fit: contain;
     border-radius: var(--radius-sm);
+    content: var(--logo-url);
 }
 
 .logo-text h1 {
