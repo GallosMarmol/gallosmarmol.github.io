@@ -135,9 +135,9 @@ function obtenerProductosEjemplo() {
             borde: "RECTO",
             calidad: "PRIMERA",
             unidad: "m²",
-            precio: 85.50,
-            precioOriginal: 120.00,
-            descuento: 29,
+            precio: 0,
+            precioOriginal: 0,
+            descuento: 0,
             imagenes: [
                 "FOTO/PRODUCTO/BTMR1TRX08241/foto_01.png",
                 "FOTO/PRODUCTO/BTMR1TRX08241/foto_02.png"
@@ -815,7 +815,7 @@ function renderizarProductos() {
                 <h3 style="color: var(--text-light); margin-bottom: 10px;">No se encontraron materiales</h3>
                 <p style="color: var(--gray-dark);">Intenta con otros filtros o términos de búsqueda</p>
                 <button class="btn btn-primary" onclick="reiniciarFiltros()" style="margin-top: 20px;" aria-label="Ver todos los materiales">
-                    <i class="fas fa-redo"></i> Ver todos los materiales
+                    <i class="fas fa-redo"></i> Ver todos los productos
                 </button>
             </div>
         `;
@@ -1039,9 +1039,9 @@ function actualizarEstadisticasProductos() {
         const indiceFin = Math.min(paginaActual * productosPorPagina, productosFiltrados.length);
         
         if (productosFiltrados.length > 0) {
-            estadisticasProductos.textContent = `Mostrando ${indiceInicio}-${indiceFin} de ${productosFiltrados.length} materiales`;
+            estadisticasProductos.textContent = `Mostrando ${indiceInicio}-${indiceFin} de ${productosFiltrados.length} productos`;
         } else {
-            estadisticasProductos.textContent = 'No hay materiales que coincidan';
+            estadisticasProductos.textContent = 'No hay productos que coincidan';
         }
     }
 }
