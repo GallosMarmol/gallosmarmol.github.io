@@ -663,7 +663,9 @@ function buscarProductos(consulta) {
         let htmlResultados = '';
         
         resultados.forEach(producto => {
-            const precioTexto = producto.precio > 0 ? `S/. ${producto.precio.toFixed(2)}` : 'Consultar precio';
+            const precioTexto = producto.precio > 0 ? 
+                `S/. ${producto.precio.toFixed(2)} (Incl. IGV)` : 
+                'Consultar precio';
             
             htmlResultados += `
                 <div class="search-result-item" data-id="${producto.id}" 
@@ -855,6 +857,13 @@ function crearTarjetaProducto(producto) {
         ? producto.imagenes[0]
         : 'https://via.placeholder.com/280x250/f5f5f5/333?text=Mármol';
     
+    // Función para manejar errores en imágenes
+    const imageFallback = (e) => {
+        e.target.onerror = null;
+        e.target.classList.add('error');
+        e.target.src = placeholderSVG;
+    };
+    
     tarjeta.innerHTML = `
         ${textoEtiqueta ? `<div class="product-badge ${claseEtiqueta}" aria-label="${textoEtiqueta}">${textoEtiqueta}</div>` : ''}
         
@@ -866,29 +875,41 @@ function crearTarjetaProducto(producto) {
                 width="280"
                 height="250"
                 loading="lazy"
-                onload="this.classList.add('loaded'); if(this.getAttribute('data-src')) this.src = this.getAttribute('data-src');"
-                onerror="this.classList.add('error'); this.src='${placeholderSVG}'">
-            <button class="product-wishlist ${producto.enFavoritos ? 'activo' : ''}" 
-                    aria-label="${producto.enFavoritos ? 'Quitar de favoritos' : 'Añadir a favoritos'}"
-                    aria-pressed="${producto.enFavoritos}"
-                    onclick="alternarFavorito('${producto.id}')">
-                <i class="${producto.enFavoritos ? 'fas' : 'far'} fa-heart"></i>
-            </button>
+                onload="if(this.getAttribute('data-src') && !this.classList.contains('loaded')) { 
+                    this.src = this.getAttribute('data-src'); 
+                    this.classList.add('loaded'); 
+                }"
+                onerror="this.onerror = null; this.classList.add('error'); this.src='${placeholderSVG}'">
+            <div class="product-image-actions">
+                <button class="product-wishlist ${producto.enFavoritos ? 'activo' : ''}" 
+                        aria-label="${producto.enFavoritos ? 'Quitar de favoritos' : 'Añadir a favoritos'}"
+                        aria-pressed="${producto.enFavoritos}"
+                        onclick="alternarFavorito('${producto.id}')">
+                    <i class="${producto.enFavoritos ? 'fas' : 'far'} fa-heart"></i>
+                </button>
+                <button class="product-share" 
+                        onclick="compartirProducto('${producto.id}')" 
+                        aria-label="Compartir ${producto.nombre}">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
         </div>
         
         <div class="product-info">
             <span class="product-code">${producto.codigo}</span>
             <h3 class="product-title">${producto.nombre}</h3>
             
-            <div class="product-price-container">
-                ${tienePrecio ? `
+            <!-- SECCIÓN DE PRECIO MODIFICADA CON IGV -->
+            ${tienePrecio ? `
+                <div class="product-price-container">
                     <div class="product-price">${precioFormateado}</div>
                     <div class="product-price-unit">${precioUnitario}</div>
+                    <div class="product-price-igv">Incluye IGV</div>
                     ${descuento > 0 ? `<span class="price-badge">-${descuento}% OFF</span>` : ''}
-                ` : `
-                    <div class="product-price-consult">Consultar precio</div>
-                `}
-            </div>
+                </div>
+            ` : `
+                <div class="product-price-consult">Consultar precio</div>
+            `}
             
             <div class="product-details-grid">
                 <div class="product-detail-item">
@@ -926,9 +947,6 @@ function crearTarjetaProducto(producto) {
                 </button>
                 <button class="product-btn view" onclick="verDetallesProducto('${producto.id}')" aria-label="Ver detalles de ${producto.nombre}">
                     <i class="fas fa-eye"></i> Detalles
-                </button>
-                <button class="product-btn share" onclick="compartirProducto('${producto.id}')" aria-label="Compartir ${producto.nombre}">
-                    <i class="fas fa-share-alt"></i>
                 </button>
             </div>
         </div>
@@ -1207,8 +1225,15 @@ function inicializarModales() {
 
 // ===== PRODUCTOS SELECCIONADOS =====
 function abrirModalProductosSeleccionados() {
+    // Verificar si hay productos seleccionados
     if (productosParaAsesor.length === 0) {
         mostrarToast('Agrega materiales para solicitar cotización');
+        
+        // Opcional: Cerrar cualquier modal que esté abierto
+        const modalAsesor = document.getElementById('asesor-seleccion-modal');
+        if (modalAsesor && modalAsesor.classList.contains('activo')) {
+            cerrarAsesorSeleccionModal();
+        }
         return;
     }
     
@@ -1216,32 +1241,276 @@ function abrirModalProductosSeleccionados() {
     const lista = document.getElementById('productos-seleccionados-list');
     const total = document.getElementById('productos-seleccionados-total');
     const btnContinuar = document.getElementById('btn-continuar-asesor');
+    const titulo = document.getElementById('productos-seleccionados-titulo');
     
-    if (!modal || !lista) return;
+    if (!modal || !lista) {
+        console.error('Elementos del modal no encontrados');
+        mostrarError('Error al abrir la lista de materiales');
+        return;
+    }
     
+    // Configurar el botón de continuar
     btnContinuar.disabled = false;
     btnContinuar.style.opacity = '1';
     btnContinuar.style.cursor = 'pointer';
     
+    // Asegurarse de que otros modales estén cerrados
+    cerrarModalFavoritos();
+    cerrarDetalleProductoModal();
+    cerrarCompartirModal();
+    
+    // Abrir el modal
     modal.classList.add('activo');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     
+    // Actualizar el título con el número de productos
+    if (titulo) {
+        titulo.innerHTML = `<i class="fas fa-list-check"></i> Productos Seleccionados (${productosParaAsesor.length})`;
+    }
+    
+    // Mostrar loading inicial
     lista.innerHTML = `
-        <div style="text-align: center; padding: 30px;">
-            <div class="loading-spinner" style="width: 40px; height: 40px; border: 3px solid var(--gray-light); border-top: 3px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-            <p style="margin-top: 15px; color: var(--text-light);">Cargando materiales...</p>
+        <div style="text-align: center; padding: 40px 20px;">
+            <div class="loading-spinner" style="width: 50px; height: 50px; border: 4px solid var(--gray-light); border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            <p style="margin-top: 20px; color: var(--text-light); font-size: 0.95rem;">Cargando ${productosParaAsesor.length} productos...</p>
         </div>
     `;
     
-    if (total) total.textContent = productosParaAsesor.length;
+    // Actualizar el total
+    if (total) {
+        total.textContent = productosParaAsesor.length;
+        total.style.fontSize = '1.4rem';
+        total.style.color = 'var(--primary-color)';
+        total.style.fontWeight = '800';
+    }
+    
+    // Generar el contenido después de un breve delay para mejor UX
+    setTimeout(() => {
+        generarContenidoModalProductosSeleccionados(lista, total, btnContinuar);
+        
+        // Enfocar el botón de continuar para mejor accesibilidad
+        setTimeout(() => {
+            if (btnContinuar) {
+                btnContinuar.focus();
+                btnContinuar.scrollIntoViewIfNeeded({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
+    }, 300);
+}
+
+function seguirAgregandoMateriales() {
+    // Cerrar el modal actual
+    const modal = document.getElementById('productos-seleccionados-modal');
+    if (modal) {
+        // Animación de cierre
+        modal.style.opacity = '0';
+        modal.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            modal.classList.remove('activo');
+            modal.setAttribute('aria-hidden', 'true');
+            modal.style.opacity = '';
+            modal.style.transform = '';
+            document.body.style.overflow = '';
+            
+            // Mostrar mensaje informativo
+            mostrarToast(`Tienes ${productosParaAsesor.length} material${productosParaAsesor.length !== 1 ? 'es' : ''} en la lista. Puedes seguir agregando más.`);
+            
+            // Hacer scroll a la sección de productos
+            setTimeout(() => {
+                const productsSection = document.getElementById('products');
+                if (productsSection) {
+                    productsSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start'
+                    });
+                    
+                    // Resaltar brevemente la sección de productos
+                    productsSection.style.transition = 'all 0.5s ease';
+                    productsSection.style.boxShadow = '0 0 0 3px var(--primary-color)';
+                    
+                    setTimeout(() => {
+                        productsSection.style.boxShadow = '';
+                    }, 1500);
+                    
+                    // Enfocar la sección de productos para accesibilidad
+                    setTimeout(() => {
+                        const firstProduct = document.querySelector('.product-card');
+                        if (firstProduct) {
+                            firstProduct.focus();
+                        } else {
+                            productsSection.focus();
+                        }
+                    }, 500);
+                }
+            }, 100);
+            
+        }, 300);
+    }
+}
+
+// Función auxiliar para generar el contenido del modal
+function generarContenidoModalProductosSeleccionados(lista, total, btnContinuar) {
+    let htmlLista = '';
+    let contadorValidos = 0;
+    
+    // Verificar cada producto
+    productosParaAsesor.forEach((item, index) => {
+        const producto = productos.find(p => p.id === item.id);
+        if (producto) {
+            contadorValidos++;
+            
+            const precioTexto = producto.precio > 0 ? 
+                `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}` : 
+                'Consultar precio';
+            
+            // Determinar si hay descuento
+            const descuentoHTML = producto.descuento > 0 ? 
+                `<span style="background: linear-gradient(135deg, var(--discount-color), var(--primary-color)); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; margin-left: 8px;">-${producto.descuento}% OFF</span>` : '';
+            
+            htmlLista += `
+                <div class="producto-seleccionado-item" data-id="${producto.id}" data-index="${index}">
+                    <div style="position: relative;">
+                        <img src="${producto.imagenes[0] || 'https://via.placeholder.com/60x60/f5f5f5/333?text=Mármol'}" 
+                            alt="${producto.nombre}"
+                            width="60"
+                            height="60"
+                            style="border-radius: var(--radius-sm); object-fit: cover;"
+                            onerror="this.src='https://via.placeholder.com/60x60/f5f5f5/333?text=Mármol'">
+                        <span style="position: absolute; top: -8px; left: -8px; background: var(--primary-color); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">
+                            ${index + 1}
+                        </span>
+                    </div>
+                    <div class="producto-seleccionado-info" style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <h5 style="margin: 0; font-size: 0.95rem; color: var(--dark-color); line-height: 1.3;">${producto.nombre}</h5>
+                            <button class="producto-seleccionado-remover" 
+                                    onclick="removerProductoSeleccionado('${producto.id}')" 
+                                    aria-label="Eliminar ${producto.nombre}"
+                                    style="background: none; border: none; color: var(--error-color); cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div style="margin-top: 6px;">
+                            <span style="font-size: 0.85rem; color: var(--text-light);">
+                                <i class="fas fa-layer-group"></i> ${producto.familia} | 
+                                <i class="fas fa-mountain"></i> ${producto.material}
+                            </span>
+                        </div>
+                        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">
+                            <span class="producto-seleccionado-price" style="font-weight: 700; color: ${producto.precio > 0 ? 'var(--price-color)' : 'var(--primary-color)'};">
+                                ${precioTexto}
+                                ${descuentoHTML}
+                            </span>
+                            <span style="font-size: 0.8rem; color: var(--text-light); background: var(--gray-light); padding: 2px 8px; border-radius: 4px;">
+                                ${producto.codigo}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    // Si no hay productos válidos
+    if (contadorValidos === 0) {
+        htmlLista = `
+            <div style="text-align: center; padding: 60px 20px; color: var(--text-light);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--text-light);">No hay materiales válidos</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 25px;">Todos los materiales seleccionados han sido eliminados o no están disponibles.</p>
+                <button class="btn btn-primary" onclick="cerrarProductosSeleccionadosModal(); mostrarToast('Modal cerrado')" style="padding: 12px 24px;">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        `;
+        
+        if (btnContinuar) {
+            btnContinuar.disabled = true;
+            btnContinuar.style.opacity = '0.6';
+            btnContinuar.style.cursor = 'not-allowed';
+            btnContinuar.innerHTML = '<i class="fas fa-ban"></i> Sin materiales';
+        }
+    } else {
+        // Botón de continuar con contador
+        if (btnContinuar) {
+            btnContinuar.disabled = false;
+            btnContinuar.style.opacity = '1';
+            btnContinuar.style.cursor = 'pointer';
+            btnContinuar.innerHTML = `
+                <i class="fas fa-arrow-right"></i> Continuar con Asesor 
+                <span style="margin-left: 8px; background: white; color: var(--primary-color); padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: bold;">
+                    ${contadorValidos}
+                </span>
+            `;
+        }
+    }
+    
+    // Aplicar animación de fade in
+    lista.style.opacity = '0.7';
+    lista.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    lista.style.transform = 'translateY(10px)';
     
     setTimeout(() => {
-        generarContenidoModal(lista, total, btnContinuar);
+        lista.innerHTML = htmlLista;
+        
+        if (total && contadorValidos > 0) {
+            total.textContent = contadorValidos;
+        }
+        
+        // Añadir efectos visuales
         setTimeout(() => {
-            if (btnContinuar) btnContinuar.focus();
+            lista.style.opacity = '1';
+            lista.style.transform = 'translateY(0)';
+            
+            // Configurar eventos de teclado para accesibilidad
+            configurarAccesibilidadModalProductos();
         }, 50);
-    }, 100);
+        
+    }, 200);
+}
+
+// Función para configurar accesibilidad
+function configurarAccesibilidadModalProductos() {
+    const modal = document.getElementById('productos-seleccionados-modal');
+    if (!modal) return;
+    
+    const items = modal.querySelectorAll('.producto-seleccionado-item');
+    const botones = modal.querySelectorAll('button');
+    
+    // Configurar navegación por teclado
+    items.forEach((item, index) => {
+        item.setAttribute('tabindex', '0');
+        item.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const botonRemover = this.querySelector('.producto-seleccionado-remover');
+                if (botonRemover) botonRemover.click();
+            } else if (e.key === 'ArrowDown' && items[index + 1]) {
+                e.preventDefault();
+                items[index + 1].focus();
+            } else if (e.key === 'ArrowUp' && items[index - 1]) {
+                e.preventDefault();
+                items[index - 1].focus();
+            }
+        });
+    });
+    
+    // Configurar botones
+    botones.forEach(btn => {
+        btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarProductosSeleccionadosModal();
+            }
+        });
+    });
+    
+    // Enfocar el primer elemento
+    if (items.length > 0) {
+        setTimeout(() => {
+            items[0].focus();
+        }, 100);
+    }
 }
 
 function generarContenidoModal(lista, total, btnContinuar) {
@@ -1253,7 +1522,7 @@ function generarContenidoModal(lista, total, btnContinuar) {
         if (producto) {
             contadorValidos++;
             const precioTexto = producto.precio > 0 ? 
-                `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}` : 
+                `S/. ${producto.precio.toFixed(2)} x ${producto.unidad} (Incl. IGV)` : 
                 'Consultar precio';
             
             htmlLista += `
@@ -1265,7 +1534,6 @@ function generarContenidoModal(lista, total, btnContinuar) {
                         onerror="this.src='https://via.placeholder.com/60x60/f5f5f5/333?text=Mármol'">
                     <div class="producto-seleccionado-info">
                         <h5>${producto.nombre}</h5>
-                        <p>${producto.familia} - ${producto.material}</p>
                         <span class="producto-seleccionado-price">${precioTexto}</span>
                     </div>
                     <button class="producto-seleccionado-remover" 
@@ -1525,10 +1793,6 @@ function cerrarAsesorSeleccionModal() {
         modal.classList.remove('activo');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        
-        setTimeout(() => {
-            abrirModalProductosSeleccionados();
-        }, 300);
     }
 }
 
@@ -1676,7 +1940,7 @@ function generarMensajeWhatsApp() {
                 mensaje += `${producto.codigo} | ${producto.medida}\n`;
                 
                 if (producto.precio > 0) {
-                    mensaje += `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}`;
+                    mensaje += `S/. ${producto.precio.toFixed(2)} x ${producto.unidad} (Incl. IGV)\n`; 
                     mensaje += `\n`;
                 } else {
                     mensaje += ` Consultar Precio\n`;
@@ -1835,15 +2099,16 @@ function alternarFavorito(idProducto) {
     if (!producto) return;
     
     const indice = productosFavoritos.indexOf(idProducto);
+    const fueAgregado = indice === -1;
     
-    if (indice === -1) {
+    if (fueAgregado) {
         productosFavoritos.push(idProducto);
         producto.enFavoritos = true;
-        mostrarToast('Añadido a favoritos');
+        mostrarToastFavorito(idProducto, 'agregar');
     } else {
         productosFavoritos.splice(indice, 1);
         producto.enFavoritos = false;
-        mostrarToast('Eliminado de favoritos');
+        mostrarToastFavorito(idProducto, 'eliminar');
     }
     
     // Actualizar la tarjeta directamente
@@ -1852,11 +2117,64 @@ function alternarFavorito(idProducto) {
     guardarFavoritos();
     actualizarContadorFavoritos();
     
+    // Si el modal de detalles está abierto, actualizarlo
+    const modalDetalles = document.getElementById('detalle-producto-modal');
+    if (modalDetalles && modalDetalles.classList.contains('activo')) {
+        actualizarModalDetalleProducto(idProducto);
+    }
+    
     // Si el modal de favoritos está abierto, actualizarlo también
     const modalFavoritos = document.getElementById('favoritos-modal');
     if (modalFavoritos && modalFavoritos.classList.contains('activo')) {
         actualizarModalFavoritos();
     }
+}
+
+function actualizarModalDetalleProducto(idProducto) {
+    const modal = document.getElementById('detalle-producto-modal');
+    const producto = productos.find(p => p.id === idProducto);
+    
+    if (!modal || !producto || !modal.classList.contains('activo')) return;
+    
+    // Actualizar el botón de favoritos en el modal
+    const btnFavorito = modal.querySelector('button[onclick*="alternarFavorito"]');
+    if (btnFavorito) {
+        const icono = btnFavorito.querySelector('i');
+        const texto = btnFavorito.textContent || '';
+        
+        if (producto.enFavoritos) {
+            // Actualizar a "Quitar Favorito"
+            if (icono) icono.className = 'fas fa-heart';
+            btnFavorito.innerHTML = '<i class="fas fa-heart"></i> Quitar Favorito';
+            btnFavorito.setAttribute('aria-label', 'Quitar de favoritos');
+        } else {
+            // Actualizar a "Añadir Favorito"
+            if (icono) icono.className = 'far fa-heart';
+            btnFavorito.innerHTML = '<i class="far fa-heart"></i> Añadir Favorito';
+            btnFavorito.setAttribute('aria-label', 'Añadir a favoritos');
+        }
+    }
+    
+    // También actualizar el botón flotante en la imagen si está visible
+    const tarjetasProducto = document.querySelectorAll(`.product-card[data-id="${idProducto}"]`);
+    tarjetasProducto.forEach(tarjeta => {
+        const botonFavoritos = tarjeta.querySelector('.product-wishlist');
+        if (botonFavoritos) {
+            const iconoCorazon = botonFavoritos.querySelector('i');
+            
+            if (producto.enFavoritos) {
+                botonFavoritos.classList.add('activo');
+                botonFavoritos.setAttribute('aria-pressed', 'true');
+                botonFavoritos.setAttribute('aria-label', 'Quitar de favoritos');
+                if (iconoCorazon) iconoCorazon.className = 'fas fa-heart';
+            } else {
+                botonFavoritos.classList.remove('activo');
+                botonFavoritos.setAttribute('aria-pressed', 'false');
+                botonFavoritos.setAttribute('aria-label', 'Añadir a favoritos');
+                if (iconoCorazon) iconoCorazon.className = 'far fa-heart';
+            }
+        }
+    });
 }
 
 function removerDeFavoritos(idProducto) {
@@ -2042,20 +2360,17 @@ function compartirPor(metodo) {
     const urlProducto = `${urlBase}?producto=${productoParaCompartir.id}&ref=share`;
     
     const textoCompartir = 
-        `🌟 *GALLOS MÁRMOL - OUTLET 2025* 🌟\n\n` +
+        `*GALLOS MÁRMOL - OUTLET 2025*\n\n` +
         `*${productoParaCompartir.nombre}*\n\n` +
-        `📋 *Código:* ${productoParaCompartir.codigo}\n` +
-        `🏷️ *Familia:* ${productoParaCompartir.familia}\n` +
-        `💎 *Material:* ${productoParaCompartir.material}\n` +
-        `✨ *Acabado:* ${productoParaCompartir.acabado}\n` +
-        `📏 *Medida:* ${productoParaCompartir.medida}\n` +
-        `⚡ *Calidad:* ${productoParaCompartir.calidad}\n` +
-        `💰 *Precio:* ${productoParaCompartir.precio > 0 ? 'S/. ' + productoParaCompartir.precio.toFixed(2) + ' x ' + productoParaCompartir.unidad : 'CONSULTAR PRECIO'}\n` +
-        `${productoParaCompartir.descuento > 0 ? `🎯 *Descuento:* ${productoParaCompartir.descuento}% OFF\n` : ''}\n` +
-        `🔗 *Ver detalles y comprar:*\n${urlProducto}\n\n` +
-        `📞 *Contacto:* +51 987 654 321\n` +
-        `📍 *Ubicación:* Lima, Perú\n\n` +
-        `*¡Oferta especial por tiempo limitado!* 🚀`;
+        `*Código:* ${productoParaCompartir.codigo}\n` +
+        `*Familia:* ${productoParaCompartir.familia}\n` +
+        `*Material:* ${productoParaCompartir.material}\n` +
+        `*Acabado:* ${productoParaCompartir.acabado}\n` +
+        `*Medida:* ${productoParaCompartir.medida}\n` +
+        `*Calidad:* ${productoParaCompartir.calidad}\n` +
+        `*Precio:* ${productoParaCompartir.precio > 0 ? 'S/. ' + productoParaCompartir.precio.toFixed(2) + ' x ' + productoParaCompartir.unidad : 'Consultar Precio'}\n` +
+        `*Ver detalles:\n${urlProducto}\n\n` +
+        `*¡Oferta especial por tiempo limitado!*`;
     
     const textoCompartirSimple = 
         `Gallos Mármol - Outlet 2025\n\n` +
@@ -2164,14 +2479,16 @@ function verDetallesProducto(idProducto) {
                 <span class="producto-detalle-code">${producto.codigo}</span>
                 <h2 class="producto-detalle-titulo">${producto.nombre}</h2>
                 
+                <!-- SECCIÓN DE PRECIO MODIFICADA CON IGV -->
                 ${tienePrecio ? `
                     <div class="detalle-price-container">
                         <div class="detalle-price">${precioFormateado}</div>
                         <div class="detalle-price-unit">${precioUnitario}</div>
+                        <div class="detalle-price-igv">Incluido IGV</div>
                         ${descuento > 0 ? `
-                            <div style="margin-top: 10px;">
+                            <div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                                 <span class="price-badge">-${descuento}% OFF</span>
-                                ${precioOriginal > 0 ? `<span style="font-size: 0.9rem; color: var(--text-light); text-decoration: line-through; margin-left: 10px;">S/. ${precioOriginal.toFixed(2)}</span>` : ''}
+                                ${precioOriginal > 0 ? `<span style="font-size: 1rem; color: var(--text-light); text-decoration: line-through; font-weight: 600;">S/. ${precioOriginal.toFixed(2)}</span>` : ''}
                             </div>
                         ` : ''}
                     </div>
@@ -2179,37 +2496,63 @@ function verDetallesProducto(idProducto) {
                     <div class="detalle-price-consult">Consultar precio</div>
                 `}
                 
-                <p class="producto-detalle-descripcion">${producto.descripcion}</p>
+                <p class="producto-detalle-descripcion">
+                    <strong>Descripción:</strong><br>
+                    ${producto.descripcion || `${producto.familia} de ${producto.material} con acabado ${producto.acabado}. Perfecto para ${producto.calidad.toLowerCase()} calidad en proyectos arquitectónicos y decorativos.`}
+                </p>
                 
                 <div class="producto-detalle-especificaciones">
+                    <h4 style="margin-bottom: 15px; color: var(--primary-color); display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-clipboard-list"></i> Especificaciones Técnicas
+                    </h4>
                     <div class="especificacion-grid">
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Familia</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-layer-group"></i> Familia
+                            </span>
                             <span class="especificacion-valor">${producto.familia}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Material</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-mountain"></i> Material
+                            </span>
                             <span class="especificacion-valor">${producto.material}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Acabado</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-paint-roller"></i> Acabado
+                            </span>
                             <span class="especificacion-valor">${producto.acabado}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Medida</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-ruler-combined"></i> Medida
+                            </span>
                             <span class="especificacion-valor">${producto.medida}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Borde</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-border-style"></i> Borde
+                            </span>
                             <span class="especificacion-valor">${producto.borde}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Calidad</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-award"></i> Calidad
+                            </span>
                             <span class="especificacion-valor">${producto.calidad}</span>
                         </div>
                         <div class="especificacion-item">
-                            <span class="especificacion-label">Unidad</span>
+                            <span class="especificacion-label">
+                                <i class="fas fa-cube"></i> Unidad
+                            </span>
                             <span class="especificacion-valor">${producto.unidad}</span>
+                        </div>
+                        <div class="especificacion-item">
+                            <span class="especificacion-label">
+                                <i class="fas fa-barcode"></i> Código
+                            </span>
+                            <span class="especificacion-valor" style="color: var(--primary-color); font-weight: 700;">${producto.codigo}</span>
                         </div>
                     </div>
                 </div>
@@ -2221,9 +2564,23 @@ function verDetallesProducto(idProducto) {
                     <button class="btn btn-secondary" onclick="compartirProducto('${producto.id}'); cerrarDetalleProductoModal()" aria-label="Compartir ${producto.nombre}">
                         <i class="fas fa-share-alt"></i> Compartir
                     </button>
+                    <button class="btn btn-secondary" onclick="alternarFavorito('${producto.id}')" aria-label="${producto.enFavoritos ? 'Quitar de favoritos' : 'Añadir a favoritos'}" id="btn-favorito-detalle-${producto.id}">
+                        <i class="${producto.enFavoritos ? 'fas' : 'far'} fa-heart"></i> ${producto.enFavoritos ? 'Quitar Favorito' : 'Añadir Favorito'}
+                    </button>
                     <button class="btn btn-secondary" onclick="cerrarDetalleProductoModal()" aria-label="Cerrar detalles del material">
                         <i class="fas fa-times"></i> Cerrar
                     </button>
+                </div>
+                
+                <!-- Información adicional sobre IGV -->
+                <div style="margin-top: 25px; padding: 15px; background: var(--gray-light); border-radius: var(--radius-md); border-left: 4px solid var(--primary-color);">
+                    <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Información sobre precios
+                    </h5>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">
+                        Todos nuestros precios ya <strong>incluyen el IGV (18%)</strong> aplicable. No hay cargos adicionales por impuestos. 
+                        Precio final por ${producto.unidad.toLowerCase() === 'm²' ? 'metro cuadrado' : producto.unidad.toLowerCase()}.
+                    </p>
                 </div>
             </div>
         `;
@@ -2257,6 +2614,27 @@ function verDetallesProducto(idProducto) {
     }
     
     abrirModalConScrollArriba();
+}
+
+function mostrarToastFavorito(idProducto, accion) {
+    const producto = productos.find(p => p.id === idProducto);
+    if (!producto) return;
+    
+    const mensaje = accion === 'agregar' ? 
+        `Añadido a favoritos` :
+        `Eliminado de favoritos`;
+    
+    mostrarToast(mensaje);
+}
+
+function volverAProductosSeleccionados() {
+    // Cerrar el modal actual de asesor
+    cerrarAsesorSeleccionModal();
+    
+    // Abrir el modal de productos seleccionados después de un breve delay
+    setTimeout(() => {
+        abrirModalProductosSeleccionados();
+    }, 300);
 }
 
 function cerrarDetalleProductoModal() {
