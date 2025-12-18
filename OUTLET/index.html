@@ -29,6 +29,10 @@
     <!-- Preloads -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" as="style">
+   
+    <!-- Preload imágenes críticas -->
+    <link rel="preload" href="FOTO/LOGO/Logo_01.webp" as="image">
+    <link rel="preload" href="FOTO/OTROS/Foto_1.webp" as="image" media="(max-width: 768px)">
     
     <!-- Fuentes y estilos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -63,15 +67,12 @@
     <!-- Header -->
     <header role="banner">
         <div class="container header-container">
-            <div class="logo-container">
-                <img src="FOTO/LOGO/Logo_01.webp" 
-                     alt="Logo Gallos Mármol - Outlet de mármol y granito" 
-                     class="logo-image"
-                     height="60"
-                     loading="eager"
-                     onerror="this.src='https://via.placeholder.com/150x60/6b0000/ffffff?text=Gallos+Mármol'"
-                >
-            </div>
+        <div class="logo-container">
+            <div class="logo-image" 
+                alt="Logo Gallos Mármol - Outlet de mármol y granito" 
+                height="60"
+                loading="eager"></div>
+        </div>
             
             <!-- Búsqueda -->
             <div class="search-section" id="search-section">
@@ -256,19 +257,28 @@
     <div class="modal" id="asesor-seleccion-modal" role="dialog" aria-modal="true" aria-labelledby="asesor-seleccion-titulo" aria-hidden="true">
         <div class="modal-content asesor-seleccion-container">
             <div class="modal-header">
-                <h3 id="asesor-seleccion-titulo">Contactar Asesor</h3>
+                <h3 id="asesor-seleccion-titulo">
+                    <i class="fas fa-headset" style="color: var(--primary-color); margin-right: 10px;"></i>
+                    Contactar Asesor
+                    <span id="productos-count-badge" style="background: var(--primary-color); color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.9rem; margin-left: 8px;">0</span>
+                </h3>
                 <button class="modal-close" aria-label="Cerrar selección de asesor">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <div class="productos-consulta-preview">
-                <h4><i class="fas fa-list"></i> Materiales para cotizar</h4>
-                <div class="productos-seleccionados-list" id="productos-consulta-preview" style="max-height: 150px; margin: 10px 0;">
-                    <!-- Vista previa dinámica -->
-                </div>
+            <!-- MENSJE SIMPLE DE CONFIRMACIÓN (opcional) -->
+            <div class="consulta-confirmacion" style="background: rgba(107, 0, 0, 0.05); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px; text-align: center;">
+                <i class="fas fa-check-circle" style="color: var(--success-color); font-size: 1.5rem; margin-bottom: 10px; display: block;"></i>
+                <p style="margin: 0; color: var(--text-color); font-weight: 600;">
+                    Listo para contactar asesor
+                </p>
+                <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                    <span id="productos-count-text">0 materiales</span> agregados para cotización
+                </small>
             </div>
             
+            <!-- Tipo de cliente -->
             <div class="cliente-tipo-seleccion">
                 <h4><i class="fas fa-user-check"></i> Tipo de Cliente</h4>
                 <div class="cliente-opciones">
@@ -289,17 +299,26 @@
                 </div>
             </div>
             
+            <!-- Contenido dinámico de asesores -->
             <div id="asesor-contenido">
                 <!-- Contenido dinámico según tipo de cliente -->
             </div>
             
-            <div class="seleccion-acciones" id="asesor-acciones" style="display: none; gap: 20px;">
-                <button class="btn btn-primary" id="contactar-asesor" aria-label="Contactar asesor seleccionado">
-                    <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
-                </button>
-                <button class="btn btn-secondary" onclick="volverAProductosSeleccionados()" aria-label="Volver a productos seleccionados">
-                    <i class="fas fa-arrow-left"></i> Volver
-                </button>
+            <!-- Acciones -->
+            <div class="seleccion-acciones" id="asesor-acciones" style="display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--gray-light);">
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: center;">
+                    <div>
+                        <button class="btn btn-primary" id="contactar-asesor" aria-label="Contactar asesor seleccionado">
+                            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                        </button>
+                        <small style="display: block; margin-top: 5px; color: var(--text-light); font-size: 0.8rem;">
+                            <i class="fas fa-clock"></i> Respuesta en menos de 15 minutos
+                        </small>
+                    </div>
+                    <button class="btn btn-secondary" onclick="volverAProductosSeleccionados()" aria-label="Volver a productos seleccionados">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -308,23 +327,51 @@
     <div class="modal" id="favoritos-modal" role="dialog" aria-modal="true" aria-labelledby="favoritos-titulo" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="favoritos-titulo">Mis Materiales Favoritos</h3>
+                <h3 id="favoritos-titulo">
+                    <i class="fas fa-heart" style="color: var(--primary-color); margin-right: 10px;"></i>
+                    Mis Materiales Favoritos 
+                    <span id="favoritos-counter" style="background: var(--primary-color); color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.9rem; margin-left: 8px;">0</span>
+                </h3>
                 <button class="modal-close" id="close-favoritos-modal" aria-label="Cerrar modal de favoritos">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <div class="favoritos-list" id="favoritos-list" role="list" aria-label="Lista de materiales favoritos">
-                <!-- Los materiales favoritos se cargarán dinámicamente -->
+            <div class="favoritos-container">
+                <!-- Lista de favoritos -->
+                <div class="favoritos-list" id="favoritos-list" role="list" aria-label="Lista de materiales favoritos">
+                    <!-- Los materiales favoritos se cargarán dinámicamente -->
+                </div>
+                
+                <!-- Estado vacío -->
+                <div class="empty-favorites" id="empty-favorites" style="display: none;">
+                    <div class="empty-state">
+                        <i class="far fa-heart"></i>
+                        <h3>No tienes favoritos aún</h3>
+                        <p>Agrega materiales a tus favoritos haciendo clic en el corazón</p>
+                        <button class="btn btn-primary" onclick="cerrarModalFavoritos(); document.getElementById('products').scrollIntoView()">
+                            </i> Explorar Outlet
+                        </button>
+                    </div>
+                </div>
             </div>
             
-            <div class="seleccion-acciones" style="border-top: none; margin-top: 20px;">
-                <button class="btn btn-primary" id="agregar-favoritos-consulta" aria-label="Agregar todos los favoritos para consultar con asesor">
-                    <i class="fas fa-comments"></i> Cotizar Favoritos
-                </button>
-                <button class="btn btn-secondary" id="limpiar-favoritos" aria-label="Eliminar todos los materiales de favoritos">
-                    <i class="fas fa-trash"></i> Limpiar Favoritos
-                </button>
+            <!-- Acciones en la parte inferior -->
+            <div class="favoritos-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-light);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;">
+                    <button class="btn btn-primary" id="agregar-favoritos-consulta" aria-label="Agregar todos los favoritos para consultar con asesor">
+                        <i class="fas fa-comments"></i> Cotizar Todos
+                    </button>
+                    <button class="btn btn-secondary" id="limpiar-favoritos" aria-label="Eliminar todos los materiales de favoritos">
+                        <i class="fas fa-trash"></i> Limpiar Todo
+                    </button>
+                </div>
+                
+                <!-- Información pequeña -->
+                <div style="text-align: center; font-size: 0.8rem; color: var(--text-light); padding: 10px;">
+                    <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+                    Los favoritos se guardan automáticamente
+                </div>
             </div>
         </div>
     </div>
@@ -369,7 +416,7 @@
             </div>
             
             <div class="seleccion-acciones" style="margin-top: 20px;">
-                <button class="btn btn-secondary" aria-label="Cerrar">
+                <button class="btn btn-secondary" onclick="cerrarCompartirModal()" aria-label="Cerrar modal de compartir">
                     <i class="fas fa-times"></i> Cerrar
                 </button>
             </div>
@@ -382,13 +429,14 @@
             <i class="fas fa-home"></i>
             <span>Inicio</span>
         </button>
-        <a href="#products" class="mobile-menu-item" aria-label="Outlet de materiales">
-            <i class="fas fa-tags"></i>
-            <span>Outlet</span>
-        </a>
         <button class="mobile-menu-item" aria-label="Buscar materiales" id="mobile-menu-search" aria-expanded="false" aria-controls="search-section">
             <i class="fas fa-search"></i>
             <span>Buscar</span>
+        </button>
+        <button class="mobile-menu-item" aria-label="Filtrar materiales" id="mobile-menu-filtros" aria-expanded="false" aria-controls="filtros-overlay">
+            <i class="fas fa-filter"></i>
+            <span>Filtrar</span>
+            <span class="mobile-menu-badge" id="mobile-filtros-count">0</span>
         </button>
         <button class="mobile-menu-item" aria-label="Ver favoritos" id="mobile-menu-favoritos">
             <i class="fas fa-heart"></i>
@@ -409,6 +457,7 @@
     <script src="JS/app.js"></script>
 </body>
 </html>
+
 
 
 
