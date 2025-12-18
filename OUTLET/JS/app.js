@@ -171,7 +171,7 @@ function inicializarAplicacion() {
         inicializarFiltrosFijos();
         inicializarBusqueda();
         inicializarModales();
-        inicializarMenuMovil();
+        inicializarMenuMovil(); // ← Esta ya está
         inicializarFiltrosMovil();
         inicializarBotonVolverArriba();
         configurarNavegacionTeclado();
@@ -183,7 +183,10 @@ function inicializarAplicacion() {
         verificarParametroURL();
         actualizarContadorFavoritos();
         actualizarContadorAsesor();
-        actualizarContadorFiltros();
+        actualizarContadorFiltros(); // ← Esta actualiza ambos contadores
+        
+        // AGREGAR INICIALIZACIÓN DEL CONTADOR DEL MENÚ
+        actualizarContadorFiltrosMenu(); // ← AGREGAR ESTA LÍNEA
         
     } catch (error) {
         console.error('Error al inicializar:', error);
@@ -1266,7 +1269,7 @@ function abrirModalProductosSeleccionados() {
     
     // Actualizar el título con el número de productos
     if (titulo) {
-        titulo.innerHTML = `<i class="fas fa-list-check"></i> Productos Seleccionados (${productosParaAsesor.length})`;
+        titulo.innerHTML = `<i class="fas fa-list-check"></i> Productos Seleccionados`;
     }
     
     // Mostrar loading inicial
@@ -1285,6 +1288,8 @@ function abrirModalProductosSeleccionados() {
         total.style.fontWeight = '800';
     }
     
+    actualizarBotonContinuarAsesor();
+
     // Generar el contenido después de un breve delay para mejor UX
     setTimeout(() => {
         generarContenidoModalProductosSeleccionados(lista, total, btnContinuar);
@@ -1608,6 +1613,9 @@ function removerProductoSeleccionado(idProducto) {
         actualizarContadorAsesor();
         actualizarInterfazDespuesDeEliminar();
         
+        // ACTUALIZAR EL BOTÓN DE CONTINUAR
+        actualizarBotonContinuarAsesor(); // ← AGREGAR ESTA LÍNEA
+        
         if (productosParaAsesor.length === 0) {
             cerrarProductosSeleccionadosModal();
             mostrarToast('Todos los materiales eliminados');
@@ -1671,11 +1679,14 @@ function actualizarModalProductosSeleccionados() {
             </div>
         `;
         
-        btnContinuar.disabled = true;
-        btnContinuar.style.opacity = '0.6';
-        btnContinuar.style.cursor = 'not-allowed';
+        if (btnContinuar) {
+            btnContinuar.disabled = true;
+            btnContinuar.style.opacity = '0.6';
+            btnContinuar.style.cursor = 'not-allowed';
+            btnContinuar.innerHTML = '<i class="fas fa-ban"></i> Sin materiales';
+        }
     } else {
-        productosParaAsesor.forEach((item) => {
+        productosParaAsesor.forEach((item, index) => {
             const producto = productos.find(p => p.id === item.id);
             if (producto) {
                 totalProductos++;
@@ -1683,45 +1694,135 @@ function actualizarModalProductosSeleccionados() {
                     `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}` : 
                     'Consultar precio';
                 
+                // Determinar si hay descuento
+                const descuentoHTML = producto.descuento > 0 ? 
+                    `<span style="background: linear-gradient(135deg, var(--discount-color), var(--primary-color)); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; margin-left: 8px;">-${producto.descuento}% OFF</span>` : '';
+                
                 htmlLista += `
-                    <div class="producto-seleccionado-item" data-id="${producto.id}">
-                        <img src="${producto.imagenes[0]}" alt="${producto.nombre}"
-                            width="60"
-                            height="60"
-                            onerror="this.src='https://via.placeholder.com/60x60/f5f5f5/333?text=Mármol'">
-                        <div class="producto-seleccionado-info">
-                            <h5>${producto.nombre}</h5>
-                            <p>${producto.familia} - ${producto.material}</p>
-                            <span class="producto-seleccionado-price">${precioTexto}</span>
+                    <div class="producto-seleccionado-item" data-id="${producto.id}" data-index="${index}">
+                        <div style="position: relative;">
+                            <img src="${producto.imagenes[0]}" 
+                                alt="${producto.nombre}"
+                                width="60"
+                                height="60"
+                                style="border-radius: var(--radius-sm); object-fit: cover;"
+                                onerror="this.src='https://via.placeholder.com/60x60/f5f5f5/333?text=Mármol'">
+                            <span style="position: absolute; top: -8px; left: -8px; background: var(--primary-color); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">
+                                ${index + 1}
+                            </span>
                         </div>
-                        <button class="producto-seleccionado-remover" 
-                                onclick="removerProductoSeleccionado('${producto.id}')" 
-                                aria-label="Eliminar ${producto.nombre} de la lista">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <div class="producto-seleccionado-info" style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <h5 style="margin: 0; font-size: 0.95rem; color: var(--dark-color); line-height: 1.3;">${producto.nombre}</h5>
+                                <button class="producto-seleccionado-remover" 
+                                        onclick="removerProductoSeleccionado('${producto.id}')" 
+                                        aria-label="Eliminar ${producto.nombre}"
+                                        style="background: none; border: none; color: var(--error-color); cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div style="margin-top: 6px;">
+                                <span style="font-size: 0.85rem; color: var(--text-light);">
+                                    <i class="fas fa-layer-group"></i> ${producto.familia} | 
+                                    <i class="fas fa-mountain"></i> ${producto.material}
+                                </span>
+                            </div>
+                            <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">
+                                <span class="producto-seleccionado-price" style="font-weight: 700; color: ${producto.precio > 0 ? 'var(--price-color)' : 'var(--primary-color)'};">
+                                    ${precioTexto}
+                                    ${descuentoHTML}
+                                </span>
+                                <span style="font-size: 0.8rem; color: var(--text-light); background: var(--gray-light); padding: 2px 8px; border-radius: 4px;">
+                                    ${producto.codigo}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 `;
             }
         });
         
-        btnContinuar.disabled = false;
-        btnContinuar.style.opacity = '1';
-        btnContinuar.style.cursor = 'pointer';
+        if (btnContinuar) {
+            btnContinuar.disabled = false;
+            btnContinuar.style.opacity = '1';
+            btnContinuar.style.cursor = 'pointer';
+            btnContinuar.innerHTML = `
+                <i class="fas fa-arrow-right"></i> Continuar con Asesor 
+                <span style="margin-left: 8px; background: white; color: var(--primary-color); padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: bold;">
+                    ${totalProductos}
+                </span>
+            `;
+        }
     }
     
+    // Aplicar animación de fade in
     lista.style.opacity = '0.7';
-    lista.style.transition = 'opacity 0.3s ease';
+    lista.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    lista.style.transform = 'translateY(10px)';
     
     setTimeout(() => {
         lista.innerHTML = htmlLista;
-        total.textContent = totalProductos;
         
+        if (total) {
+            total.textContent = totalProductos;
+        }
+        
+        // Añadir efectos visuales
         setTimeout(() => {
             lista.style.opacity = '1';
+            lista.style.transform = 'translateY(0)';
+            
+            // Configurar eventos de teclado para accesibilidad
+            const items = lista.querySelectorAll('.producto-seleccionado-item');
+            items.forEach((item, index) => {
+                item.setAttribute('tabindex', '0');
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const botonRemover = this.querySelector('.producto-seleccionado-remover');
+                        if (botonRemover) botonRemover.click();
+                    } else if (e.key === 'ArrowDown' && items[index + 1]) {
+                        e.preventDefault();
+                        items[index + 1].focus();
+                    } else if (e.key === 'ArrowUp' && items[index - 1]) {
+                        e.preventDefault();
+                        items[index - 1].focus();
+                    }
+                });
+            });
+            
+            // Enfocar el primer elemento
+            if (items.length > 0) {
+                setTimeout(() => {
+                    items[0].focus();
+                }, 100);
+            }
         }, 50);
-    }, 150);
+        
+    }, 200);
+}
+
+function actualizarBotonContinuarAsesor() {
+    const btnContinuar = document.getElementById('btn-continuar-asesor');
+    const totalProductos = productosParaAsesor.length;
     
-    actualizarContadorAsesor();
+    if (btnContinuar) {
+        if (totalProductos === 0) {
+            btnContinuar.disabled = true;
+            btnContinuar.style.opacity = '0.6';
+            btnContinuar.style.cursor = 'not-allowed';
+            btnContinuar.innerHTML = '<i class="fas fa-ban"></i> Sin materiales';
+        } else {
+            btnContinuar.disabled = false;
+            btnContinuar.style.opacity = '1';
+            btnContinuar.style.cursor = 'pointer';
+            btnContinuar.innerHTML = `
+                <i class="fas fa-arrow-right"></i> Continuar con Asesor 
+                <span style="margin-left: 8px; background: white; color: var(--primary-color); padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: bold;">
+                    ${totalProductos}
+                </span>
+            `;
+        }
+    }
 }
 
 function continuarConAsesor() {
@@ -1739,48 +1840,40 @@ function abrirModalAsesorSeleccion() {
     }
     
     const modal = document.getElementById('asesor-seleccion-modal');
-    const preview = document.getElementById('productos-consulta-preview');
+    const badge = document.getElementById('productos-count-badge');
+    const countText = document.getElementById('productos-count-text');
     
-    let htmlPreview = '';
-    productosParaAsesor.slice(0, 3).forEach((item, index) => {
-        const producto = productos.find(p => p.id === item.id);
-        if (producto) {
-            htmlPreview += `
-                <div class="producto-seleccionado-item">
-                    <img src="${producto.imagenes[0]}" alt="${producto.nombre}"
-                         width="40"
-                         height="40"
-                         onerror="this.src='https://via.placeholder.com/40x40/f5f5f5/333?text=Mármol'">
-                    <div class="producto-seleccionado-info">
-                        <h5 style="font-size: 0.8rem;">${producto.nombre.substring(0, 30)}...</h5>
-                    </div>
-                </div>
-            `;
-        }
-    });
-    
-    if (productosParaAsesor.length > 3) {
-        htmlPreview += `<div style="text-align: center; padding: 10px; color: var(--text-light); font-size: 0.8rem;">y ${productosParaAsesor.length - 3} más...</div>`;
+    if (!modal) {
+        console.error('Modal no encontrado');
+        return;
     }
     
-    preview.innerHTML = htmlPreview;
+    // Actualizar contadores
+    if (badge) badge.textContent = productosParaAsesor.length;
+    if (countText) {
+        countText.textContent = `${productosParaAsesor.length} material${productosParaAsesor.length !== 1 ? 'es' : ''}`;
+    }
     
+    // Configuración inicial
     tipoClienteSeleccionado = null;
     asesorSeleccionado = null;
     
     document.getElementById('asesor-contenido').innerHTML = '';
     document.getElementById('asesor-acciones').style.display = 'none';
     
+    // Restaurar selección anterior si existe
     if (tipoClienteSeleccionado) {
         const radio = document.querySelector(`input[value="${tipoClienteSeleccionado}"]`);
         if (radio) radio.checked = true;
         seleccionarTipoCliente(tipoClienteSeleccionado);
     }
     
+    // Abrir modal
     modal.classList.add('activo');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     
+    // Enfocar primer elemento
     setTimeout(() => {
         const firstRadio = document.querySelector('input[name="tipo-cliente"]');
         if (firstRadio) firstRadio.focus();
@@ -1996,50 +2089,23 @@ function agregarParaAsesor(idProducto) {
 function abrirModalFavoritos() {
     const modal = document.getElementById('favoritos-modal');
     const listaFavoritos = document.getElementById('favoritos-list');
+    const emptyState = document.getElementById('empty-favorites');
     
-    if (!modal || !listaFavoritos) return;
+    if (!modal || !listaFavoritos || !emptyState) return;
+    
+    // Actualizar contador en el título
+    const favoritosCounter = document.getElementById('favoritos-counter');
+    if (favoritosCounter) {
+        favoritosCounter.textContent = productosFavoritos.length;
+    }
     
     if (productosFavoritos.length === 0) {
-        listaFavoritos.innerHTML = `
-            <div class="empty-state">
-                <i class="far fa-heart"></i>
-                <h3>No tienes favoritos aún</h3>
-                <p>Agrega materiales a tus favoritos haciendo clic en el corazón</p>
-            </div>
-        `;
+        listaFavoritos.style.display = 'none';
+        emptyState.style.display = 'flex';
     } else {
-        let htmlFavoritos = '';
-        
-        productosFavoritos.forEach(id => {
-            const producto = productos.find(p => p.id === id);
-            if (producto) {
-                const precioTexto = producto.precio > 0 ? `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}` : 'Consultar precio';
-                
-                htmlFavoritos += `
-                    <div class="favorito-item" data-id="${producto.id}">
-                        <img src="${producto.imagenes[0]}" alt="${producto.nombre}"
-                             width="80"
-                             height="80"
-                             onerror="this.src='https://via.placeholder.com/80x80/f5f5f5/333?text=Mármol'">
-                        <div class="favorito-info">
-                            <h4>${producto.nombre}</h4>
-                            <span class="favorito-code">${producto.codigo}</span>
-                            <small><strong>${precioTexto}</strong></small>
-                        </div>
-                        <div class="favorito-actions">
-                            <button class="favorito-btn consultar" onclick="agregarParaAsesor('${producto.id}'); cerrarModalFavoritos()" aria-label="Solicitar cotización de ${producto.nombre}">
-                                <i class="fas fa-file-invoice-dollar"></i> Cotizar
-                            </button>
-                            <button class="favorito-btn favorito-remove" onclick="removerDeFavoritos('${producto.id}')" aria-label="Eliminar ${producto.nombre} de favoritos">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-        });
-        
-        listaFavoritos.innerHTML = htmlFavoritos;
+        listaFavoritos.style.display = 'flex';
+        emptyState.style.display = 'none';
+        generarListaFavoritosSimple();
     }
     
     modal.classList.add('activo');
@@ -2047,9 +2113,82 @@ function abrirModalFavoritos() {
     document.body.style.overflow = 'hidden';
     
     setTimeout(() => {
-        const firstFavorito = document.querySelector('.favorito-btn');
-        if (firstFavorito) firstFavorito.focus();
+        const closeBtn = document.getElementById('close-favoritos-modal');
+        if (closeBtn) closeBtn.focus();
     }, 100);
+}
+
+function generarListaFavoritosSimple() {
+    const listaFavoritos = document.getElementById('favoritos-list');
+    if (!listaFavoritos || productosFavoritos.length === 0) return;
+    
+    let htmlFavoritos = '';
+    
+    productosFavoritos.forEach((id, index) => {
+        const producto = productos.find(p => p.id === id);
+        if (producto) {
+            const precioTexto = producto.precio > 0 ? 
+                `S/. ${producto.precio.toFixed(2)} x ${producto.unidad}` : 
+                'Consultar precio';
+            
+            htmlFavoritos += `
+                <div class="favorito-item" data-id="${producto.id}" data-index="${index + 1}" tabindex="0">
+                    <img src="${producto.imagenes[0] || 'https://via.placeholder.com/80x80/f5f5f5/333?text=Mármol'}" 
+                         alt="${producto.nombre}"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/80x80/f5f5f5/333?text=Mármol'">
+                    
+                    <div class="favorito-info">
+                        <span class="favorito-code">${producto.codigo}</span>
+                        <h4>${producto.nombre}</h4>
+                                                
+                        <div class="favorito-price">${precioTexto}</div>
+                    </div>
+                    
+                    <div class="favorito-actions">
+                        <button class="favorito-btn consultar" 
+                                onclick="agregarParaAsesor('${producto.id}'); mostrarToast('Agregado para cotizar')" 
+                                aria-label="Cotizar ${producto.nombre}">
+                            <i class="fas fa-file-invoice-dollar"></i> Cotizar
+                        </button>
+                        <button class="favorito-btn eliminar" 
+                                onclick="removerDeFavoritos('${producto.id}')" 
+                                aria-label="Eliminar ${producto.nombre}">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    listaFavoritos.innerHTML = htmlFavoritos;
+    
+    // Agregar navegación por teclado
+    setTimeout(() => {
+        const items = listaFavoritos.querySelectorAll('.favorito-item');
+        items.forEach((item, index) => {
+            item.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const btnCotizar = this.querySelector('.favorito-btn.consultar');
+                    if (btnCotizar) btnCotizar.click();
+                } else if (e.key === 'Delete' || e.key === 'd') {
+                    const btnEliminar = this.querySelector('.favorito-btn.eliminar');
+                    if (btnEliminar) btnEliminar.click();
+                } else if (e.key === 'ArrowDown' && items[index + 1]) {
+                    e.preventDefault();
+                    items[index + 1].focus();
+                } else if (e.key === 'ArrowUp' && items[index - 1]) {
+                    e.preventDefault();
+                    items[index - 1].focus();
+                }
+            });
+        });
+        
+        if (items.length > 0) {
+            items[0].focus();
+        }
+    }, 50);
 }
 
 function cerrarModalFavoritos() {
@@ -2314,8 +2453,6 @@ function abrirCompartirModal() {
     
     const opcionesCompartir = [
         { nombre: 'WhatsApp', icono: 'fab fa-whatsapp', color: '#25D366' },
-        { nombre: 'Facebook', icono: 'fab fa-facebook', color: '#1877F2' },
-        { nombre: 'Correo', icono: 'fas fa-envelope', color: '#EA4335' },
         { nombre: 'Copiar', icono: 'fas fa-copy', color: '#6c757d' }
     ];
     
@@ -2369,33 +2506,23 @@ function compartirPor(metodo) {
         `*Medida:* ${productoParaCompartir.medida}\n` +
         `*Calidad:* ${productoParaCompartir.calidad}\n` +
         `*Precio:* ${productoParaCompartir.precio > 0 ? 'S/. ' + productoParaCompartir.precio.toFixed(2) + ' x ' + productoParaCompartir.unidad : 'Consultar Precio'}\n` +
-        `*Ver detalles:\n${urlProducto}\n\n` +
+        `*Ver detalles:*\n${urlProducto}\n\n` +
         `*¡Oferta especial por tiempo limitado!*`;
     
     const textoCompartirSimple = 
-        `Gallos Mármol - Outlet 2025\n\n` +
+        `*Gallos Mármol - Outlet 2025*\n\n` +
         `${productoParaCompartir.nombre}\n` +
-        `Código: ${productoParaCompartir.codigo}\n` +
-        `Material: ${productoParaCompartir.material}\n` +
-        `Precio: ${productoParaCompartir.precio > 0 ? 'S/. ' + productoParaCompartir.precio.toFixed(2) : 'Consultar'}\n\n` +
-        `Ver detalles: ${urlProducto}`;
+        `*Código:* ${productoParaCompartir.codigo}\n` +
+        `*Material:* ${productoParaCompartir.material}\n` +
+        `*Precio:* ${productoParaCompartir.precio > 0 ? 'S/. ' + productoParaCompartir.precio.toFixed(2) : 'Consultar'}\n\n` +
+        `*Ver detalles:* ${urlProducto}`;
     
     try {
         switch(metodo.toLowerCase()) {
             case 'whatsapp':
                 window.open(`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`, '_blank', 'noopener,noreferrer');
                 break;
-                
-            case 'facebook':
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlProducto)}&quote=${encodeURIComponent(productoParaCompartir.nombre + ' - Gallos Mármol Outlet')}`, '_blank', 'noopener,noreferrer');
-                break;
-                
-            case 'correo':
-                const subject = `Gallos Mármol - ${productoParaCompartir.nombre}`;
-                const body = `${textoCompartirSimple}\n\n---\nGallos Mármol Outlet 2025\nCalidad premium a precios outlet\n`;
-                window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank', 'noopener,noreferrer');
-                break;
-                
+                                
             case 'copiar':
                 copiarEnlaceCompartir();
                 return;
@@ -3203,13 +3330,10 @@ function cerrarFiltrosMovil() {
         overlay.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         
-        // Enfocar el botón que abrió el modal
-        if (window.innerWidth < 768) {
-            const btnFiltros = document.getElementById('btn-filtros-movil');
-            if (btnFiltros) btnFiltros.focus();
-        } else {
-            const btnFiltrar = document.getElementById('btn-filtrar-movil');
-            if (btnFiltrar) btnFiltrar.focus();
+        // Quitar la clase "active" del botón de filtros en el menú
+        const filtrosBtn = document.getElementById('mobile-menu-filtros');
+        if (filtrosBtn) {
+            filtrosBtn.classList.remove('active');
         }
     }
 }
@@ -3274,6 +3398,9 @@ function actualizarContadorFiltros() {
     
     if (contador) contador.textContent = count;
     
+    // ACTUALIZAR EL CONTADOR DEL MENÚ MÓVIL
+    actualizarContadorFiltrosMenu(); // ← AGREGAR ESTA LÍNEA
+    
     if (btnLimpiar) {
         if (count > 0) {                    
             btnLimpiar.style.background = 'linear-gradient(135deg, #e63946, #d62839)';
@@ -3291,6 +3418,7 @@ function actualizarContadorFiltros() {
 
 // ===== MENÚ MÓVIL =====
 function inicializarMenuMovil() {
+    // Botón de búsqueda
     const searchBtn = document.getElementById('mobile-menu-search');
     if (searchBtn) {
         searchBtn.addEventListener('click', function(e) {
@@ -3306,6 +3434,7 @@ function inicializarMenuMovil() {
         });
     }
 
+    // Botón de inicio
     const inicioBtn = document.getElementById('mobile-menu-home');
     if (inicioBtn) {
         inicioBtn.addEventListener('click', function(e) {
@@ -3318,6 +3447,20 @@ function inicializarMenuMovil() {
         });
     }
 
+    // NUEVO: Botón de filtros
+    const filtrosBtn = document.getElementById('mobile-menu-filtros');
+    if (filtrosBtn) {
+        filtrosBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            abrirFiltrosMovil();
+            document.querySelectorAll('.mobile-menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    }
+
+    // Botón de favoritos
     const favoritosBtn = document.getElementById('mobile-menu-favoritos');
     if (favoritosBtn) {
         favoritosBtn.addEventListener('click', function(e) {
@@ -3330,6 +3473,7 @@ function inicializarMenuMovil() {
         });
     }
 
+    // Enlace de outlet
     const outletLink = document.querySelector('a[href="#products"]');
     if (outletLink) {
         outletLink.addEventListener('click', function(e) {
@@ -3339,6 +3483,36 @@ function inicializarMenuMovil() {
             this.classList.add('active');
         });
     }
+}
+
+function actualizarContadorFiltrosMenu() {
+    const contadorFiltrosMenu = document.getElementById('mobile-filtros-count');
+    if (!contadorFiltrosMenu) return;
+    
+    let count = 0;
+    const tipos = ['familias', 'materiales', 'acabados', 'medidas', 'calidades', 'bordes'];
+    
+    tipos.forEach(tipo => {
+        if (estadoFiltros[tipo] && estadoFiltros[tipo].length > 0) {
+            count += estadoFiltros[tipo].length;
+        }
+    });
+    
+    const precios = productos.filter(p => p.precio > 0).map(p => p.precio);
+    if (precios.length > 0) {
+        const minDefault = Math.floor(Math.min(...precios));
+        const maxDefault = Math.ceil(Math.max(...precios));
+        
+        if (estadoFiltros.rangoPrecio.min > minDefault || 
+            estadoFiltros.rangoPrecio.max < maxDefault) {
+            count++;
+        }
+    }
+    
+    if (estadoFiltros.busqueda) count++;
+    
+    contadorFiltrosMenu.textContent = count;
+    contadorFiltrosMenu.style.display = count > 0 ? 'flex' : 'none';
 }
 
 // ===== CONFIGURAR SCROLL DE BÚSQUEDA MÓVIL =====
@@ -3415,54 +3589,6 @@ function actualizarContadorAsesor() {
     if (whatsappCount) whatsappCount.textContent = productosParaAsesor.length;
 }
 
-function actualizarVistaPreviaAsesor() {
-    const preview = document.getElementById('productos-consulta-preview');
-    const acciones = document.getElementById('asesor-acciones');
-    const btnContactar = document.getElementById('contactar-asesor');
-    
-    if (!preview) return;
-    
-    let htmlPreview = '';
-    
-    if (productosParaAsesor.length === 0) {
-        htmlPreview = `
-            <div style="text-align: center; padding: 20px; color: var(--text-light);">
-                <i class="fas fa-exclamation-circle" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
-                <p>No hay materiales para cotizar</p>
-            </div>
-        `;
-        
-        if (acciones) acciones.style.display = 'none';
-        if (btnContactar) btnContactar.disabled = true;
-    } else {
-        productosParaAsesor.slice(0, 3).forEach((item, index) => {
-            const producto = productos.find(p => p.id === item.id);
-            if (producto) {
-                htmlPreview += `
-                    <div class="producto-seleccionado-item">
-                        <img src="${producto.imagenes[0]}" alt="${producto.nombre}"
-                            width="40"
-                            height="40"
-                            onerror="this.src='https://via.placeholder.com/40x40/f5f5f5/333?text=Mármol'">
-                        <div class="producto-seleccionado-info">
-                            <h5 style="font-size: 0.8rem;">${producto.nombre.substring(0, 30)}...</h5>
-                        </div>
-                    </div>
-                `;
-            }
-        });
-        
-        if (productosParaAsesor.length > 3) {
-            htmlPreview += `<div style="text-align: center; padding: 10px; color: var(--text-light); font-size: 0.8rem;">y ${productosParaAsesor.length - 3} más...</div>`;
-        }
-        
-        if (acciones) acciones.style.display = 'flex';
-        if (btnContactar) btnContactar.disabled = false;
-    }
-    
-    preview.innerHTML = htmlPreview;
-}
-
 // ===== UTILIDADES =====
 function mostrarToast(mensaje) {
     const toastExistente = document.querySelector('.toast');
@@ -3507,3 +3633,4 @@ function mostrarError(mensaje) {
 }
 
 console.log('Código JavaScript completamente cargado');
+
