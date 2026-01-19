@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repuesto - Administrador</title>
+    
+    <!-- Fuentes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="icon" type="image/x-icon" href="../../../FOTO/ICONO/Icono_01.ico">    
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="CSS/styles.css">
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="logo-container">
+                <!-- Logo para tema claro (por defecto) -->
+                <img src="../../../FOTO/LOGO/Logo_02.webp" 
+                    alt="Logo Sistema Repuestos - Tema Claro" 
+                    class="logo-img logo-light"
+                    id="loginLogoLight">
+                
+                <!-- Logo para tema oscuro (oculto por defecto) -->
+                <img src="../../../FOTO/LOGO/Logo_03.webp" 
+                    alt="Logo Sistema Repuestos - Tema Oscuro" 
+                    class="logo-img logo-dark hidden"
+                    id="loginLogoDark">
+                
+                <div class="logo-text">
+                    <h1>Sistema de Repuestos</h1>
+                    <span>Administrador</span>
+                </div>
+            </div>
+            
+            <!-- Paso 1: Ingresar correo -->
+            <div id="emailStep">
+                <div class="input-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Correo electrónico
+                    </label>
+                    <input type="email" id="email" placeholder="admin@empresa.com" aria-label="Correo electrónico">
+                </div>
+                <button id="verifyEmailBtn" class="btn btn-primary btn-block" aria-label="Verificar correo">
+                    Verificar correo
+                </button>
+            </div>
+            
+            <!-- Paso 2: Ingresar contraseña -->
+            <div id="passwordStep" class="hidden">
+                <div class="input-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña" aria-label="Contraseña">
+                        <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="loginBtn" class="btn btn-primary btn-block" aria-label="Iniciar sesión">
+                    Iniciar sesión
+                </button>
+                <button id="backToEmailBtn" class="btn btn-secondary btn-block" style="margin-top: 10px;" aria-label="Volver al paso anterior">
+                    Volver
+                </button>
+            </div>
+            
+            <!-- Mensajes de error/éxito -->
+            <div id="loginMessage" class="message hidden" role="alert" aria-live="polite"></div>
+            
+            <!-- Loading -->
+            <div id="loginLoading" class="hidden" style="text-align: center; margin-top: 20px;">
+                <div class="loading"></div>
+                <p style="margin-top: 10px; color: var(--text-light);">Verificando información...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sistema principal (oculto inicialmente) -->
+    <div id="appContainer" class="hidden">
+        <!-- Header Mejorado -->
+        <header class="app-header" role="banner">
+            <div class="container header-container">
+                <div class="header-logo">
+                    <!-- Logo para tema claro (por defecto) -->
+                    <img src="../../../FOTO/LOGO/Logo_02.webp" 
+                        alt="Logo Gestor de Repuestos - Tema Claro" 
+                        class="header-logo-img header-logo-light"
+                        id="headerLogoLight">
+                    
+                    <!-- Logo para tema oscuro (oculto por defecto) -->
+                    <img src="../../../FOTO/LOGO/Logo_03.webp" 
+                        alt="Logo Gestor de Repuestos - Tema Oscuro" 
+                        class="header-logo-img header-logo-dark hidden"
+                        id="headerLogoDark">
+                </div>
+                
+                <!-- Búsqueda -->
+                <div class="search-section" id="search-section">
+                    <div class="search-container">
+                        <input type="text" 
+                               class="search-input" 
+                               id="search-input" 
+                               placeholder="Buscar por código, nombre, categoría..." 
+                               aria-label="Buscar repuestos"
+                               aria-describedby="search-hint">
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        <span id="search-hint" class="sr-only">Presiona Enter para buscar</span>
+                    </div>
+                    <div class="search-results" id="search-results" role="region" aria-live="polite"></div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon theme-toggle" id="themeToggle" aria-label="Cambiar tema claro/oscuro" aria-pressed="false">
+                        <i class="fas fa-moon"></i>
+                    </button>                    
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar" aria-haspopup="true" aria-expanded="false">A</div>
+                        <div class="user-dropdown" id="userDropdown" role="menu">
+                            <div class="user-info">
+                                <div class="user-name" id="userName">Administrador</div>
+                                <span class="user-role" id="userRole">Administrador</span>
+                            </div>
+                            <button class="dropdown-item logout" id="logoutBtn" role="menuitem">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero section -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h2 id="hero-title">Gestión de Repuestos</h2>
+                <p>Administra de manera eficiente el inventario de repuestos. Control total sobre repuestos, estados y ubicaciones.</p>
+            </div>
+        </section>
+
+        <!-- Barra de filtros fijos -->
+        <nav class="filtros-fijos" id="filtros-fijos" aria-label="Filtros de repuestos">
+            <div class="container">
+                <div class="filtros-horizontal">
+                    <button class="btn-filtro-grupo" data-target="categoria" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-tags"></i> Categoría
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="tipo" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-cog"></i> Tipo
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="estado" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-info-circle"></i> Estado
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="ubicacion" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-map-marker-alt"></i> Ubicación
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="marca" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-trademark"></i> Marca
+                    </button>
+                    <!-- NUEVO FILTRO: USUARIO -->
+                    <button class="btn-filtro-grupo" data-target="usuario" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-user"></i> Usuario
+                    </button>
+                    <!-- BOTÓN LIMPIAR FILTROS -->
+                    <button class="btn-limpiar-filtros" id="btn-limpiar-filtros" onclick="reiniciarFiltros()" aria-label="Limpiar todos los filtros">
+                        <i class="fas fa-redo"></i> Limpiar
+                    </button>             
+                </div>
+                
+                <!-- Contenedor de opciones de filtro -->
+                <div class="filtros-opciones-container" id="filtros-opciones" role="region" aria-labelledby="filtros-opciones-title" aria-hidden="true"></div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="container" id="main-content">
+            
+            <!-- Mensajes del sistema -->
+            <div id="systemMessage" class="message hidden" role="alert" aria-live="polite"></div>
+            
+            <!-- Repuestos -->
+            <section class="products-section" id="products" aria-labelledby="products-title">
+                <div class="section-header">
+                    <div>
+                        <h2 id="products-title" class="section-title">Inventario de Repuestos</h2>
+                        <p class="products-stats" id="products-stats">Mostrando <span id="products-count">0</span> repuestos</p>
+                    </div>
+                    <div>
+                        <button id="addRepuestoBtn" class="btn btn-primary" aria-label="Agregar nuevo repuesto">
+                            <i class="fas fa-plus"></i> Nuevo Repuesto
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="repuestos-grid" id="repuestosGrid" role="list" aria-label="Lista de repuestos">
+                    <!-- Los repuestos se cargarán dinámicamente -->
+                </div>
+                
+                <!-- Paginación -->
+                <nav class="pagination" id="pagination" aria-label="Paginación de repuestos"></nav>
+            </section>
+        </main>
+
+        <!-- Botón flotante para filtros en móvil -->
+        <button id="filtrosMovilBtn" class="floating-filter-btn hidden" aria-label="Abrir filtros">
+            <i class="fas fa-filter"></i>
+            <span class="filter-badge" id="filterBadge">0</span>
+        </button> 
+        
+        <!-- Modal para filtros en móvil -->
+        <div id="filtrosModal" class="modal-overlay filtros-modal" role="dialog" aria-modal="true" aria-labelledby="filtrosModalTitle" aria-hidden="true">
+            <div class="modal filtros-modal-content">
+                <div class="modal-header">
+                    <h2 id="filtrosModalTitle">
+                        <i class="fas fa-filter"></i>
+                        Filtros
+                    </h2>
+                    <button class="modal-close" id="closeFiltrosModalBtn" aria-label="Cerrar filtros">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Los filtros se cargarán aquí dinámicamente -->
+                    <div id="filtrosModalContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="limpiarFiltrosModalBtn" class="btn btn-secondary" aria-label="Limpiar filtros">
+                        <i class="fas fa-redo"></i> Limpiar Filtros
+                    </button>
+                    <button id="aplicarFiltrosModalBtn" class="btn btn-primary" aria-label="Aplicar filtros">
+                        <i class="fas fa-check"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Modal para crear/editar repuesto -->
+    <div id="repuestoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">
+                    <i class="fas fa-box"></i>
+                    <span id="modalTitleText">Agregar repuesto</span>
+                </h2>
+                <button class="modal-close" id="closeModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="repuestoForm">
+                    <div class="form-grid">
+                        <!-- Nombre automático (solo lectura) -->
+                        <div class="form-group">
+                            <label for="repuestoNombre">
+                                <i class="fas fa-tag"></i> Nombre del repuesto
+                            </label>
+                            <input type="text" id="repuestoNombre" disabled readonly aria-label="Nombre generado automáticamente">
+                            <div class="field-info">
+                                <i class="fas fa-info-circle"></i> Nombre generado automáticamente
+                            </div>
+                        </div>
+                                                
+                        <div class="form-group required">
+                            <label for="repuestoCategoria">
+                                <i class="fas fa-tags"></i> Categoría
+                            </label>
+                            <select id="repuestoCategoria" required aria-label="Seleccionar categoría">
+                                <option value="">Selecciona una categoría</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Tipo (bloqueado hasta seleccionar categoría) -->
+                        <div class="form-group required">
+                            <label for="repuestoTipo">
+                                <i class="fas fa-cog"></i> Tipo de repuesto
+                            </label>
+                            <select id="repuestoTipo" disabled required aria-label="Seleccionar tipo de repuesto">
+                                <option value="">Primero selecciona una categoría</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Marca (NO obligatoria) -->
+                        <div class="form-group">
+                            <label for="repuestoMarca">
+                                <i class="fas fa-trademark"></i> Marca
+                            </label>
+                            <select id="repuestoMarca" aria-label="Seleccionar marca (opcional)">
+                                <option value="">Selecciona una marca</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group required">
+                            <label for="repuestoEstado">
+                                <i class="fas fa-info-circle"></i> Estado del repuesto
+                            </label>
+                            <select id="repuestoEstado" required aria-label="Seleccionar estado del repuesto">
+                                <option value="">Selecciona un estado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group required">
+                            <label for="repuestoUbicacion">
+                                <i class="fas fa-map-marker-alt"></i> Ubicación
+                            </label>
+                            <select id="repuestoUbicacion" required aria-label="Seleccionar ubicación">
+                                <option value="">Selecciona una ubicación</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Nuevo campo: Usuario asignado -->
+                        <div class="form-group">
+                            <label for="repuestoUsuarioId">
+                                <i class="fas fa-user"></i> Usuario asignado
+                            </label>
+                            <select id="repuestoUsuarioId" aria-label="Seleccionar usuario asignado (opcional)">
+                                <option value="">Sin asignar</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="repuestoModelo">
+                                <i class="fas fa-cube"></i> Modelo
+                            </label>
+                            <input type="text" id="repuestoModelo" aria-label="Modelo del repuesto">
+                            <div class="field-info">
+                                <i class="fas fa-info-circle"></i> Opcional - Puedes dejar este campo vacío
+                            </div>                              
+                        </div>
+     
+                        <div class="form-group">
+                            <label for="repuestoNumeroParte">
+                                <i class="fas fa-hashtag"></i> Número de parte
+                            </label>
+                            <input type="text" id="repuestoNumeroParte" aria-label="Número de parte del repuesto (opcional)">
+                            <div class="field-info">
+                                <i class="fas fa-info-circle"></i> Opcional - Puedes dejar este campo vacío
+                            </div>
+                        </div>                    
+                        
+                        <div class="form-group">
+                            <label for="repuestoNumeroSerie">
+                                <i class="fas fa-barcode"></i> Número de serie
+                            </label>
+                            <input type="text" id="repuestoNumeroSerie" aria-label="Número de serie">
+                            <div class="field-info">
+                                <i class="fas fa-info-circle"></i> Opcional - Puedes dejar este campo vacío
+                            </div>                            
+                        </div>
+                    </div>
+                                        
+                    <div class="form-group">
+                        <label for="repuestoObservaciones">
+                            <i class="fas fa-sticky-note"></i> Observaciones
+                        </label>
+                        <textarea 
+                            id="repuestoObservaciones" 
+                            rows="3" 
+                            placeholder="NO HAY OBSERVACIÓN" 
+                            aria-label="Observaciones del repuesto (por defecto: NO HAY OBSERVACIÓN)"
+                        ></textarea>
+                        <div class="field-info">
+                            <i class="fas fa-info-circle"></i> Por defecto: "NO HAY OBSERVACIÓN"
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="repuestoActivo">
+                            <i class="fas fa-power-off"></i> Estado del sistema
+                        </label>
+                        <select id="repuestoActivo" aria-label="Estado activo/inactivo">
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="repuestoId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelModalBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                <button id="saveRepuestoBtn" class="btn btn-primary" aria-label="Guardar repuesto">Guardar repuesto</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación para eliminar -->
+    <div id="confirmationModal" class="modal-overlay confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-body">
+                <div class="confirmation-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="confirmation-title" id="confirmationTitle">¿Estás seguro?</h3>
+                <p class="confirmation-message" id="confirmationMessage">Esta acción no se puede deshacer.</p>
+                <div class="confirmation-buttons">
+                    <button id="confirmCancelBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                    <button id="confirmActionBtn" class="btn btn-danger" aria-label="Eliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para crear contraseña -->
+    <div id="passwordModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="passwordModalTitle">
+                    <i class="fas fa-key"></i>
+                    Crear contraseña
+                </h2>
+                <button class="modal-close" id="closePasswordModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px;">No tienes una contraseña registrada. Por favor, crea una nueva contraseña para tu cuenta.</p>
+                <div class="form-group required">
+                    <label for="newPassword">Nueva contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required aria-label="Nueva contraseña">
+                        <button type="button" id="toggleNewPassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="confirmPassword">Confirmar contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" placeholder="Repite la contraseña" required aria-label="Confirmar contraseña">
+                        <button type="button" id="toggleConfirmPassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelPasswordBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                <button id="savePasswordBtn" class="btn btn-primary" aria-label="Crear contraseña">Crear contraseña</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para formato de etiqueta -->
+    <div id="etiquetaModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="etiquetaModalTitle" aria-hidden="true">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="etiquetaModalTitle">
+                    <i class="fas fa-tag"></i>
+                    Formato de Etiqueta
+                </h2>
+                <button class="modal-close" id="closeEtiquetaModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="formato-etiqueta-info">
+                    <div class="formato-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Formato seleccionado</h3>
+                    <div class="formato-detalles">
+                        <p><strong>Tamaño:</strong> 7.5 × 5 cm</p>
+                        <p><strong>Orientación:</strong> Horizontal</p>
+                        <p><strong>Formato:</strong> PDF</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEtiquetaBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                <button id="generarEtiquetaBtn" class="btn btn-primary" aria-label="Generar etiqueta">
+                    <i class="fas fa-print"></i> Generar Etiqueta PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="JS/app.js"></script>
+</body>
+</html>

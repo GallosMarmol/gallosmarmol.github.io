@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Activos</title>
+    
+    <!-- Fuentes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../../FOTO/ICONO/Icono_01.ico">    
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="CSS/styles.css">
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="logo-container">
+                <!-- Logo para tema claro -->
+                <img src="../../../FOTO/LOGO/Logo_02.webp" 
+                    alt="Logo Sistema Activos" 
+                    class="logo-img logo-light"
+                    id="loginLogoLight">
+                
+                <!-- Logo para tema oscuro -->
+                <img src="../../../FOTO/LOGO/Logo_03.webp" 
+                    alt="Logo Sistema Activos - Tema Oscuro" 
+                    class="logo-img logo-dark hidden"
+                    id="loginLogoDark">
+                
+                <div class="logo-text">
+                    <h1>Sistema de Activos</h1>
+                    <span>Gestión de Activos Fijos</span>
+                </div>
+            </div>
+            
+            <!-- Paso 1: Ingresar correo -->
+            <div id="emailStep">
+                <div class="input-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Correo electrónico
+                    </label>
+                    <input type="email" id="email" placeholder="admin@empresa.com" aria-label="Correo electrónico">
+                </div>
+                <button id="verifyEmailBtn" class="btn btn-primary btn-block" aria-label="Verificar correo">
+                    Verificar correo
+                </button>
+            </div>
+            
+            <!-- Paso 2: Ingresar contraseña -->
+            <div id="passwordStep" class="hidden">
+                <div class="input-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña" aria-label="Contraseña">
+                        <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="loginBtn" class="btn btn-primary btn-block" aria-label="Iniciar sesión">
+                    Iniciar sesión
+                </button>
+                <button id="backToEmailBtn" class="btn btn-secondary btn-block" style="margin-top: 10px;" aria-label="Volver al paso anterior">
+                    Volver
+                </button>
+            </div>
+            
+            <!-- Mensajes de error/éxito -->
+            <div id="loginMessage" class="message hidden" role="alert" aria-live="polite"></div>
+            
+            <!-- Loading -->
+            <div id="loginLoading" class="hidden" style="text-align: center; margin-top: 20px;">
+                <div class="loading"></div>
+                <p style="margin-top: 10px; color: var(--text-light);">Verificando información...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sistema principal (oculto inicialmente) -->
+    <div id="appContainer" class="hidden">
+        <!-- Header Mejorado -->
+        <header class="app-header" role="banner">
+            <div class="container header-container">
+                <div class="header-logo">
+                    <!-- Logo para tema claro -->
+                    <img src="../../../FOTO/LOGO/Logo_02.webp" 
+                        alt="Logo Gestor de Activos" 
+                        class="header-logo-img header-logo-light"
+                        id="headerLogoLight">
+                    
+                    <!-- Logo para tema oscuro -->
+                    <img src="../../../FOTO/LOGO/Logo_03.webp" 
+                        alt="Logo Gestor de Activos - Tema Oscuro" 
+                        class="header-logo-img header-logo-dark hidden"
+                        id="headerLogoDark">
+                </div>
+                
+                <!-- Búsqueda -->
+                <div class="search-section" id="search-section">
+                    <div class="search-container">
+                        <input type="text" 
+                               class="search-input" 
+                               id="search-input" 
+                               placeholder="Buscar por código, nombre, categoría..." 
+                               aria-label="Buscar activos"
+                               aria-describedby="search-hint">
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        <span id="search-hint" class="sr-only">Presiona Enter para buscar</span>
+                    </div>
+                    <div class="search-results" id="search-results" role="region" aria-live="polite"></div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon theme-toggle" id="themeToggle" aria-label="Cambiar tema claro/oscuro" aria-pressed="false">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <button class="header-icon" id="dashboardBtn" aria-label="Ver dashboard">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar" aria-haspopup="true" aria-expanded="false">A</div>
+                        <div class="user-dropdown" id="userDropdown" role="menu">
+                            <div class="user-info">
+                                <div class="user-name" id="userName">Administrador</div>
+                                <span class="user-role" id="userRole">Administrador</span>
+                            </div>
+                            <button class="dropdown-item logout" id="logoutBtn" role="menuitem">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard y Estadísticas -->
+        <section class="dashboard-section" id="dashboardSection" aria-labelledby="dashboard-title">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2 id="dashboard-title">
+                        <i class="fas fa-chart-line"></i> Dashboard de Activos
+                    </h2>
+                    <button class="btn btn-secondary btn-small" id="refreshStatsBtn" aria-label="Actualizar estadísticas">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon total">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="totalActivos">0</h3>
+                            <p class="stat-label">Total de Activos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon operativos">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="activosOperativos">0</h3>
+                            <p class="stat-label">Activos Operativos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon mantenimiento">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="activosMantenimiento">0</h3>
+                            <p class="stat-label">En Mantenimiento</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon depreciados">
+                            <i class="fas fa-chart-line-down"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="activosDepreciados">0</h3>
+                            <p class="stat-label">Depreciados</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> Distribución por Categoría</h3>
+                        <div class="chart-container">
+                            <canvas id="categoriaChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-bar"></i> Activos por Departamento</h3>
+                        <div class="chart-container">
+                            <canvas id="departamentoChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-calendar-alt"></i> Adquisiciones por Año</h3>
+                        <div class="chart-container">
+                            <canvas id="adquisicionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra de filtros fijos -->
+        <nav class="filtros-fijos" id="filtros-fijos" aria-label="Filtros de activos">
+            <div class="container">
+                <div class="filtros-horizontal">
+                    <button class="btn-filtro-grupo" data-target="categoria" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-tags"></i> Categoría
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="departamento" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-building"></i> Departamento
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="estado" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-info-circle"></i> Estado
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="ubicacion" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-map-marker-alt"></i> Ubicación
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="responsable" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-user"></i> Responsable
+                    </button>
+                    <button class="btn-filtro-grupo" data-target="proveedor" aria-expanded="false" aria-controls="filtros-opciones">
+                        <i class="fas fa-truck"></i> Proveedor
+                    </button>
+                    <button class="btn-limpiar-filtros" id="btn-limpiar-filtros" onclick="reiniciarFiltros()" aria-label="Limpiar todos los filtros">
+                        <i class="fas fa-redo"></i> Limpiar
+                    </button>             
+                </div>
+                
+                <!-- Contenedor de opciones de filtro -->
+                <div class="filtros-opciones-container" id="filtros-opciones" role="region" aria-labelledby="filtros-opciones-title" aria-hidden="true"></div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="container" id="main-content">
+            
+            <!-- Mensajes del sistema -->
+            <div id="systemMessage" class="message hidden" role="alert" aria-live="polite"></div>
+            
+            <!-- Activos -->
+            <section class="activos-section" id="activos" aria-labelledby="activos-title">
+                <div class="section-header">
+                    <div>
+                        <h2 id="activos-title" class="section-title">Inventario de Activos</h2>
+                        <p class="activos-stats" id="activos-stats">Mostrando <span id="activos-count">0</span> activos</p>
+                        <div class="valor-total">
+                            <i class="fas fa-dollar-sign"></i>
+                            Valor Total: <span id="valorTotal">$0.00</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="addActivoBtn" class="btn btn-primary" aria-label="Agregar nuevo activo">
+                            <i class="fas fa-plus"></i> Nuevo Activo
+                        </button>
+                        <button id="exportBtn" class="btn btn-success" aria-label="Exportar a Excel">
+                            <i class="fas fa-file-excel"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="activos-grid" id="activosGrid" role="list" aria-label="Lista de activos">
+                    <!-- Los activos se cargarán dinámicamente -->
+                </div>
+                
+                <!-- Paginación -->
+                <nav class="pagination" id="pagination" aria-label="Paginación de activos"></nav>
+            </section>
+        </main>
+
+        <!-- Botón flotante para filtros en móvil -->
+        <button id="filtrosMovilBtn" class="floating-filter-btn hidden" aria-label="Abrir filtros">
+            <i class="fas fa-filter"></i>
+            <span class="filter-badge" id="filterBadge">0</span>
+        </button> 
+        
+        <!-- Modal para filtros en móvil -->
+        <div id="filtrosModal" class="modal-overlay filtros-modal" role="dialog" aria-modal="true" aria-labelledby="filtrosModalTitle" aria-hidden="true">
+            <div class="modal filtros-modal-content">
+                <div class="modal-header">
+                    <h2 id="filtrosModalTitle">
+                        <i class="fas fa-filter"></i>
+                        Filtros
+                    </h2>
+                    <button class="modal-close" id="closeFiltrosModalBtn" aria-label="Cerrar filtros">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Los filtros se cargarán aquí dinámicamente -->
+                    <div id="filtrosModalContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="limpiarFiltrosModalBtn" class="btn btn-secondary" aria-label="Limpiar filtros">
+                        <i class="fas fa-redo"></i> Limpiar Filtros
+                    </button>
+                    <button id="aplicarFiltrosModalBtn" class="btn btn-primary" aria-label="Aplicar filtros">
+                        <i class="fas fa-check"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Modal para crear/editar activo -->
+    <div id="activoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h2 id="modalTitle">
+                    <i class="fas fa-laptop"></i>
+                    <span id="modalTitleText">Agregar activo</span>
+                </h2>
+                <button class="modal-close" id="closeModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="activoForm">
+                    <div class="form-grid-2">
+                        <!-- Información Básica -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                            <div class="form-group required">
+                                <label for="activoCodigo">
+                                    <i class="fas fa-barcode"></i> Código de Activo
+                                </label>
+                                <input type="text" id="activoCodigo" required aria-label="Código del activo" placeholder="ACT-001">
+                            </div>
+                            
+                            <div class="form-group required">
+                                <label for="activoNombre">
+                                    <i class="fas fa-tag"></i> Nombre del Activo
+                                </label>
+                                <input type="text" id="activoNombre" required aria-label="Nombre del activo" placeholder="Laptop Dell XPS 15">
+                            </div>
+                            
+                            <div class="form-group required">
+                                <label for="activoCategoria">
+                                    <i class="fas fa-tags"></i> Categoría
+                                </label>
+                                <select id="activoCategoria" required aria-label="Seleccionar categoría">
+                                    <option value="">Selecciona una categoría</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoMarca">
+                                    <i class="fas fa-trademark"></i> Marca
+                                </label>
+                                <input type="text" id="activoMarca" aria-label="Marca del activo" placeholder="Dell">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoModelo">
+                                    <i class="fas fa-cube"></i> Modelo
+                                </label>
+                                <input type="text" id="activoModelo" aria-label="Modelo del activo" placeholder="XPS 15 9520">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoSerial">
+                                    <i class="fas fa-hashtag"></i> Número de Serie
+                                </label>
+                                <input type="text" id="activoSerial" aria-label="Número de serie">
+                            </div>
+                        </div>
+                        
+                        <!-- Información Financiera y Asignación -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-chart-line"></i> Información Financiera</h3>
+                            <div class="form-group required">
+                                <label for="activoValor">
+                                    <i class="fas fa-dollar-sign"></i> Valor de Adquisición
+                                </label>
+                                <input type="number" id="activoValor" required aria-label="Valor de adquisición" step="0.01" min="0" placeholder="1500.00">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoFechaAdquisicion">
+                                    <i class="fas fa-calendar-alt"></i> Fecha de Adquisición
+                                </label>
+                                <input type="date" id="activoFechaAdquisicion" aria-label="Fecha de adquisición">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoVidaUtil">
+                                    <i class="fas fa-clock"></i> Vida Útil (años)
+                                </label>
+                                <input type="number" id="activoVidaUtil" aria-label="Vida útil en años" min="1" max="50" value="5">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoValorResidual">
+                                    <i class="fas fa-percentage"></i> Valor Residual (%)
+                                </label>
+                                <input type="number" id="activoValorResidual" aria-label="Valor residual porcentaje" min="0" max="100" step="0.1" value="10">
+                            </div>
+                            
+                            <h3><i class="fas fa-user-tie"></i> Asignación</h3>
+                            <div class="form-group">
+                                <label for="activoDepartamento">
+                                    <i class="fas fa-building"></i> Departamento
+                                </label>
+                                <select id="activoDepartamento" aria-label="Seleccionar departamento">
+                                    <option value="">Selecciona departamento</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoResponsable">
+                                    <i class="fas fa-user"></i> Responsable
+                                </label>
+                                <select id="activoResponsable" aria-label="Seleccionar responsable">
+                                    <option value="">Selecciona responsable</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoUbicacion">
+                                    <i class="fas fa-map-marker-alt"></i> Ubicación Física
+                                </label>
+                                <select id="activoUbicacion" aria-label="Seleccionar ubicación">
+                                    <option value="">Selecciona ubicación</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información Adicional -->
+                    <div class="form-grid-1">
+                        <div class="form-section">
+                            <h3><i class="fas fa-clipboard-list"></i> Información Adicional</h3>
+                            <div class="form-group required">
+                                <label for="activoEstado">
+                                    <i class="fas fa-info-circle"></i> Estado del Activo
+                                </label>
+                                <select id="activoEstado" required aria-label="Seleccionar estado">
+                                    <option value="">Selecciona estado</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoProveedor">
+                                    <i class="fas fa-truck"></i> Proveedor
+                                </label>
+                                <select id="activoProveedor" aria-label="Seleccionar proveedor">
+                                    <option value="">Selecciona proveedor</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoFactura">
+                                    <i class="fas fa-file-invoice"></i> Número de Factura
+                                </label>
+                                <input type="text" id="activoFactura" aria-label="Número de factura">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoGarantia">
+                                    <i class="fas fa-shield-alt"></i> Garantía (meses)
+                                </label>
+                                <input type="number" id="activoGarantia" aria-label="Período de garantía en meses" min="0" value="12">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoObservaciones">
+                                    <i class="fas fa-sticky-note"></i> Observaciones
+                                </label>
+                                <textarea id="activoObservaciones" rows="3" aria-label="Observaciones del activo"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="activoActivo">
+                                    <i class="fas fa-power-off"></i> Estado del Sistema
+                                </label>
+                                <select id="activoActivo" aria-label="Estado activo/inactivo">
+                                    <option value="true">Activo</option>
+                                    <option value="false">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cálculo de Depreciación -->
+                    <div class="form-section depreciacion-section" id="depreciacionSection">
+                        <h3><i class="fas fa-calculator"></i> Cálculo de Depreciación</h3>
+                        <div class="depreciacion-info">
+                            <div class="depreciacion-item">
+                                <span class="depreciacion-label">Valor Actual:</span>
+                                <span class="depreciacion-value" id="valorActual">$0.00</span>
+                            </div>
+                            <div class="depreciacion-item">
+                                <span class="depreciacion-label">Depreciación Anual:</span>
+                                <span class="depreciacion-value" id="depreciacionAnual">$0.00</span>
+                            </div>
+                            <div class="depreciacion-item">
+                                <span class="depreciacion-label">Depreciación Mensual:</span>
+                                <span class="depreciacion-value" id="depreciacionMensual">$0.00</span>
+                            </div>
+                            <div class="depreciacion-item">
+                                <span class="depreciacion-label">Años Restantes:</span>
+                                <span class="depreciacion-value" id="aniosRestantes">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="activoId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelModalBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                <button id="saveActivoBtn" class="btn btn-primary" aria-label="Guardar activo">Guardar Activo</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación para eliminar -->
+    <div id="confirmationModal" class="modal-overlay confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-body">
+                <div class="confirmation-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="confirmation-title" id="confirmationTitle">¿Estás seguro?</h3>
+                <p class="confirmation-message" id="confirmationMessage">Esta acción no se puede deshacer.</p>
+                <div class="confirmation-buttons">
+                    <button id="confirmCancelBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                    <button id="confirmActionBtn" class="btn btn-danger" aria-label="Eliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para crear contraseña -->
+    <div id="passwordModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="passwordModalTitle">
+                    <i class="fas fa-key"></i>
+                    Crear contraseña
+                </h2>
+                <button class="modal-close" id="closePasswordModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px;">No tienes una contraseña registrada. Por favor, crea una nueva contraseña para tu cuenta.</p>
+                <div class="form-group required">
+                    <label for="newPassword">Nueva contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required aria-label="Nueva contraseña">
+                        <button type="button" id="toggleNewPassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="confirmPassword">Confirmar contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" placeholder="Repite la contraseña" required aria-label="Confirmar contraseña">
+                        <button type="button" id="toggleConfirmPassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelPasswordBtn" class="btn btn-secondary" aria-label="Cancelar">Cancelar</button>
+                <button id="savePasswordBtn" class="btn btn-primary" aria-label="Crear contraseña">Crear contraseña</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para detalles del activo -->
+    <div id="detalleModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="detalleModalTitle" aria-hidden="true">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h2 id="detalleModalTitle">
+                    <i class="fas fa-info-circle"></i>
+                    Detalles del Activo
+                </h2>
+                <button class="modal-close" id="closeDetalleModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detalle-container">
+                    <div class="detalle-header">
+                        <div class="detalle-codigo" id="detalleCodigo">ACT-001</div>
+                        <div class="detalle-estado" id="detalleEstado">OPERATIVO</div>
+                    </div>
+                    
+                    <div class="detalle-content">
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                            <div class="detalle-grid">
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Nombre:</span>
+                                    <span class="detalle-value" id="detalleNombre"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Categoría:</span>
+                                    <span class="detalle-value" id="detalleCategoria"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Marca/Modelo:</span>
+                                    <span class="detalle-value" id="detalleMarcaModelo"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">N° Serie:</span>
+                                    <span class="detalle-value" id="detalleSerial"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-chart-line"></i> Información Financiera</h3>
+                            <div class="detalle-grid">
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Valor Adquisición:</span>
+                                    <span class="detalle-value" id="detalleValor"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Valor Actual:</span>
+                                    <span class="detalle-value" id="detalleValorActual"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Fecha Adquisición:</span>
+                                    <span class="detalle-value" id="detalleFechaAdquisicion"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Vida Útil:</span>
+                                    <span class="detalle-value" id="detalleVidaUtil"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-user-tie"></i> Asignación y Ubicación</h3>
+                            <div class="detalle-grid">
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Departamento:</span>
+                                    <span class="detalle-value" id="detalleDepartamento"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Responsable:</span>
+                                    <span class="detalle-value" id="detalleResponsable"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Ubicación:</span>
+                                    <span class="detalle-value" id="detalleUbicacion"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Proveedor:</span>
+                                    <span class="detalle-value" id="detalleProveedor"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-file-alt"></i> Documentación</h3>
+                            <div class="detalle-grid">
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Factura:</span>
+                                    <span class="detalle-value" id="detalleFactura"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Garantía:</span>
+                                    <span class="detalle-value" id="detalleGarantia"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Último Mantenimiento:</span>
+                                    <span class="detalle-value" id="detalleUltimoMantenimiento"></span>
+                                </div>
+                                <div class="detalle-item">
+                                    <span class="detalle-label">Próximo Mantenimiento:</span>
+                                    <span class="detalle-value" id="detalleProximoMantenimiento"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-sticky-note"></i> Observaciones</h3>
+                            <div class="detalle-observaciones" id="detalleObservaciones"></div>
+                        </div>
+                        
+                        <div class="detalle-section">
+                            <h3><i class="fas fa-history"></i> Historial</h3>
+                            <div class="historial-container" id="historialContainer">
+                                <!-- El historial se cargará aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="imprimirDetalleBtn" class="btn btn-secondary" aria-label="Imprimir detalles">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button id="editarDesdeDetalleBtn" class="btn btn-primary" aria-label="Editar activo">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para historial de mantenimiento -->
+    <div id="historialModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="historialModalTitle" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="historialModalTitle">
+                    <i class="fas fa-history"></i>
+                    Historial de Mantenimiento
+                </h2>
+                <button class="modal-close" id="closeHistorialModalBtn" aria-label="Cerrar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="historialContent">
+                    <!-- El contenido del historial se cargará aquí -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cerrarHistorialBtn" class="btn btn-secondary" aria-label="Cerrar">Cerrar</button>
+                <button id="agregarMantenimientoBtn" class="btn btn-primary" aria-label="Agregar mantenimiento">
+                    <i class="fas fa-plus"></i> Agregar Mantenimiento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="JS/app.js"></script>
+</body>
+</html>
