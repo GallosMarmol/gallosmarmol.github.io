@@ -29,10 +29,10 @@ const estadoFiltros = {
 
 // Configuración de tipos y formatos
 const tiposRecursos = [
-    { id: 'imagen', nombre: 'Imagen', icono: 'fas fa-image' },
-    { id: 'video', nombre: 'Video', icono: 'fas fa-video' },
-    { id: 'documento', nombre: 'Documento', icono: 'fas fa-file-alt' },
-    { id: 'audio', nombre: 'Audio', icono: 'fas fa-volume-up' }
+    { id: 'imagen', nombre: 'IMAGEN', icono: 'fas fa-image' },
+    { id: 'video', nombre: 'VIDEO', icono: 'fas fa-video' },
+    { id: 'documento', nombre: 'DOCUMENTO', icono: 'fas fa-file-alt' },
+    { id: 'audio', nombre: 'AUDIO', icono: 'fas fa-volume-up' }
 ];
 
 const formatosComunes = ['jpg', 'png', 'gif', 'mp4', 'avi', 'pdf', 'docx', 'pptx', 'mp3', 'wav'];
@@ -1579,10 +1579,6 @@ function crearFilaListaRecurso(recurso, index) {
                             <h4 class="recurso-titulo-lista" title="${recurso.nombre}">
                                 ${recurso.nombre}
                             </h4>
-                            <span class="recurso-fecha-lista" aria-label="Fecha de creación">
-                                <i class="far fa-calendar"></i> 
-                                ${formatearFecha(recurso.fecha_creacion)}
-                            </span>
                         </div>
                         <p class="recurso-descripcion-lista" title="${recurso.descripcion || 'Sin descripción'}">
                             ${recurso.descripcion?.substring(0, 100) || 'Sin descripción'}${recurso.descripcion?.length > 100 ? '...' : ''}
@@ -1691,9 +1687,9 @@ function crearBadgesHTML(recurso, tipoColor, formato, isGoogleDrive) {
         `);
     }
     
-    // Badges de etiquetas (máximo 2)
+    // Badges de etiquetas (máximo 5)
     if (recurso.etiquetas && recurso.etiquetas.length > 0) {
-        recurso.etiquetas.slice(0, 2).forEach(etiqueta => {
+        recurso.etiquetas.slice(0, 5).forEach(etiqueta => {
             badges.push(`
                 <span class="badge badge-etiqueta" aria-label="Etiqueta: ${etiqueta}">
                     <i class="fas fa-tag"></i> 
@@ -1702,10 +1698,10 @@ function crearBadgesHTML(recurso, tipoColor, formato, isGoogleDrive) {
             `);
         });
         
-        if (recurso.etiquetas.length > 2) {
+        if (recurso.etiquetas.length > 5) {
             badges.push(`
                 <span class="badge badge-mas" aria-label="${recurso.etiquetas.length - 2} etiquetas más">
-                    +${recurso.etiquetas.length - 2}
+                    +${recurso.etiquetas.length - 5}
                 </span>
             `);
         }
