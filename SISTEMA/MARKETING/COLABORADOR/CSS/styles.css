@@ -822,7 +822,6 @@ body.dark-mode .password-input-container input {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 80px;
 }
 
 .tipo-info-container {
@@ -960,13 +959,14 @@ body.dark-mode .password-input-container input {
     position: absolute;
     top: 16px;
     right: 16px;
+    width: 30%;
     background: linear-gradient(135deg, #4285F4, #34A853);
     color: white;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: var(--radius-sm);
     font-size: 0.75rem;
     font-weight: 600;
-    z-index: 2;
+    z-index: 20;
     box-shadow: var(--shadow-sm);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -2145,12 +2145,11 @@ body.dark-mode .logo-dark {
 .recurso-badge {
     position: absolute;
     top: 16px;
-    left: 16px;
     padding: 6px 12px;
     border-radius: var(--radius-sm);
     font-size: 0.8rem;
     font-weight: 600;
-    z-index: 2;
+    z-index: 20;
     box-shadow: var(--shadow-sm);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
@@ -2158,6 +2157,7 @@ body.dark-mode .logo-dark {
 
 .recurso-badge.imagen {
     background: linear-gradient(135deg, var(--imagen-color), #228be6);
+    left: 20px;
 }
 
 .recurso-badge.video {
@@ -2256,6 +2256,7 @@ body.dark-mode .logo-dark {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 16px;
+    margin-top: 5px;
     font-size: 0.85rem;
 }
 
