@@ -1885,7 +1885,7 @@ body.dark-mode .logo-dark {
     background: linear-gradient(135deg, 
         rgba(107, 0, 0, 0.9) 0%, 
         rgba(74, 0, 0, 0.9) 100%),
-        url('../../../../FOTO/OTRO/Otro_1.webp');
+        url('../../../../RECURSO/FOTO/OTRO/Otro_1.webp');
     background-size: cover;
     background-position: center;
     color: white;
@@ -3506,3 +3506,4 @@ body.dark-mode .header-logo-img {
         gap: 15px;
     }
 }
+
