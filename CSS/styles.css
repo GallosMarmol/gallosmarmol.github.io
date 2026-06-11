@@ -1,0 +1,723 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL
+============================================ */
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+:root {
+    --primary: #39080a;
+    --primary-dark: #2a0607;
+    --primary-light: #4a0a0d;
+    --secondary: #d4d4ae;
+    --secondary-dark: #c4c49a;
+    --secondary-light: #e4e4c8;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+}
+
+/* Clases utilitarias de color */
+.bg-primary { background-color: var(--primary); }
+.bg-primary-dark { background-color: var(--primary-dark); }
+.bg-secondary { background-color: var(--secondary); }
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--secondary); }
+.border-primary { border-color: var(--primary); }
+
+/* ============================================
+   ANIMACIONES Y EFECTOS BASE
+============================================ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+.main-content { animation: fadeInPage 0.4s ease-out; }
+.modal-content { animation: modalFadeIn 0.3s ease-out; }
+
+/* ============================================
+   SPINNER DE CARGA
+============================================ */
+.spinner {
+    border: 3px solid rgba(57,8,10,0.1);
+    border-radius: 50%;
+    border-top: 3px solid var(--primary);
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+.loading-overlay {
+    backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.5);
+}
+
+/* ============================================
+   SCROLLBAR PERSONALIZADO
+============================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ============================================
+   SIDEBAR Y LAYOUT
+============================================ */
+.sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 50;
+        width: 80%;
+        max-width: 280px;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0 !important; padding: 3rem !important; }
+}
+
+/* ============================================
+   CARDS Y GRIDS
+============================================ */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.card-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1);
+    border-color: var(--secondary);
+}
+
+/* ============================================
+   BOTONES
+============================================ */
+.btn-primary, .btn-secondary, .btn-danger {
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:active, .btn-secondary:active, .btn-danger:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn-primary:hover { background-color: var(--primary-dark); }
+
+.btn-secondary {
+    background-color: var(--secondary);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+.btn-secondary:hover { background-color: var(--secondary-dark); }
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+.btn-danger:hover { background-color: #b91c1c; }
+
+/* ============================================
+   FORMULARIOS E INPUTS
+============================================ */
+.form-input {
+    width: 100%;
+    border: 1px solid var(--gray-300);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(57, 8, 10, 0.1);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    margin-bottom: 0.25rem;
+}
+
+/* ============================================
+   BADGES Y ESTADOS
+============================================ */
+.estado-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.estado-DISPONIBLE { background-color: #d1fae5; color: #065f46; }
+.estado-ASIGNADO { background-color: #dbeafe; color: #1e40af; }
+.estado-REPARACIÓN { background-color: #fed7aa; color: #92400e; }
+.estado-BAJA { background-color: #fee2e2; color: #991b1b; }
+.estado-MANTENIMIENTO { background-color: #e9d5ff; color: #6b21a8; }
+.estado-RESERVADO { background-color: #cffafe; color: #155e75; }
+.estado-PRÉSTAMO { background-color: #ccfbf1; color: #115e59; }
+
+/* ============================================
+   FILTROS
+============================================ */
+#panelFiltros, #panelFiltrosActivos {
+    transition: all 0.3s ease;
+}
+
+#panelFiltros.hidden, #panelFiltrosActivos.hidden {
+    display: none;
+}
+
+/* ============================================
+   CARDS DE USUARIOS
+============================================ */
+.user-card {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow: hidden;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(57,8,10,0.1);
+}
+
+.user-card .user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1rem 0.5rem 1rem;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.user-card .user-email {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    word-break: break-word;
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+}
+
+.user-card .user-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    justify-content: flex-end;
+}
+
+/* ============================================
+   MODALES
+============================================ */
+#asignacionModal .overflow-y-auto::-webkit-scrollbar,
+#atributoModal .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+}
+
+#asignacionModal .overflow-y-auto::-webkit-scrollbar-track,
+#atributoModal .overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#asignacionModal .overflow-y-auto::-webkit-scrollbar-thumb,
+#atributoModal .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+/* ============================================
+   ACORDEONES
+============================================ */
+.accordion-section {
+    border-top: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.accordion-header i { transition: transform 0.3s ease; }
+.accordion-header.open i { transform: rotate(90deg); }
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.accordion-content.open {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   MEDIA QUERIES RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .card-item {
+        padding: 1rem;
+    }
+    
+    .flex.justify-end {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 768px) {   
+    .md\:cursor-default {
+        cursor: default;
+    }
+}
+
+@media (max-width: 640px) {
+    #atributoModal .max-w-md {
+        margin: 0.5rem;
+        width: calc(100% - 1rem);
+    }
+    
+    #atributoModal .grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   ANIMACIÓN PARA EL PANEL FLOTANTE
+============================================ */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#filtrosPanel {
+    animation: fadeInDown 0.2s ease-out;
+}
+
+/* ============================================
+   MEJORAS PARA EL MODAL DE MANTENIMIENTO
+============================================ */
+#mantenimientoModal {
+    backdrop-filter: blur(2px);
+}
+
+#mantenimientoModal .bg-white {
+    animation: modalSlideUp 0.25s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    #mantenimientoModal .p-6 {
+        padding: 1rem;
+    }
+    
+    #mantenimientoModal .form-input,
+    #mantenimientoModal select,
+    #mantenimientoModal textarea {
+        font-size: 16px;
+    }
+    
+    #mantenimientoModal .grid-cols-2 {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+/* ============================================
+   ESTILO PARA LA VISTA PREVIA DE LA ETIQUETA
+============================================ */
+#etiquetaActivo {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+}
+
+#etiquetaActivo:hover {
+    transform: scale(1.02);
+}
+
+/* ============================================
+   MEJORAS PARA SELECTS
+============================================ */
+select, input {
+    transition: all 0.2s ease;
+}
+
+select:focus, input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(57, 8, 10, 0.1);
+}
+
+/* ============================================
+   UTILIDADES ADICIONALES
+============================================ */
+details summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] summary i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.filter-chip {
+    transition: all 0.2s ease;
+}
+
+.filter-chip.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* ============================================
+   ESTILOS PARA LOGO DEL SIDEBAR
+============================================ */
+.sidebar-logo {
+    transition: all 0.3s ease;
+}
+
+.sidebar-logo:hover {
+    transform: scale(1.02);
+    opacity: 0.95;
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .sidebar .sidebar-logo {
+        max-width: 80px;
+    }
+}
+
+/* Para sidebar contraído (si existe) */
+.sidebar.collapsed .sidebar-logo {
+    max-width: 40px;
+    margin: 0 auto;
+}
+
+.sidebar.collapsed .sidebar-logo-text {
+    display: none;
+}
+
+/* ============================================
+   SIDEBAR CON SCROLL INTERNO
+============================================ */
+
+/* Estructura del sidebar para scroll */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+/* Header fijo */
+.sidebar-header {
+    flex-shrink: 0;
+}
+
+/* Área de navegación con scroll */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+/* Footer fijo */
+.sidebar-footer {
+    flex-shrink: 0;
+}
+
+/* Scroll personalizado */
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-dark);
+}
+
+/* ============================================
+   SIDEBAR CON SCROLL INTERNO
+============================================ */
+
+/* Estructura del sidebar para scroll */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+/* Header fijo */
+.sidebar-header {
+    flex-shrink: 0;
+}
+
+/* Área de navegación con scroll */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+/* Footer fijo */
+.sidebar-footer {
+    flex-shrink: 0;
+}
+
+/* Scroll personalizado */
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-dark);
+}
+
+/* ============================================
+   ESTILOS PARA VALIDACIÓN DE FORMULARIOS
+   ============================================ */
+.mensaje-error {
+    font-size: 11px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mensaje-error i {
+    font-size: 10px;
+}
+
+.mensaje-error.hidden {
+    display: none;
+}
+
+input.error, select.error, textarea.error {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8 !important;
+}
+
+input.success, select.success {
+    border-color: #28a745 !important;
+    background-color: #f8fff8 !important;
+}
+
+/* Animación para mensajes de error */
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.shake-error {
+    animation: shakeError 0.3s ease-in-out;
+}
+
+/* Ajustes para móvil */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 80%;
+        max-width: 280px;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0 !important;
+        padding: 1rem !important;
+    }
+}
+
+/* Estilos para selects múltiples */
+select[multiple] {
+    overflow-y: auto;
+    min-height: 80px;
+}
+
+select[multiple] option {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+select[multiple] option:checked {
+    background: #39080a linear-gradient(0deg, #39080a 0%, #39080a 100%);
+    color: white;
+}
+
+/* Badge de contador de filtros activos */
+.filtros-badge {
+    background-color: #39080a;
+    color: white;
+    border-radius: 9999px;
+    padding: 2px 8px;
+    font-size: 10px;
+    margin-left: 8px;
+}
