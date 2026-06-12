@@ -1594,13 +1594,37 @@ function renderizarLandingProducto(producto) {
     console.log('✅ Landing page renderizada correctamente');
 }
 
-// ==================== RENDERIZAR OUTLET CON FILTROS, COTIZACIÓN, ESCANEO QR Y PROTECCIÓN ====================
 function renderizarPaginaOutlet(productos) {
     console.log('🎨 Renderizando página de Outlet con todas las funcionalidades');
     
-    window.outletProductosCache = productos || [];
+    // ============================================
+    // CONFIGURACIÓN Y CONSTANTES
+    // ============================================
+    const CONFIG = {
+        COTIZACION_STORAGE_KEY: 'cotizacion_outlet_seleccionados',
+        DEFAULT_IMAGE: 'FOTO/foto_04.webp',
+        QR_FPS: 10,
+        QR_BOX_SIZE: 250,
+        FILTROS_DEBOUNCE_DELAY: 400,
+        IMAGE_LAZY_LOAD_THRESHOLD: 0.1,
+        BARRA_COTIZACION_BOTTOM_MOBILE: '70px',
+        BARRA_COTIZACION_BOTTOM_DESKTOP: '0px'
+    };
+    
+    // ============================================
+    // VALIDACIÓN DE DATOS DE ENTRADA
+    // ============================================
+    const productosValidos = (productos && Array.isArray(productos)) ? productos : [];
+    window.outletProductosCache = productosValidos;
+    
+    // ============================================
+    // INICIALIZACIÓN DE VARIABLES GLOBALES
+    // ============================================
     let asesoresPrecargados = null;
-    let modalCotizacionCreado = false;
+    let cotizacionSeleccionados = [];
+    let html5QrCode = null;
+    let escaneoActivo = false;
+    let observerImagenes = null;
     
     // Variables para caché del formulario
     window.clienteNombreCache = '';
@@ -1613,8 +1637,8 @@ function renderizarPaginaOutlet(productos) {
     // ============================================
     // FUNCIÓN PARA OPTIMIZAR URL DE GOOGLE DRIVE
     // ============================================
-    function optimizarGoogleDriveUrl(url) {
-        if (!url || url === '') return 'FOTO/foto_04.webp';
+    function optimizarGoogleDriveUrl(url, size = 'w400-h400') {
+        if (!url || url === '') return CONFIG.DEFAULT_IMAGE;
         
         // Si ya es una URL optimizada de Google Drive
         if (url.includes('lh3.googleusercontent.com')) return url;
@@ -1628,19 +1652,32 @@ function renderizarPaginaOutlet(productos) {
         
         for (const pattern of patterns) {
             const match = url.match(pattern);
-            if (match) {
-                return `https://lh3.googleusercontent.com/d/${match[1]}=w400-h400`;
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}=${size}`;
             }
         }
         
         return url;
     }
     
+    // ============================================
+    // ESCAPE HTML MEJORADO
+    // ============================================
     function escapeHtml(text) {
         if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        const mapa = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(text).replace(/[&<>"'`=\/]/g, function(caracter) {
+            return mapa[caracter];
+        });
     }
     
     // ============================================
@@ -1674,23 +1711,87 @@ function renderizarPaginaOutlet(productos) {
     const acabadosUnicos = new Map();
     const materialesUnicos = new Map();
     
-    window.outletProductosCache.forEach(p => {
+    productosValidos.forEach(p => {
         if (p.familia?.nombre) familiasUnicas.set(p.familia_id, p.familia.nombre);
         else if (p.familia_nombre) familiasUnicas.set(p.familia_nombre, p.familia_nombre);
+        
         if (p.acabado?.nombre) acabadosUnicos.set(p.acabado_id, p.acabado.nombre);
         else if (p.acabado_nombre) acabadosUnicos.set(p.acabado_nombre, p.acabado_nombre);
+        
         if (p.material?.nombre) materialesUnicos.set(p.material_id, p.material.nombre);
         else if (p.material_nombre) materialesUnicos.set(p.material_nombre, p.material_nombre);
     });
     
-    const familiasOptions = Array.from(familiasUnicas.entries()).map(([id, nombre]) => `<option value="${id}">${nombre}</option>`).join('');
-    const acabadosOptions = Array.from(acabadosUnicos.entries()).map(([id, nombre]) => `<option value="${id}">${nombre}</option>`).join('');
-    const materialesOptions = Array.from(materialesUnicos.entries()).map(([id, nombre]) => `<option value="${id}">${nombre}</option>`).join('');
+    const familiasOptions = Array.from(familiasUnicas.entries())
+        .filter(([id]) => id && id !== '')
+        .map(([id, nombre]) => `<option value="${id}">${escapeHtml(nombre)}</option>`)
+        .join('');
+    
+    const acabadosOptions = Array.from(acabadosUnicos.entries())
+        .filter(([id]) => id && id !== '')
+        .map(([id, nombre]) => `<option value="${id}">${escapeHtml(nombre)}</option>`)
+        .join('');
+    
+    const materialesOptions = Array.from(materialesUnicos.entries())
+        .filter(([id]) => id && id !== '')
+        .map(([id, nombre]) => `<option value="${id}">${escapeHtml(nombre)}</option>`)
+        .join('');
     
     // ============================================
-    // FUNCIONES DE FILTROS Y CARDS
+    // CARGA DE IMÁGENES CON LAZY LOADING
     // ============================================
+    function cargarImagenConLazy(imgElement, url) {
+        if (!imgElement) return;
+        
+        // Placeholder mientras carga
+        imgElement.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3C/svg%3E';
+        imgElement.style.background = '#f0f0f0';
+        
+        // Cargar imagen real
+        const imagen = new Image();
+        imagen.onload = () => {
+            imgElement.src = url;
+            imgElement.style.background = 'transparent';
+        };
+        imagen.onerror = () => {
+            imgElement.src = CONFIG.DEFAULT_IMAGE;
+            imgElement.style.background = 'transparent';
+        };
+        imagen.src = url;
+    }
     
+    function inicializarLazyLoading() {
+        if ('IntersectionObserver' in window) {
+            observerImagenes = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        const dataSrc = img.getAttribute('data-src');
+                        if (dataSrc) {
+                            cargarImagenConLazy(img, dataSrc);
+                            observerImagenes.unobserve(img);
+                        }
+                    }
+                });
+            }, {
+                rootMargin: '50px',
+                threshold: CONFIG.IMAGE_LAZY_LOAD_THRESHOLD
+            });
+            
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                observerImagenes.observe(img);
+            });
+        } else {
+            // Fallback para navegadores antiguos
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                cargarImagenConLazy(img, img.getAttribute('data-src'));
+            });
+        }
+    }
+    
+    // ============================================
+    // GENERAR CARDS CON LAZY LOADING
+    // ============================================
     window.generarCardsOutlet = function(productosLista) {
         if (!productosLista || productosLista.length === 0) {
             return '<div class="no-results"><i class="fas fa-box-open"></i><p>No hay productos que coincidan con los filtros</p><button onclick="limpiarFiltrosOutlet()" class="btn-primary" style="margin-top: 16px;">Limpiar filtros</button></div>';
@@ -1698,29 +1799,30 @@ function renderizarPaginaOutlet(productos) {
         
         return productosLista.map(p => {
             const estaSeleccionado = cotizacionSeleccionados && cotizacionSeleccionados.some(item => item && item.id === p.id);
-            const imagenUrl = optimizarGoogleDriveUrl(p.imagen_principal);
+            const imagenUrl = optimizarGoogleDriveUrl(p.imagen_principal, 'w300-h300');
             
             return `
                 <div class="producto-card" data-id="${p.id}">
                     <div class="card-image">
-                        <img src="${imagenUrl}" 
+                        <img data-src="${imagenUrl}" 
+                             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3C/svg%3E"
                              alt="${escapeHtml(p.nombre)}" 
                              loading="lazy"
-                             onerror="this.onerror=null; this.src='FOTO/foto_04.webp'">
+                             class="lazy-image">
                         <div class="badge-outlet">🔥 OUTLET</div>
                     </div>
                     <div class="card-info">
                         <h3>${escapeHtml(p.nombre) || 'Producto'}</h3>
                         <p class="codigo">${escapeHtml(p.codigo) || 'Sin código'}</p>
                         <div class="specs-badges">
-                            ${p.medida ? `<span class="spec-badge"><i class="fas fa-ruler-combined"></i> ${p.medida}</span>` : ''}
-                            ${p.espesor ? `<span class="spec-badge"><i class="fas fa-arrows-alt-h"></i> ${p.espesor}</span>` : ''}
+                            ${p.medida ? `<span class="spec-badge"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
+                            ${p.espesor ? `<span class="spec-badge"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
                             <a href="/?producto=${p.slug}" class="btn-detalle-enhanced" style="flex: 1;">
                                 <span>Ver Detalle</span>
                             </a>
-                            <button onclick="toggleSeleccionCotizacion({id:'${p.id}', nombre:'${escapeHtml(p.nombre)}', codigo:'${p.codigo || ''}', imagen_principal:'${p.imagen_principal || ''}', slug:'${p.slug}'})" 
+                            <button onclick="window.toggleSeleccionCotizacion({id:'${p.id}', nombre:'${escapeHtml(p.nombre)}', codigo:'${p.codigo || ''}', imagen_principal:'${p.imagen_principal || ''}', slug:'${p.slug}'})" 
                                     class="btn-cotizar" data-id="${p.id}"
                                     style="background: ${estaSeleccionado ? '#10b981' : '#39080a'}; color: white; border: none; padding: 8px 12px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.8rem; justify-content: center; font-weight: 600">
                                 <i class="fas ${estaSeleccionado ? 'fa-check-circle' : 'fa-plus-circle'}"></i>
@@ -1733,6 +1835,9 @@ function renderizarPaginaOutlet(productos) {
         }).join('');
     };
     
+    // ============================================
+    // FUNCIONES DE FILTROS Y CARDS
+    // ============================================
     window.aplicarFiltrosOutlet = function() {
         const busqueda = document.getElementById('searchOutlet')?.value.toLowerCase().trim() || '';
         const familiaId = document.getElementById('filtroFamilia')?.value;
@@ -1741,7 +1846,7 @@ function renderizarPaginaOutlet(productos) {
         
         let productosData = window.outletProductosCache.map(p => ({
             ...p,
-            imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || 'FOTO/foto_04.webp'),
+            imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE),
             slug: p.slug || p.id
         }));
         
@@ -1753,7 +1858,10 @@ function renderizarPaginaOutlet(productos) {
         
         const grid = document.getElementById('productosGrid');
         const contador = document.getElementById('contadorProductos');
-        if (grid) grid.innerHTML = window.generarCardsOutlet(filtrados);
+        if (grid) {
+            grid.innerHTML = window.generarCardsOutlet(filtrados);
+            inicializarLazyLoading();
+        }
         if (contador) contador.textContent = filtrados.length;
         
         let activos = 0;
@@ -1762,8 +1870,21 @@ function renderizarPaginaOutlet(productos) {
         if (materialId && materialId !== '') activos++;
         if (busqueda) activos++;
         const badge = document.getElementById('filtrosBadge');
-        if (badge) { if (activos > 0) { badge.textContent = activos; badge.style.display = 'inline-block'; } else { badge.style.display = 'none'; } }
-        if (window.innerWidth <= 768) { const modal = document.getElementById('filtrosModal'); if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; } }
+        if (badge) { 
+            if (activos > 0) { 
+                badge.textContent = activos; 
+                badge.style.display = 'inline-block'; 
+            } else { 
+                badge.style.display = 'none'; 
+            } 
+        }
+        if (window.innerWidth <= 768) { 
+            const modal = document.getElementById('filtrosModal'); 
+            if (modal) { 
+                modal.classList.remove('show'); 
+                document.body.style.overflow = ''; 
+            } 
+        }
     };
     
     window.limpiarFiltrosOutlet = function() {
@@ -1771,24 +1892,41 @@ function renderizarPaginaOutlet(productos) {
         const familiaSelect = document.getElementById('filtroFamilia');
         const acabadoSelect = document.getElementById('filtroAcabado');
         const materialSelect = document.getElementById('filtroMaterial');
+        
         if (searchInput) searchInput.value = '';
         if (familiaSelect) familiaSelect.value = '';
         if (acabadoSelect) acabadoSelect.value = '';
         if (materialSelect) materialSelect.value = '';
-        const productosData = window.outletProductosCache.map(p => ({ ...p, imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || 'FOTO/foto_04.webp'), slug: p.slug || p.id }));
+        
+        const productosData = window.outletProductosCache.map(p => ({ 
+            ...p, 
+            imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE), 
+            slug: p.slug || p.id 
+        }));
+        
         const grid = document.getElementById('productosGrid');
         const contador = document.getElementById('contadorProductos');
-        if (grid) grid.innerHTML = window.generarCardsOutlet(productosData);
+        if (grid) {
+            grid.innerHTML = window.generarCardsOutlet(productosData);
+            inicializarLazyLoading();
+        }
         if (contador) contador.textContent = productosData.length;
+        
         const badge = document.getElementById('filtrosBadge');
         if (badge) badge.style.display = 'none';
-        if (window.innerWidth <= 768) { const modal = document.getElementById('filtrosModal'); if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; } }
+        
+        if (window.innerWidth <= 768) { 
+            const modal = document.getElementById('filtrosModal'); 
+            if (modal) { 
+                modal.classList.remove('show'); 
+                document.body.style.overflow = ''; 
+            } 
+        }
     };
     
     // ============================================
     // FUNCIONES DE MODALES DE FILTROS
     // ============================================
-    
     window.openFiltrosModal = function() { 
         const modal = document.getElementById('filtrosModal'); 
         if (modal) { 
@@ -1830,8 +1968,8 @@ function renderizarPaginaOutlet(productos) {
         if (acabadoDesktop && acabadoModal) acabadoDesktop.value = acabadoModal.value;
         if (materialDesktop && materialModal) materialDesktop.value = materialModal.value;
         
-        if (typeof aplicarFiltrosOutlet === 'function') {
-            aplicarFiltrosOutlet();
+        if (typeof window.aplicarFiltrosOutlet === 'function') {
+            window.aplicarFiltrosOutlet();
         }
         
         if (window.innerWidth <= 768) {
@@ -1852,8 +1990,8 @@ function renderizarPaginaOutlet(productos) {
         if (acabadoModal) acabadoModal.value = '';
         if (materialModal) materialModal.value = '';
         
-        if (typeof limpiarFiltrosOutlet === 'function') {
-            limpiarFiltrosOutlet();
+        if (typeof window.limpiarFiltrosOutlet === 'function') {
+            window.limpiarFiltrosOutlet();
         }
         
         if (window.innerWidth <= 768) {
@@ -1872,7 +2010,6 @@ function renderizarPaginaOutlet(productos) {
     // ============================================
     // FUNCIONES DE MODALES PERSONALIZADOS
     // ============================================
-    
     function mostrarModal(titulo, mensaje, tipo = 'info', opciones = {}) {
         return new Promise((resolve) => {
             let modal = document.getElementById('modalPersonalizado');
@@ -1975,10 +2112,9 @@ function renderizarPaginaOutlet(productos) {
     // ============================================
     // FUNCIONES DE COTIZACIÓN
     // ============================================
-    
     function ejecutarLimpieza() {
         cotizacionSeleccionados = [];
-        localStorage.removeItem(cotizacionStorageKey);
+        localStorage.removeItem(CONFIG.COTIZACION_STORAGE_KEY);
         actualizarBarraFlotante();
         
         document.querySelectorAll('.btn-cotizar').forEach(btn => {
@@ -2026,7 +2162,7 @@ function renderizarPaginaOutlet(productos) {
     }
     
     function cargarSeleccionCotizacion() {
-        const guardado = localStorage.getItem(cotizacionStorageKey);
+        const guardado = localStorage.getItem(CONFIG.COTIZACION_STORAGE_KEY);
         if (guardado) {
             try {
                 cotizacionSeleccionados = JSON.parse(guardado);
@@ -2051,7 +2187,7 @@ function renderizarPaginaOutlet(productos) {
             barra = document.createElement('div');
             barra.id = 'barra-cotizacion';
             barra.innerHTML = `
-                <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #39080a; color: white; padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);">
+                <div style="position: fixed; bottom: ${window.innerWidth <= 768 ? CONFIG.BARRA_COTIZACION_BOTTOM_MOBILE : CONFIG.BARRA_COTIZACION_BOTTOM_DESKTOP}; left: 0; right: 0; background: #39080a; color: white; padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); backdrop-filter: blur(10px); background: rgba(57,8,10,0.95);">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <i class="fas fa-clipboard-list"></i>
                         <span id="contador-cotizacion">${total}</span> producto(s) seleccionado(s)
@@ -2067,8 +2203,14 @@ function renderizarPaginaOutlet(productos) {
                 </div>
             `;
             document.body.appendChild(barra);
+            
+            // Agregar padding bottom al body para que no tape contenido
+            if (window.innerWidth <= 768) {
+                document.body.style.paddingBottom = '80px';
+            }
         } else if (barra && total === 0) {
             barra.remove();
+            document.body.style.paddingBottom = '';
         } else if (barra && total > 0) {
             const contador = document.getElementById('contador-cotizacion');
             if (contador) contador.textContent = total;
@@ -2105,7 +2247,7 @@ function renderizarPaginaOutlet(productos) {
             });
         }
         
-        localStorage.setItem(cotizacionStorageKey, JSON.stringify(cotizacionSeleccionados));
+        localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
         actualizarBarraFlotante();
         actualizarBotonCard(producto.id, existe);
     }
@@ -2114,21 +2256,19 @@ function renderizarPaginaOutlet(productos) {
     window.actualizarBarraFlotante = actualizarBarraFlotante;
     
     // ============================================
-    // FUNCIONES DE ESCANEO QR
+    // FUNCIONES DE ESCANEO QR CON CÁMARA TRASERA
     // ============================================
-    
-    let html5QrCode = null;
-    let escaneoActivo = false;
-    
     function detenerEscaneoQR() {
+        console.log('🛑 Deteniendo escáner QR...');
         if (html5QrCode && escaneoActivo) {
             html5QrCode.stop().then(() => {
-                console.log('✅ Escáner QR detenido');
+                console.log('✅ Escáner QR detenido correctamente');
                 escaneoActivo = false;
                 html5QrCode = null;
             }).catch(err => {
-                console.error('Error al detener escáner:', err);
+                console.warn('Error al detener escáner:', err);
                 html5QrCode = null;
+                escaneoActivo = false;
             });
         }
     }
@@ -2137,275 +2277,241 @@ function renderizarPaginaOutlet(productos) {
         console.log('🔒 Cerrando modal QR...');
         detenerEscaneoQR();
         const modalQR = document.getElementById('modalQR');
-        if (modalQR) modalQR.style.display = 'none';
+        if (modalQR) {
+            modalQR.style.display = 'none';
+            // Limpiar el contenido del reader para liberar la cámara
+            const readerElement = document.getElementById('qr-reader');
+            if (readerElement) {
+                readerElement.innerHTML = '';
+            }
+        }
     }
     
-    function iniciarEscaneoQR() {
+    async function iniciarEscaneoQR() {
         console.log('🔍 Iniciando escaneo QR...');
         
         const modalQR = document.getElementById('modalQR');
         const readerElement = document.getElementById('qr-reader');
         
         if (!modalQR || !readerElement) {
-            console.error('Modal QR no encontrado');
-            mostrarModal('Error', 'No se pudo abrir el escáner QR', 'error');
+            console.error('❌ Modal QR no encontrado');
+            alert('Error: No se pudo abrir el escáner QR');
             return;
         }
         
+        // Limpiar cualquier escaneo previo
+        detenerEscaneoQR();
+        
+        // Limpiar el contenido del reader
         readerElement.innerHTML = '';
+        
+        // Mostrar modal
         modalQR.style.display = 'flex';
         
+        // Verificar que la biblioteca esté cargada
         if (typeof Html5Qrcode === 'undefined') {
+            console.error('❌ Html5Qrcode no está cargado');
             modalQR.style.display = 'none';
-            mostrarModal('Error', 'La biblioteca de escaneo QR no está cargada. Por favor, recarga la página.', 'error');
+            alert('Error: La biblioteca de escaneo QR no está cargada. Por favor, recarga la página.');
             return;
         }
         
-        Html5Qrcode.getCameras().then(devices => {
+        try {
+            // Verificar si hay cámaras disponibles
+            const devices = await Html5Qrcode.getCameras();
             console.log('📷 Cámaras detectadas:', devices.length);
             
             if (devices && devices.length === 0) {
                 modalQR.style.display = 'none';
-                mostrarModal('Sin cámara', 'No se detectó ninguna cámara en este dispositivo.', 'warning');
+                alert('No se detectó ninguna cámara en este dispositivo.');
                 return;
             }
             
-            const cameraId = devices[0].id;
+            // Mostrar que está iniciando la cámara
+            readerElement.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Iniciando cámara...</div>';
             
-            setTimeout(() => {
-                try {
-                    html5QrCode = new Html5Qrcode("qr-reader");
-                    
-                    const config = {
-                        fps: 10,
-                        qrbox: { width: 250, height: 250 },
-                        aspectRatio: 1.0
-                    };
-                    
-                    html5QrCode.start(
-                        { deviceId: { exact: cameraId } },
-                        config,
-                        (decodedText) => {
-                            console.log('✅ QR escaneado:', decodedText);
-                            detenerEscaneoQR();
-                            if (modalQR) modalQR.style.display = 'none';
-                            
-                            const searchInput = document.getElementById('searchOutlet');
-                            if (searchInput) {
-                                searchInput.value = decodedText;
-                                if (typeof window.aplicarFiltrosOutlet === 'function') {
-                                    window.aplicarFiltrosOutlet();
-                                }
-                            }
-                            
-                            mostrarModal('✅ Código encontrado', `Se encontró: ${decodedText}`, 'success');
-                        },
-                        (errorMessage) => {}
-                    ).catch(err => {
-                        console.error('Error al iniciar cámara:', err);
-                        if (modalQR) modalQR.style.display = 'none';
-                        escaneoActivo = false;
-                        html5QrCode = null;
-                        
-                        if (err.message && err.message.includes('permission')) {
-                            mostrarModal('Permiso denegado', 'Necesitamos acceso a la cámara para escanear códigos QR.', 'warning');
-                        } else {
-                            mostrarModal('Error de cámara', 'No se pudo acceder a la cámara. Verifica que tengas una cámara conectada.', 'error');
-                        }
-                    });
-                    
-                    escaneoActivo = true;
-                    
-                } catch (error) {
-                    console.error('Error creando Html5Qrcode:', error);
+            // Crear nueva instancia
+            html5QrCode = new Html5Qrcode("qr-reader");
+            
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            };
+            
+            // Intentar con cámara trasera (environment)
+            console.log('📷 Intentando usar cámara trasera...');
+            
+            await html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => {
+                    // Éxito al escanear
+                    console.log('✅ QR escaneado:', decodedText);
+                    detenerEscaneoQR();
                     if (modalQR) modalQR.style.display = 'none';
-                    mostrarModal('Error', 'No se pudo inicializar el escáner QR', 'error');
+                    
+                    const searchInput = document.getElementById('searchOutlet');
+                    if (searchInput) {
+                        searchInput.value = decodedText;
+                        // Aplicar filtros después de un pequeño delay
+                        setTimeout(() => {
+                            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                                window.aplicarFiltrosOutlet();
+                            }
+                        }, 100);
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    mostrarModal('✅ Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000 });
+                },
+                (errorMessage) => {
+                    // Error de escaneo - ignorar, es normal mientras busca QR
+                    // console.log('Escaneando...', errorMessage);
                 }
-            }, 100);
-        }).catch(err => {
-            console.error('Error obteniendo cámaras:', err);
-            modalQR.style.display = 'none';
-            mostrarModal('Error', 'No se pudo detectar la cámara.', 'error');
-        });
-    }
-    
-    // ============================================
-    // FUNCIONES DE ENVÍO DE COTIZACIÓN
-    // ============================================
-    
-// ==================== ENVIAR COTIZACIÓN (CON LOGS DETALLADOS) ====================
-async function enviarCotizacion(datosCliente, asesor) {
-    console.log('🚀 INICIO de enviarCotizacion');
-    console.log('  - asesor recibido:', asesor);
-    console.log('  - asesor.id:', asesor?.id);
-    
-    // Guardar una copia del asesor para evitar que se pierda
-    const asesorOriginal = { ...asesor };
-    console.log('  - asesorOriginal guardado:', asesorOriginal);
-    
-    if (!asesor || !asesor.id) {
-        console.error('❌ Error: asesor inválido');
-        mostrarModal('Error', 'No se pudo identificar al asesor', 'error');
-        return;
-    }
-    
-    mostrarModal('Procesando', 'Guardando cotización...', 'info', { showConfirmButton: false });
-    
-    try {
-        const numero = `COT-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
-        const fechaActual = new Date().toISOString();
-        
-        console.log('📝 Creando cotización:', {
-            numero,
-            asesorNombre: asesor.nombre,
-            asesorId: asesor.id,
-            productos: cotizacionSeleccionados.length
-        });
-        
-        // ============================================
-        // 1. GUARDAR COTIZACIÓN PRINCIPAL
-        // ============================================
-        
-        console.log('📍 Paso 1: Creando objeto cotización...');
-        console.log('  - asesor.id en este punto:', asesor.id);
-        
-        const cotizacion = {
-            numero: numero,
-            cliente_nombre: datosCliente.nombre,
-            cliente_email: datosCliente.email,
-            cliente_telefono: datosCliente.telefono,
-            cliente_empresa: datosCliente.empresa || null,
-            tipo_cliente: 'NUEVO',
-            asesor_asignado_id: asesor.id,
-            observaciones: datosCliente.observaciones || null,
-            ubicacion_proyecto: datosCliente.ubicacionProyecto || null,
-            estado: 'PENDIENTE',
-            creado_el: fechaActual
-        };
-        
-        console.log('📍 Paso 2: Insertando en Supabase...');
-        console.log('  - asesor.id antes de insertar:', asesor.id);
-        
-        const { data: nuevaCotizacion, error: cotizacionError } = await window.supabaseClient
-            .from('cotizaciones')
-            .insert(cotizacion)
-            .select()
-            .single();
-        
-        console.log('📍 Paso 3: Respuesta de Supabase recibida');
-        console.log('  - asesor.id después de insertar:', asesor.id);
-        
-        if (cotizacionError) {
-            console.error('Error guardando cotización:', cotizacionError);
-            throw cotizacionError;
-        }
-        
-        const cotizacionId = nuevaCotizacion.id;
-        console.log('✅ Cotización guardada:', numero, 'ID:', cotizacionId);
-        console.log('  - asesor.id sigue siendo:', asesor.id);
-        
-        // ============================================
-        // 2. GUARDAR DETALLES DE PRODUCTOS
-        // ============================================
-        
-        console.log('📍 Paso 4: Guardando detalles de productos...');
-        
-        for (const producto of cotizacionSeleccionados) {
-            const { error: detalleError } = await window.supabaseClient
-                .from('cotizacion_detalles')
-                .insert({
-                    cotizacion_id: cotizacionId,
-                    producto_id: producto.id,
-                    codigo: producto.codigo || '',
-                    nombre: producto.nombre,
-                    creado_el: fechaActual
-                });
+            );
             
-            if (detalleError) {
-                console.error(`Error guardando detalle para ${producto.nombre}:`, detalleError);
+            escaneoActivo = true;
+            console.log('✅ Escáner QR iniciado correctamente con cámara trasera');
+            
+        } catch (err) {
+            console.error('❌ Error al iniciar escáner:', err);
+            
+            if (modalQR) modalQR.style.display = 'none';
+            escaneoActivo = false;
+            html5QrCode = null;
+            
+            let mensajeError = 'No se pudo acceder a la cámara.';
+            if (err.message && err.message.includes('permission')) {
+                mensajeError = 'Permiso denegado. Por favor, permite el acceso a la cámara en la configuración de tu navegador.';
+            } else if (err.message && err.message.includes('NotFoundError')) {
+                mensajeError = 'No se encontró ninguna cámara en este dispositivo.';
+            } else {
+                mensajeError = 'Error al iniciar la cámara: ' + (err.message || 'Error desconocido');
             }
+            
+            alert(mensajeError);
+        }
+    }
+    
+    // ============================================
+    // FUNCIÓN DE ENVÍO DE COTIZACIÓN COMPLETA
+    // ============================================
+    async function enviarCotizacion(datosCliente, asesor) {
+        console.log('🚀 INICIO de enviarCotizacion');
+        
+        if (!asesor || !asesor.id) {
+            console.error('❌ Error: asesor inválido');
+            mostrarModal('Error', 'No se pudo identificar al asesor', 'error');
+            return;
         }
         
-        console.log('✅ Detalles de productos guardados');
-        console.log('  - asesor.id antes de contador:', asesor.id);
-        
-        // ============================================
-        // 3. INCREMENTAR CONTADOR DEL ASESOR
-        // ============================================
-        
-        console.log('📍 Paso 5: Incrementando contador...');
+        mostrarModal('Procesando', 'Guardando cotización...', 'info', { showConfirmButton: false });
         
         try {
-            const nuevoContador = (asesor.leads_asignados_hoy || 0) + 1;
-            await window.supabaseClient
-                .from('vendedores')
-                .update({ 
-                    leads_asignados_hoy: nuevoContador,
-                    ultima_asignacion: fechaActual
-                })
-                .eq('id', asesor.id);
-            console.log(`✅ Contador actualizado: ${nuevoContador}`);
-        } catch (err) {
-            console.error('Error actualizando contador:', err);
-        }
-        
-        console.log('  - asesor.id antes de relación:', asesor.id);
-        
-        // ============================================
-        // 4. GUARDAR RELACIÓN CLIENTE-ASESOR
-        // ============================================
-        
-        if (asesor.id && datosCliente.email) {
-            console.log('📍 Paso 6: Guardando relación cliente-asesor...');
-            try {
-                const { data: existente } = await window.supabaseClient
-                    .from('clientes_asesores')
-                    .select('id')
-                    .eq('email', datosCliente.email)
-                    .maybeSingle();
+            const numero = `COT-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
+            const fechaActual = new Date().toISOString();
+            
+            const cotizacion = {
+                numero: numero,
+                cliente_nombre: datosCliente.nombre,
+                cliente_email: datosCliente.email,
+                cliente_telefono: datosCliente.telefono,
+                cliente_empresa: datosCliente.empresa || null,
+                tipo_cliente: 'NUEVO',
+                asesor_asignado_id: asesor.id,
+                observaciones: datosCliente.observaciones || null,
+                ubicacion_proyecto: datosCliente.ubicacionProyecto || null,
+                estado: 'PENDIENTE',
+                creado_el: fechaActual
+            };
+            
+            const { data: nuevaCotizacion, error: cotizacionError } = await window.supabaseClient
+                .from('cotizaciones')
+                .insert(cotizacion)
+                .select()
+                .single();
+            
+            if (cotizacionError) throw cotizacionError;
+            
+            const cotizacionId = nuevaCotizacion.id;
+            console.log('✅ Cotización guardada:', numero, 'ID:', cotizacionId);
+            
+            // Guardar detalles de productos
+            for (const producto of cotizacionSeleccionados) {
+                const { error: detalleError } = await window.supabaseClient
+                    .from('cotizacion_detalles')
+                    .insert({
+                        cotizacion_id: cotizacionId,
+                        producto_id: producto.id,
+                        codigo: producto.codigo || '',
+                        nombre: producto.nombre,
+                        creado_el: fechaActual
+                    });
                 
-                if (existente) {
-                    await window.supabaseClient
-                        .from('clientes_asesores')
-                        .update({
-                            telefono: datosCliente.telefono,
-                            vendedor_id: asesor.id,
-                            ultima_cotizacion: fechaActual
-                        })
-                        .eq('id', existente.id);
-                } else {
-                    await window.supabaseClient
-                        .from('clientes_asesores')
-                        .insert({
-                            email: datosCliente.email,
-                            telefono: datosCliente.telefono,
-                            vendedor_id: asesor.id,
-                            ultima_cotizacion: fechaActual,
-                            creado_el: fechaActual
-                        });
-                }
-                console.log('✅ Relación cliente-asesor guardada');
-            } catch (err) {
-                console.error('Error guardando relación:', err);
+                if (detalleError) console.error(`Error guardando detalle para ${producto.nombre}:`, detalleError);
             }
-        }
-        
-        console.log('  - asesor.id antes de cerrar modal:', asesor.id);
-        
-        // Cerrar modal de carga
-        const modalOverlay = document.querySelector('.modal-overlay.active');
-        if (modalOverlay) modalOverlay.classList.remove('active');
-        
-        // ============================================
-        // 5. ENVIAR WHATSAPP
-        // ============================================
-        
-        let productosLista = '';
-        cotizacionSeleccionados.forEach((p, i) => {
-            productosLista += `${i+1}. ${p.nombre}${p.codigo ? ` (${p.codigo})` : ''}\n`;
-        });
-        
-        const mensaje = `📋 *NUEVA COTIZACIÓN - OUTLET*
+            
+            // Incrementar contador del asesor
+            try {
+                const nuevoContador = (asesor.leads_asignados_hoy || 0) + 1;
+                await window.supabaseClient
+                    .from('vendedores')
+                    .update({ 
+                        leads_asignados_hoy: nuevoContador,
+                        ultima_asignacion: fechaActual
+                    })
+                    .eq('id', asesor.id);
+                console.log(`✅ Contador actualizado: ${nuevoContador}`);
+            } catch (err) {
+                console.error('Error actualizando contador:', err);
+            }
+            
+            // Guardar relación cliente-asesor
+            if (asesor.id && datosCliente.email) {
+                try {
+                    const { data: existente } = await window.supabaseClient
+                        .from('clientes_asesores')
+                        .select('id')
+                        .eq('email', datosCliente.email)
+                        .maybeSingle();
+                    
+                    if (existente) {
+                        await window.supabaseClient
+                            .from('clientes_asesores')
+                            .update({
+                                telefono: datosCliente.telefono,
+                                vendedor_id: asesor.id,
+                                ultima_cotizacion: fechaActual
+                            })
+                            .eq('id', existente.id);
+                    } else {
+                        await window.supabaseClient
+                            .from('clientes_asesores')
+                            .insert({
+                                email: datosCliente.email,
+                                telefono: datosCliente.telefono,
+                                vendedor_id: asesor.id,
+                                ultima_cotizacion: fechaActual,
+                                creado_el: fechaActual
+                            });
+                    }
+                } catch (err) {
+                    console.error('Error guardando relación:', err);
+                }
+            }
+            
+            // Cerrar modal de carga
+            const modalOverlay = document.querySelector('.modal-overlay.active');
+            if (modalOverlay) modalOverlay.classList.remove('active');
+            
+            // Enviar WhatsApp
+            let productosLista = '';
+            cotizacionSeleccionados.forEach((p, i) => {
+                productosLista += `${i+1}. ${p.nombre}${p.codigo ? ` (${p.codigo})` : ''}\n`;
+            });
+            
+            const mensaje = `📋 *NUEVA COTIZACIÓN - OUTLET*
 
 *N° Cotización:* ${numero}
 *Fecha:* ${new Date().toLocaleString()}
@@ -2419,66 +2525,54 @@ async function enviarCotizacion(datosCliente, asesor) {
 *Productos:*
 ${productosLista}
 *Observaciones:* ${datosCliente.observaciones || 'Ninguna'}`;
-        
-        const telefonoAsesor = asesor?.telefono?.replace(/\D/g, '');
-        
-        if (telefonoAsesor && telefonoAsesor.length >= 9) {
-            let whatsappNumber = telefonoAsesor;
-            if (whatsappNumber.length === 9) {
-                whatsappNumber = `51${whatsappNumber}`;
+            
+            const telefonoAsesor = asesor?.telefono?.replace(/\D/g, '');
+            
+            if (telefonoAsesor && telefonoAsesor.length >= 9) {
+                let whatsappNumber = telefonoAsesor;
+                if (whatsappNumber.length === 9) {
+                    whatsappNumber = `51${whatsappNumber}`;
+                }
+                window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensaje)}`, '_blank');
+                await mostrarModal('✅ Cotización enviada', `Enviada a ${asesor.nombre}`, 'success', { timer: 3000, showConfirmButton: false });
+            } else {
+                await mostrarModal('⚠️ No se pudo enviar', 'Cotización registrada exitosamente', 'warning', { confirmButtonText: 'Entendido' });
             }
-            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensaje)}`, '_blank');
-            await mostrarModal('✅ Cotización enviada', `Enviada a ${asesor.nombre}`, 'success', { timer: 3000, showConfirmButton: false });
-        } else {
-            await mostrarModal('⚠️ No se pudo enviar', 'Cotización registrada exitosamente', 'warning', { confirmButtonText: 'Entendido' });
+            
+            // Limpiar selección
+            cotizacionSeleccionados = [];
+            localStorage.removeItem(CONFIG.COTIZACION_STORAGE_KEY);
+            actualizarBarraFlotante();
+            
+            document.querySelectorAll('.btn-cotizar').forEach(btn => {
+                btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
+                btn.style.background = '#39080a';
+                btn.style.color = 'white';
+            });
+            
+            window.modoAsignacion = 'auto';
+            window.asesorPreasignadoId = null;
+            
+            window.clienteNombreCache = '';
+            window.clienteEmailCache = '';
+            window.clienteTelefonoCache = '';
+            window.clienteEmpresaCache = '';
+            window.ubicacionCache = '';
+            window.observacionesCache = '';
+            
+        } catch (error) {
+            const modalOverlay = document.querySelector('.modal-overlay.active');
+            if (modalOverlay) modalOverlay.classList.remove('active');
+            
+            console.error('❌ Error detallado:', error);
+            await mostrarModal('Error', 'Ocurrió un error al procesar la cotización: ' + (error.message || 'Error desconocido'), 'error');
         }
-        
-        // ============================================
-        // 6. LIMPIAR SELECCIÓN
-        // ============================================
-        
-        cotizacionSeleccionados = [];
-        localStorage.removeItem(cotizacionStorageKey);
-        actualizarBarraFlotante();
-        
-        document.querySelectorAll('.btn-cotizar').forEach(btn => {
-            btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-            btn.style.background = '#39080a';
-            btn.style.color = 'white';
-        });
-        
-        window.modoAsignacion = 'auto';
-        window.asesorPreasignadoId = null;
-        
-        window.clienteNombreCache = '';
-        window.clienteEmailCache = '';
-        window.clienteTelefonoCache = '';
-        window.clienteEmpresaCache = '';
-        window.ubicacionCache = '';
-        window.observacionesCache = '';
-        
-        console.log('✅ Proceso de cotización completado exitosamente');
-        console.log('  - asesor.id al final:', asesor.id);
-        
-    } catch (error) {
-        const modalOverlay = document.querySelector('.modal-overlay.active');
-        if (modalOverlay) modalOverlay.classList.remove('active');
-        
-        console.error('❌ Error detallado:', error);
-        console.error('  - asesor en el catch:', asesor);
-        console.error('  - asesor.id en el catch:', asesor?.id);
-        
-        await mostrarModal('Error', 'Ocurrió un error al procesar la cotización: ' + (error.message || 'Error desconocido'), 'error');
     }
-}
     
     // ============================================
     // FUNCIONES DE COTIZACIÓN MODAL (ABRIR MODAL)
     // ============================================
-    
-    // ==================== ABRIR MODAL DE COTIZACIÓN (COMPLETO CON VALIDACIONES) ====================
     window.abrirModalCotizacion = async function() {
-        // Validación rápida
         if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
             mostrarModal('Sin productos', 'No hay productos seleccionados para cotizar', 'warning');
             return;
@@ -2493,9 +2587,7 @@ ${productosLista}
             return;
         }
         
-        // ============================================
-        // GUARDAR VALORES ACTUALES DEL FORMULARIO
-        // ============================================
+        // Guardar valores actuales del formulario
         if (document.getElementById('cliente-nombre-modal')) {
             window.clienteNombreCache = document.getElementById('cliente-nombre-modal').value || '';
             window.clienteEmailCache = document.getElementById('cliente-correo-modal').value || '';
@@ -2505,9 +2597,6 @@ ${productosLista}
             window.observacionesCache = document.getElementById('observaciones-modal')?.value || '';
         }
         
-        // ============================================
-        // 1. MOSTRAR MODAL CON SKELETON LOADER
-        // ============================================
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         
@@ -2523,27 +2612,22 @@ ${productosLista}
             </div>
         `;
         
-        // ============================================
-        // 2. CARGAR CONTENIDO REAL
-        // ============================================
         setTimeout(async () => {
             try {
-                // Precargar asesores
                 let vendedores = asesoresPrecargados;
                 if (!vendedores) {
                     vendedores = await precargarAsesoresOutlet();
                 }
                 
                 const asesoresOptions = vendedores && vendedores.length > 0 
-                    ? vendedores.map(v => `<option value="${v.id}">${v.nombre}${v.telefono ? ` (${v.telefono})` : ''}</option>`).join('')
+                    ? vendedores.map(v => `<option value="${v.id}">${escapeHtml(v.nombre)}${v.telefono ? ` (${v.telefono})` : ''}</option>`).join('')
                     : '<option value="" disabled>No hay asesores disponibles</option>';
                 
-                // Generar productos HTML con botón de eliminar
                 const productosHtml = cotizacionSeleccionados.map(p => `
                     <div class="flex justify-between items-center py-2 border-b last:border-b-0">
                         <div class="flex-1">
-                            <p class="font-medium text-sm">${p.nombre || 'Producto'}</p>
-                            <p class="text-xs text-gray-400">Código: ${p.codigo || 'N/A'}</p>
+                            <p class="font-medium text-sm">${escapeHtml(p.nombre) || 'Producto'}</p>
+                            <p class="text-xs text-gray-400">Código: ${escapeHtml(p.codigo) || 'N/A'}</p>
                         </div>
                         <button onclick="eliminarProductoCotizacion('${p.id}', '${(p.nombre || '').replace(/'/g, "\\'")}')" 
                                 class="text-red-500 hover:text-red-700 p-1 ml-2 transition-colors"
@@ -2553,14 +2637,9 @@ ${productosLista}
                     </div>
                 `).join('');
                 
-                // Determinar modo inicial
                 const modoInicial = window.modoAsignacion || 'auto';
                 
-                // ============================================
-                // HTML COMPLETO DEL MODAL
-                // ============================================
                 body.innerHTML = `
-                    <!-- PASO 1: PRODUCTOS -->
                     <div class="mb-5">
                         <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
                             <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
@@ -2574,7 +2653,6 @@ ${productosLista}
                         </div>
                     </div>
                     
-                    <!-- PASO 2: ASIGNACIÓN DE ASESOR -->
                     <div class="mb-5">
                         <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
                             <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
@@ -2583,20 +2661,18 @@ ${productosLista}
                             <h4 class="font-semibold text-gray-800">Asignación de asesor</h4>
                         </div>
                         
-                        <!-- Tarjeta informativa -->
                         <div class="bg-blue-50 rounded-lg p-3 mb-3 border border-blue-200">
                             <div class="flex items-start gap-2">
                                 <i class="fas fa-info-circle text-blue-500 mt-0.5 text-sm"></i>
                                 <div class="text-xs text-blue-700">
                                     <p class="font-medium mb-1">¿Cómo funciona la asignación?</p>
-                                    <p>• <strong>Automático:</strong> El sistema asignará el asesor con menos leads hoy (distribución justa).</p>
+                                    <p>• <strong>Automático:</strong> El sistema asignará el asesor con menos leads hoy.</p>
                                     <p>• <strong>Elegir asesor:</strong> Selecciona manualmente a tu asesor preferido.</p>
-                                    <p>• <strong>Buscar por email:</strong> Si ya has trabajado con nosotros, ingresa tu correo para encontrar a tu asesor habitual.</p>
+                                    <p>• <strong>Buscar por email:</strong> Ingresa tu correo para encontrar a tu asesor habitual.</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Opciones de asignación -->
                         <div class="bg-gray-50 rounded-lg p-3 mb-3">
                             <div class="flex gap-6 mb-3">
                                 <label class="flex items-center gap-2 cursor-pointer">
@@ -2609,7 +2685,6 @@ ${productosLista}
                                 </label>
                             </div>
                             
-                            <!-- Selector manual -->
                             <div id="selector-asesor-manual" class="${modoInicial === 'manual' ? '' : 'hidden'}">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Selecciona un asesor:</label>
                                 <select id="asesor-manual-select" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white" onchange="window.actualizarAsesorSeleccionadoManual()">
@@ -2617,7 +2692,6 @@ ${productosLista}
                                 </select>
                             </div>
                             
-                            <!-- Búsqueda por email -->
                             <div id="campo-email-cliente-modal" class="${modoInicial === 'manual' ? 'hidden' : ''}">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">¿Ya has trabajado con nosotros? Busca tu asesor:</label>
                                 <div class="flex gap-2">
@@ -2629,11 +2703,9 @@ ${productosLista}
                                 <p class="text-xs text-gray-400 mt-1">Si tu correo está registrado, te mostraremos a tu asesor habitual.</p>
                             </div>
                             
-                            <!-- Resultado de búsqueda -->
                             <div id="asesor-info-modal" class="hidden mt-3"></div>
                         </div>
                         
-                        <!-- SECCIÓN: ASESOR ASIGNADO -->
                         <div id="asesor-asignado-container" class="mt-4">
                             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
                                 <i class="fas fa-spinner fa-spin text-primary"></i>
@@ -2642,7 +2714,6 @@ ${productosLista}
                         </div>
                     </div>
                     
-                    <!-- PASO 3: DATOS DE CONTACTO CON VALIDACIONES -->
                     <div class="mb-5">
                         <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
                             <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
@@ -2651,7 +2722,6 @@ ${productosLista}
                             <h4 class="font-semibold text-gray-800">Datos de contacto</h4>
                         </div>
                         <div class="space-y-4">
-                            <!-- Nombre completo -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">
                                     Nombre completo <span class="text-red-500">*</span>
@@ -2664,7 +2734,6 @@ ${productosLista}
                                 <div id="error-nombre" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
                             </div>
                             
-                            <!-- Correo electrónico -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">
                                     Correo electrónico <span class="text-red-500">*</span>
@@ -2677,11 +2746,9 @@ ${productosLista}
                                 <div id="error-email" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
                             </div>
                             
-                            <!-- Teléfono -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">
                                     Teléfono <span class="text-red-500">*</span>
-                                    <span class="text-gray-400 font-normal ml-1">(incluye código país)</span>
                                 </label>
                                 <div class="flex gap-2">
                                     <select id="prefijo-pais" class="w-32 p-2 border border-gray-300 rounded-lg text-sm bg-white" onchange="window.actualizarPlaceholderTelefono()">
@@ -2689,10 +2756,6 @@ ${productosLista}
                                         <option value="1">🇺🇸 EE.UU (+1)</option>
                                         <option value="34">🇪🇸 España (+34)</option>
                                         <option value="52">🇲🇽 México (+52)</option>
-                                        <option value="54">🇦🇷 Argentina (+54)</option>
-                                        <option value="56">🇨🇱 Chile (+56)</option>
-                                        <option value="57">🇨🇴 Colombia (+57)</option>
-                                        <option value="58">🇻🇪 Venezuela (+58)</option>
                                     </select>
                                     <input type="tel" id="cliente-telefono-modal" 
                                         class="flex-1 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" 
@@ -2701,12 +2764,8 @@ ${productosLista}
                                         oninput="window.validarCampoTelefono(this)">
                                 </div>
                                 <div id="error-telefono" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
-                                <p class="text-xs text-gray-400 mt-1">
-                                    <i class="fas fa-info-circle"></i> Ingresa solo números. Si es fuera de Perú, selecciona el código de país.
-                                </p>
                             </div>
                             
-                            <!-- Empresa -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">
                                     Empresa <span class="text-gray-400">(opcional)</span>
@@ -2721,7 +2780,6 @@ ${productosLista}
                         </div>
                     </div>
                     
-                    <!-- PASO 4: INFORMACIÓN ADICIONAL -->
                     <div class="mb-5">
                         <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
                             <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
@@ -2747,10 +2805,7 @@ ${productosLista}
                     </div>
                 `;
                 
-                // ============================================
-                // FUNCIONES DE VALIDACIÓN
-                // ============================================
-                
+                // Funciones de validación
                 function validarCampoNombre(input) {
                     const valor = input.value.trim();
                     const errorDiv = document.getElementById('error-nombre');
@@ -2809,7 +2864,7 @@ ${productosLista}
                     
                     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                     if (!emailRegex.test(valor)) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Ingresa un correo electrónico válido (ej: usuario@dominio.com)';
+                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Ingresa un correo electrónico válido';
                         errorDiv.classList.remove('hidden');
                         input.classList.add('border-red-500');
                         input.classList.remove('border-green-500');
@@ -2856,11 +2911,11 @@ ${productosLista}
                             break;
                         case '1':
                             if (soloNumeros.length === 10) esValido = true;
-                            else mensajeError = 'El número debe tener 10 dígitos (ej: 2125551234)';
+                            else mensajeError = 'El número debe tener 10 dígitos';
                             break;
                         case '34':
                             if (soloNumeros.length === 9) esValido = true;
-                            else mensajeError = 'El número debe tener 9 dígitos (ej: 612345678)';
+                            else mensajeError = 'El número debe tener 9 dígitos';
                             break;
                         default:
                             if (soloNumeros.length >= 7 && soloNumeros.length <= 15) esValido = true;
@@ -2899,7 +2954,7 @@ ${productosLista}
                     }
                     
                     if (valor.length > 150) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre de la empresa no puede exceder 150 caracteres';
+                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre no puede exceder 150 caracteres';
                         errorDiv.classList.remove('hidden');
                         input.classList.add('border-red-500');
                         input.classList.remove('border-green-500');
@@ -2962,9 +3017,6 @@ ${productosLista}
                     return nombreValido && emailValido && telefonoValido;
                 }
                 
-                // ============================================
-                // EXPONER FUNCIONES GLOBALMENTE
-                // ============================================
                 window.validarCampoNombre = validarCampoNombre;
                 window.validarCampoEmail = validarCampoEmail;
                 window.validarCampoTelefono = validarCampoTelefono;
@@ -2973,17 +3025,13 @@ ${productosLista}
                 window.obtenerTelefonoCompleto = obtenerTelefonoCompleto;
                 window.validarTodosLosCampos = validarTodosLosCampos;
                 
-                // ============================================
-                // FUNCIONES DE ASIGNACIÓN DE ASESOR
-                // ============================================
-                
+                // Funciones de asignación de asesor
                 function generarAsesorAsignadoHTML(asesor, origen) {
                     if (!asesor) {
                         return `
                             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
                                 <i class="fas fa-user-slash text-gray-400 text-2xl mb-2"></i>
                                 <p class="text-sm text-gray-500">No hay asesores disponibles</p>
-                                <p class="text-xs text-gray-400">Contacta al administrador</p>
                             </div>
                         `;
                     }
@@ -3013,14 +3061,14 @@ ${productosLista}
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex flex-wrap items-center gap-2 mb-1">
-                                        <h5 class="font-bold text-gray-800">${asesor.nombre || 'Asesor'}</h5>
+                                        <h5 class="font-bold text-gray-800">${escapeHtml(asesor.nombre || 'Asesor')}</h5>
                                         <span class="text-xs px-2 py-0.5 rounded-full ${badgeColor}">${badgeTexto}</span>
                                     </div>
-                                    ${asesor.email ? `<p class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-envelope w-3"></i> ${asesor.email}</p>` : ''}
-                                    ${asesor.telefono ? `<p class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-phone w-3"></i> ${asesor.telefono}</p>` : ''}
+                                    ${asesor.email ? `<p class="text-xs text-gray-500"><i class="fas fa-envelope"></i> ${escapeHtml(asesor.email)}</p>` : ''}
+                                    ${asesor.telefono ? `<p class="text-xs text-gray-500"><i class="fas fa-phone"></i> ${escapeHtml(asesor.telefono)}</p>` : ''}
                                 </div>
-                                <button onclick="window.abrirSelectorReasignacion()" class="text-xs text-primary hover:underline flex items-center gap-1 flex-shrink-0" title="Cambiar asesor">
-                                    <i class="fas fa-exchange-alt text-xs"></i> Reasignar
+                                <button onclick="window.abrirSelectorReasignacion()" class="text-xs text-primary hover:underline">
+                                    <i class="fas fa-exchange-alt"></i> Reasignar
                                 </button>
                             </div>
                         </div>
@@ -3096,7 +3144,7 @@ ${productosLista}
                         const selectManualElem = document.getElementById('asesor-manual-select');
                         if (selectManualElem && selectManualElem.value) {
                             const asesorId = selectManualElem.value;
-                            const asesor = (asesoresPrecargados || []).find(v => v.id === asesorId);
+                            const asesor = (vendedores || []).find(v => v.id === asesorId);
                             if (asesor) {
                                 actualizarVisualizacionAsesor(asesor, 'manual');
                             }
@@ -3112,7 +3160,7 @@ ${productosLista}
                     const selectManual = document.getElementById('asesor-manual-select');
                     if (selectManual && selectManual.value) {
                         const asesorId = selectManual.value;
-                        const asesor = (asesoresPrecargados || []).find(v => v.id === asesorId);
+                        const asesor = (vendedores || []).find(v => v.id === asesorId);
                         if (asesor) {
                             window.modoAsignacion = 'manual';
                             actualizarVisualizacionAsesor(asesor, 'manual');
@@ -3123,18 +3171,16 @@ ${productosLista}
                 window.cambiarModoAsignacion = cambiarModoAsignacion;
                 window.actualizarAsesorSeleccionadoManual = actualizarAsesorSeleccionadoManual;
                 
-                // ============================================
-                // FUNCIÓN DE REASIGNACIÓN
-                // ============================================
+                // Función de reasignación
                 window.abrirSelectorReasignacion = async function() {
-                    const vendedoresActuales = asesoresPrecargados || [];
+                    const vendedoresActuales = vendedores || [];
                     if (vendedoresActuales.length === 0) {
                         mostrarModal('Sin asesores', 'No hay asesores disponibles para reasignar', 'warning');
                         return;
                     }
                     
                     const opcionesAsesores = vendedoresActuales.map(v => 
-                        `<option value="${v.id}">${v.nombre}${v.telefono ? ` (${v.telefono})` : ''}</option>`
+                        `<option value="${v.id}">${escapeHtml(v.nombre)}${v.telefono ? ` (${v.telefono})` : ''}</option>`
                     ).join('');
                     
                     mostrarModal(
@@ -3142,7 +3188,7 @@ ${productosLista}
                         `
                         <div class="text-left space-y-3">
                             <p class="text-sm text-gray-600">Selecciona el asesor que prefieras:</p>
-                            <select id="select-reasignar-asesor" class="w-full p-2 border border-gray-300 rounded-lg text-sm" style="margin-top: 8px;">
+                            <select id="select-reasignar-asesor" class="w-full p-2 border border-gray-300 rounded-lg text-sm">
                                 <option value="">-- Seleccionar asesor --</option>
                                 ${opcionesAsesores}
                             </select>
@@ -3188,17 +3234,13 @@ ${productosLista}
                                     }
                                 }
                                 
-                                mostrarModal('✅ Asesor reasignado', `Ahora serás atendido por: ${asesorSeleccionado.nombre}`, 'success', { timer: 2000, showConfirmButton: false });
+                                mostrarModal('✅ Asesor reasignado', `Ahora serás atendido por: ${asesorSeleccionado.nombre}`, 'success', { timer: 2000 });
                             }
                         }
                     });
                 };
                 
-                // ============================================
-                // CONFIGURAR EVENTOS
-                // ============================================
-                
-                // Botón buscar asesor por email
+                // Configurar eventos
                 const btnBuscar = document.getElementById('btnBuscarAsesorEmail');
                 if (btnBuscar && !btnBuscar.hasAttribute('data-listener')) {
                     btnBuscar.setAttribute('data-listener', 'true');
@@ -3246,8 +3288,7 @@ ${productosLista}
                                             <i class="fas fa-user-check text-green-600"></i>
                                             <div>
                                                 <p class="font-medium text-green-800">¡Asesor encontrado!</p>
-                                                <p class="text-sm font-semibold">${asesor.nombre}</p>
-                                                <p class="text-xs text-gray-500">${asesor.email || ''}</p>
+                                                <p class="text-sm font-semibold">${escapeHtml(asesor.nombre)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -3277,7 +3318,6 @@ ${productosLista}
                     };
                 }
                 
-                // Configurar evento change del select manual
                 const selectManual = document.getElementById('asesor-manual-select');
                 if (selectManual && !selectManual.hasAttribute('data-listener')) {
                     selectManual.setAttribute('data-listener', 'true');
@@ -3286,14 +3326,11 @@ ${productosLista}
                     };
                 }
                 
-                // ============================================
-                // BOTÓN ENVIAR COTIZACIÓN CON VALIDACIONES
-                // ============================================
+                // Botón enviar cotización
                 const btnEnviar = document.getElementById('btnEnviarCotizacion');
                 if (btnEnviar && !btnEnviar.hasAttribute('data-listener')) {
                     btnEnviar.setAttribute('data-listener', 'true');
                     btnEnviar.onclick = async () => {
-                        // Validar campos
                         if (!window.validarTodosLosCampos || !window.validarTodosLosCampos()) {
                             mostrarModal('Campos inválidos', 'Corrige los errores marcados', 'warning');
                             return;
@@ -3308,13 +3345,8 @@ ${productosLista}
                             return;
                         }
                         
-                        // ============================================
-                        // OBTENER ASESOR COMO OBJETO COMPLETO
-                        // ============================================
-                        
                         let asesor = null;
                         
-                        // Opción 1: Modo manual con selección
                         if (window.modoAsignacion === 'manual') {
                             const selectManual = document.getElementById('asesor-manual-select');
                             const asesorId = selectManual?.value;
@@ -3324,10 +3356,8 @@ ${productosLista}
                                 return;
                             }
                             
-                            // Buscar en caché
-                            asesor = (asesoresPrecargados || []).find(a => a.id === asesorId);
+                            asesor = (vendedores || []).find(a => a.id === asesorId);
                             
-                            // Si no está en caché, consultar directamente
                             if (!asesor) {
                                 const { data: vendedor } = await window.supabaseClient
                                     .from('vendedores')
@@ -3336,20 +3366,17 @@ ${productosLista}
                                     .single();
                                 asesor = vendedor;
                             }
-                        } 
-                        // Opción 2: Modo automático
-                        else {
+                        } else {
                             try {
-                                const { data: vendedores } = await window.supabaseClient
+                                const { data: vendedoresData } = await window.supabaseClient
                                     .from('vendedores')
                                     .select('id, nombre, telefono, email, leads_asignados_hoy')
                                     .eq('activo', true)
                                     .eq('atiende_outlet', true);
                                 
-                                if (vendedores && vendedores.length > 0) {
-                                    // Ordenar por menor cantidad de leads
-                                    vendedores.sort((a, b) => (a.leads_asignados_hoy || 0) - (b.leads_asignados_hoy || 0));
-                                    asesor = vendedores[0];
+                                if (vendedoresData && vendedoresData.length > 0) {
+                                    vendedoresData.sort((a, b) => (a.leads_asignados_hoy || 0) - (b.leads_asignados_hoy || 0));
+                                    asesor = vendedoresData[0];
                                 } else {
                                     mostrarModal('Error', 'No hay asesores disponibles', 'error');
                                     return;
@@ -3361,16 +3388,11 @@ ${productosLista}
                             }
                         }
                         
-                        // VALIDACIÓN FINAL
                         if (!asesor || !asesor.id) {
-                            console.error('❌ No se pudo obtener un asesor válido');
-                            mostrarModal('Error', 'No se pudo asignar un asesor válido. Intenta nuevamente.', 'error');
+                            mostrarModal('Error', 'No se pudo asignar un asesor válido', 'error');
                             return;
                         }
                         
-                        console.log('✅ Asesor asignado (objeto completo):', asesor);
-                        
-                        // Crear objeto datosCliente (sin incluir el asesor aquí)
                         const datosCliente = {
                             nombre: nombre,
                             email: email,
@@ -3381,25 +3403,21 @@ ${productosLista}
                             modoAsignacion: window.modoAsignacion || 'auto'
                         };
                         
-                        // Cerrar modal y enviar - PASANDO EL OBJETO ASESOR COMPLETO
                         window.cerrarModalCotizacion();
                         await enviarCotizacion(datosCliente, asesor);
                     };
                 }
                 
-                // Inicializar
                 if (modoInicial === 'auto') {
                     await asignarAsesorAutomatico();
                 } else if (window.asesorPreasignadoId) {
-                    const asesorManual = (asesoresPrecargados || []).find(v => v.id === window.asesorPreasignadoId);
+                    const asesorManual = (vendedores || []).find(v => v.id === window.asesorPreasignadoId);
                     if (asesorManual) {
                         actualizarVisualizacionAsesor(asesorManual, 'manual');
                     }
                 }
                 
                 actualizarPlaceholderTelefono();
-                
-                console.log('✅ Modal de cotización cargado correctamente con validaciones');
                 
             } catch (error) {
                 console.error('Error cargando modal:', error);
@@ -3414,9 +3432,7 @@ ${productosLista}
         }, 50);
     };
     
-    // ==================== ELIMINAR PRODUCTO DE COTIZACIÓN CON CONFIRMACIÓN ====================
     function eliminarProductoCotizacion(productoId, productoNombre) {
-        // Mostrar modal de confirmación antes de eliminar
         mostrarModal(
             '¿Eliminar producto?',
             `¿Estás seguro de que deseas eliminar "<strong>${productoNombre || 'este producto'}</strong>" de tu cotización?`,
@@ -3428,41 +3444,21 @@ ${productosLista}
             }
         ).then((result) => {
             if (result.isConfirmed) {
-                // Eliminar el producto del array
                 cotizacionSeleccionados = cotizacionSeleccionados.filter(p => p.id !== productoId);
-                
-                // Guardar en localStorage
-                localStorage.setItem(cotizacionStorageKey, JSON.stringify(cotizacionSeleccionados));
-                
-                // Actualizar barra flotante
+                localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
                 actualizarBarraFlotante();
-                
-                // Actualizar el botón del producto en la card principal
                 actualizarBotonCard(productoId, true);
                 
-                // ============================================
-                // VERIFICAR SI QUEDAN PRODUCTOS
-                // ============================================
                 if (cotizacionSeleccionados.length === 0) {
-                    // Si no quedan productos, cerrar el modal de cotización
                     window.cerrarModalCotizacion();
-                    
-                    // Mostrar mensaje informativo
-                    mostrarModal(
-                        'Cotización vacía',
-                        'Se han eliminado todos los productos. La cotización se ha cerrado.',
-                        'info',
-                        { timer: 2000, showConfirmButton: false }
-                    );
+                    mostrarModal('Cotización vacía', 'Se han eliminado todos los productos. La cotización se ha cerrado.', 'info', { timer: 2000 });
                 } else {
-                    // Si aún hay productos, actualizar el contenido del modal
-                    // Recargar el modal para mostrar la lista actualizada
                     window.abrirModalCotizacion();
                 }
             }
         });
     }
-
+    
     window.eliminarProductoCotizacion = eliminarProductoCotizacion;
     
     window.cerrarModalCotizacion = function() {
@@ -3472,23 +3468,45 @@ ${productosLista}
     };
     
     function initCountdown() {
-        const fechaInicio = new Date(2026, 5, 24), fechaFin = new Date(2026, 6, 18), hoy = new Date();
-        hoy.setHours(0,0,0,0);
+        const fechaInicio = new Date(2026, 5, 24);
+        const fechaFin = new Date(2026, 6, 18);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        
         let targetDate, mensaje = "";
-        if (hoy < fechaInicio) { targetDate = fechaInicio; mensaje = "OFERTA PRÓXIMAMENTE"; }
-        else if (hoy >= fechaInicio && hoy <= fechaFin) { targetDate = fechaFin; mensaje = "OFERTA POR TIEMPO LIMITADO"; }
-        else { targetDate = null; mensaje = "OFERTA FINALIZADA"; }
+        
+        if (hoy < fechaInicio) {
+            targetDate = fechaInicio;
+            mensaje = "OFERTA PRÓXIMAMENTE";
+        } else if (hoy >= fechaInicio && hoy <= fechaFin) {
+            targetDate = fechaFin;
+            mensaje = "OFERTA POR TIEMPO LIMITADO";
+        } else {
+            targetDate = null;
+            mensaje = "OFERTA FINALIZADA";
+        }
+        
         const titleEl = document.getElementById('countdownTitle');
         if (titleEl) titleEl.textContent = mensaje;
+        
         if (!targetDate) return;
+        
         function update() {
-            const now = new Date(), diff = targetDate - now;
+            const now = new Date();
+            const diff = targetDate - now;
             if (diff <= 0) return;
-            document.getElementById('countdown-days').textContent = Math.floor(diff / 86400000).toString().padStart(2,'0');
-            document.getElementById('countdown-hours').textContent = Math.floor((diff % 86400000) / 3600000).toString().padStart(2,'0');
-            document.getElementById('countdown-minutes').textContent = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0');
-            document.getElementById('countdown-seconds').textContent = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
+            
+            const days = Math.floor(diff / 86400000);
+            const hours = Math.floor((diff % 86400000) / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
         }
+        
         update();
         setInterval(update, 1000);
     }
@@ -3496,10 +3514,9 @@ ${productosLista}
     // ============================================
     // GENERAR HTML COMPLETO
     // ============================================
-    
     const productosDataParaHTML = window.outletProductosCache.map(p => ({ 
         ...p, 
-        imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || 'FOTO/foto_04.webp'), 
+        imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE), 
         slug: p.slug || p.id 
     }));
     const heroBackgroundImage = '../FOTO/foto_03.webp';
@@ -3555,7 +3572,7 @@ ${productosLista}
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
         <title>Outlet | Gallos Mármol</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -3564,19 +3581,27 @@ ${productosLista}
             *{margin:0;padding:0;box-sizing:border-box}
             :root{--primary:#39080a;--primary-dark:#2a0607;--secondary:#d4d4ae;--white:#fff;--gray-50:#fafafa;--gray-100:#f5f5f5;--gray-200:#eee;--gray-300:#e0e0e0;--gray-400:#cbd5e1;--gray-500:#94a3b8;--gray-600:#666;--gray-700:#444;--gray-800:#222;--red-500:#ef4444;--red-600:#dc2626;--orange-400:#fb923c}
             body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.5;overflow-x:hidden}
+            
             /* Protección de imágenes */
             body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
             img{-webkit-user-drag:none;-khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;user-drag:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:auto}
+            
             .container{width:100%;max-width:1280px;margin:0 auto;padding:0 24px}
             h1,h2,h3{font-weight:700}
+            
+            /* Header */
             header{position:fixed;top:0;left:0;right:0;background:var(--primary);z-index:1000;padding:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
             .navbar{display:flex;justify-content:center;align-items:center}
             .logo img{width:200px;height:auto}
+            
+            /* Hero Section */
             .hero-outlet{min-height:85vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(0,0,0,0.5)),url('${heroBackgroundImage}');background-size:cover;background-position:center;padding:120px 0 80px}
             .hero-content{max-width:700px}
             .hero-title{font-size:3.5rem;font-weight:800;color:white;margin-bottom:16px}
             .hero-title span{color:var(--secondary)}
             .hero-description{font-size:1.1rem;color:rgba(255,255,255,0.9);margin-bottom:32px}
+            
+            /* Countdown */
             .countdown-container{background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:20px;padding:20px 30px;margin-bottom:32px;display:inline-block}
             .countdown{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
             .countdown-item{text-align:center;background:rgba(0,0,0,0.6);border-radius:16px;padding:12px 16px;min-width:80px}
@@ -3585,8 +3610,39 @@ ${productosLista}
             .hero-buttons{display:flex;gap:16px;flex-wrap:wrap}
             .btn-primary-custom{background:var(--secondary);color:var(--primary);padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
             .btn-primary-custom:hover{background:var(--secondary);transform:translateY(-3px)}
+            
+            /* Search Section - Mobile First */
+            .search-filters-section{background:white;border-radius:24px;margin:-30px auto 30px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+            .search-wrapper{margin-bottom:16px}
+            .search-box-enhanced{position:relative;display:flex;flex-direction:column;gap:12px}
+            .search-box-enhanced i.fa-search{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--gray-400);z-index:1;pointer-events:none}
+            .search-box-enhanced input{width:100%;padding:14px 18px 14px 48px;border:2px solid var(--gray-200);border-radius:50px;font-size:0.95rem;background:var(--gray-50);transition:all 0.3s ease}
+            .search-box-enhanced input:focus{outline:none;border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(57,8,10,0.1)}
+            .search-box-enhanced input::placeholder{color:var(--gray-400);font-size:0.9rem}
+            
+            .btn-escaneo-qr{background:var(--primary);color:white;border:none;border-radius:50px;padding:14px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:0.9rem;transition:all 0.3s ease;width:100%}
+            .btn-escaneo-qr:hover{background:var(--primary-dark);transform:translateY(-2px)}
+            .btn-escaneo-qr:active{transform:translateY(0)}
+            .btn-escaneo-qr i{font-size:1.1rem}
+            
+            .search-hint{display:flex;justify-content:flex-end;margin-top:8px;font-size:0.7rem;color:var(--gray-400)}
+            .search-hint i{margin-right:4px}
+            
+            /* Filtros Desktop */
+            .filters-desktop-container{margin-bottom:16px}
+            .filtros-grid-enhanced{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
+            .filtro-group{flex:1;min-width:150px}
+            .filtro-group label{display:block;font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:8px}
+            .filtro-group select{width:100%;padding:14px 16px;border:1px solid var(--gray-200);border-radius:16px;font-size:0.9rem;background:var(--gray-50);cursor:pointer}
+            .filtros-actions{display:flex;gap:12px;margin-top:16px}
+            .btn-filter,.btn-clear{padding:12px 28px;border-radius:40px;font-weight:600;cursor:pointer;border:none}
+            .btn-filter{background:var(--primary);color:white}
+            .btn-clear{background:var(--gray-100);color:var(--gray-700)}
+            
+            /* Filtros Mobile FAB */
             .filtros-fab{position:fixed;bottom:80px;right:20px;background:var(--primary);color:white;width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.2);cursor:pointer;z-index:90;border:none}
             .filtros-fab:hover{transform:scale(1.05)}
+            
             .filtros-modal{position:fixed;top:0;right:-100%;width:85%;max-width:320px;height:100%;background:white;z-index:1000;transition:right 0.3s ease;box-shadow:-5px 0 25px rgba(0,0,0,0.1);display:flex;flex-direction:column}
             .filtros-modal.show{right:0}
             .filtros-modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:none}
@@ -3597,20 +3653,13 @@ ${productosLista}
             .filtros-modal-body{flex:1;padding:20px;overflow-y:auto}
             .filtros-modal-footer{padding:20px;border-top:1px solid var(--gray-200);display:flex;gap:12px}
             .filtros-modal-footer button{flex:1;padding:12px;border-radius:40px;font-weight:600;cursor:pointer}
-
-            .search-hint{display:flex;justify-content:flex-end;margin-top:8px;font-size:0.7rem;color:var(--gray-400)}
-            .filters-desktop-container{margin-bottom:16px}
-            .filtros-grid-enhanced{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
-            .filtro-group{flex:1;min-width:150px}
-            .filtro-group label{display:block;font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:8px}
-            .filtro-group select{width:100%;padding:14px 16px;border:1px solid var(--gray-200);border-radius:16px;font-size:0.9rem;background:var(--gray-50);cursor:pointer}
-            .filtros-actions{display:flex;gap:12px;margin-top:16px}
-            .btn-filter,.btn-clear{padding:12px 28px;border-radius:40px;font-weight:600;cursor:pointer;border:none}
-            .btn-filter{background:var(--primary);color:white}
-            .btn-clear{background:var(--gray-100);color:var(--gray-700)}
+            
+            /* Scroll Top Button */
             .scroll-top-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--primary);color:white;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.2);z-index:80}
+            
+            /* Productos Grid */
             .productos-grid-enhanced{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px}
-            .producto-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid var(--gray-200)}
+            .producto-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid var(--gray-200);transition:all 0.3s ease}
             .producto-card:hover{transform:translateY(-5px);box-shadow:0 12px 25px -10px rgba(0,0,0,0.15)}
             .card-image{position:relative;height:180px;overflow:hidden;background:var(--gray-100)}
             .card-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease}
@@ -3627,6 +3676,8 @@ ${productosLista}
             .contador-enhanced span{font-weight:700;color:var(--primary)}
             .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
             .no-results{text-align:center;padding:40px;background:white;border-radius:20px}
+            
+            /* Modales */
             .modal-personalizado{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;justify-content:center;align-items:center}
             .modal-personalizado.active{display:flex}
             .modal-personalizado-contenido{background:white;border-radius:16px;width:90%;max-width:400px;overflow:hidden}
@@ -3635,6 +3686,7 @@ ${productosLista}
             .modal-personalizado-footer{padding:16px 20px;display:flex;gap:12px;justify-content:flex-end;border-top:1px solid #e5e7eb}
             .btn-modal-confirmar{background:#dc3545;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
             .btn-modal-cancelar{background:#e5e7eb;color:#374151;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
+            
             .modal-cotizacion{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10001;justify-content:center;align-items:center;overflow-y:auto}
             .modal-cotizacion.active{display:flex}
             .modal-cotizacion-contenido{background:white;border-radius:20px;width:90%;max-width:750px;max-height:90vh;overflow-y:auto;margin:20px auto}
@@ -3643,6 +3695,7 @@ ${productosLista}
             .modal-cotizacion-close{background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;width:36px;height:36px;border-radius:50%}
             .modal-cotizacion-body{padding:24px}
             .modal-cotizacion-footer{padding:16px 24px;display:flex;gap:12px;justify-content:flex-end;border-top:1px solid #e5e7eb;background:#f9fafb}
+            
             .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:20000;justify-content:center;align-items:center}
             .modal-overlay.active{display:flex}
             .modal-custom{background:white;border-radius:20px;width:90%;max-width:450px;overflow:hidden}
@@ -3657,9 +3710,13 @@ ${productosLista}
             .btn-modal-danger{background:#dc3545;color:white}
             .btn-modal-warning{background:#f59e0b;color:white}
             .btn-modal-secondary{background:#e5e7eb;color:#374151}
+            
+            /* QR Reader */
             #qr-reader{width:100%;border-radius:12px;overflow:hidden}
             #qr-reader video{width:100%;border-radius:12px}
             #qr-reader__scan_region{background:#f0f0f0;border-radius:12px}
+            
+            /* Footer */
             footer{background:var(--primary-dark);color:white;padding:40px 20px 25px;margin-top:50px}
             .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1200px;margin:0 auto}
             .footer-logo img{width:150px;margin-bottom:12px}
@@ -3668,195 +3725,24 @@ ${productosLista}
             .footer-social a,.footer-links a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7);text-decoration:none;margin-bottom:10px;transition:0.3s;font-size:0.8rem}
             .footer-social a:hover,.footer-links a:hover{color:var(--secondary);transform:translateX(5px)}
             .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.65rem;opacity:0.6}
+            
+            /* Animaciones */
             @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
             .animate-pulse{animation:pulse 1.5s cubic-bezier(0.4,0,0.6,1) infinite}
-            /* ============================================ */
-            /* BUSCADOR Y FILTROS - MOBILE FIRST */
-            /* ============================================ */
-
-            .search-filters-section {
-                background: white;
-                border-radius: 24px;
-                margin: -30px auto 30px;
-                padding: 16px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            }
-
-            .search-wrapper {
-                margin-bottom: 16px;
-            }
-
-            .search-box-enhanced {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .search-box-enhanced i.fa-search {
-                position: absolute;
-                left: 18px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 1rem;
-                color: var(--gray-400);
-                z-index: 1;
-                pointer-events: none;
-            }
-
-            .search-box-enhanced input {
-                width: 100%;
-                padding: 14px 18px 14px 48px;
-                border: 2px solid var(--gray-200);
-                border-radius: 50px;
-                font-size: 0.95rem;
-                background: var(--gray-50);
-                transition: all 0.3s ease;
-            }
-
-            .search-box-enhanced input:focus {
-                outline: none;
-                border-color: var(--primary);
-                background: white;
-                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
-            }
-
-            .search-box-enhanced input::placeholder {
-                color: var(--gray-400);
-                font-size: 0.9rem;
-            }
-
-            /* Botón de escaneo */
-            .btn-escaneo-qr {
-                background: var(--primary);
-                color: white;
-                border: none;
-                border-radius: 50px;
-                padding: 14px 20px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                font-weight: 600;
-                font-size: 0.9rem;
-                transition: all 0.3s ease;
-                width: 100%;
-            }
-
-            .btn-escaneo-qr:hover {
-                background: var(--primary-dark);
-                transform: translateY(-2px);
-            }
-
-            .btn-escaneo-qr:active {
-                transform: translateY(0);
-            }
-
-            .btn-escaneo-qr i {
-                font-size: 1.1rem;
-            }
-
-            /* ============================================ */
-            /* PROTECCIÓN EXTRA PARA IMÁGENES */
-            /* ============================================ */
-
-            /* Prevenir que las imágenes se puedan guardar */
-            img {
-                -webkit-touch-callout: none !important;
-                -webkit-user-select: none !important;
-                -khtml-user-select: none !important;
-                -moz-user-select: none !important;
-                -ms-user-select: none !important;
-                user-select: none !important;
-                pointer-events: auto !important;
-            }
-
-            /* Deshabilitar la capacidad de arrastrar imágenes */
-            img[draggable="true"] {
-                -webkit-user-drag: none !important;
-                user-drag: none !important;
-            }
-
-            /* Ocultar el cursor de texto sobre imágenes */
-            img {
-                cursor: default !important;
-            }
-
-            /* Prevenir que se abra el menú contextual en cualquier lugar */
-            * {
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            /* Desktop: fila horizontal */
-            @media (min-width: 768px) {
-                .search-filters-section {
-                    padding: 20px 24px;
-                    margin: -40px auto 40px;
-                }
-                
-                .search-box-enhanced {
-                    flex-direction: row;
-                    align-items: center;
-                }
-                
-                .search-box-enhanced input {
-                    flex: 1;
-                    padding: 16px 20px 16px 55px;
-                    font-size: 1rem;
-                }
-                
-                .btn-escaneo-qr {
-                    width: auto;
-                    padding: 16px 28px;
-                    font-size: 1rem;
-                }
-                
-                .search-box-enhanced i.fa-search {
-                    left: 22px;
-                    font-size: 1.1rem;
-                }
-            }
-
-            /* Móvil pequeño (menos de 480px) */
-            @media (max-width: 480px) {
-                .search-filters-section {
-                    margin: -20px auto 20px;
-                    padding: 12px;
-                }
-                
-                .search-box-enhanced input {
-                    padding: 12px 14px 12px 42px;
-                    font-size: 0.85rem;
-                }
-                
-                .btn-escaneo-qr {
-                    padding: 12px 16px;
-                    font-size: 0.85rem;
-                }
-                
-                .btn-escaneo-qr i {
-                    font-size: 0.9rem;
-                }
-                
-                .search-hint {
-                    font-size: 0.65rem;
-                }
-            }
-
-            .search-hint {
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 8px;
-                font-size: 0.7rem;
-                color: var(--gray-400);
-            }
-
-            .search-hint i {
-                margin-right: 4px;
-            }
-
-            @media(min-width:769px){
+            
+            .hidden{display:none}
+            .text-red-500{color:#ef4444}
+            .text-green-500{color:#10b981}
+            .border-red-500{border-color:#ef4444}
+            .border-green-500{border-color:#10b981}
+            
+            /* Desktop Styles */
+            @media (min-width: 769px) {
+                .search-filters-section{padding:20px 24px;margin:-40px auto 40px}
+                .search-box-enhanced{flex-direction:row;align-items:center}
+                .search-box-enhanced input{flex:1;padding:16px 20px 16px 55px;font-size:1rem}
+                .btn-escaneo-qr{width:auto;padding:16px 28px;font-size:1rem}
+                .search-box-enhanced i.fa-search{left:22px;font-size:1.1rem}
                 .productos-grid-enhanced{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
                 .card-image{height:240px}
                 .card-info h3{font-size:1rem}
@@ -3865,7 +3751,9 @@ ${productosLista}
                 .filtros-modal,.filtros-modal-overlay{display:none!important}
                 .filters-desktop-container{display:block}
             }
-            @media(max-width:768px){
+            
+            /* Mobile Styles */
+            @media (max-width: 768px) {
                 .container{padding:0 16px}
                 .hero-title{font-size:2rem}
                 .countdown-item{min-width:60px;padding:8px 10px}
@@ -3879,16 +3767,22 @@ ${productosLista}
                 .btn-detalle-enhanced{padding:8px 10px}
                 .scroll-top-btn{width:45px;height:45px;bottom:15px;right:15px}
                 .filtros-fab{width:50px;height:50px;bottom:150px;right:15px}
-                .btn-escaneo-qr{font-size:14px}
-                .btn-escaneo-qr i{font-size:16px}
                 .footer-grid{text-align:center}
                 .footer-social a,.footer-links a{justify-content:center}
             }
-            .hidden{display:none}
+            
+            @media (max-width: 480px) {
+                .search-filters-section{margin:-20px auto 20px;padding:12px}
+                .search-box-enhanced input{padding:12px 14px 12px 42px;font-size:0.85rem}
+                .btn-escaneo-qr{padding:12px 16px;font-size:0.85rem}
+                .btn-escaneo-qr i{font-size:0.9rem}
+                .search-hint{font-size:0.65rem}
+            }
         </style>
     </head>
     <body>
         <header><div class="container navbar"><div class="logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"></div></div></header>
+        
         <div class="filtros-modal-overlay" id="filtrosModalOverlay" onclick="closeFiltrosModal()"></div>
         <div class="filtros-modal" id="filtrosModal">
             <div class="filtros-modal-header"><h3><i class="fas fa-filter"></i> Filtros</h3><button class="close-modal-btn" onclick="closeFiltrosModal()"><i class="fas fa-times"></i></button></div>
@@ -3899,32 +3793,70 @@ ${productosLista}
             </div>
             <div class="filtros-modal-footer"><button class="btn-filter" onclick="aplicarFiltrosDesdeModal()">Aplicar</button><button class="btn-clear" onclick="limpiarFiltrosDesdeModal()">Limpiar</button></div>
         </div>
+        
         <button class="filtros-fab" onclick="openFiltrosModal()"><i class="fas fa-filter"></i></button>
         <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+        
         ${modalConfirmacionHtml}
         ${modalCotizacionHtml}
         ${modalQRHtml}
-        <section class="hero-outlet"><div class="container"><div class="hero-content"><h1 class="hero-title">Outlet</h1><p class="hero-description">Aprovecha nuestra selección exclusiva de productos.</p><div class="countdown-container"><div class="countdown-title" id="countdownTitle">⏰ OFERTA POR TIEMPO LIMITADO</div><div class="countdown"><div class="countdown-item"><div class="countdown-number" id="countdown-days">00</div><div class="countdown-label">Días</div></div><div class="countdown-item"><div class="countdown-number" id="countdown-hours">00</div><div class="countdown-label">Horas</div></div><div class="countdown-item"><div class="countdown-number" id="countdown-minutes">00</div><div class="countdown-label">Minutos</div></div><div class="countdown-item"><div class="countdown-number" id="countdown-seconds">00</div><div class="countdown-label">Segundos</div></div></div></div><div class="hero-buttons"><a href="#productos" class="btn-primary-custom"><i class="fas fa-shopping-bag"></i> Ver Productos</a></div></div></div></section>
-        <div class="container"><div class="search-filters-section">
-        <div class="search-wrapper">
-            <div class="search-box-enhanced">
-                <input type="text" id="searchOutlet" 
-                    placeholder="Buscar producto..." 
-                    autocomplete="off"
-                    inputmode="search">
-                <button id="btnEscanearQR" class="btn-escaneo-qr">
-                    <i class="fas fa-qrcode"></i>
-                    <span>Escanear</span>
-                </button>
+        
+        <section class="hero-outlet">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Outlet</h1>
+                    <p class="hero-description">Aprovecha nuestra selección exclusiva de productos.</p>
+                    <div class="countdown-container">
+                        <div class="countdown-title" id="countdownTitle">⏰ OFERTA POR TIEMPO LIMITADO</div>
+                        <div class="countdown">
+                            <div class="countdown-item"><div class="countdown-number" id="countdown-days">00</div><div class="countdown-label">Días</div></div>
+                            <div class="countdown-item"><div class="countdown-number" id="countdown-hours">00</div><div class="countdown-label">Horas</div></div>
+                            <div class="countdown-item"><div class="countdown-number" id="countdown-minutes">00</div><div class="countdown-label">Minutos</div></div>
+                            <div class="countdown-item"><div class="countdown-number" id="countdown-seconds">00</div><div class="countdown-label">Segundos</div></div>
+                        </div>
+                    </div>
+                    <div class="hero-buttons"><a href="#productos" class="btn-primary-custom"><i class="fas fa-shopping-bag"></i> Ver Productos</a></div>
+                </div>
             </div>
-            <div class="search-hint">
-                <i class="fas fa-info-circle"></i> 
-                <span>Busca por nombre, código o escanea QR</span>
+        </section>
+        
+        <div class="container">
+            <div class="search-filters-section">
+                <div class="search-wrapper">
+                    <div class="search-box-enhanced">
+                        <input type="text" id="searchOutlet" 
+                            placeholder="Buscar producto..." 
+                            autocomplete="off"
+                            inputmode="search">
+                        <button id="btnEscanearQR" class="btn-escaneo-qr">
+                            <i class="fas fa-qrcode"></i>
+                            <span>Escanear</span>
+                        </button>
+                    </div>
+                    <div class="search-hint">
+                        <i class="fas fa-info-circle"></i> 
+                        <span>Busca por nombre, código o escanea QR</span>
+                    </div>
+                </div>
+                
+                <div class="filters-desktop-container">
+                    <div class="filtros-grid-enhanced">
+                        <div class="filtro-group"><label>Familia</label><select id="filtroFamilia"><option value="">Todas</option>${familiasOptions}</select></div>
+                        <div class="filtro-group"><label>Acabado</label><select id="filtroAcabado"><option value="">Todos</option>${acabadosOptions}</select></div>
+                        <div class="filtro-group"><label>Material</label><select id="filtroMaterial"><option value="">Todos</option>${materialesOptions}</select></div>
+                        <div class="filtros-actions"><button onclick="aplicarFiltrosOutlet()" class="btn-filter">Aplicar</button><button onclick="limpiarFiltrosOutlet()" class="btn-clear">Limpiar</button></div>
+                    </div>
+                </div>
             </div>
         </div>
-                
-        <div class="filters-desktop-container"><div class="filtros-grid-enhanced"><div class="filtro-group"><label>Familia</label><select id="filtroFamilia"><option value="">Todas</option>${familiasOptions}</select></div><div class="filtro-group"><label>Acabado</label><select id="filtroAcabado"><option value="">Todos</option>${acabadosOptions}</select></div><div class="filtro-group"><label>Material</label><select id="filtroMaterial"><option value="">Todos</option>${materialesOptions}</select></div><div class="filtros-actions"><button onclick="aplicarFiltrosOutlet()" class="btn-filter">Aplicar</button><button onclick="limpiarFiltrosOutlet()" class="btn-clear">Limpiar</button></div></div></div></div></div>
-        <section id="productos" class="container"><div class="results-header"><div class="contador-enhanced"><i class="fas fa-box-open"></i> <span id="contadorProductos">${productosDataParaHTML.length}</span> producto(s)</div></div><div id="productosGrid" class="productos-grid-enhanced">${window.generarCardsOutlet(productosDataParaHTML)}</div></section>
+        
+        <section id="productos" class="container">
+            <div class="results-header">
+                <div class="contador-enhanced"><i class="fas fa-box-open"></i> <span id="contadorProductos">${productosDataParaHTML.length}</span> producto(s)</div>
+            </div>
+            <div id="productosGrid" class="productos-grid-enhanced">${window.generarCardsOutlet(productosDataParaHTML)}</div>
+        </section>
+        
         <footer>
             <div class="footer-grid">
                 <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad, combinando belleza, exclusividad y excelencia en cada proyecto.</p></div>
@@ -3933,7 +3865,9 @@ ${productosLista}
             </div>
             <div class="footer-bottom">© 2026 Gallos Mármol — Todos los derechos reservados.</div>
         </footer>
+        
         <script>
+            // Exponer funciones globales
             window.openFiltrosModal = openFiltrosModal;
             window.closeFiltrosModal = closeFiltrosModal;
             window.syncModalSelects = syncModalSelects;
@@ -3946,7 +3880,9 @@ ${productosLista}
             window.abrirModalCotizacion = abrirModalCotizacion;
             window.cerrarModalCotizacion = cerrarModalCotizacion;
             window.eliminarProductoCotizacion = eliminarProductoCotizacion;
+            window.toggleSeleccionCotizacion = toggleSeleccionCotizacion;
             
+            // Funciones de filtros
             function syncModalSelects(){
                 const fd=document.getElementById('filtroFamilia'),ad=document.getElementById('filtroAcabado'),md=document.getElementById('filtroMaterial');
                 const fm=document.getElementById('filtroFamiliaModal'),am=document.getElementById('filtroAcabadoModal'),mm=document.getElementById('filtroMaterialModal');
@@ -3974,122 +3910,17 @@ ${productosLista}
                 if(window.innerWidth<=768){const m=document.getElementById('filtrosModal');if(m){m.classList.remove('show');document.body.style.overflow='';}}
             }
             
-            // ============================================
-            // PROTECCIÓN DE IMÁGENES
-            // ============================================
-            document.addEventListener('contextmenu', function(e) {
-                if (e.target.tagName === 'IMG') {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-            
-            // ============================================
-            // PROTECCIÓN REFORZADA - IMPOSIBLE GUARDAR IMÁGENES
-            // ============================================
-
-            // 1. Deshabilitar clic derecho TOTAL (no solo en imágenes)
+            // Protección de imágenes y contenido
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
                 return false;
             });
-
-            // 2. Deshabilitar arrastrar cualquier elemento
+            
             document.addEventListener('dragstart', function(e) {
                 e.preventDefault();
                 return false;
             });
-
-            // 3. Deshabilitar teclas de desarrollador y guardado
-            document.addEventListener('keydown', function(e) {
-                // F12
-                if (e.key === 'F12') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+Shift+I (abrir inspector)
-                if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+U (ver código fuente)
-                if (e.ctrlKey && e.key === 'u') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+S (guardar página)
-                if (e.ctrlKey && e.key === 's') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+Shift+J (abrir consola)
-                if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+P (imprimir)
-                if (e.ctrlKey && e.key === 'p') {
-                    e.preventDefault();
-                    return false;
-                }
-                // Ctrl+C (copiar) - opcional, puede ser muy restrictivo
-                // if (e.ctrlKey && e.key === 'c') {
-                //     e.preventDefault();
-                //     return false;
-                // }
-            });
-
-            // 4. Deshabilitar selección de texto en toda la página
-            document.body.style.userSelect = 'none';
-            document.body.style.webkitUserSelect = 'none';
-            document.body.style.msUserSelect = 'none';
-
-            // 5. Para imágenes específicamente, prevenir cualquier interacción
-            function protegerTodasLasImagenes() {
-                document.querySelectorAll('img').forEach(img => {
-                    img.setAttribute('draggable', 'false');
-                    img.setAttribute('oncontextmenu', 'return false;');
-                    img.setAttribute('onselectstart', 'return false;');
-                    img.style.pointerEvents = 'auto';
-                    
-                    // Prevenir eventos de arrastre
-                    img.addEventListener('dragstart', function(e) {
-                        e.preventDefault();
-                        return false;
-                    });
-                    
-                    img.addEventListener('dragend', function(e) {
-                        e.preventDefault();
-                        return false;
-                    });
-                    
-                    // Prevenir clic derecho
-                    img.addEventListener('contextmenu', function(e) {
-                        e.preventDefault();
-                        return false;
-                    });
-                    
-                    // Prevenir selección
-                    img.addEventListener('selectstart', function(e) {
-                        e.preventDefault();
-                        return false;
-                    });
-                });
-            }
-
-            // Ejecutar protección inicial
-            protegerTodasLasImagenes();
-
-            // Observar cambios para proteger imágenes dinámicas
-            const observerProteccion = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.addedNodes.length) {
-                        protegerTodasLasImagenes();
-                    }
-                });
-            });
-            observerProteccion.observe(document.body, { childList: true, subtree: true });
-
+            
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12') { e.preventDefault(); return false; }
                 if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
@@ -4097,6 +3928,10 @@ ${productosLista}
                 if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
                 if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); return false; }
             });
+            
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.msUserSelect = 'none';
             
             function protegerImagenes() {
                 document.querySelectorAll('img').forEach(img => {
@@ -4107,13 +3942,10 @@ ${productosLista}
             }
             
             protegerImagenes();
+            const observerImagenesProt = new MutationObserver(() => protegerImagenes());
+            observerImagenesProt.observe(document.body, { childList: true, subtree: true });
             
-            const observer = new MutationObserver(() => protegerImagenes());
-            observer.observe(document.body, { childList: true, subtree: true });
-            
-            // ============================================
-            // ESCANEO QR
-            // ============================================
+            // Escaneo QR con cámara trasera
             let html5QrCode = null;
             let escaneoActivo = false;
             
@@ -4132,12 +3964,17 @@ ${productosLista}
                 if (!modalQR || !readerElement) return;
                 readerElement.innerHTML = '';
                 modalQR.style.display = 'flex';
+                
                 if (typeof Html5Qrcode === 'undefined') {
                     modalQR.style.display = 'none';
+                    mostrarModal('Error', 'Biblioteca QR no cargada', 'error');
                     return;
                 }
+                
                 html5QrCode = new Html5Qrcode("qr-reader");
-                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
                     (decodedText) => {
                         detenerEscaneoQR();
                         if (modalQR) modalQR.style.display = 'none';
@@ -4146,11 +3983,14 @@ ${productosLista}
                             searchInput.value = decodedText;
                             if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
                         }
+                        mostrarModal('✅ Código encontrado', decodedText, 'success');
                     },
                     (errorMessage) => {}
                 ).catch(err => {
-                    if (modalQR) modalQR.style.display = 'none';
+                    console.error('Error al iniciar cámara:', err);
+                    modalQR.style.display = 'none';
                     escaneoActivo = false;
+                    mostrarModal('Error de cámara', 'No se pudo acceder a la cámara trasera', 'error');
                 });
                 escaneoActivo = true;
             }
@@ -4161,15 +4001,80 @@ ${productosLista}
                 if (modalQR) modalQR.style.display = 'none';
             }
             
-            setTimeout(() => {
+            // Inicializar eventos
+            document.addEventListener('DOMContentLoaded', function() {
                 const btnEscanear = document.getElementById('btnEscanearQR');
-                const btnCerrar = document.getElementById('btnCerrarQR');
+                const btnCerrarQR = document.getElementById('btnCerrarQR');
                 const modalQR = document.getElementById('modalQR');
+                
                 if (btnEscanear) btnEscanear.onclick = iniciarEscaneoQR;
-                if (btnCerrar) btnCerrar.onclick = cerrarModalQR;
+                if (btnCerrarQR) btnCerrarQR.onclick = cerrarModalQR;
                 if (modalQR) modalQR.onclick = (e) => { if (e.target === modalQR) cerrarModalQR(); };
-            }, 500);
+                
+                const searchInput = document.getElementById('searchOutlet');
+                const familiaSelect = document.getElementById('filtroFamilia');
+                const acabadoSelect = document.getElementById('filtroAcabado');
+                const materialSelect = document.getElementById('filtroMaterial');
+                
+                let timeoutBusqueda = null;
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(timeoutBusqueda);
+                        timeoutBusqueda = setTimeout(() => {
+                            if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
+                        }, 400);
+                    });
+                }
+                
+                const aplicarFiltros = () => {
+                    syncModalSelects();
+                    if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
+                };
+                
+                if (familiaSelect) familiaSelect.addEventListener('change', aplicarFiltros);
+                if (acabadoSelect) acabadoSelect.addEventListener('change', aplicarFiltros);
+                if (materialSelect) materialSelect.addEventListener('change', aplicarFiltros);
+                
+                syncModalSelects();
+                
+                // Lazy loading de imágenes
+                if ('IntersectionObserver' in window) {
+                    const imageObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                const dataSrc = img.getAttribute('data-src');
+                                if (dataSrc) {
+                                    img.src = dataSrc;
+                                    img.removeAttribute('data-src');
+                                    imageObserver.unobserve(img);
+                                }
+                            }
+                        });
+                    }, { rootMargin: '50px' });
+                    
+                    document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+                } else {
+                    document.querySelectorAll('img[data-src]').forEach(img => {
+                        img.src = img.getAttribute('data-src');
+                        img.removeAttribute('data-src');
+                    });
+                }
+                
+                // Scroll Top Button
+                const scrollBtn = document.getElementById('scrollTopBtn');
+                window.addEventListener('scroll', () => {
+                    if (scrollBtn) {
+                        if (window.scrollY > 300) {
+                            scrollBtn.style.display = 'flex';
+                        } else {
+                            scrollBtn.style.display = 'none';
+                        }
+                    }
+                });
+            });
             
+            // Countdown
             (function initCountdown(){
                 const fi=new Date(2026,5,24),ff=new Date(2026,6,18),h=new Date();
                 h.setHours(0,0,0,0);fi.setHours(0,0,0,0);ff.setHours(0,0,0,0);
@@ -4189,18 +4094,6 @@ ${productosLista}
                 }
                 u();setInterval(u,1000);
             })();
-            
-            document.addEventListener('DOMContentLoaded',function(){
-                const si=document.getElementById('searchOutlet'),fs=document.getElementById('filtroFamilia'),as=document.getElementById('filtroAcabado'),ms=document.getElementById('filtroMaterial');
-                let tb=null;
-                if(si){si.addEventListener('input',function(){clearTimeout(tb);tb=setTimeout(()=>{if(typeof aplicarFiltrosOutlet==='function')aplicarFiltrosOutlet();},400);});}
-                const af=()=>{if(typeof aplicarFiltrosOutlet==='function')aplicarFiltrosOutlet();};
-                const sa=()=>{syncModalSelects();af();};
-                if(fs)fs.addEventListener('change',sa);
-                if(as)as.addEventListener('change',sa);
-                if(ms)ms.addEventListener('change',sa);
-                syncModalSelects();
-            });
         </script>
     </body>
     </html>`;
@@ -4213,7 +4106,9 @@ ${productosLista}
             actualizarBarraFlotante();
             actualizarTodosLosBotonesCotizar();
         }
+        
         if (typeof initCountdown === 'function') initCountdown();
+        inicializarLazyLoading();
         
         // Precarga de asesores
         if (window.requestIdleCallback) {
@@ -4222,7 +4117,9 @@ ${productosLista}
             setTimeout(() => precargarAsesoresOutlet(), 2000);
         }
         
-        // Configurar botón de escaneo QR
+        // ============================================
+        // CONFIGURACIÓN DEL ESCÁNER QR (AGREGAR ESTO)
+        // ============================================
         const btnEscanear = document.getElementById('btnEscanearQR');
         const btnCerrarQR = document.getElementById('btnCerrarQR');
         const modalQR = document.getElementById('modalQR');
@@ -4232,8 +4129,11 @@ ${productosLista}
             btnEscanear.parentNode.replaceChild(nuevoBtn, btnEscanear);
             nuevoBtn.onclick = function(e) {
                 e.preventDefault();
-                iniciarEscaneoQR();
+                e.stopPropagation();
+                console.log('🖱️ Click en botón escanear');
+                iniciarEscaneoQR();  // Esta función debe estar definida arriba
             };
+            console.log('✅ Botón escanear configurado');
         }
         
         if (btnCerrarQR) {
@@ -4254,7 +4154,7 @@ ${productosLista}
         window.iniciarEscaneoQR = iniciarEscaneoQR;
         window.cerrarModalQR = cerrarModalQR;
         
-        console.log('✅ Outlet renderizado correctamente');
+        console.log('✅ Outlet renderizado correctamente con todas las mejoras');
         
     }, 100);
 }
