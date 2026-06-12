@@ -719,7 +719,7 @@ async function enviarCotizacion(datosCliente, asesor) {
         }
         
         const cotizacionId = nuevaCotizacion.id;
-        console.log('✅ Cotización guardada:', numero, 'ID:', cotizacionId);
+        console.log('Cotización guardada:', numero, 'ID:', cotizacionId);
         
         // ============================================
         // 2. GUARDAR DETALLES DE PRODUCTOS EN cotizacion_detalles
@@ -747,10 +747,10 @@ async function enviarCotizacion(datosCliente, asesor) {
             }
         }
         
-        console.log(`✅ Detalles guardados: ${detallesGuardados} de ${cotizacionSeleccionados.length} productos`);
+        console.log(`Detalles guardados: ${detallesGuardados} de ${cotizacionSeleccionados.length} productos`);
         
         if (erroresDetalles.length > 0) {
-            console.warn('⚠️ Algunos detalles no se guardaron:', erroresDetalles);
+            console.warn('Algunos detalles no se guardaron:', erroresDetalles);
         }
         
         // ============================================
@@ -766,7 +766,7 @@ async function enviarCotizacion(datosCliente, asesor) {
                     ultima_asignacion: fechaActual
                 })
                 .eq('id', asesor.id);
-            console.log(`✅ Contador actualizado para ${asesor.nombre}: ${nuevoContador}`);
+            console.log(`Contador actualizado para ${asesor.nombre}: ${nuevoContador}`);
         } catch (err) {
             console.error('Error al incrementar contador:', err);
             // No detenemos el proceso si falla el contador
@@ -804,7 +804,7 @@ async function enviarCotizacion(datosCliente, asesor) {
                             creado_el: fechaActual
                         });
                 }
-                console.log('✅ Relación cliente-asesor guardada');
+                console.log('Relación cliente-asesor guardada');
             } catch (err) {
                 console.error('Error guardando relación cliente-asesor:', err);
             }
@@ -828,7 +828,7 @@ async function enviarCotizacion(datosCliente, asesor) {
         
         const modoTexto = datosCliente.modoAsignacion === 'manual' ? 'Manual (cliente eligió asesor)' : 'Automático (distribución justa)';
         
-        const mensaje = `📋 *NUEVA COTIZACIÓN - OUTLET*
+        const mensaje = `*NUEVA COTIZACIÓN - OUTLET*
 
 *N° Cotización:* ${numero}
 *Fecha:* ${new Date().toLocaleString()}
@@ -869,13 +869,13 @@ Por favor contactar al cliente para brindar precios y disponibilidad.`;
             
             console.log('📱 WhatsApp enviado a:', asesor.nombre, 'Número:', whatsappNumber);
             
-            await mostrarModal('✅ Cotización enviada', 
+            await mostrarModal('Cotización enviada', 
                 `Cotización ${numero} enviada a ${asesor.nombre} por WhatsApp.\n\nUn asesor se contactará contigo pronto.`, 
                 'success', 
                 { timer: 4000, showConfirmButton: false }
             );
         } else {
-            await mostrarModal('⚠️ No se pudo enviar automáticamente', 
+            await mostrarModal('No se pudo enviar automáticamente', 
                 `Cotización N°: ${numero}\n\nNo se pudo enviar por WhatsApp porque el asesor ${asesor.nombre} no tiene un número de teléfono configurado.\n\nLa cotización ha sido registrada en el sistema.`, 
                 'warning', 
                 { confirmButtonText: 'Entendido' }
@@ -909,7 +909,7 @@ Por favor contactar al cliente para brindar precios y disponibilidad.`;
         window.ubicacionCache = '';
         window.observacionesCache = '';
         
-        console.log('✅ Proceso de cotización completado exitosamente');
+        console.log('Proceso de cotización completado exitosamente');
         
     } catch (error) {
         // Cerrar modal de carga si está abierto
@@ -1595,7 +1595,7 @@ function renderizarLandingProducto(producto) {
 }
 
 function renderizarPaginaOutlet(productos) {
-    console.log('🎨 Renderizando página de Outlet con todas las funcionalidades');
+    console.log('Renderizando página de Outlet con todas las funcionalidades');
     
     // ============================================
     // CONFIGURACIÓN Y CONSTANTES
@@ -1695,7 +1695,7 @@ function renderizarPaginaOutlet(productos) {
                 .eq('atiende_outlet', true)
                 .order('orden');
             asesoresPrecargados = vendedores || [];
-            console.log('✅ Asesores precargados:', asesoresPrecargados.length);
+            console.log('Asesores precargados:', asesoresPrecargados.length);
             return asesoresPrecargados;
         } catch (error) {
             console.error('Error precargando asesores:', error);
@@ -1801,29 +1801,38 @@ function renderizarPaginaOutlet(productos) {
             const estaSeleccionado = cotizacionSeleccionados && cotizacionSeleccionados.some(item => item && item.id === p.id);
             const imagenUrl = optimizarGoogleDriveUrl(p.imagen_principal, 'w300-h300');
             
+            // Escapar correctamente todos los datos
+            const nombreEscapado = escapeHtml(p.nombre || 'Producto');
+            const codigoEscapado = escapeHtml(p.codigo || '');
+            const imagenEscapada = escapeHtml(p.imagen_principal || '');
+            const slugEscapado = escapeHtml(p.slug || p.id);
+            const medidaEscapada = escapeHtml(p.medida || '');
+            const espesorEscapado = escapeHtml(p.espesor || '');
+            const productId = p.id;
+            
             return `
-                <div class="producto-card" data-id="${p.id}">
+                <div class="producto-card" data-id="${productId}">
                     <div class="card-image">
                         <img data-src="${imagenUrl}" 
-                             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3C/svg%3E"
-                             alt="${escapeHtml(p.nombre)}" 
-                             loading="lazy"
-                             class="lazy-image">
-                        <div class="badge-outlet">🔥 OUTLET</div>
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3C/svg%3E"
+                            alt="${nombreEscapado}" 
+                            loading="lazy"
+                            class="lazy-image">
                     </div>
                     <div class="card-info">
-                        <h3>${escapeHtml(p.nombre) || 'Producto'}</h3>
-                        <p class="codigo">${escapeHtml(p.codigo) || 'Sin código'}</p>
+                        <h3>${nombreEscapado}</h3>
+                        <p class="codigo">${codigoEscapado || 'Sin código'}</p>
                         <div class="specs-badges">
                             ${p.medida ? `<span class="spec-badge"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
                             ${p.espesor ? `<span class="spec-badge"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                            <a href="/?producto=${p.slug}" class="btn-detalle-enhanced" style="flex: 1;">
+                            <a href="/?producto=${slugEscapado}" class="btn-detalle-enhanced" style="flex: 1;">
                                 <span>Ver Detalle</span>
                             </a>
-                            <button onclick="window.toggleSeleccionCotizacion({id:'${p.id}', nombre:'${escapeHtml(p.nombre)}', codigo:'${p.codigo || ''}', imagen_principal:'${p.imagen_principal || ''}', slug:'${p.slug}'})" 
-                                    class="btn-cotizar" data-id="${p.id}"
+                            <button onclick="window.toggleSeleccionCotizacionWrapper('${productId}', '${nombreEscapado.replace(/'/g, "\\'")}', '${codigoEscapado.replace(/'/g, "\\'")}', '${imagenEscapada.replace(/'/g, "\\'")}', '${slugEscapado.replace(/'/g, "\\'")}', '${medidaEscapada.replace(/'/g, "\\'")}', '${espesorEscapado.replace(/'/g, "\\'")}')" 
+                                    class="btn-cotizar" 
+                                    data-id="${productId}"
                                     style="background: ${estaSeleccionado ? '#10b981' : '#39080a'}; color: white; border: none; padding: 8px 12px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.8rem; justify-content: center; font-weight: 600">
                                 <i class="fas ${estaSeleccionado ? 'fa-check-circle' : 'fa-plus-circle'}"></i>
                                 ${estaSeleccionado ? 'Agregado' : 'Cotizar'}
@@ -1835,6 +1844,23 @@ function renderizarPaginaOutlet(productos) {
         }).join('');
     };
     
+    // Función wrapper para manejar el clic del botón cotizar de manera segura
+    window.toggleSeleccionCotizacionWrapper = function(id, nombre, codigo, imagen, slug, medida, espesor) {
+        console.log('🖱️ Click en cotizar:', { id, nombre, codigo, medida, espesor });
+        
+        const producto = {
+            id: id,
+            nombre: nombre,
+            codigo: codigo,
+            imagen_principal: imagen,
+            slug: slug,
+            medida: medida || null,
+            espesor: espesor || null
+        };
+        
+        window.toggleSeleccionCotizacion(producto);
+    };
+
     // ============================================
     // FUNCIONES DE FILTROS Y CARDS
     // ============================================
@@ -1885,6 +1911,10 @@ function renderizarPaginaOutlet(productos) {
                 document.body.style.overflow = ''; 
             } 
         }
+        
+        if (typeof window.actualizarBotonLimpiarTodo === 'function') {
+            window.actualizarBotonLimpiarTodo();
+        }
     };
     
     window.limpiarFiltrosOutlet = function() {
@@ -1921,6 +1951,10 @@ function renderizarPaginaOutlet(productos) {
                 modal.classList.remove('show'); 
                 document.body.style.overflow = ''; 
             } 
+        }
+        
+        if (typeof window.actualizarBotonLimpiarTodo === 'function') {
+            window.actualizarBotonLimpiarTodo();
         }
     };
     
@@ -2178,45 +2212,190 @@ function renderizarPaginaOutlet(productos) {
             cotizacionSeleccionados = [];
         }
     }
-    
+
     function actualizarBarraFlotante() {
         let barra = document.getElementById('barra-cotizacion');
         const total = cotizacionSeleccionados.length;
         
         if (!barra && total > 0) {
+            // Crear la barra por primera vez
             barra = document.createElement('div');
             barra.id = 'barra-cotizacion';
+            barra.className = 'barra-cotizacion mini';
+            
             barra.innerHTML = `
-                <div style="position: fixed; bottom: ${window.innerWidth <= 768 ? CONFIG.BARRA_COTIZACION_BOTTOM_MOBILE : CONFIG.BARRA_COTIZACION_BOTTOM_DESKTOP}; left: 0; right: 0; background: #39080a; color: white; padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); backdrop-filter: blur(10px); background: rgba(57,8,10,0.95);">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-clipboard-list"></i>
-                        <span id="contador-cotizacion">${total}</span> producto(s) seleccionado(s)
+                <!-- Modo Mini (Colapsado) -->
+                <div class="barra-cotizacion-mini">
+                    <div class="barra-info-mini">
+                        <div class="barra-icono">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="barra-texto-mini">
+                            <span id="contador-cotizacion-mini">${total}</span> producto(s)
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="window.limpiarCotizacion()" style="background: #6b7280; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">
-                            <i class="fas fa-trash"></i> Limpiar
+                    <div class="barra-acciones-mini">
+                        <button class="btn-cotizar-mini" id="btn-ver-cotizacion-mini">
+                            <i class="fas fa-file-invoice"></i> Cotizar
                         </button>
-                        <button onclick="window.abrirModalCotizacion()" style="background: #d4d4ae; border: none; padding: 8px 16px; border-radius: 8px; color: #39080a; cursor: pointer; font-weight: bold;">
-                            <i class="fas fa-file-invoice"></i> Ver Cotización
+                        <button class="btn-expandir" id="btn-expandir-barra">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Modo Expandido (Detalles) - Oculto inicialmente -->
+                <div class="barra-cotizacion-expanded" style="display: none;">
+                    <div class="barra-productos-preview" id="preview-productos">
+                        ${generarPreviewProductos()}
+                    </div>
+                    <div class="barra-acciones-expanded">
+                        <button class="btn-limpiar" id="btn-limpiar-barra">
+                            <i class="fas fa-trash-alt"></i> Limpiar todo
+                        </button>
+                        <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded">
+                            <i class="fas fa-file-invoice"></i> Ver cotización completa
                         </button>
                     </div>
                 </div>
             `;
-            document.body.appendChild(barra);
             
-            // Agregar padding bottom al body para que no tape contenido
-            if (window.innerWidth <= 768) {
-                document.body.style.paddingBottom = '80px';
-            }
+            document.body.appendChild(barra);
+            configurarEventosBarra(barra);
+            
+            // Ajustar padding del body
+            const alturaBarra = barra.offsetHeight;
+            document.body.style.paddingBottom = `${alturaBarra + 10}px`;
+            
         } else if (barra && total === 0) {
+            // Eliminar barra si no hay productos
             barra.remove();
             document.body.style.paddingBottom = '';
+            
         } else if (barra && total > 0) {
-            const contador = document.getElementById('contador-cotizacion');
-            if (contador) contador.textContent = total;
+            // Actualizar solo los elementos que existen
+            
+            // Verificar y actualizar badge (modo mini)
+            const badge = document.getElementById('badge-cantidad');
+            if (badge) {
+                badge.textContent = total;
+            }
+            
+            // Verificar y actualizar contador mini
+            const contadorMini = document.getElementById('contador-cotizacion-mini');
+            if (contadorMini) {
+                contadorMini.textContent = total;
+            }
+            
+            // Verificar si el modo expandido está visible
+            const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
+            if (expandedSection && expandedSection.style.display !== 'none') {
+                // Si está expandido, actualizar el preview
+                const previewContainer = document.getElementById('preview-productos');
+                if (previewContainer) {
+                    previewContainer.innerHTML = generarPreviewProductos();
+                }
+            }
         }
     }
-    
+
+    function generarPreviewProductos() {
+        // Verificar que cotizacionSeleccionados existe y tiene elementos
+        if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
+            return '<div class="preview-item" style="justify-content: center; color: #999;">No hay productos seleccionados</div>';
+        }
+        
+        let html = '';
+        
+        // Mostrar hasta 3 productos
+        cotizacionSeleccionados.slice(0, 3).forEach(p => {
+            html += `
+                <div class="preview-item">
+                    <div class="preview-info">
+                        <span class="preview-nombre">${escapeHtml(p.nombre || 'Producto')}</span>
+                        <div class="preview-detalles" style="display: flex; gap: 8px; margin-top: 2px;">
+                            ${p.medida ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
+                            ${p.espesor ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
+                        </div>
+                    </div>
+                    <button class="preview-eliminar" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            `;
+        });
+        
+        // Mostrar indicador de más productos
+        if (cotizacionSeleccionados.length > 3) {
+            html += `
+                <div class="preview-item" style="justify-content: center; color: var(--secondary); font-size: 0.65rem;">
+                    <i class="fas fa-ellipsis-h"></i> +${cotizacionSeleccionados.length - 3} producto(s) más
+                </div>
+            `;
+        }
+        
+        return html;
+    }
+
+    function configurarEventosBarra(barra) {
+        // Botones mini
+        const btnCotizarMini = document.getElementById('btn-ver-cotizacion-mini');
+        const btnExpandir = document.getElementById('btn-expandir-barra');
+        const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
+        const miniSection = barra.querySelector('.barra-cotizacion-mini');
+        
+        if (btnCotizarMini) {
+            btnCotizarMini.onclick = () => window.abrirModalCotizacion();
+        }
+        
+        if (btnExpandir) {
+            btnExpandir.onclick = () => {
+                if (expandedSection.style.display === 'none') {
+                    expandedSection.style.display = 'flex';
+                    miniSection.style.display = 'none';
+                    barra.classList.add('expanded');
+                    barra.classList.remove('mini');
+                    btnExpandir.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    
+                    // Ajustar padding
+                    const nuevaAltura = barra.offsetHeight;
+                    document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
+                } else {
+                    expandedSection.style.display = 'none';
+                    miniSection.style.display = 'flex';
+                    barra.classList.remove('expanded');
+                    barra.classList.add('mini');
+                    btnExpandir.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                    
+                    // Ajustar padding
+                    const nuevaAltura = barra.offsetHeight;
+                    document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
+                }
+            };
+        }
+        
+        // Botones expandidos
+        const btnLimpiar = document.getElementById('btn-limpiar-barra');
+        const btnVerCotizacion = document.getElementById('btn-ver-cotizacion-expanded');
+        
+        if (btnLimpiar) {
+            btnLimpiar.onclick = () => window.limpiarCotizacion();
+        }
+        
+        if (btnVerCotizacion) {
+            btnVerCotizacion.onclick = () => window.abrirModalCotizacion();
+        }
+    }
+
+    // Detectar cambios de orientación para ajustar padding
+    window.addEventListener('resize', () => {
+        const barra = document.getElementById('barra-cotizacion');
+        if (barra) {
+            const altura = barra.offsetHeight;
+            document.body.style.paddingBottom = `${altura + 10}px`;
+        }
+    });    
+
     function actualizarBotonCard(productoId, estabaSeleccionado) {
         const btn = document.querySelector(`.btn-cotizar[data-id="${productoId}"]`);
         if (btn) {
@@ -2232,23 +2411,65 @@ function renderizarPaginaOutlet(productos) {
         }
     }
     
+    function mostrarToast(mensaje) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notificacion';
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 2000);
+    }
+
     function toggleSeleccionCotizacion(producto) {
+        if (!producto || !producto.id) {
+            console.error('Producto inválido:', producto);
+            return;
+        }
+        
         const existe = cotizacionSeleccionados.find(p => p.id === producto.id);
+        
+        // Buscar el producto completo en el cache para obtener medida y espesor
+        const productoCompleto = window.outletProductosCache.find(p => p.id === producto.id);
         
         if (existe) {
             cotizacionSeleccionados = cotizacionSeleccionados.filter(p => p.id !== existe.id);
+            if (typeof mostrarToast === 'function') {
+                mostrarToast(`"${producto.nombre}" removido`);
+            }
         } else {
             cotizacionSeleccionados.push({
                 id: producto.id,
-                nombre: producto.nombre,
-                codigo: producto.codigo,
-                imagen: producto.imagen_principal,
-                slug: producto.slug
+                nombre: producto.nombre || 'Producto',
+                codigo: producto.codigo || '',
+                imagen: producto.imagen_principal || '',
+                slug: producto.slug || producto.id,
+                medida: productoCompleto?.medida || producto.medida || null,
+                espesor: productoCompleto?.espesor || producto.espesor || null
             });
+            
+            if (typeof mostrarToast === 'function') {
+                mostrarToast(`"${producto.nombre}" agregado a cotización`);
+            }
+            
+            // Animar badge si existe
+            const badge = document.getElementById('badge-cantidad');
+            if (badge) {
+                badge.classList.add('animado');
+                setTimeout(() => badge.classList.remove('animado'), 300);
+            }
         }
         
+        // Guardar en localStorage
         localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
-        actualizarBarraFlotante();
+        
+        // Actualizar barra (siempre verificar que existe antes de actualizar)
+        if (typeof actualizarBarraFlotante === 'function') {
+            actualizarBarraFlotante();
+        }
+        
+        // Actualizar botón de la card
         actualizarBotonCard(producto.id, existe);
     }
     
@@ -2623,19 +2844,44 @@ ${productosLista}
                     ? vendedores.map(v => `<option value="${v.id}">${escapeHtml(v.nombre)}${v.telefono ? ` (${v.telefono})` : ''}</option>`).join('')
                     : '<option value="" disabled>No hay asesores disponibles</option>';
                 
-                const productosHtml = cotizacionSeleccionados.map(p => `
-                    <div class="flex justify-between items-center py-2 border-b last:border-b-0">
-                        <div class="flex-1">
-                            <p class="font-medium text-sm">${escapeHtml(p.nombre) || 'Producto'}</p>
-                            <p class="text-xs text-gray-400">Código: ${escapeHtml(p.codigo) || 'N/A'}</p>
+                const productosHtml = cotizacionSeleccionados.map(p => {
+                    // Buscar el producto original en el cache para obtener medida y espesor
+                    const productoOriginal = window.outletProductosCache.find(prod => prod.id === p.id);
+                    
+                    // Obtener medida y espesor del producto original o del objeto actual
+                    const medida = productoOriginal?.medida || p.medida || 'No especifica';
+                    const espesor = productoOriginal?.espesor || p.espesor || 'No especifica';
+                    
+                    return `
+                        <div class="flex justify-between items-center py-2 border-b last:border-b-0 hover:bg-gray-100 transition-colors rounded-lg px-2" style="transition: all 0.2s ease;">
+                            <div class="flex-1">
+                                <div class="flex items-start gap-2">
+                                    <div class="flex-1">
+                                        <p class="font-medium text-sm text-gray-800">${escapeHtml(p.nombre) || 'Producto'}</p>
+                                        <p class="text-xs text-gray-400 font-mono mt-0.5">Código: ${escapeHtml(p.codigo) || 'N/A'}</p>
+                                        <div class="flex flex-wrap gap-3 mt-1">
+                                            ${medida !== 'No especifica' ? `
+                                            <span class="text-xs inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                                                <i class="fas fa-ruler-combined text-[10px]"></i> ${escapeHtml(medida)}
+                                            </span>
+                                            ` : ''}
+                                            ${espesor !== 'No especifica' ? `
+                                            <span class="text-xs inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                                                <i class="fas fa-arrows-alt-h text-[10px]"></i> ${escapeHtml(espesor)}
+                                            </span>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="window.eliminarProductoCotizacion('${p.id}', '${(p.nombre || '').replace(/'/g, "\\'")}')" 
+                                    class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all ml-2 flex-shrink-0"
+                                    title="Eliminar producto">
+                                <i class="fas fa-trash-alt text-sm"></i>
+                            </button>
                         </div>
-                        <button onclick="eliminarProductoCotizacion('${p.id}', '${(p.nombre || '').replace(/'/g, "\\'")}')" 
-                                class="text-red-500 hover:text-red-700 p-1 ml-2 transition-colors"
-                                title="Eliminar producto">
-                            <i class="fas fa-trash-alt text-sm"></i>
-                        </button>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
                 
                 const modoInicial = window.modoAsignacion || 'auto';
                 
@@ -2666,7 +2912,7 @@ ${productosLista}
                                 <i class="fas fa-info-circle text-blue-500 mt-0.5 text-sm"></i>
                                 <div class="text-xs text-blue-700">
                                     <p class="font-medium mb-1">¿Cómo funciona la asignación?</p>
-                                    <p>• <strong>Automático:</strong> El sistema asignará el asesor con menos leads hoy.</p>
+                                    <p>• <strong>Automático:</strong> El sistema asignará el asesor automáticamente.</p>
                                     <p>• <strong>Elegir asesor:</strong> Selecciona manualmente a tu asesor preferido.</p>
                                     <p>• <strong>Buscar por email:</strong> Ingresa tu correo para encontrar a tu asesor habitual.</p>
                                 </div>
@@ -2677,11 +2923,11 @@ ${productosLista}
                             <div class="flex gap-6 mb-3">
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="radio" name="tipoAsignacion" value="auto" onchange="window.cambiarModoAsignacion('auto')" ${modoInicial === 'auto' ? 'checked' : ''}> 
-                                    <span class="text-sm font-medium">🤖 Automático</span>
+                                    <span class="text-sm font-medium">Automático</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="radio" name="tipoAsignacion" value="manual" onchange="window.cambiarModoAsignacion('manual')" ${modoInicial === 'manual' ? 'checked' : ''}> 
-                                    <span class="text-sm font-medium">👤 Elegir asesor</span>
+                                    <span class="text-sm font-medium">Elegir asesor</span>
                                 </label>
                             </div>
                             
@@ -3040,16 +3286,16 @@ ${productosLista}
                     let badgeColor = '';
                     
                     if (origen === 'auto') {
-                        badgeTexto = '🤖 Asignado automáticamente';
+                        badgeTexto = 'Asignado automáticamente';
                         badgeColor = 'bg-blue-100 text-blue-700';
                     } else if (origen === 'manual') {
-                        badgeTexto = '👤 Seleccionado por ti';
+                        badgeTexto = 'Seleccionado por ti';
                         badgeColor = 'bg-green-100 text-green-700';
                     } else if (origen === 'email') {
-                        badgeTexto = '📧 Asociado a tu correo';
+                        badgeTexto = 'Asociado a tu correo';
                         badgeColor = 'bg-purple-100 text-purple-700';
                     } else if (origen === 'reasignado') {
-                        badgeTexto = '🔄 Reasignado manualmente';
+                        badgeTexto = 'Reasignado manualmente';
                         badgeColor = 'bg-orange-100 text-orange-700';
                     }
                     
@@ -3057,7 +3303,7 @@ ${productosLista}
                         <div class="p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-200 shadow-sm">
                             <div class="flex items-start gap-3">
                                 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-user-tie text-primary text-xl"></i>
+                                    
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex flex-wrap items-center gap-2 mb-1">
@@ -3122,7 +3368,7 @@ ${productosLista}
                             const asesorInfo = document.getElementById('asesor-info-modal');
                             if (asesorInfo) asesorInfo.classList.add('hidden');
                             
-                            mostrarModal('✅ Asesor asignado', `Se te ha asignado: ${mejorAsesor.nombre}`, 'success', { timer: 2000, showConfirmButton: false });
+                            mostrarModal('Asesor asignado', `Se te ha asignado: ${mejorAsesor.nombre}`, 'success', { timer: 2000, showConfirmButton: false });
                         } else {
                             mostrarModal('Error', 'No hay asesores disponibles para asignar', 'error');
                         }
@@ -3662,7 +3908,7 @@ ${productosLista}
             .producto-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid var(--gray-200);transition:all 0.3s ease}
             .producto-card:hover{transform:translateY(-5px);box-shadow:0 12px 25px -10px rgba(0,0,0,0.15)}
             .card-image{position:relative;height:180px;overflow:hidden;background:var(--gray-100)}
-            .card-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease}
+            .card-image img{width:100%;height:100%;object-fit:contain;transition:transform 0.4s ease}
             .producto-card:hover .card-image img{transform:scale(1.05)}
             .badge-outlet{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,var(--red-600),var(--orange-400));color:white;padding:4px 10px;border-radius:20px;font-size:0.65rem;font-weight:600;z-index:2}
             .card-info{padding:12px}
@@ -3715,7 +3961,419 @@ ${productosLista}
             #qr-reader{width:100%;border-radius:12px;overflow:hidden}
             #qr-reader video{width:100%;border-radius:12px}
             #qr-reader__scan_region{background:#f0f0f0;border-radius:12px}
-            
+      
+            /* Mejoras para la lista de productos en el modal */
+            .modal-cotizacion-body .border {
+                border-color: #e5e7eb;
+            }
+
+            .modal-cotizacion-body .hover\:bg-gray-100:hover {
+                background-color: #f9fafb;
+            }
+
+            /* Estilos para los badges de medida y espesor */
+            .modal-cotizacion-body .bg-gray-100 {
+                background-color: #f3f4f6;
+            }
+
+            .modal-cotizacion-body .rounded-full {
+                border-radius: 9999px;
+            }
+
+            /* Animación suave al eliminar */
+            .preview-item,
+            .producto-cotizacion-item {
+                transition: all 0.2s ease;
+            }
+
+            .preview-item:hover,
+            .producto-cotizacion-item:hover {
+                background-color: #f9fafb;
+            }            
+
+            /* Estilos para el buscador con botón de limpiar */
+            .search-input-wrapper {
+                position: relative;
+                flex: 1;
+            }
+
+            .search-input-wrapper i.fa-search {
+                position: absolute;
+                left: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1rem;
+                color: var(--gray-400);
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .search-input-wrapper input {
+                width: 100%;
+                padding: 14px 18px 14px 48px;
+                border: 2px solid var(--gray-200);
+                border-radius: 50px;
+                font-size: 0.95rem;
+                background: var(--gray-50);
+                transition: all 0.3s ease;
+            }
+
+            .search-input-wrapper input:focus {
+                outline: none;
+                border-color: var(--primary);
+                background: white;
+                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
+            }
+
+            .search-input-wrapper input:focus + .btn-clear-search {
+                display: flex !important;
+            }
+
+            .btn-clear-search {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: var(--gray-400);
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 50%;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+                z-index: 2;
+            }
+
+            .btn-clear-search:hover {
+                color: var(--primary);
+                background: rgba(0,0,0,0.05);
+            }
+
+            .btn-clear-search i {
+                font-size: 1rem;
+            }
+
+            /* Desktop styles */
+            @media (min-width: 769px) {
+                .search-input-wrapper input {
+                    padding: 16px 20px 16px 55px;
+                    font-size: 1rem;
+                }
+                
+                .search-input-wrapper i.fa-search {
+                    left: 22px;
+                    font-size: 1.1rem;
+                }
+                
+                .btn-clear-search {
+                    right: 16px;
+                }
+                
+                .btn-clear-search i {
+                    font-size: 1.1rem;
+                }
+            }
+
+            /* Mobile styles */
+            @media (max-width: 768px) {
+                .search-input-wrapper input {
+                    padding: 12px 14px 12px 42px;
+                    font-size: 0.85rem;
+                }
+                
+                .btn-clear-search {
+                    right: 10px;
+                }
+                
+                .btn-clear-search i {
+                    font-size: 0.9rem;
+                }
+            }
+
+            .btn-clear-all {
+                background: var(--gray-100);
+                color: var(--gray-700);
+                border: 1px solid var(--gray-200);
+                padding: 8px 16px;
+                border-radius: 40px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-clear-all:hover {
+                background: var(--gray-200);
+                transform: translateY(-2px);
+            }
+
+            .btn-clear-all:active {
+                transform: translateY(0);
+            }
+
+            .btn-clear-all i {
+                font-size: 0.7rem;
+            }
+
+            /* Responsive para móvil */
+            @media (max-width: 768px) {
+                .btn-clear-all {
+                    padding: 6px 12px;
+                    font-size: 0.7rem;
+                }
+                
+                .btn-clear-all i {
+                    font-size: 0.65rem;
+                }
+            }
+
+            /* Barra de cotización mejorada - Mobile First */
+            .barra-cotizacion {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #39080a 0%, #2a0607 100%);
+                color: white;
+                padding: 10px 16px;
+                z-index: 1000;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+            }
+
+            /* Modo expandido */
+            .barra-cotizacion.expanded {
+                padding: 16px;
+            }
+
+            /* Modo mini (colapsado) */
+            .barra-cotizacion.mini {
+                padding: 25px 16px;
+            }
+
+            .barra-cotizacion-mini {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            .barra-info-mini {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex: 1;
+            }
+
+            .barra-icono {
+                position: relative;
+            }
+
+            .barra-icono i {
+                font-size: 1.2rem;
+                color: var(--secondary);
+            }
+
+            .badge-cantidad {
+                position: absolute;
+                top: -8px;
+                right: -12px;
+                background: #d4d4ae;
+                color: #39080a;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                font-size: 0.6rem;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .barra-texto-mini {
+                font-size: 0.8rem;
+                font-weight: 500;
+            }
+
+            .barra-texto-mini span {
+                font-weight: 800;
+                font-size: 1rem;
+                color: var(--secondary);
+            }
+
+            .barra-acciones-mini {
+                display: flex;
+                gap: 8px;
+            }
+
+            .btn-cotizar-mini {
+                background: #d4d4ae;
+                border: none;
+                padding: 6px 12px;
+                border-radius: 40px;
+                color: #39080a;
+                font-weight: 600;
+                font-size: 0.7rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .btn-expandir {
+                background: rgba(255,255,255,0.1);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+            }
+
+            /* Modo expandido (detalles) */
+            .barra-cotizacion-expanded {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .barra-productos-preview {
+                max-height: 120px;
+                overflow-y: auto;
+                margin-bottom: 8px;
+            }
+
+            .preview-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 6px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                font-size: 0.7rem;
+            }
+
+            .preview-nombre {
+                flex: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .preview-eliminar {
+                background: none;
+                border: none;
+                color: #ff6b6b;
+                cursor: pointer;
+                padding: 4px;
+                margin-left: 8px;
+            }
+
+            .barra-acciones-expanded {
+                display: flex;
+                gap: 10px;
+            }
+
+            .btn-limpiar {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                padding: 10px 16px;
+                border-radius: 40px;
+                color: white;
+                cursor: pointer;
+                font-size: 0.75rem;
+                font-weight: 500;
+                flex: 1;
+            }
+
+            .btn-ver-cotizacion {
+                background: #d4d4ae;
+                border: none;
+                padding: 10px 16px;
+                border-radius: 40px;
+                color: #39080a;
+                cursor: pointer;
+                font-size: 0.75rem;
+                font-weight: 700;
+                flex: 1;
+            }
+
+            /* Animaciones */
+            @keyframes slideUp {
+                from {
+                    transform: translateY(100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+
+            .barra-cotizacion {
+                animation: slideUp 0.3s ease;
+            }
+
+            /* Desktop */
+            @media (min-width: 769px) {
+                .barra-cotizacion {
+                    padding: 12px 24px;
+                }
+                
+                .btn-expandir {
+                    display: none;
+                }
+                
+                .barra-cotizacion.mini .barra-cotizacion-mini {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+            }
+
+            /* Animación de feedback al agregar producto */
+            @keyframes pulse {
+                0%, 100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.2);
+                }
+            }
+
+            .badge-cantidad.animado {
+                animation: pulse 0.3s ease;
+            }
+
+            .toast-notificacion {
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #10b981;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 40px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                z-index: 1001;
+                animation: slideUp 0.3s ease, fadeOut 2s ease 1.5s forwards;
+                white-space: nowrap;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+
+            @keyframes fadeOut {
+                to {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+            }
+
             /* Footer */
             footer{background:var(--primary-dark);color:white;padding:40px 20px 25px;margin-top:50px}
             .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1200px;margin:0 auto}
@@ -3824,10 +4482,16 @@ ${productosLista}
             <div class="search-filters-section">
                 <div class="search-wrapper">
                     <div class="search-box-enhanced">
-                        <input type="text" id="searchOutlet" 
-                            placeholder="Buscar producto..." 
-                            autocomplete="off"
-                            inputmode="search">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchOutlet" 
+                                placeholder="Buscar producto..." 
+                                autocomplete="off"
+                                inputmode="search">
+                            <button id="btnLimpiarBusqueda" class="btn-clear-search" type="button" style="display: none;">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
                         <button id="btnEscanearQR" class="btn-escaneo-qr">
                             <i class="fas fa-qrcode"></i>
                             <span>Escanear</span>
@@ -3852,8 +4516,15 @@ ${productosLista}
         
         <section id="productos" class="container">
             <div class="results-header">
-                <div class="contador-enhanced"><i class="fas fa-box-open"></i> <span id="contadorProductos">${productosDataParaHTML.length}</span> producto(s)</div>
-            </div>
+                <div class="contador-enhanced">
+                    <i class="fas fa-box-open"></i> 
+                    <span id="contadorProductos">${productosDataParaHTML.length}</span> producto(s)
+                </div> 
+                <button id="btnLimpiarTodoOutlet" class="btn-clear-all" style="display: none;">
+                    <i class="fas fa-eraser"></i> Limpiar todo
+                </button>  
+            </div> 
+
             <div id="productosGrid" class="productos-grid-enhanced">${window.generarCardsOutlet(productosDataParaHTML)}</div>
         </section>
         
@@ -4011,11 +4682,48 @@ ${productosLista}
                 if (btnCerrarQR) btnCerrarQR.onclick = cerrarModalQR;
                 if (modalQR) modalQR.onclick = (e) => { if (e.target === modalQR) cerrarModalQR(); };
                 
+                const btnLimpiarTodo = document.getElementById('btnLimpiarTodoOutlet');
                 const searchInput = document.getElementById('searchOutlet');
                 const familiaSelect = document.getElementById('filtroFamilia');
                 const acabadoSelect = document.getElementById('filtroAcabado');
                 const materialSelect = document.getElementById('filtroMaterial');
-                
+
+                const actualizarBotonLimpiarTodo = () => {
+                    if (btnLimpiarTodo) {
+                        const hayFiltrosActivos = (familiaSelect && familiaSelect.value !== '') ||
+                                                (acabadoSelect && acabadoSelect.value !== '') ||
+                                                (materialSelect && materialSelect.value !== '') ||
+                                                (searchInput && searchInput.value !== '');
+                        
+                        btnLimpiarTodo.style.display = hayFiltrosActivos ? 'inline-flex' : 'none';
+                    }
+                };
+
+                if (btnLimpiarTodo) {
+                    btnLimpiarTodo.addEventListener('click', function() {
+                        // Limpiar búsqueda
+                        if (searchInput) {
+                            searchInput.value = '';
+                            if (btnLimpiarBusqueda) btnLimpiarBusqueda.style.display = 'none';
+                        }
+                        
+                        // Limpiar selects
+                        if (familiaSelect) familiaSelect.value = '';
+                        if (acabadoSelect) acabadoSelect.value = '';
+                        if (materialSelect) materialSelect.value = '';
+                        
+                        // Aplicar filtros
+                        if (typeof window.limpiarFiltrosOutlet === 'function') {
+                            window.limpiarFiltrosOutlet();
+                        } else if (typeof window.aplicarFiltrosOutlet === 'function') {
+                            window.aplicarFiltrosOutlet();
+                        }
+                        
+                        // Ocultar el botón
+                        btnLimpiarTodo.style.display = 'none';
+                    });
+                }                
+
                 let timeoutBusqueda = null;
                 if (searchInput) {
                     searchInput.addEventListener('input', function() {
@@ -4116,7 +4824,7 @@ ${productosLista}
         } else {
             setTimeout(() => precargarAsesoresOutlet(), 2000);
         }
-        
+               
         // ============================================
         // CONFIGURACIÓN DEL ESCÁNER QR (AGREGAR ESTO)
         // ============================================
@@ -4154,6 +4862,122 @@ ${productosLista}
         window.iniciarEscaneoQR = iniciarEscaneoQR;
         window.cerrarModalQR = cerrarModalQR;
         
+        // ============================================
+        // BÚSQUEDA EN TIEMPO REAL CON BOTÓN DE LIMPIAR
+        // ============================================
+        const searchInput = document.getElementById('searchOutlet');
+        const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
+
+        if (searchInput) {
+            // Función para mostrar/ocultar el botón de limpiar
+            const toggleClearButton = () => {
+                if (btnLimpiarBusqueda) {
+                    if (searchInput.value.length > 0) {
+                        btnLimpiarBusqueda.style.display = 'flex';
+                    } else {
+                        btnLimpiarBusqueda.style.display = 'none';
+                    }
+                }
+            };
+            
+            // Mostrar/ocultar botón al iniciar
+            toggleClearButton();
+            
+            // Búsqueda en tiempo real (debounced)
+            let timeoutBusqueda = null;
+            searchInput.addEventListener('input', function() {
+                // Mostrar/ocultar botón de limpiar
+                toggleClearButton();
+                
+                // Filtrar en tiempo real con debounce
+                clearTimeout(timeoutBusqueda);
+                timeoutBusqueda = setTimeout(() => {
+                    if (typeof window.aplicarFiltrosOutlet === 'function') {
+                        window.aplicarFiltrosOutlet();
+                    }
+                }, 300); // 300ms de delay para mejor rendimiento
+            });
+            
+            // Evento para tecla Enter (búsqueda inmediata)
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(timeoutBusqueda);
+                    if (typeof window.aplicarFiltrosOutlet === 'function') {
+                        window.aplicarFiltrosOutlet();
+                    }
+                }
+            });
+        }
+
+        // Botón para limpiar búsqueda
+        if (btnLimpiarBusqueda) {
+            btnLimpiarBusqueda.addEventListener('click', function() {
+                if (searchInput) {
+                    searchInput.value = '';
+                    // Ocultar el botón
+                    btnLimpiarBusqueda.style.display = 'none';
+                    // Aplicar filtros para mostrar todos los productos
+                    if (typeof window.aplicarFiltrosOutlet === 'function') {
+                        window.aplicarFiltrosOutlet();
+                    }
+                    // Dar foco al input
+                    searchInput.focus();
+                }
+            });
+        }
+      
+        // Detectar scroll para mostrar/ocultar barra
+        let ultimoScroll = 0;
+        let temporizadorOcultar;
+        
+        window.addEventListener('scroll', () => {
+            const barra = document.getElementById('barra-cotizacion');
+            if (!barra) return;
+            
+            const scrollActual = window.scrollY;
+            const alturaTotal = document.body.scrollHeight;
+            const ventanaAltura = window.innerHeight;
+            const estaAlFinal = scrollActual + ventanaAltura >= alturaTotal - 100;
+            
+            if (estaAlFinal) {
+                barra.style.transform = 'translateY(0)';
+                return;
+            }
+            
+            if (scrollActual > ultimoScroll && scrollActual > 100) {
+                clearTimeout(temporizadorOcultar);
+                barra.style.transform = 'translateY(100%)';
+                barra.style.transition = 'transform 0.3s ease';
+            } else if (scrollActual < ultimoScroll) {
+                clearTimeout(temporizadorOcultar);
+                barra.style.transform = 'translateY(0)';
+            } else {
+                clearTimeout(temporizadorOcultar);
+                temporizadorOcultar = setTimeout(() => {
+                    if (barra.style.transform !== 'translateY(0)') {
+                        barra.style.transform = 'translateY(0)';
+                    }
+                }, 2000);
+            }
+            
+            ultimoScroll = scrollActual;
+        });
+        
+        // Mostrar barra al hacer hover en desktop
+        if (window.innerWidth > 768) {
+            const barra = document.getElementById('barra-cotizacion');
+            if (barra) {
+                barra.addEventListener('mouseenter', () => {
+                    barra.style.transform = 'translateY(0)';
+                });
+                barra.addEventListener('mouseleave', () => {
+                    if (window.scrollY > 100) {
+                        barra.style.transform = 'translateY(100%)';
+                    }
+                });
+            }
+        }
+
         console.log('✅ Outlet renderizado correctamente con todas las mejoras');
         
     }, 100);
