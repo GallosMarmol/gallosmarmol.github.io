@@ -4832,22 +4832,30 @@ ${productosLista}
         // ============================================
         const searchInputOutlet = document.getElementById('searchOutlet');
         const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
-        let timeoutBusqueda = null; // Para debounce
+        let timeoutBusqueda = null;
 
         function toggleClearButton() {
-            if (btnLimpiarBusqueda && searchInputOutlet) {
-                if (searchInputOutlet.value.length > 0) {
-                    btnLimpiarBusqueda.style.display = 'flex';
+            const inputActual = document.getElementById('searchOutlet');
+            const btnActual = document.getElementById('btnLimpiarBusqueda');
+            
+            if (btnActual && inputActual) {
+                if (inputActual.value.length > 0) {
+                    btnActual.style.display = 'flex';
                 } else {
-                    btnLimpiarBusqueda.style.display = 'none';
+                    btnActual.style.display = 'none';
                 }
             }
         }
 
         function limpiarCampoBusqueda() {
-            if (searchInputOutlet) {
-                searchInputOutlet.value = '';
-                toggleClearButton();
+            const inputActual = document.getElementById('searchOutlet');
+            const btnActual = document.getElementById('btnLimpiarBusqueda');
+            
+            if (inputActual) {
+                inputActual.value = '';
+                if (btnActual) {
+                    btnActual.style.display = 'none';
+                }
                 
                 // Aplicar filtros para mostrar todos los productos
                 if (typeof window.aplicarFiltrosOutlet === 'function') {
@@ -4855,75 +4863,82 @@ ${productosLista}
                 }
                 
                 // Dar foco al input
-                searchInputOutlet.focus();
+                inputActual.focus();
                 
-                // Mostrar feedback visual
-                if (typeof mostrarToast === 'function') {
-                    mostrarToast('🔍 Búsqueda limpiada');
-                }
+                console.log('🧹 Búsqueda limpiada');
             }
         }
 
-        // Función para aplicar filtros con debounce (evita filtrar en cada letra)
         function ejecutarFiltroBusqueda() {
-            console.log('🔍 Ejecutando filtro de búsqueda:', searchInputOutlet?.value);
+            const inputActual = document.getElementById('searchOutlet');
+            console.log('🔍 Ejecutando filtro de búsqueda:', inputActual?.value);
             if (typeof window.aplicarFiltrosOutlet === 'function') {
                 window.aplicarFiltrosOutlet();
             }
-            // Actualizar botón de limpiar todo si existe
             if (typeof window.actualizarBotonLimpiarTodo === 'function') {
                 window.actualizarBotonLimpiarTodo();
             }
         }
 
-        if (btnLimpiarBusqueda) {
-            // Limpiar eventos anteriores clonando el botón
-            const nuevoBtn = btnLimpiarBusqueda.cloneNode(true);
-            btnLimpiarBusqueda.parentNode.replaceChild(nuevoBtn, btnLimpiarBusqueda);
-            
-            nuevoBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                limpiarCampoBusqueda();
-            });
-        }
-
+        // ============================================
+        // CONFIGURAR INPUT (sin clonar para no romper referencias)
+        // ============================================
         if (searchInputOutlet) {
-            // Limpiar eventos anteriores clonando el input
+            // Remover event listeners anteriores
             const nuevoInput = searchInputOutlet.cloneNode(true);
             searchInputOutlet.parentNode.replaceChild(nuevoInput, searchInputOutlet);
             
-            // Evento input: detecta mientras el usuario escribe
+            // Asignar nuevos eventos al input
             nuevoInput.addEventListener('input', function(e) {
                 console.log('✍️ Usuario escribió:', e.target.value);
-                
-                // Mostrar/ocultar botón de limpiar
                 toggleClearButton();
                 
-                // Filtrar con debounce (espera a que termine de escribir)
                 clearTimeout(timeoutBusqueda);
                 timeoutBusqueda = setTimeout(() => {
                     ejecutarFiltroBusqueda();
-                }, 300); // 300ms de delay después de la última tecla
+                }, 300);
             });
             
-            // Tecla ESC para limpiar
             nuevoInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     limpiarCampoBusqueda();
                 }
-                // Tecla Enter para filtrar inmediatamente
                 if (e.key === 'Enter') {
                     clearTimeout(timeoutBusqueda);
                     ejecutarFiltroBusqueda();
                 }
             });
             
-            console.log('✅ Búsqueda en tiempo real configurada');
+            console.log('✅ Input de búsqueda configurado');
         }
 
+        // ============================================
+        // CONFIGURAR BOTÓN DE LIMPIAR (después del input)
+        // ============================================
+        setTimeout(() => {
+            const btnActual = document.getElementById('btnLimpiarBusqueda');
+            
+            if (btnActual) {
+                // Clonar para eliminar eventos anteriores
+                const nuevoBtn = btnActual.cloneNode(true);
+                btnActual.parentNode.replaceChild(nuevoBtn, btnActual);
+                
+                // Agregar evento al nuevo botón
+                nuevoBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🖱️ Click en botón limpiar');
+                    limpiarCampoBusqueda();
+                });
+                
+                console.log('✅ Botón limpiar configurado');
+            }
+        }, 50);
+
         // Inicializar estado del botón
-        toggleClearButton(); 
+        setTimeout(() => {
+            toggleClearButton();
+        }, 100);
 
         // Detectar scroll para mostrar/ocultar barra
         let ultimoScroll = 0;
