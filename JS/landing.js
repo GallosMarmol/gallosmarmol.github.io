@@ -1410,7 +1410,7 @@ function renderizarLandingProducto(producto) {
         <section class="antes-comprar-section">
             <div class="container">
                 <div class="section-title">
-                    <h2>📋 Lo que debes saber antes de comprar</h2>
+                    <h2>Lo que debes saber antes de comprar</h2>
                     <p>Información clave para tu decisión de compra</p>
                 </div>
                 <div class="antes-comprar-grid">
@@ -1834,7 +1834,13 @@ function renderizarLandingProducto(producto) {
                 </div>
             </div>
         </section>
+
+        ${tieneGaleria ? galeriaHtml : ''}        
         
+        ${tieneRangos ? rangosHtml : ''}
+
+        ${tieneAplicaciones ? aplicacionesHtml : ''}
+
         <section class="specs-section">
             <div class="container">
                 <div class="section-title"><h2>Especificaciones del Producto</h2><p>Información técnica y detalles premium</p></div>
@@ -1850,14 +1856,10 @@ function renderizarLandingProducto(producto) {
             </div>
         </section>
         
+        ${fichaHtml}
+
         ${caracteristicasComercialHtml}
-        
-        ${tieneAplicaciones ? aplicacionesHtml : ''}
-        
-        ${tieneGaleria ? galeriaHtml : ''}
-        
-        ${tieneRangos ? rangosHtml : ''}
-        
+                                
         ${antesDeComprarHtml}
         
         <section>
@@ -1870,9 +1872,7 @@ function renderizarLandingProducto(producto) {
                 </div>
             </div>
         </section>
-        
-        ${fichaHtml}
-        
+                
         ${notaInformativaHtml}
         
         ${botonFlotante}
