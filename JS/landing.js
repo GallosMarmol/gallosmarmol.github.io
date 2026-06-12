@@ -3836,7 +3836,7 @@ ${productosLista}
             .btn-escaneo-qr:active{transform:translateY(0)}
             .btn-escaneo-qr i{font-size:1.1rem}
             
-            .search-hint{display:flex;justify-content:flex-end;margin-top:8px;font-size:0.7rem;color:var(--gray-400)}
+            .search-hint{display:flex;justify-content:flex-start;margin-top:8px;font-size:0.7rem;color:var(--gray-400)}
             .search-hint i{margin-right:4px}
             
             /* Filtros Desktop */
@@ -4832,6 +4832,7 @@ ${productosLista}
         // ============================================
         const searchInputOutlet = document.getElementById('searchOutlet');
         const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
+        let timeoutBusqueda = null; // Para debounce
 
         function toggleClearButton() {
             if (btnLimpiarBusqueda && searchInputOutlet) {
@@ -4858,14 +4859,29 @@ ${productosLista}
                 
                 // Mostrar feedback visual
                 if (typeof mostrarToast === 'function') {
-                    mostrarToast('Búsqueda limpiada');
+                    mostrarToast('🔍 Búsqueda limpiada');
                 }
             }
         }
 
+        // Función para aplicar filtros con debounce (evita filtrar en cada letra)
+        function ejecutarFiltroBusqueda() {
+            console.log('🔍 Ejecutando filtro de búsqueda:', searchInputOutlet?.value);
+            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                window.aplicarFiltrosOutlet();
+            }
+            // Actualizar botón de limpiar todo si existe
+            if (typeof window.actualizarBotonLimpiarTodo === 'function') {
+                window.actualizarBotonLimpiarTodo();
+            }
+        }
+
         if (btnLimpiarBusqueda) {
-            // Método 1: Event listener directo (recomendado)
-            btnLimpiarBusqueda.addEventListener('click', function(e) {
+            // Limpiar eventos anteriores clonando el botón
+            const nuevoBtn = btnLimpiarBusqueda.cloneNode(true);
+            btnLimpiarBusqueda.parentNode.replaceChild(nuevoBtn, btnLimpiarBusqueda);
+            
+            nuevoBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 limpiarCampoBusqueda();
@@ -4873,22 +4889,42 @@ ${productosLista}
         }
 
         if (searchInputOutlet) {
-            // Mostrar/ocultar botón mientras escribe
-            searchInputOutlet.addEventListener('input', function() {
+            // Limpiar eventos anteriores clonando el input
+            const nuevoInput = searchInputOutlet.cloneNode(true);
+            searchInputOutlet.parentNode.replaceChild(nuevoInput, searchInputOutlet);
+            
+            // Evento input: detecta mientras el usuario escribe
+            nuevoInput.addEventListener('input', function(e) {
+                console.log('✍️ Usuario escribió:', e.target.value);
+                
+                // Mostrar/ocultar botón de limpiar
                 toggleClearButton();
+                
+                // Filtrar con debounce (espera a que termine de escribir)
+                clearTimeout(timeoutBusqueda);
+                timeoutBusqueda = setTimeout(() => {
+                    ejecutarFiltroBusqueda();
+                }, 300); // 300ms de delay después de la última tecla
             });
             
             // Tecla ESC para limpiar
-            searchInputOutlet.addEventListener('keydown', function(e) {
+            nuevoInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     limpiarCampoBusqueda();
                 }
+                // Tecla Enter para filtrar inmediatamente
+                if (e.key === 'Enter') {
+                    clearTimeout(timeoutBusqueda);
+                    ejecutarFiltroBusqueda();
+                }
             });
+            
+            console.log('✅ Búsqueda en tiempo real configurada');
         }
 
         // Inicializar estado del botón
-        toggleClearButton();
-      
+        toggleClearButton(); 
+
         // Detectar scroll para mostrar/ocultar barra
         let ultimoScroll = 0;
         let temporizadorOcultar;
