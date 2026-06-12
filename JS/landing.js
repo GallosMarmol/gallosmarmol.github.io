@@ -239,30 +239,83 @@ function actualizarBarraFlotante() {
     const total = cotizacionSeleccionados.length;
     
     if (!barra && total > 0) {
+        // Crear la barra por primera vez
         barra = document.createElement('div');
         barra.id = 'barra-cotizacion';
+        barra.className = 'barra-cotizacion mini';
+        
         barra.innerHTML = `
-            <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #39080a; color: white; padding: 12px 20px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span id="contador-cotizacion">${total}</span> producto(s) seleccionado(s)
+            <!-- Modo Mini (Colapsado) -->
+            <div class="barra-cotizacion-mini">
+                <div class="barra-info-mini">
+                    <div class="barra-icono">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge-cantidad" id="badge-cantidad">${total}</span>
+                    </div>
+                    <div class="barra-texto-mini">
+                        <span id="contador-cotizacion-mini">${total}</span> producto(s)
+                    </div>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="window.limpiarCotizacion()" style="background: #6b7280; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">
-                        <i class="fas fa-trash"></i> Limpiar
+                <div class="barra-acciones-mini">
+                    <button class="btn-cotizar-mini" id="btn-ver-cotizacion-mini">
+                        <i class="fas fa-file-invoice"></i> Cotizar
                     </button>
-                    <button onclick="window.abrirModalCotizacion()" style="background: #d4d4ae; border: none; padding: 8px 16px; border-radius: 8px; color: #39080a; cursor: pointer; font-weight: bold;">
-                        <i class="fas fa-file-invoice"></i> Ver Cotización
+                    <button class="btn-expandir" id="btn-expandir-barra">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Modo Expandido (Detalles) - Oculto inicialmente -->
+            <div class="barra-cotizacion-expanded" style="display: none;">
+                <div class="barra-productos-preview" id="preview-productos">
+                    ${generarPreviewProductos()}
+                </div>
+                <div class="barra-acciones-expanded">
+                    <button class="btn-limpiar" id="btn-limpiar-barra">
+                        <i class="fas fa-trash-alt"></i> Limpiar todo
+                    </button>
+                    <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded">
+                        <i class="fas fa-file-invoice"></i> Ver cotización completa
                     </button>
                 </div>
             </div>
         `;
+        
         document.body.appendChild(barra);
+        configurarEventosBarra(barra);
+        
+        // Ajustar padding del body
+        const alturaBarra = barra.offsetHeight;
+        document.body.style.paddingBottom = `${alturaBarra + 10}px`;
+        
     } else if (barra && total === 0) {
         barra.remove();
+        document.body.style.paddingBottom = '';
+        
     } else if (barra && total > 0) {
-        const contador = document.getElementById('contador-cotizacion');
-        if (contador) contador.textContent = total;
+        // ACTUALIZAR ELEMENTOS EXISTENTES
+        
+        // Actualizar badge y contador mini
+        const badge = document.getElementById('badge-cantidad');
+        if (badge) badge.textContent = total;
+        
+        const contadorMini = document.getElementById('contador-cotizacion-mini');
+        if (contadorMini) contadorMini.textContent = total;
+        
+        // 👇 IMPORTANTE: Actualizar el preview de productos SIEMPRE
+        const previewContainer = document.getElementById('preview-productos');
+        if (previewContainer) {
+            previewContainer.innerHTML = generarPreviewProductos();
+            console.log('📦 Preview actualizado:', cotizacionSeleccionados.length, 'productos');
+        }
+        
+        // Si la barra está expandida, asegurar que el contenido se vea bien
+        const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
+        if (expandedSection && expandedSection.style.display !== 'none') {
+            // Forzar reflow para asegurar que se muestre correctamente
+            expandedSection.style.display = 'flex';
+        }
     }
 }
 
@@ -1071,42 +1124,172 @@ function cerrarLoadingModal() {
 function renderizarLandingProducto(producto) {
     console.log('🎨 Renderizando landing page para:', producto.nombre);
     
+    // ========== CONSTANTES ==========
+    const FOTOS_POR_CARGA = 3;
+    
+    // ========== FUNCIÓN PARA OPTIMIZAR URLs DE GOOGLE DRIVE ==========
     function optimizarGoogleDriveUrl(url) {
-        if (!url) return 'FOTO/foto_04.webp';
-        const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-        if (match) return `https://lh3.googleusercontent.com/d/${match[1]}`;
-        return url;
+        if (!url || url === '') return 'FOTO/foto_04.webp';
+        
+        try {
+            if (url.includes('lh3.googleusercontent.com')) {
+                return url;
+            }
+            
+            let fileId = null;
+            
+            let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                fileId = match[1];
+            }
+            
+            if (!fileId) {
+                match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            }
+            
+            if (!fileId) {
+                match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            }
+            
+            if (fileId) {
+                return `https://lh3.googleusercontent.com/d/${fileId}`;
+            }
+            
+            return url;
+            
+        } catch(e) {
+            console.warn('Error al procesar URL:', url, e);
+            return 'FOTO/foto_04.webp';
+        }
     }
     
+    // ========== OBTENER DATOS CON LAS URLs CORREGIDAS ==========
     const imagenPrincipal = optimizarGoogleDriveUrl(producto.imagen_principal);
+    
     const galeriaImagenes = (producto.galeria && producto.galeria.length > 0) 
         ? producto.galeria.map(img => optimizarGoogleDriveUrl(img))
         : [];
-    const rangosArray = producto.rangos || [];
+    
+    const rangosArray = (producto.rangos && producto.rangos.length > 0) 
+        ? producto.rangos.map(img => optimizarGoogleDriveUrl(img))
+        : [];
+    
     const tieneGaleria = galeriaImagenes.length > 0;
     const tieneRangos = rangosArray.length > 0;
     const tieneAplicaciones = producto.aplicaciones && producto.aplicaciones.length > 0;
+    
+    const galeriaInicial = galeriaImagenes.slice(0, FOTOS_POR_CARGA);
+    const rangosIniciales = rangosArray.slice(0, FOTOS_POR_CARGA);
     
     const nombrePartes = producto.nombre.split(' ');
     const primeraPalabra = nombrePartes[0];
     const restoPalabras = nombrePartes.slice(1).join(' ');
     
+    // ========== MODAL PARA GALERÍA (Inspiración) ==========
+    const modalGaleriaHtml = `
+        <div id="modalGaleria" class="modal-galeria">
+            <div class="modal-galeria-content">
+                <div class="modal-galeria-header">
+                    <h3><i class="fas fa-images"></i> Galería de Inspiración - ${producto.nombre}</h3>
+                    <button class="modal-galeria-close">&times;</button>
+                </div>
+                <div class="modal-galeria-body" id="modalGaleriaBody"></div>
+            </div>
+        </div>
+        
+        <!-- Modal de zoom para galería -->
+        <div id="zoomModalGaleria" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <div class="modal-prev" id="zoomGaleriaPrev">❮</div>
+                <div class="modal-next" id="zoomGaleriaNext">❯</div>
+                <img id="zoomGaleriaImage" src="" alt="Imagen ampliada">
+                <div id="zoomGaleriaCounter" class="modal-counter">1 / 1</div>
+            </div>
+        </div>
+    `;
+    
+    // ========== MODAL PARA RANGOS ==========
+    const modalRangosHtml = `
+        <div id="modalRangos" class="modal-galeria">
+            <div class="modal-galeria-content">
+                <div class="modal-galeria-header">
+                    <h3><i class="fas fa-palette"></i> Rangos y Variaciones - ${producto.nombre}</h3>
+                    <button class="modal-rangos-close">&times;</button>
+                </div>
+                <div class="modal-galeria-body" id="modalRangosBody"></div>
+            </div>
+        </div>
+        
+        <!-- Modal de zoom para rangos -->
+        <div id="zoomModalRangos" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <div class="modal-prev" id="zoomRangosPrev">❮</div>
+                <div class="modal-next" id="zoomRangosNext">❯</div>
+                <img id="zoomRangosImage" src="" alt="Imagen ampliada">
+                <div id="zoomRangosCounter" class="modal-counter">1 / 1</div>
+            </div>
+        </div>
+    `;
+    
+    // ========== MODAL DE ZOOM PRINCIPAL PARA IMÁGENES DE LA PÁGINA ==========
+    const modalZoomPrincipalHtml = `
+        <div id="zoomModalPrincipal" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <div class="modal-prev" id="zoomPrincipalPrev">❮</div>
+                <div class="modal-next" id="zoomPrincipalNext">❯</div>
+                <img id="zoomPrincipalImage" src="" alt="Imagen ampliada">
+                <div id="zoomPrincipalCounter" class="modal-counter">1 / 1</div>
+            </div>
+        </div>
+    `;
+    
+    // ========== GENERAR HTML DE GALERÍA ==========
     let galeriaHtml = '';
     if (tieneGaleria) {
-        for (let i = 0; i < galeriaImagenes.length; i++) {
-            const img = galeriaImagenes[i];
-            const idx = i + 1;
-            galeriaHtml += `
-                <div class="galeria-item">
-                    <img src="${img}" alt="${producto.nombre} - Imagen ${idx}" onerror="this.src='FOTO/foto_04.webp'" data-index="${idx}">
-                    <button class="zoom-btn" data-index="${idx}">
-                        <i class="fas fa-search-plus"></i>
-                    </button>
+        galeriaHtml = `
+            <section class="gallery-section" id="galeria">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Inspiración y Diseño</h2>
+                        <p>Visualiza cómo se transforma cada ambiente</p>
+                    </div>
+                    <div class="gallery-grid" id="galleryGrid">
+                        ${galeriaInicial.map((img, i) => {
+                            return `
+                                <div class="galeria-item">
+                                    <img src="${img}" alt="${producto.nombre} - Imagen ${i+1}" 
+                                         loading="lazy" 
+                                         onerror="this.src='FOTO/foto_04.webp'" 
+                                         data-galeria-index="${i}">
+                                    <button class="zoom-btn-galeria" data-galeria-index="${i}">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${galeriaImagenes.length > FOTOS_POR_CARGA ? `
+                        <div class="ver-mas-container text-center">
+                            <button class="btn-ver-mas" id="verTodaGaleriaBtn">
+                                <i class="fas fa-images"></i> Ver todas las imágenes de inspiración (${galeriaImagenes.length})
+                            </button>
+                        </div>
+                    ` : ''}
                 </div>
-            `;
-        }
+            </section>
+        `;
     }
     
+    // ========== GENERAR HTML DE RANGOS ==========
     let rangosHtml = '';
     if (tieneRangos) {
         rangosHtml = `
@@ -1116,34 +1299,77 @@ function renderizarLandingProducto(producto) {
                         <h2>Rangos y Variaciones Naturales</h2>
                         <p>Diferentes vetas y tonalidades que puede presentar el producto</p>
                     </div>
-                    <div class="aviso-variabilidad" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px 20px; margin-bottom: 25px; border-radius: 8px;">
-                        <div style="display: flex; gap: 12px; align-items: flex-start;">
-                            <i class="fas fa-info-circle" style="color: #856404; font-size: 1.2rem; margin-top: 2px;"></i>
-                            <div style="color: #856404;">
-                                <strong style="display: block; margin-bottom: 5px;">⚠️ IMPORTANTE: VARIABILIDAD NATURAL</strong>
-                                <p style="margin: 0; font-size: 0.85rem;">Las imágenes mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. Al tratarse de piedra natural, no podemos garantizar que el producto final sea idéntico a las muestras mostradas.</p>
+                    <div class="aviso-variabilidad">
+                        <div class="aviso-flex">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>⚠️ IMPORTANTE: VARIABILIDAD NATURAL</strong>
+                                <p>Las imágenes mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. Al tratarse de piedra natural, no podemos garantizar que el producto final sea idéntico a las muestras mostradas.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="rangos-grid">
-                        ${rangosArray.map((img, i) => {
-                            const idx = 1 + galeriaImagenes.length + i;
-                            const imgOptimizada = optimizarGoogleDriveUrl(img);
+                    <div class="rangos-grid" id="rangosGrid">
+                        ${rangosIniciales.map((img, i) => {
                             return `
                                 <div class="rango-item">
-                                    <img src="${imgOptimizada}" alt="${producto.nombre} - Variación ${i+1}" loading="lazy" onerror="this.src='FOTO/foto_04.webp'" data-index="${idx}">
-                                    <button class="zoom-btn" data-index="${idx}">
+                                    <img src="${img}" alt="${producto.nombre} - Variación ${i+1}" 
+                                         loading="lazy" 
+                                         onerror="this.src='FOTO/foto_04.webp'" 
+                                         data-rango-index="${i}">
+                                    <button class="zoom-btn-rango" data-rango-index="${i}">
                                         <i class="fas fa-search-plus"></i>
                                     </button>
                                 </div>
                             `;
                         }).join('')}
                     </div>
+                    ${rangosArray.length > FOTOS_POR_CARGA ? `
+                        <div class="ver-mas-container text-center">
+                            <button class="btn-ver-mas" id="verTodosRangosBtn">
+                                <i class="fas fa-palette"></i> Ver todas las variaciones (${rangosArray.length})
+                            </button>
+                        </div>
+                    ` : ''}
                 </div>
             </section>
         `;
     }
     
+    // ========== CARACTERÍSTICAS COMERCIALES ==========
+    const caracteristicasComercialHtml = `
+        <section class="caracteristicas-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Características del Material Comercial</h2>
+                    <p>Información importante sobre las particularidades de la piedra natural</p>
+                </div>
+                <div class="caracteristicas-grid">
+                    <div class="caracteristica-card">
+                        <i class="fas fa-border-all"></i>
+                        <h3>Esquinas Postilladas</h3>
+                        <p>Las piezas pueden presentar esquinas postilladas o desportilladuras leves en los bordes, lo cual es normal en materiales pétreos.</p>
+                    </div>
+                    <div class="caracteristica-card">
+                        <i class="fas fa-cut"></i>
+                        <h3>Marcas del Disco</h3>
+                        <p>Es posible encontrar marcas del disco de corte en la superficie durante el procesamiento del material.</p>
+                    </div>
+                    <div class="caracteristica-card">
+                        <i class="fas fa-water"></i>
+                        <h3>Cangrejera Superficial</h3>
+                        <p>La cara de las baldosas puede presentar cangrejera (pequeñas imperfecciones superficiales) características del material.</p>
+                    </div>
+                    <div class="caracteristica-card">
+                        <i class="fas fa-palette"></i>
+                        <h3>Rango de Color Variado</h3>
+                        <p>El rango de color es variado y puede ser más pronunciado entre diferentes lotes de producción.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+    
+    // ========== APLICACIONES ==========
     let aplicacionesHtml = '';
     if (tieneAplicaciones) {
         aplicacionesHtml = `
@@ -1166,310 +1392,424 @@ function renderizarLandingProducto(producto) {
         `;
     }
     
+    // ========== BANNER ADVERTENCIA ==========
     const bannerAdvertencia = `
-        <div class="aviso-sticky" style="background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 12px 0; position: sticky; top: 65px; z-index: 99;">
+        <div class="aviso-sticky">
             <div class="container">
-                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                    <i class="fas fa-exclamation-triangle" style="color: #856404; font-size: 1.1rem;"></i>
-                    <span style="color: #856404; font-size: 0.85rem;">
-                        <strong>IMPORTANTE:</strong> Las imágenes son referenciales. La piedra natural presenta variaciones en vetas, tonos y textura. 
-                        <a href="#nota-natural" style="color: #856404; text-decoration: underline;">Más información</a>
-                    </span>
+                <div class="aviso-flex-center">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>IMPORTANTE:</strong> Las imágenes son referenciales. La piedra natural presenta variaciones en vetas, tonos y textura. 
+                    <a href="#nota-natural">Más información</a></span>
                 </div>
             </div>
         </div>
     `;
     
-    const caracteristicasComercialHtml = `
-        <section class="caracteristicas-section" style="background: #f8f9fa; padding: 40px 0;">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Características del Material Comercial</h2>
-                    <p>Información importante sobre las particularidades de la piedra natural</p>
-                </div>
-                <div class="caracteristicas-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div class="caracteristica-card" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <i class="fas fa-border-all" style="font-size: 2rem; color: #39080a; margin-bottom: 12px; display: block;"></i>
-                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Esquinas Postilladas</h3>
-                        <p style="font-size: 0.85rem; color: #666;">Las piezas pueden presentar esquinas postilladas o desportilladuras leves en los bordes, lo cual es normal en materiales pétreos.</p>
-                    </div>
-                    <div class="caracteristica-card" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <i class="fas fa-cut" style="font-size: 2rem; color: #39080a; margin-bottom: 12px; display: block;"></i>
-                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Marcas del Disco</h3>
-                        <p style="font-size: 0.85rem; color: #666;">Es posible encontrar marcas del disco de corte en la superficie durante el procesamiento del material.</p>
-                    </div>
-                    <div class="caracteristica-card" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <i class="fas fa-water" style="font-size: 2rem; color: #39080a; margin-bottom: 12px; display: block;"></i>
-                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Cangrejera Superficial</h3>
-                        <p style="font-size: 0.85rem; color: #666;">La cara de las baldosas puede presentar cangrejera (pequeñas imperfecciones superficiales) características del material.</p>
-                    </div>
-                    <div class="caracteristica-card" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <i class="fas fa-palette" style="font-size: 2rem; color: #39080a; margin-bottom: 12px; display: block;"></i>
-                        <h3 style="font-size: 1rem; margin-bottom: 8px;">Rango de Color Variado</h3>
-                        <p style="font-size: 0.85rem; color: #666;">El rango de color es variado y puede ser más pronunciado entre diferentes lotes de producción.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    `;
-    
+    // ========== ANTES DE COMPRAR ==========
     const antesDeComprarHtml = `
-        <section class="antes-comprar-section" style="background: #e8f4f8; padding: 40px 0;">
+        <section class="antes-comprar-section">
             <div class="container">
                 <div class="section-title">
                     <h2>📋 Lo que debes saber antes de comprar</h2>
                     <p>Información clave para tu decisión de compra</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">Las imágenes son REFERENCIALES, no contractuales</span>
-                    </div>
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">La piedra natural presenta variabilidad en vetas y tonos</span>
-                    </div>
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">No se puede seleccionar una veta o tonalidad específica</span>
-                    </div>
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">Solicita una muestra física antes de tu pedido</span>
-                    </div>
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">El producto final puede diferir de las muestras mostradas</span>
-                    </div>
-                    <div style="display: flex; gap: 12px; align-items: center; background: white; padding: 15px; border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i>
-                        <span style="font-size: 0.9rem;">Las variaciones son características de calidad, no defectos</span>
-                    </div>
+                <div class="antes-comprar-grid">
+                    <div class="info-item"><span>Las imágenes son REFERENCIALES, no contractuales</span></div>
+                    <div class="info-item"><span>La piedra natural presenta variabilidad en vetas y tonos</span></div>
+                    <div class="info-item"><span>No se puede seleccionar una veta o tonalidad específica</span></div>
+                    <div class="info-item"><span>Solicita una muestra física antes de tu pedido</span></div>
+                    <div class="info-item"><span>El producto final puede diferir de las muestras mostradas</span></div>
+                    <div class="info-item"><span>Las variaciones son características de calidad, no defectos</span></div>
                 </div>
             </div>
         </section>
     `;
     
+    // ========== ESPECIFICACIONES ==========
     const especificacionesConTooltips = [
-        { titulo: 'Código', valor: producto.codigo || 'NO ESPECIFICADO', tooltip: 'Código interno de identificación del producto' },
-        { titulo: 'Unidad de Medida', valor: producto.unidad_medida?.nombre || 'NO ESPECIFICADA', tooltip: 'Unidad en la que se comercializa el producto' },
-        { titulo: 'Calidad', valor: producto.calidad?.nombre || 'NO ESPECIFICADA', tooltip: 'Estándar de calidad del producto' },
+        { titulo: 'Código', valor: producto.codigo || 'NO ESPECIFICADO', tooltip: 'Código de identificación del producto' },
+        { titulo: 'Unidad de Medida', valor: producto.unidad_medida?.nombre || 'NO ESPECIFICADA', tooltip: 'Unidad de medida en la que se comercializa el producto' },
+        { titulo: 'Calidad', valor: producto.calidad?.nombre || 'NO ESPECIFICADA', tooltip: 'Calidad del producto' },
         { titulo: 'Modelo', valor: producto.modelo || 'NO ESPECIFICADO', tooltip: 'Referencia del modelo' },
         { titulo: 'Familia', valor: producto.familia?.nombre || 'NO ESPECIFICADA', tooltip: 'Familia a la que pertenece el producto' },
-        { titulo: 'Acabado', valor: producto.acabado?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de acabado superficial (pulido, apomazado, etc.)' },
-        { titulo: 'Borde', valor: producto.borde?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de borde del material' },
-        { titulo: 'Material', valor: producto.material?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de material (mármol, granito, etc.)' },
-        { titulo: 'Medida', valor: producto.medida || 'NO ESPECIFICADA', tooltip: 'Dimensiones estándar de la pieza' },
-        { titulo: 'Espesor', valor: producto.espesor || 'NO ESPECIFICADO', tooltip: 'Grosor del material' }
+        { titulo: 'Acabado', valor: producto.acabado?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de acabado del producto' },
+        { titulo: 'Borde', valor: producto.borde?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de borde del producto' },
+        { titulo: 'Material', valor: producto.material?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de material del producto' },
+        { titulo: 'Medida', valor: producto.medida || 'NO ESPECIFICADA', tooltip: 'Dimensiones del producto' },
+        { titulo: 'Espesor', valor: producto.espesor || 'NO ESPECIFICADO', tooltip: 'Grosor del producto' }
     ];
     
+    // ========== FICHA TÉCNICA ==========
     const fichaUrl = producto.ficha_tecnica_url ? optimizarGoogleDriveUrl(producto.ficha_tecnica_url) : null;
     const fichaHtml = fichaUrl ? `
         <div class="ficha-section">
             <div class="container text-center">
-                <a href="${fichaUrl}" target="_blank" class="btn-ficha"><i class="fas fa-file-pdf"></i> Ver Ficha Técnica</a>
+                <a href="${fichaUrl}" download class="btn-ficha" id="btnDescargarFicha">
+                    <i class="fas fa-file-pdf"></i> Descargar Ficha Técnica
+                </a>
             </div>
         </div>
     ` : '';
     
+    // ========== NOTA INFORMATIVA ==========
     const notaInformativaHtml = `
         <section class="nota-section" id="nota-natural">
             <div class="container">
-                <div class="nota-card" style="border-left-color: #39080a;">
-                    <div class="nota-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
+                <div class="nota-card">
+                    <div class="nota-icon"><i class="fas fa-info-circle"></i></div>
                     <div class="nota-content">
                         <h3>Nota sobre la variabilidad natural de la piedra</h3>
                         <p>Debido a su naturaleza, las piedras naturales como mármoles, travertinos, granitos y otras, poseen grados de variación en tono y color, diferencias en la formación de vetas y distintos niveles de porosidad. Por este motivo, los tonos y características de las muestras exhibidas y/o entregadas, son referenciales y pueden variar.</p>
-                        <p style="margin-top: 12px;"><strong>Características del material comercial:</strong> Las piezas pueden presentar esquinas postilladas, marcas del disco de corte, cangrejera superficial en la cara de la baldosa, y rango de color variado (más pronunciado entre lotes). Estas son características normales de los materiales pétreos y no constituyen defectos.</p>
-                        <p style="margin-top: 12px;"><strong>IMPORTANTE:</strong> Las imágenes de rangos y variaciones mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. NO es posible seleccionar una veta o tonalidad específica al momento de la compra.</p>
-                        <p style="margin-top: 12px;">Para mayor certeza, recomendamos solicitar una muestra física antes de realizar su pedido.</p>
+                        <p><strong>Características del material comercial:</strong> Las piezas pueden presentar esquinas postilladas, marcas del disco de corte, cangrejera superficial en la cara de la baldosa, y rango de color variado (más pronunciado entre lotes). Estas son características normales de los materiales pétreos y no constituyen defectos.</p>
+                        <p><strong>IMPORTANTE:</strong> Las imágenes de rangos y variaciones mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. NO es posible seleccionar una veta o tonalidad específica al momento de la compra.</p>
+                        <p>Para mayor certeza, recomendamos solicitar una muestra física antes de realizar su pedido.</p>
                     </div>
                 </div>
             </div>
         </section>
     `;
     
+    // ========== BOTÓN FLOTANTE SOLO SUBIR (SIN COMPARTIR) ==========
+    const botonFlotante = `
+        <div class="floating-buttons">
+            <button class="floating-btn floating-top" id="floatingTopBtn">
+                <i class="fas fa-arrow-up"></i>
+                <span class="floating-tooltip">Subir</span>
+            </button>
+        </div>
+    `;
+    
+    // ========== SEO META TAGS ==========
+    const metaTags = `
+        <meta name="description" content="${producto.descripcion_corta || 'Piedra natural de alta calidad para arquitectura y diseño.'}">
+        <meta property="og:title" content="${producto.nombre} | Gallos Mármol">
+        <meta property="og:description" content="${producto.descripcion_corta || 'Descubre la elegancia de la piedra natural.'}">
+        <meta property="og:image" content="${imagenPrincipal}">
+        <meta property="og:type" content="product">
+        <meta name="twitter:card" content="summary_large_image">
+    `;
+    
+    // ========== SCHEMA MARKUP ==========
+    const schemaMarkup = `
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "${producto.nombre.replace(/"/g, '\\"')}",
+            "description": "${(producto.descripcion_corta || '').replace(/"/g, '\\"')}",
+            "image": "${imagenPrincipal}",
+            "sku": "${producto.codigo || ''}",
+            "brand": {"@type": "Brand", "name": "Gallos Mármol"}
+        }
+        <\/script>
+    `;
+    
+    // ========== PRELOAD ==========
+    const preloadHtml = `
+        <link rel="preload" as="image" href="${imagenPrincipal}">
+    `;
+    
+    // ========== HTML COMPLETO ==========
     const html = `<!DOCTYPE html>
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
         <title>${producto.nombre} | Gallos Mármol</title>
+        ${metaTags}
+        ${schemaMarkup}
+        ${preloadHtml}
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            img { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-user-drag: none; user-drag: none; pointer-events: auto; }
-            body { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; font-family: 'Poppins', sans-serif; background: #ffffff; overflow-x: hidden; }
             :root {
                 --primary: #39080a;
                 --primary-dark: #2a0607;
-                --primary-light: #5a1a1d;
                 --secondary: #d4d4ae;
-                --secondary-dark: #c4c49a;  
                 --white: #ffffff;
-                --gray-50: #fafafa;
                 --gray-100: #f5f5f5;
-                --gray-200: #eeeeee;
-                --gray-300: #e0e0e0;
-                --gray-400: #cbd5e1;
-                --gray-500: #94a3b8;
                 --gray-600: #666666;
                 --gray-700: #444444;
                 --gray-800: #222222;
-                --red-500: #ef4444;
-                --red-600: #dc2626;
-                --orange-400: #fb923c;
-                --secondary-light: #e4e4c8;
+                --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+                --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+                --border-radius: 16px;
+                --border-radius-sm: 12px;
             }
-            .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-            h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
-            .section-title { text-align: center; margin-bottom: 40px; }
-            .section-title h2 { font-size: 1.75rem; color: var(--primary); margin-bottom: 12px; }
-            .section-title p { font-size: 0.9rem; color: var(--gray-600); max-width: 600px; margin: 0 auto; }
-            header { 
-                position: fixed; 
-                top: 0; 
-                left: 0; 
-                right: 0; 
-                background: var(--primary); 
-                z-index: 1000; 
-                padding: 12px 0; 
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            }
-            .navbar { 
-                display: flex; 
-                justify-content: center; 
-                align-items: center; 
-                width: 100%;
-            }
-            .logo { 
+            .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+            .text-center { text-align: center; }
+            body { font-family: 'Poppins', sans-serif; background: var(--white); overflow-x: hidden; color: var(--gray-800); }
+            .section-title { text-align: center; margin-bottom: 32px; }
+            .section-title h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
+            .section-title p { font-size: 0.85rem; color: var(--gray-600); max-width: 600px; margin: 0 auto; }
+            header { position: fixed; top: 0; left: 0; right: 0; background: var(--primary); z-index: 1000; padding: 10px 0; box-shadow: var(--shadow-sm); }
+            .navbar { display: flex; justify-content: center; align-items: center; }
+            .logo img { width: 200px; height: auto; pointer-events: none; }
+            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 90px; z-index: 99; }
+            .aviso-flex-center { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 0.75rem; color: #856404; }
+            .aviso-flex-center a { color: #856404; text-decoration: underline; }
+            
+            /* HERO SECTION - CORREGIDA PARA MÓVIL Y TABLET */
+            .hero { 
+                min-height: 100vh; 
                 display: flex; 
                 align-items: center; 
                 justify-content: center;
+                background: linear-gradient(135deg, rgba(57,8,10,0.92), rgba(57,8,10,0.88)); 
+                padding: 80px 0 50px; 
             }
-            .logo img { 
-                width: 130px; 
-                height: auto; 
-                pointer-events: none; 
-            }        
-            .spec-card { position: relative; cursor: help; }
-            .spec-card:hover .tooltip-text { visibility: visible; opacity: 1; }
-            .tooltip-text { visibility: hidden; width: 200px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 5px 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.7rem; font-weight: normal; }
-            .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
-            .hero { min-height: 100vh; display: flex; align-items: center; background: linear-gradient(rgba(57,8,10,0.85), rgba(57,8,10,0.85)); padding: 100px 0 60px; }
-            .hero-content { display: flex; flex-direction: column; gap: 30px; }
-            .hero-text { text-align: center; order: 2; }
-            .hero h1 { font-size: 1.8rem; color: var(--white); margin-bottom: 16px; }
-            .hero h1 span { color: var(--secondary); }
-            .hero p { color: rgba(255,255,255,0.9); font-size: 0.9rem; margin-bottom: 24px; }
-            .hero-buttons { display: flex; flex-direction: column; gap: 12px; }
-            .hero-image { position: relative; order: 1; text-align: center; }
-            .hero-image img { width: 80%; max-width: 280px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); cursor: pointer; }
-            .hero-image .zoom-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10; }
-            .hero-image .zoom-btn:hover { background: var(--primary); transform: scale(1.1); }
-            .btn { padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: inline-block; text-align: center; transition: 0.3s; cursor: pointer; border: none; }
-            .btn-secondary { border: 2px solid var(--secondary); color: var(--secondary); background: transparent; }
-            .btn-secondary:hover { background: var(--secondary); color: var(--primary); transform: translateY(-2px); }
-            section { padding: 60px 0; }
+            .hero-content { 
+                display: flex; 
+                flex-direction: column; 
+                align-items: center;
+                justify-content: center;
+                gap: 30px; 
+                width: 100%;
+            }
+            .hero-text { 
+                text-align: center; 
+                order: 2; 
+                width: 100%;
+            }
+            .hero h1 { 
+                font-size: 1.6rem; 
+                color: var(--white); 
+                margin-bottom: 12px; 
+            }
+            .hero h1 span { 
+                color: var(--secondary); 
+            }
+            .hero p { 
+                color: rgba(255,255,255,0.9); 
+                font-size: 0.85rem; 
+                margin-bottom: 20px; 
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-buttons { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 10px; 
+                align-items: center;
+            }
+            .hero-image { 
+                position: relative; 
+                order: 1; 
+                text-align: center; 
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+            .hero-image img { 
+                width: auto;
+                max-width: 85%;
+                height: auto;
+                max-height: 280px;
+                object-fit: contain;
+                border-radius: 20px; 
+                box-shadow: var(--shadow-lg); 
+                cursor: pointer; 
+            }
+            .btn { 
+                padding: 12px 20px; 
+                border-radius: 40px; 
+                font-weight: 600; 
+                font-size: 0.85rem; 
+                text-decoration: none; 
+                display: inline-block; 
+                text-align: center; 
+                transition: all 0.3s ease; 
+                border: none; 
+                cursor: pointer; 
+            }
+            .btn-secondary { 
+                border: 2px solid var(--secondary); 
+                color: var(--secondary); 
+                background: transparent; 
+            }
+            .btn-secondary:hover { 
+                background: var(--secondary); 
+                color: var(--primary); 
+                transform: translateY(-2px); 
+            }
+            
+            section { padding: 50px 0; }
             .specs-section { background: var(--gray-100); }
-            .specs-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-            .spec-card { background: var(--white); padding: 20px; border-radius: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s; }
-            .spec-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-            .spec-card h3 { font-size: 0.75rem; color: var(--gray-600); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
-            .spec-card p { font-size: 1rem; font-weight: 700; color: var(--primary); }
-            .apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-            .app-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 24px 12px; border-radius: 16px; text-align: center; transition: 0.3s; }
-            .app-card i { font-size: 2rem; color: var(--secondary); margin-bottom: 10px; }
-            .app-card h3 { font-size: 0.85rem; font-weight: 500; }
+            .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .spec-card { background: var(--white); padding: 16px; border-radius: var(--border-radius-sm); text-align: center; box-shadow: var(--shadow-sm); position: relative; cursor: help; }
+            .spec-card h3 { font-size: 0.7rem; color: var(--gray-600); margin-bottom: 5px; text-transform: uppercase; }
+            .spec-card p { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+            .tooltip-text { visibility: hidden; width: 180px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 5px 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.7rem; }
+            .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
+            .spec-card:hover .tooltip-text { visibility: visible; opacity: 1; }
+            .caracteristicas-section { background: #f8f9fa; }
+            .caracteristicas-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+            .caracteristica-card { background: var(--white); padding: 20px; border-radius: var(--border-radius-sm); text-align: center; }
+            .caracteristica-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; display: block; }
+            .caracteristica-card h3 { font-size: 0.9rem; margin-bottom: 8px; color: var(--primary); }
+            .caracteristica-card p { font-size: 0.8rem; color: var(--gray-600); }
+            .apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .app-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 20px 12px; border-radius: var(--border-radius-sm); text-align: center; }
+            .app-card i { font-size: 1.8rem; color: var(--secondary); margin-bottom: 8px; }
+            .app-card h3 { font-size: 0.8rem; font-weight: 500; }
             .gallery-section, .rangos-section { background: var(--gray-100); }
             .gallery-grid, .rangos-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-            .galeria-item, .rango-item { position: relative; overflow: hidden; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-            .galeria-item img, .rango-item img { width: 100%; height: 240px; object-fit: cover; transition: 0.5s; display: block; cursor: pointer; }
+            .galeria-item, .rango-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
+            .galeria-item img, .rango-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
             .galeria-item:hover img, .rango-item:hover img { transform: scale(1.03); }
-            .galeria-item .zoom-btn, .rango-item .zoom-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; opacity: 0; z-index: 10; }
-            .galeria-item:hover .zoom-btn, .rango-item:hover .zoom-btn { opacity: 1; }
-            .trust-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-            .trust-card { background: var(--gray-100); padding: 25px 20px; border-radius: 16px; text-align: center; transition: 0.3s; }
-            .trust-card i { font-size: 2rem; color: var(--primary); margin-bottom: 12px; }
-            .trust-card h3 { font-size: 1rem; margin-bottom: 8px; color: var(--primary); }
-            .trust-card p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.5; }
-            .ficha-section { background: var(--gray-100); padding: 40px 0; text-align: center; }
-            .btn-ficha { background: var(--primary); color: var(--white); padding: 12px 28px; border-radius: 40px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+            .zoom-btn-galeria, .zoom-btn-rango, .zoom-btn-hero { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; }
+            .zoom-btn-galeria:hover, .zoom-btn-rango:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
+            .ver-mas-container { margin-top: 25px; }
+            .btn-ver-mas { background: var(--primary); color: var(--white); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+            .btn-ver-mas:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            .aviso-variabilidad { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; margin-bottom: 25px; border-radius: 8px; }
+            .aviso-flex { display: flex; gap: 12px; align-items: flex-start; }
+            .aviso-flex i { color: #856404; font-size: 1.1rem; margin-top: 2px; }
+            .aviso-flex strong { display: block; margin-bottom: 4px; color: #856404; font-size: 0.8rem; }
+            .aviso-flex p { margin: 0; font-size: 0.75rem; color: #856404; }
+            .antes-comprar-section { background: #e8f4f8; }
+            .antes-comprar-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+            .info-item { display: flex; gap: 10px; align-items: center; background: var(--white); padding: 12px 15px; border-radius: 10px; font-size: 0.8rem; }
+            .info-item i { color: #28a745; font-size: 1.1rem; flex-shrink: 0; }
+            .trust-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+            .trust-card { background: var(--gray-100); padding: 20px; border-radius: var(--border-radius-sm); text-align: center; }
+            .trust-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
+            .trust-card h3 { font-size: 0.9rem; margin-bottom: 6px; color: var(--primary); }
+            .trust-card p { font-size: 0.8rem; color: var(--gray-600); }
+            .ficha-section { background: var(--gray-100); padding: 30px 0; text-align: center; }
+            .btn-ficha { background: var(--primary); color: var(--white); padding: 12px 28px; border-radius: 40px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease; }
             .btn-ficha:hover { background: var(--primary-dark); transform: translateY(-2px); }
-            .nota-section { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 50px 0; }
-            .nota-card { background: var(--white); border-radius: 20px; padding: 30px; display: flex; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
-            .nota-icon { flex-shrink: 0; width: 50px; height: 50px; background: rgba(57,8,10,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-            .nota-icon i { font-size: 1.5rem; color: var(--primary); }
-            .nota-content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
-            .nota-content p { font-size: 0.85rem; color: var(--gray-700); line-height: 1.6; }
-            footer { background: var(--primary-dark); color: var(--white); padding: 40px 20px 25px; }
-            .footer-grid { display: grid; grid-template-columns: 1fr; gap: 30px; text-align: center; }
-            .footer-logo img { width: 150px; margin-bottom: 12px; pointer-events: none; }
+            .nota-section { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px 0; }
+            .nota-card { background: var(--white); border-radius: 20px; padding: 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); border-left: 5px solid var(--primary); }
+            .nota-icon { flex-shrink: 0; width: 40px; height: 40px; background: rgba(57,8,10,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+            .nota-icon i { font-size: 1.2rem; color: var(--primary); }
+            .nota-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+            .nota-content p { font-size: 0.8rem; color: var(--gray-700); line-height: 1.5; margin-bottom: 8px; }
+            footer { background: var(--primary-dark); color: var(--white); padding: 35px 20px 25px; }
+            .footer-grid { display: grid; grid-template-columns: 1fr; gap: 25px; text-align: center; }
+            .footer-logo img { width: 120px; margin-bottom: 10px; pointer-events: none; }
             .footer-logo p { font-size: 0.75rem; opacity: 0.7; }
-            .footer-social h4, .footer-links h4 { font-size: 0.9rem; margin-bottom: 15px; color: var(--secondary); }
-            .footer-social a, .footer-links a { display: flex; align-items: center; justify-content: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 10px; transition: 0.3s; font-size: 0.8rem; }
+            .footer-social h4, .footer-links h4 { font-size: 0.85rem; margin-bottom: 12px; color: var(--secondary); }
+            .footer-social a, .footer-links a { display: flex; align-items: center; justify-content: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 8px; transition: all 0.3s ease; font-size: 0.75rem; }
             .footer-social a:hover, .footer-links a:hover { color: var(--secondary); transform: translateX(5px); }
-            .footer-bottom { text-align: center; margin-top: 35px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.65rem; opacity: 0.6; }
-            .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 20000; justify-content: center; align-items: center; cursor: pointer; }
+            .footer-bottom { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.6rem; opacity: 0.6; }
+            
+            /* Modales */
+            .modal-galeria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 20000; overflow-y: auto; }
+            .modal-galeria.active { display: block; }
+            .modal-galeria-content { position: relative; background: var(--white); max-width: 1200px; margin: 40px auto; border-radius: 20px; overflow: hidden; animation: modalFadeIn 0.3s ease; }
+            @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+            .modal-galeria-header { background: var(--primary); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+            .modal-galeria-header h3 { font-size: 1rem; margin: 0; }
+            .modal-galeria-header h3 i { margin-right: 8px; }
+            .modal-galeria-close, .modal-rangos-close { background: none; border: none; color: var(--white); font-size: 28px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+            .modal-galeria-close:hover, .modal-rangos-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+            .modal-galeria-body { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; max-height: calc(100vh - 80px); overflow-y: auto; }
+            .modal-img-item { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; cursor: pointer; transition: transform 0.3s ease; }
+            .modal-img-item:hover { transform: scale(1.02); }
+            .modal-img-item img { width: 100%; height: 100%; object-fit: cover; }
+            .modal-img-item .zoom-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+            
+            /* Modal de zoom */
+            .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 30000; justify-content: center; align-items: center; cursor: pointer; }
             .image-modal.active { display: flex !important; }
-            .modal-content { position: relative; max-width: 90%; max-height: 90%; display: flex; justify-content: center; align-items: center; }
-            .modal-content img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: none; }
-            .modal-close { position: absolute; top: -50px; right: -50px; width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: var(--primary); cursor: pointer; transition: all 0.3s ease; z-index: 20001; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-            .modal-close:hover { transform: scale(1.1); background: var(--secondary); color: var(--primary-dark); }
-            .modal-prev, .modal-next { position: absolute; top: 50%; transform: translateY(-50%); width: 55px; height: 55px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: white; cursor: pointer; transition: all 0.3s ease; z-index: 20001; backdrop-filter: blur(5px); }
-            .modal-prev:hover, .modal-next:hover { background: var(--primary); color: var(--secondary); transform: translateY(-50%) scale(1.1); }
-            .modal-prev { left: 20px; }
-            .modal-next { right: 20px; }
-            .modal-counter { position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 8px 18px; border-radius: 30px; font-size: 0.9rem; font-family: monospace; z-index: 20001; backdrop-filter: blur(5px); white-space: nowrap; }
+            .modal-content { position: relative; max-width: 95%; max-height: 95%; display: flex; justify-content: center; align-items: center; }
+            .modal-content img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+            .modal-close { position: absolute; top: -45px; right: -5px; width: 38px; height: 38px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: var(--primary); cursor: pointer; z-index: 30001; }
+            .modal-prev, .modal-next { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; cursor: pointer; z-index: 30001; backdrop-filter: blur(5px); }
+            .modal-prev { left: 10px; }
+            .modal-next { right: 10px; }
+            .modal-counter { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 12px; border-radius: 30px; font-size: 0.7rem; z-index: 30001; }
+            
+            /* Botón flotante solo subir */
+            .floating-buttons { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+            .floating-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; border: none; box-shadow: var(--shadow-lg); position: relative; }
+            .floating-top { background: var(--primary); color: white; }
+            .floating-btn:hover { transform: scale(1.1); }
+            .floating-tooltip { position: absolute; right: 60px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.3s ease; pointer-events: none; }
+            .floating-btn:hover .floating-tooltip { opacity: 1; visibility: visible; right: 65px; }
+            
+            /* MEDIA QUERIES - CORREGIDAS */
+            @media (min-width: 480px) {
+                .gallery-grid, .rangos-grid { grid-template-columns: repeat(2, 1fr); }
+                .specs-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+                .apps-grid { grid-template-columns: repeat(3, 1fr); }
+                .antes-comprar-grid { grid-template-columns: repeat(2, 1fr); }
+                .trust-grid { grid-template-columns: repeat(3, 1fr); }
+                .caracteristicas-grid { grid-template-columns: repeat(2, 1fr); }
+                .hero-image img { max-height: 320px; max-width: 80%; }
+            }
+            
             @media (min-width: 768px) {
-                .container { padding: 0 30px; }
-                .hero-content { flex-direction: row; align-items: center; gap: 50px; }
-                .hero-text { text-align: left; flex: 1; order: 1; }
-                .hero h1 { font-size: 2.5rem; }
-                .hero-buttons { flex-direction: row; gap: 15px; }
-                .hero-image { flex: 1; order: 2; }
-                .hero-image img { width: 100%; max-width: 450px; }
-                .specs-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-                .apps-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-                .gallery-grid, .rangos-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+                .container { padding: 0 24px; }
+                .hero-content { 
+                    flex-direction: row; 
+                    align-items: center; 
+                    justify-content: space-between;
+                    gap: 40px; 
+                }
+                .hero-text { 
+                    text-align: left; 
+                    flex: 1; 
+                    order: 1; 
+                }
+                .hero h1 { font-size: 2rem; }
+                .hero p { margin-left: 0; margin-right: 0; }
+                .hero-buttons { 
+                    flex-direction: row; 
+                    gap: 15px; 
+                    justify-content: flex-start;
+                }
+                .hero-image { 
+                    flex: 1; 
+                    order: 2; 
+                    justify-content: flex-end;
+                }
+                .hero-image img { 
+                    max-height: 380px; 
+                    max-width: 100%;
+                }
+                .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+                .apps-grid { grid-template-columns: repeat(4, 1fr); }
+                .gallery-grid, .rangos-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+                .caracteristicas-grid { grid-template-columns: repeat(4, 1fr); }
                 .footer-grid { grid-template-columns: repeat(3, 1fr); text-align: left; }
                 .footer-social a, .footer-links a { justify-content: flex-start; }
+                .section-title h2 { font-size: 1.8rem; }
+                .modal-galeria-body { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
             }
+            
             @media (min-width: 1024px) {
-                .hero h1 { font-size: 3rem; }
-                .hero-image img { max-width: 500px; }
-                .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; }
-                .apps-grid { grid-template-columns: repeat(4, 1fr); gap: 25px; }
-                .gallery-grid, .rangos-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; }
-                .section-title h2 { font-size: 2.2rem; }
-                section { padding: 80px 0; }
+                .hero h1 { font-size: 2.5rem; }
+                .hero-image img { max-height: 450px; }
+                .section-title h2 { font-size: 2rem; }
+                section { padding: 70px 0; }
             }
-            @media (max-width: 768px) {
-                .modal-prev, .modal-next { width: 40px; height: 40px; font-size: 24px; }
-                .modal-prev { left: 10px; }
-                .modal-next { right: 10px; }
-                .modal-close { top: -45px; right: -5px; width: 38px; height: 38px; font-size: 24px; }
-                .modal-counter { bottom: -40px; font-size: 0.75rem; padding: 5px 12px; }
-                .galeria-item .zoom-btn, .rango-item .zoom-btn, .hero-image .zoom-btn { opacity: 1; width: 35px; height: 35px; bottom: 10px; right: 10px; }
-                .hero h1 { font-size: 1.5rem; }
+            
+            /* Ajustes para móviles pequeños */
+            @media (max-width: 380px) {
+                .hero h1 { font-size: 1.3rem; }
+                .section-title h2 { font-size: 1.3rem; }
+                .floating-btn { width: 45px; height: 45px; }
+                .btn { padding: 10px 16px; font-size: 0.8rem; }
+                .hero-image img { max-height: 220px; max-width: 90%; }
             }
-            .text-center { text-align: center; }
-            .hidden { display: none; }
+            
+            img { -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
         </style>
     </head>
     <body>
-        <div id="imageModal" class="image-modal">
-            <div class="modal-content">
-                <div class="modal-close">✕</div>
-                <div class="modal-prev">❮</div>
-                <div class="modal-next">❯</div>
-                <img id="modalImage" src="" alt="Imagen ampliada">
-                <div id="modalCounter" class="modal-counter">1 / 1</div>
-            </div>
-        </div>
+        <!-- Modal de zoom principal para la página -->
+        ${modalZoomPrincipalHtml}
+        
+        <!-- Modal para galería de inspiración -->
+        ${modalGaleriaHtml}
+        
+        <!-- Modal para rangos -->
+        ${modalRangosHtml}
         
         <header>
             <div class="container navbar">
@@ -1489,8 +1829,8 @@ function renderizarLandingProducto(producto) {
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="${imagenPrincipal}" alt="${producto.nombre}" loading="eager" onerror="this.src='FOTO/foto_04.webp'" data-index="0">
-                    <button class="zoom-btn" data-index="0"><i class="fas fa-search-plus"></i></button>
+                    <img src="${imagenPrincipal}" alt="${producto.nombre}" loading="eager" onerror="this.src='FOTO/foto_04.webp'" id="heroImage">
+                    <button class="zoom-btn-hero" id="heroZoomBtn"><i class="fas fa-search-plus"></i></button>
                 </div>
             </div>
         </section>
@@ -1514,19 +1854,7 @@ function renderizarLandingProducto(producto) {
         
         ${tieneAplicaciones ? aplicacionesHtml : ''}
         
-        ${tieneGaleria ? `
-        <section class="gallery-section" id="galeria">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Inspiración y Diseño</h2>
-                    <p>Visualiza cómo ${primeraPalabra} transforma cada ambiente</p>
-                </div>
-                <div class="gallery-grid">
-                    ${galeriaHtml}
-                </div>
-            </div>
-        </section>
-        ` : ''}
+        ${tieneGaleria ? galeriaHtml : ''}
         
         ${tieneRangos ? rangosHtml : ''}
         
@@ -1547,11 +1875,17 @@ function renderizarLandingProducto(producto) {
         
         ${notaInformativaHtml}
         
+        ${botonFlotante}
+        
         <footer>
             <div class="container">
                 <div class="footer-grid">
-                    <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad.</p></div>
-                    <div class="footer-social"><h4>Redes Sociales</h4><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a><a href="#"><i class="fab fa-instagram"></i> Instagram</a><a href="#"><i class="fab fa-tiktok"></i> TikTok</a></div>
+                    <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad, combinando belleza, exclusividad y excelencia en cada proyecto.</p></div>
+                    <div class="footer-social">
+                    <h4>Redes Sociales</h4>
+                    <a href="https://www.facebook.com/gallosmarmol/"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="https://www.instagram.com/gallosmarmol/"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="https://www.tiktok.com/@gallos.marmol.ofic"><i class="fab fa-tiktok"></i> TikTok</a></div>
                     <div class="footer-links"><h4>Contacto</h4><a href="https://gallosmarmol.com.pe"><i class="fas fa-globe"></i> gallosmarmol.com.pe</a><a href="mailto:info@gallosmarmol.com.pe"><i class="fas fa-envelope"></i> info@gallosmarmol.com.pe</a></div>
                 </div>
                 <div class="footer-bottom">© 2026 Gallos Mármol — Todos los derechos reservados.</div>
@@ -1560,30 +1894,278 @@ function renderizarLandingProducto(producto) {
         
         <script>
             (function() {
-                const imagenes = [];
-                document.querySelectorAll('img[data-index]').forEach(img => { const idx = parseInt(img.dataset.index); imagenes[idx] = img.src; });
-                const imagenesLimpias = imagenes.filter(img => img);
-                let indiceActual = 0;
-                const modal = document.getElementById('imageModal');
-                const imgModal = document.getElementById('modalImage');
-                const contador = document.getElementById('modalCounter');
-                const closeBtn = document.querySelector('.modal-close');
-                const prevBtn = document.querySelector('.modal-prev');
-                const nextBtn = document.querySelector('.modal-next');
-                function abrirModal(indice) { if (!imagenesLimpias.length) return; indiceActual = Math.min(Math.max(0, indice), imagenesLimpias.length - 1); imgModal.src = imagenesLimpias[indiceActual]; contador.innerText = (indiceActual + 1) + ' / ' + imagenesLimpias.length; modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
-                function cerrarModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
-                function siguiente() { indiceActual = (indiceActual + 1) % imagenesLimpias.length; imgModal.src = imagenesLimpias[indiceActual]; contador.innerText = (indiceActual + 1) + ' / ' + imagenesLimpias.length; }
-                function anterior() { indiceActual = (indiceActual - 1 + imagenesLimpias.length) % imagenesLimpias.length; imgModal.src = imagenesLimpias[indiceActual]; contador.innerText = (indiceActual + 1) + ' / ' + imagenesLimpias.length; }
-                if (closeBtn) closeBtn.onclick = cerrarModal;
-                if (prevBtn) prevBtn.onclick = anterior;
-                if (nextBtn) nextBtn.onclick = siguiente;
-                modal.onclick = function(e) { if (e.target === modal) cerrarModal(); };
-                document.onkeydown = function(e) { if (!modal.classList.contains('active')) return; if (e.key === 'Escape') cerrarModal(); if (e.key === 'ArrowLeft') anterior(); if (e.key === 'ArrowRight') siguiente(); };
-                document.querySelectorAll('.zoom-btn').forEach(btn => { btn.onclick = function(e) { e.stopPropagation(); const idx = parseInt(this.dataset.index); if (!isNaN(idx)) abrirModal(idx); }; });
-                document.querySelectorAll('.hero-image img, .galeria-item img, .rango-item img').forEach(img => { if (img.hasAttribute('data-index')) { img.onclick = function(e) { e.stopPropagation(); const idx = parseInt(this.dataset.index); if (!isNaN(idx)) abrirModal(idx); }; } });
+                // ========== DATOS ==========
+                const galeriaCompleta = ${JSON.stringify(galeriaImagenes)};
+                const rangosCompleto = ${JSON.stringify(rangosArray)};
+                const imagenPrincipal = "${imagenPrincipal}";
+                
+                // ========== ZOOM PRINCIPAL (para imágenes de la página) ==========
+                const imagenesPagina = [...galeriaCompleta, ...rangosCompleto];
+                let indicePaginaActual = 0;
+                
+                const modalPrincipal = document.getElementById('zoomModalPrincipal');
+                const imgPrincipal = document.getElementById('zoomPrincipalImage');
+                const counterPrincipal = document.getElementById('zoomPrincipalCounter');
+                const prevPrincipal = document.getElementById('zoomPrincipalPrev');
+                const nextPrincipal = document.getElementById('zoomPrincipalNext');
+                const closePrincipal = document.querySelector('#zoomModalPrincipal .modal-close');
+                
+                function abrirZoomPrincipal(indice) {
+                    if (indice === 'hero') {
+                        imgPrincipal.src = imagenPrincipal;
+                        counterPrincipal.innerText = '1 / 1';
+                        if (prevPrincipal) prevPrincipal.style.display = 'none';
+                        if (nextPrincipal) nextPrincipal.style.display = 'none';
+                    } else {
+                        indicePaginaActual = Math.min(Math.max(0, indice), imagenesPagina.length - 1);
+                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
+                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
+                        if (prevPrincipal) prevPrincipal.style.display = 'flex';
+                        if (nextPrincipal) nextPrincipal.style.display = 'flex';
+                    }
+                    modalPrincipal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarZoomPrincipal() {
+                    modalPrincipal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                function siguientePrincipal() {
+                    if (indicePaginaActual < imagenesPagina.length - 1) {
+                        indicePaginaActual++;
+                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
+                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
+                    }
+                }
+                
+                function anteriorPrincipal() {
+                    if (indicePaginaActual > 0) {
+                        indicePaginaActual--;
+                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
+                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
+                    }
+                }
+                
+                if (closePrincipal) closePrincipal.addEventListener('click', cerrarZoomPrincipal);
+                if (prevPrincipal) prevPrincipal.addEventListener('click', anteriorPrincipal);
+                if (nextPrincipal) nextPrincipal.addEventListener('click', siguientePrincipal);
+                if (modalPrincipal) modalPrincipal.addEventListener('click', (e) => { if (e.target === modalPrincipal) cerrarZoomPrincipal(); });
+                
+                // Zoom para imagen hero
+                const heroZoomBtn = document.getElementById('heroZoomBtn');
+                const heroImage = document.getElementById('heroImage');
+                if (heroZoomBtn) heroZoomBtn.addEventListener('click', () => abrirZoomPrincipal('hero'));
+                if (heroImage) heroImage.addEventListener('click', () => abrirZoomPrincipal('hero'));
+                
+                // ========== ZOOM PARA GALERÍA ==========
+                let indiceGaleriaActual = 0;
+                const modalZoomGaleria = document.getElementById('zoomModalGaleria');
+                const imgZoomGaleria = document.getElementById('zoomGaleriaImage');
+                const counterZoomGaleria = document.getElementById('zoomGaleriaCounter');
+                const prevZoomGaleria = document.getElementById('zoomGaleriaPrev');
+                const nextZoomGaleria = document.getElementById('zoomGaleriaNext');
+                const closeZoomGaleria = document.querySelector('#zoomModalGaleria .modal-close');
+                
+                function abrirZoomGaleria(indice) {
+                    indiceGaleriaActual = indice;
+                    imgZoomGaleria.src = galeriaCompleta[indiceGaleriaActual];
+                    counterZoomGaleria.innerText = (indiceGaleriaActual + 1) + ' / ' + galeriaCompleta.length;
+                    modalZoomGaleria.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarZoomGaleria() {
+                    modalZoomGaleria.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                function siguienteGaleria() {
+                    if (indiceGaleriaActual < galeriaCompleta.length - 1) {
+                        indiceGaleriaActual++;
+                        imgZoomGaleria.src = galeriaCompleta[indiceGaleriaActual];
+                        counterZoomGaleria.innerText = (indiceGaleriaActual + 1) + ' / ' + galeriaCompleta.length;
+                    }
+                }
+                
+                function anteriorGaleria() {
+                    if (indiceGaleriaActual > 0) {
+                        indiceGaleriaActual--;
+                        imgZoomGaleria.src = galeriaCompleta[indiceGaleriaActual];
+                        counterZoomGaleria.innerText = (indiceGaleriaActual + 1) + ' / ' + galeriaCompleta.length;
+                    }
+                }
+                
+                if (closeZoomGaleria) closeZoomGaleria.addEventListener('click', cerrarZoomGaleria);
+                if (prevZoomGaleria) prevZoomGaleria.addEventListener('click', anteriorGaleria);
+                if (nextZoomGaleria) nextZoomGaleria.addEventListener('click', siguienteGaleria);
+                if (modalZoomGaleria) modalZoomGaleria.addEventListener('click', (e) => { if (e.target === modalZoomGaleria) cerrarZoomGaleria(); });
+                
+                // ========== ZOOM PARA RANGOS ==========
+                let indiceRangosActual = 0;
+                const modalZoomRangos = document.getElementById('zoomModalRangos');
+                const imgZoomRangos = document.getElementById('zoomRangosImage');
+                const counterZoomRangos = document.getElementById('zoomRangosCounter');
+                const prevZoomRangos = document.getElementById('zoomRangosPrev');
+                const nextZoomRangos = document.getElementById('zoomRangosNext');
+                const closeZoomRangos = document.querySelector('#zoomModalRangos .modal-close');
+                
+                function abrirZoomRangos(indice) {
+                    indiceRangosActual = indice;
+                    imgZoomRangos.src = rangosCompleto[indiceRangosActual];
+                    counterZoomRangos.innerText = (indiceRangosActual + 1) + ' / ' + rangosCompleto.length;
+                    modalZoomRangos.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarZoomRangos() {
+                    modalZoomRangos.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                function siguienteRangos() {
+                    if (indiceRangosActual < rangosCompleto.length - 1) {
+                        indiceRangosActual++;
+                        imgZoomRangos.src = rangosCompleto[indiceRangosActual];
+                        counterZoomRangos.innerText = (indiceRangosActual + 1) + ' / ' + rangosCompleto.length;
+                    }
+                }
+                
+                function anteriorRangos() {
+                    if (indiceRangosActual > 0) {
+                        indiceRangosActual--;
+                        imgZoomRangos.src = rangosCompleto[indiceRangosActual];
+                        counterZoomRangos.innerText = (indiceRangosActual + 1) + ' / ' + rangosCompleto.length;
+                    }
+                }
+                
+                if (closeZoomRangos) closeZoomRangos.addEventListener('click', cerrarZoomRangos);
+                if (prevZoomRangos) prevZoomRangos.addEventListener('click', anteriorRangos);
+                if (nextZoomRangos) nextZoomRangos.addEventListener('click', siguienteRangos);
+                if (modalZoomRangos) modalZoomRangos.addEventListener('click', (e) => { if (e.target === modalZoomRangos) cerrarZoomRangos(); });
+                
+                // ========== FUNCIÓN PARA ABRIR MODAL DE GALERÍA ==========
+                function abrirModalGaleria() {
+                    const modal = document.getElementById('modalGaleria');
+                    const body = document.getElementById('modalGaleriaBody');
+                    if (!modal || !body) return;
+                    
+                    body.innerHTML = '';
+                    galeriaCompleta.forEach((img, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'modal-img-item';
+                        div.innerHTML = \`
+                            <img src="\${img}" alt="Imagen \${idx+1}" loading="lazy" onerror="this.src='FOTO/foto_04.webp'">
+                            <div class="zoom-badge"><i class="fas fa-search-plus"></i></div>
+                        \`;
+                        div.addEventListener('click', () => abrirZoomGaleria(idx));
+                        body.appendChild(div);
+                    });
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function abrirModalRangos() {
+                    const modal = document.getElementById('modalRangos');
+                    const body = document.getElementById('modalRangosBody');
+                    if (!modal || !body) return;
+                    
+                    body.innerHTML = '';
+                    rangosCompleto.forEach((img, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'modal-img-item';
+                        div.innerHTML = \`
+                            <img src="\${img}" alt="Variación \${idx+1}" loading="lazy" onerror="this.src='FOTO/foto_04.webp'">
+                            <div class="zoom-badge"><i class="fas fa-search-plus"></i></div>
+                        \`;
+                        div.addEventListener('click', () => abrirZoomRangos(idx));
+                        body.appendChild(div);
+                    });
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarModalGaleria(modalId) {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+                
+                // Botones ver todas
+                const verTodaGaleriaBtn = document.getElementById('verTodaGaleriaBtn');
+                const verTodosRangosBtn = document.getElementById('verTodosRangosBtn');
+                if (verTodaGaleriaBtn) verTodaGaleriaBtn.addEventListener('click', abrirModalGaleria);
+                if (verTodosRangosBtn) verTodosRangosBtn.addEventListener('click', abrirModalRangos);
+                
+                // Cerrar modales
+                const modalGaleriaClose = document.querySelector('.modal-galeria-close');
+                const modalRangosClose = document.querySelector('.modal-rangos-close');
+                if (modalGaleriaClose) modalGaleriaClose.addEventListener('click', () => cerrarModalGaleria('modalGaleria'));
+                if (modalRangosClose) modalRangosClose.addEventListener('click', () => cerrarModalGaleria('modalRangos'));
+                
+                const modalGaleria = document.getElementById('modalGaleria');
+                const modalRangosElem = document.getElementById('modalRangos');
+                if (modalGaleria) modalGaleria.addEventListener('click', (e) => {
+                    if (e.target === modalGaleria) cerrarModalGaleria('modalGaleria');
+                });
+                if (modalRangosElem) modalRangosElem.addEventListener('click', (e) => {
+                    if (e.target === modalRangosElem) cerrarModalGaleria('modalRangos');
+                });
+                
+                // Zoom para imágenes de galería (las 3 iniciales)
+                document.querySelectorAll('.zoom-btn-galeria').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.dataset.galeriaIndex);
+                        if (!isNaN(idx)) abrirZoomPrincipal(idx);
+                    });
+                });
+                
+                document.querySelectorAll('.galeria-item img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const idx = parseInt(img.dataset.galeriaIndex);
+                        if (!isNaN(idx)) abrirZoomPrincipal(idx);
+                    });
+                });
+                
+                // Zoom para imágenes de rangos (las 3 iniciales)
+                document.querySelectorAll('.zoom-btn-rango').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.dataset.rangoIndex);
+                        if (!isNaN(idx)) abrirZoomPrincipal(galeriaCompleta.length + idx);
+                    });
+                });
+                
+                document.querySelectorAll('.rango-item img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const idx = parseInt(img.dataset.rangoIndex);
+                        if (!isNaN(idx)) abrirZoomPrincipal(galeriaCompleta.length + idx);
+                    });
+                });
+                
+                // Botón subir
+                const topBtn = document.getElementById('floatingTopBtn');
+                if (topBtn) {
+                    topBtn.addEventListener('click', () => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
+                
+                // Prevenir descarga de imágenes
+                document.addEventListener('contextmenu', (e) => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'U')) e.preventDefault();
+                    if (e.key === 'F12') e.preventDefault();
+                });
+                
+                console.log('✅ Landing page cargada - Modales independientes funcionando');
             })();
-            document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
-            document.addEventListener('keydown', function(e) { if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; } if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) { e.preventDefault(); return false; } if (e.key === 'F12') { e.preventDefault(); return false; } });
         </script>
     </body>
     </html>`;
@@ -2300,39 +2882,34 @@ function renderizarPaginaOutlet(productos) {
     }
 
     function generarPreviewProductos() {
-        // Verificar que cotizacionSeleccionados existe y tiene elementos
+        // Verificar que hay productos
         if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
             return '<div class="preview-item" style="justify-content: center; color: #999;">No hay productos seleccionados</div>';
         }
         
         let html = '';
         
-        // Mostrar hasta 3 productos
-        cotizacionSeleccionados.slice(0, 3).forEach(p => {
+        // Mostrar TODOS los productos (sin límite) para que se vean todos en el preview
+        cotizacionSeleccionados.forEach((p, index) => {
             html += `
-                <div class="preview-item">
-                    <div class="preview-info">
-                        <span class="preview-nombre">${escapeHtml(p.nombre || 'Producto')}</span>
-                        <div class="preview-detalles" style="display: flex; gap: 8px; margin-top: 2px;">
+                <div class="preview-item" data-producto-id="${p.id}" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div class="preview-info" style="flex: 1; min-width: 0;">
+                        <div class="preview-nombre" style="font-size: 0.75rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${escapeHtml(p.nombre || 'Producto')}
+                        </div>
+                        <div class="preview-detalles" style="display: flex; gap: 8px; margin-top: 2px; flex-wrap: wrap;">
+                            ${p.codigo ? `<span style="font-size: 0.6rem; opacity: 0.7; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 10px;">${escapeHtml(p.codigo)}</span>` : ''}
                             ${p.medida ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
                             ${p.espesor ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
                         </div>
                     </div>
-                    <button class="preview-eliminar" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')">
-                        <i class="fas fa-times-circle"></i>
+                    <button class="preview-eliminar" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')" 
+                            style="background: none; border: none; color: #ff6b6b; cursor: pointer; padding: 4px 8px; border-radius: 20px; transition: all 0.2s ease;">
+                        <i class="fas fa-trash-alt" style="font-size: 0.7rem;"></i>
                     </button>
                 </div>
             `;
         });
-        
-        // Mostrar indicador de más productos
-        if (cotizacionSeleccionados.length > 3) {
-            html += `
-                <div class="preview-item" style="justify-content: center; color: var(--secondary); font-size: 0.65rem;">
-                    <i class="fas fa-ellipsis-h"></i> +${cotizacionSeleccionados.length - 3} producto(s) más
-                </div>
-            `;
-        }
         
         return html;
     }
@@ -2349,18 +2926,30 @@ function renderizarPaginaOutlet(productos) {
         }
         
         if (btnExpandir) {
-            btnExpandir.onclick = () => {
-                if (expandedSection.style.display === 'none') {
+            btnExpandir.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (expandedSection.style.display === 'none' || expandedSection.style.display === '') {
+                    // Expandir
                     expandedSection.style.display = 'flex';
                     miniSection.style.display = 'none';
                     barra.classList.add('expanded');
                     barra.classList.remove('mini');
                     btnExpandir.innerHTML = '<i class="fas fa-chevron-down"></i>';
                     
+                    // 👇 IMPORTANTE: Actualizar el preview al expandir
+                    const previewContainer = document.getElementById('preview-productos');
+                    if (previewContainer) {
+                        previewContainer.innerHTML = generarPreviewProductos();
+                        console.log('📦 Preview actualizado al expandir');
+                    }
+                    
                     // Ajustar padding
                     const nuevaAltura = barra.offsetHeight;
                     document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
                 } else {
+                    // Colapsar
                     expandedSection.style.display = 'none';
                     miniSection.style.display = 'flex';
                     barra.classList.remove('expanded');
@@ -2436,7 +3025,7 @@ function renderizarPaginaOutlet(productos) {
         if (existe) {
             cotizacionSeleccionados = cotizacionSeleccionados.filter(p => p.id !== existe.id);
             if (typeof mostrarToast === 'function') {
-                mostrarToast(`"${producto.nombre}" removido`);
+                mostrarToast("PRODUCTO REMOVIDO");
             }
         } else {
             cotizacionSeleccionados.push({
@@ -2450,7 +3039,7 @@ function renderizarPaginaOutlet(productos) {
             });
             
             if (typeof mostrarToast === 'function') {
-                mostrarToast(`"${producto.nombre}" agregado a cotización`);
+                mostrarToast("AGREGADO A LA COTIZACIÓN");
             }
             
             // Animar badge si existe
