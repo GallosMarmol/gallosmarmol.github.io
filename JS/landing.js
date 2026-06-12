@@ -2516,66 +2516,48 @@ function renderizarPaginaOutlet(productos) {
         
         if (!modalQR || !readerElement) {
             console.error('❌ Modal QR no encontrado');
-            alert('Error: No se pudo abrir el escáner QR');
             return;
         }
         
-        // Limpiar cualquier escaneo previo
         detenerEscaneoQR();
-        
-        // Limpiar el contenido del reader
         readerElement.innerHTML = '';
-        
-        // Mostrar modal
         modalQR.style.display = 'flex';
         
-        // Verificar que la biblioteca esté cargada
         if (typeof Html5Qrcode === 'undefined') {
-            console.error('❌ Html5Qrcode no está cargado');
             modalQR.style.display = 'none';
-            alert('Error: La biblioteca de escaneo QR no está cargada. Por favor, recarga la página.');
+            mostrarModal('Error', 'La biblioteca de escaneo QR no está cargada', 'error');
             return;
         }
         
         try {
-            // Verificar si hay cámaras disponibles
-            const devices = await Html5Qrcode.getCameras();
-            console.log('📷 Cámaras detectadas:', devices.length);
-            
-            if (devices && devices.length === 0) {
-                modalQR.style.display = 'none';
-                alert('No se detectó ninguna cámara en este dispositivo.');
-                return;
-            }
-            
-            // Mostrar que está iniciando la cámara
-            readerElement.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Iniciando cámara...</div>';
-            
-            // Crear nueva instancia
             html5QrCode = new Html5Qrcode("qr-reader");
             
             const config = {
-                fps: 10,
-                qrbox: { width: 250, height: 250 },
+                fps: CONFIG.QR_FPS,
+                qrbox: { width: CONFIG.QR_BOX_SIZE, height: CONFIG.QR_BOX_SIZE },
                 aspectRatio: 1.0
             };
-            
-            // Intentar con cámara trasera (environment)
-            console.log('📷 Intentando usar cámara trasera...');
             
             await html5QrCode.start(
                 { facingMode: "environment" },
                 config,
                 (decodedText) => {
-                    // Éxito al escanear
                     console.log('✅ QR escaneado:', decodedText);
                     detenerEscaneoQR();
                     if (modalQR) modalQR.style.display = 'none';
                     
                     const searchInput = document.getElementById('searchOutlet');
                     if (searchInput) {
+                        // Establecer el valor
                         searchInput.value = decodedText;
-                        // Aplicar filtros después de un pequeño delay
+                        
+                        // 👇 IMPORTANTE: Mostrar el botón de limpiar
+                        const btnClear = document.getElementById('btnLimpiarBusqueda');
+                        if (btnClear) {
+                            btnClear.style.display = 'flex';
+                        }
+                        
+                        // Aplicar filtros
                         setTimeout(() => {
                             if (typeof window.aplicarFiltrosOutlet === 'function') {
                                 window.aplicarFiltrosOutlet();
@@ -2583,36 +2565,19 @@ function renderizarPaginaOutlet(productos) {
                         }, 100);
                     }
                     
-                    // Mostrar mensaje de éxito
                     mostrarModal('✅ Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000 });
                 },
-                (errorMessage) => {
-                    // Error de escaneo - ignorar, es normal mientras busca QR
-                    // console.log('Escaneando...', errorMessage);
-                }
+                (errorMessage) => {}
             );
             
             escaneoActivo = true;
-            console.log('✅ Escáner QR iniciado correctamente con cámara trasera');
+            console.log('✅ Escáner QR iniciado correctamente');
             
         } catch (err) {
             console.error('❌ Error al iniciar escáner:', err);
-            
             if (modalQR) modalQR.style.display = 'none';
-            escaneoActivo = false;
-            html5QrCode = null;
-            
-            let mensajeError = 'No se pudo acceder a la cámara.';
-            if (err.message && err.message.includes('permission')) {
-                mensajeError = 'Permiso denegado. Por favor, permite el acceso a la cámara en la configuración de tu navegador.';
-            } else if (err.message && err.message.includes('NotFoundError')) {
-                mensajeError = 'No se encontró ninguna cámara en este dispositivo.';
-            } else {
-                mensajeError = 'Error al iniciar la cámara: ' + (err.message || 'Error desconocido');
-            }
-            
-            alert(mensajeError);
-        }
+        mostrarModal('Error', 'No se pudo acceder a la cámara', 'error');
+    }
     }
     
     // ============================================
@@ -4865,66 +4830,64 @@ ${productosLista}
         // ============================================
         // BÚSQUEDA EN TIEMPO REAL CON BOTÓN DE LIMPIAR
         // ============================================
-        const searchInput = document.getElementById('searchOutlet');
+        const searchInputOutlet = document.getElementById('searchOutlet');
         const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
 
-        if (searchInput) {
-            // Función para mostrar/ocultar el botón de limpiar
-            const toggleClearButton = () => {
-                if (btnLimpiarBusqueda) {
-                    if (searchInput.value.length > 0) {
-                        btnLimpiarBusqueda.style.display = 'flex';
-                    } else {
-                        btnLimpiarBusqueda.style.display = 'none';
-                    }
+        function toggleClearButton() {
+            if (btnLimpiarBusqueda && searchInputOutlet) {
+                if (searchInputOutlet.value.length > 0) {
+                    btnLimpiarBusqueda.style.display = 'flex';
+                } else {
+                    btnLimpiarBusqueda.style.display = 'none';
                 }
-            };
-            
-            // Mostrar/ocultar botón al iniciar
-            toggleClearButton();
-            
-            // Búsqueda en tiempo real (debounced)
-            let timeoutBusqueda = null;
-            searchInput.addEventListener('input', function() {
-                // Mostrar/ocultar botón de limpiar
+            }
+        }
+
+        function limpiarCampoBusqueda() {
+            if (searchInputOutlet) {
+                searchInputOutlet.value = '';
                 toggleClearButton();
                 
-                // Filtrar en tiempo real con debounce
-                clearTimeout(timeoutBusqueda);
-                timeoutBusqueda = setTimeout(() => {
-                    if (typeof window.aplicarFiltrosOutlet === 'function') {
-                        window.aplicarFiltrosOutlet();
-                    }
-                }, 300); // 300ms de delay para mejor rendimiento
+                // Aplicar filtros para mostrar todos los productos
+                if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                }
+                
+                // Dar foco al input
+                searchInputOutlet.focus();
+                
+                // Mostrar feedback visual
+                if (typeof mostrarToast === 'function') {
+                    mostrarToast('Búsqueda limpiada');
+                }
+            }
+        }
+
+        if (btnLimpiarBusqueda) {
+            // Método 1: Event listener directo (recomendado)
+            btnLimpiarBusqueda.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                limpiarCampoBusqueda();
+            });
+        }
+
+        if (searchInputOutlet) {
+            // Mostrar/ocultar botón mientras escribe
+            searchInputOutlet.addEventListener('input', function() {
+                toggleClearButton();
             });
             
-            // Evento para tecla Enter (búsqueda inmediata)
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    clearTimeout(timeoutBusqueda);
-                    if (typeof window.aplicarFiltrosOutlet === 'function') {
-                        window.aplicarFiltrosOutlet();
-                    }
+            // Tecla ESC para limpiar
+            searchInputOutlet.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    limpiarCampoBusqueda();
                 }
             });
         }
 
-        // Botón para limpiar búsqueda
-        if (btnLimpiarBusqueda) {
-            btnLimpiarBusqueda.addEventListener('click', function() {
-                if (searchInput) {
-                    searchInput.value = '';
-                    // Ocultar el botón
-                    btnLimpiarBusqueda.style.display = 'none';
-                    // Aplicar filtros para mostrar todos los productos
-                    if (typeof window.aplicarFiltrosOutlet === 'function') {
-                        window.aplicarFiltrosOutlet();
-                    }
-                    // Dar foco al input
-                    searchInput.focus();
-                }
-            });
-        }
+        // Inicializar estado del botón
+        toggleClearButton();
       
         // Detectar scroll para mostrar/ocultar barra
         let ultimoScroll = 0;
