@@ -357,7 +357,7 @@ function limpiarCotizacion() {
                 btn.style.color = 'white';
             });
             
-            await mostrarModal('✅ Selección limpiada', 'Todos los productos han sido removidos de tu cotización.', 'success', { timer: 2000, showConfirmButton: false });
+            await mostrarModal('Selección limpiada', 'Todos los productos han sido removidos de tu cotización.', 'success', { timer: 2000, showConfirmButton: false });
         }
     });
 }
@@ -586,7 +586,7 @@ function generarMensajeWhatsApp(datosCliente, productos, cotizacion, asesor) {
         productosLista += `${i+1}. ${p.nombre} - ${p.cantidad} unidad(es)\n`;
     });
     
-    return `📋 *NUEVA COTIZACIÓN - OUTLET*
+    return `*NUEVA COTIZACIÓN - OUTLET*
     
 *N° Cotización:* ${cotizacion.numero}
 *Fecha:* ${new Date().toLocaleString()}
@@ -1239,15 +1239,12 @@ function renderizarLandingProducto(producto) {
         </div>
     `;
     
-    // ========== MODAL DE ZOOM PRINCIPAL PARA IMÁGENES DE LA PÁGINA ==========
+    // ========== MODAL DE ZOOM PRINCIPAL SOLO PARA IMAGEN HERO ==========
     const modalZoomPrincipalHtml = `
         <div id="zoomModalPrincipal" class="image-modal">
             <div class="modal-content">
                 <div class="modal-close">✕</div>
-                <div class="modal-prev" id="zoomPrincipalPrev">❮</div>
-                <div class="modal-next" id="zoomPrincipalNext">❯</div>
                 <img id="zoomPrincipalImage" src="" alt="Imagen ampliada">
-                <div id="zoomPrincipalCounter" class="modal-counter">1 / 1</div>
             </div>
         </div>
     `;
@@ -1260,7 +1257,7 @@ function renderizarLandingProducto(producto) {
                 <div class="container">
                     <div class="section-title">
                         <h2>Inspiración y Diseño</h2>
-                        <p>Visualiza cómo se transforma cada ambiente</p>
+                        <p>Visualiza cómo ${primeraPalabra} transforma cada ambiente</p>
                     </div>
                     <div class="gallery-grid" id="galleryGrid">
                         ${galeriaInicial.map((img, i) => {
@@ -1270,7 +1267,7 @@ function renderizarLandingProducto(producto) {
                                          loading="lazy" 
                                          onerror="this.src='FOTO/foto_04.webp'" 
                                          data-galeria-index="${i}">
-                                    <button class="zoom-btn-galeria" data-galeria-index="${i}">
+                                    <button class="zoom-btn-galeria-inicial" data-galeria-index="${i}">
                                         <i class="fas fa-search-plus"></i>
                                     </button>
                                 </div>
@@ -1316,7 +1313,7 @@ function renderizarLandingProducto(producto) {
                                          loading="lazy" 
                                          onerror="this.src='FOTO/foto_04.webp'" 
                                          data-rango-index="${i}">
-                                    <button class="zoom-btn-rango" data-rango-index="${i}">
+                                    <button class="zoom-btn-rango-inicial" data-rango-index="${i}">
                                         <i class="fas fa-search-plus"></i>
                                     </button>
                                 </div>
@@ -1430,11 +1427,11 @@ function renderizarLandingProducto(producto) {
         { titulo: 'Código', valor: producto.codigo || 'NO ESPECIFICADO', tooltip: 'Código de identificación del producto' },
         { titulo: 'Unidad de Medida', valor: producto.unidad_medida?.nombre || 'NO ESPECIFICADA', tooltip: 'Unidad de medida en la que se comercializa el producto' },
         { titulo: 'Calidad', valor: producto.calidad?.nombre || 'NO ESPECIFICADA', tooltip: 'Calidad del producto' },
-        { titulo: 'Modelo', valor: producto.modelo || 'NO ESPECIFICADO', tooltip: 'Referencia del modelo' },
+        { titulo: 'Modelo', valor: producto.modelo || 'NO ESPECIFICADO', tooltip: 'Modelo del producto' },
         { titulo: 'Familia', valor: producto.familia?.nombre || 'NO ESPECIFICADA', tooltip: 'Familia a la que pertenece el producto' },
-        { titulo: 'Acabado', valor: producto.acabado?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de acabado del producto' },
-        { titulo: 'Borde', valor: producto.borde?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de borde del producto' },
-        { titulo: 'Material', valor: producto.material?.nombre || 'NO ESPECIFICADO', tooltip: 'Tipo de material del producto' },
+        { titulo: 'Acabado', valor: producto.acabado?.nombre || 'NO ESPECIFICADO', tooltip: 'Acabado del producto' },
+        { titulo: 'Borde', valor: producto.borde?.nombre || 'NO ESPECIFICADO', tooltip: 'Borde del producto' },
+        { titulo: 'Material', valor: producto.material?.nombre || 'NO ESPECIFICADO', tooltip: 'Material del producto' },
         { titulo: 'Medida', valor: producto.medida || 'NO ESPECIFICADA', tooltip: 'Dimensiones del producto' },
         { titulo: 'Espesor', valor: producto.espesor || 'NO ESPECIFICADO', tooltip: 'Grosor del producto' }
     ];
@@ -1469,7 +1466,7 @@ function renderizarLandingProducto(producto) {
         </section>
     `;
     
-    // ========== BOTÓN FLOTANTE SOLO SUBIR (SIN COMPARTIR) ==========
+    // ========== BOTÓN FLOTANTE SOLO SUBIR ==========
     const botonFlotante = `
         <div class="floating-buttons">
             <button class="floating-btn floating-top" id="floatingTopBtn">
@@ -1515,7 +1512,7 @@ function renderizarLandingProducto(producto) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-        <title>${producto.nombre} | Gallos Mármol</title>
+        <title>${producto.nombre} | GALLOS MÁRMOL</title>
         ${metaTags}
         ${schemaMarkup}
         ${preloadHtml}
@@ -1551,7 +1548,7 @@ function renderizarLandingProducto(producto) {
             .aviso-flex-center { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 0.75rem; color: #856404; }
             .aviso-flex-center a { color: #856404; text-decoration: underline; }
             
-            /* HERO SECTION - CORREGIDA PARA MÓVIL Y TABLET */
+            /* HERO SECTION */
             .hero { 
                 min-height: 100vh; 
                 display: flex; 
@@ -1660,8 +1657,8 @@ function renderizarLandingProducto(producto) {
             .galeria-item, .rango-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
             .galeria-item img, .rango-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
             .galeria-item:hover img, .rango-item:hover img { transform: scale(1.03); }
-            .zoom-btn-galeria, .zoom-btn-rango, .zoom-btn-hero { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; }
-            .zoom-btn-galeria:hover, .zoom-btn-rango:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
+            .zoom-btn-galeria-inicial, .zoom-btn-rango-inicial, .zoom-btn-hero { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; }
+            .zoom-btn-galeria-inicial:hover, .zoom-btn-rango-inicial:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
             .ver-mas-container { margin-top: 25px; }
             .btn-ver-mas { background: var(--primary); color: var(--white); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
             .btn-ver-mas:hover { background: var(--primary-dark); transform: translateY(-2px); }
@@ -1724,7 +1721,7 @@ function renderizarLandingProducto(producto) {
             .modal-next { right: 10px; }
             .modal-counter { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 5px 12px; border-radius: 30px; font-size: 0.7rem; z-index: 30001; }
             
-            /* Botón flotante solo subir */
+            /* Botón flotante */
             .floating-buttons { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
             .floating-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; border: none; box-shadow: var(--shadow-lg); position: relative; }
             .floating-top { background: var(--primary); color: white; }
@@ -1732,7 +1729,7 @@ function renderizarLandingProducto(producto) {
             .floating-tooltip { position: absolute; right: 60px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.3s ease; pointer-events: none; }
             .floating-btn:hover .floating-tooltip { opacity: 1; visibility: visible; right: 65px; }
             
-            /* MEDIA QUERIES - CORREGIDAS */
+            /* MEDIA QUERIES */
             @media (min-width: 480px) {
                 .gallery-grid, .rangos-grid { grid-template-columns: repeat(2, 1fr); }
                 .specs-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
@@ -1789,7 +1786,6 @@ function renderizarLandingProducto(producto) {
                 section { padding: 70px 0; }
             }
             
-            /* Ajustes para móviles pequeños */
             @media (max-width: 380px) {
                 .hero h1 { font-size: 1.3rem; }
                 .section-title h2 { font-size: 1.3rem; }
@@ -1802,8 +1798,13 @@ function renderizarLandingProducto(producto) {
         </style>
     </head>
     <body>
-        <!-- Modal de zoom principal para la página -->
-        ${modalZoomPrincipalHtml}
+        <!-- Modal de zoom principal solo para imagen hero -->
+        <div id="zoomModalPrincipal" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <img id="zoomPrincipalImage" src="" alt="Imagen ampliada">
+            </div>
+        </div>
         
         <!-- Modal para galería de inspiración -->
         ${modalGaleriaHtml}
@@ -1834,12 +1835,14 @@ function renderizarLandingProducto(producto) {
                 </div>
             </div>
         </section>
-
-        ${tieneGaleria ? galeriaHtml : ''}        
         
+        ${tieneGaleria ? galeriaHtml : ''}
+
         ${tieneRangos ? rangosHtml : ''}
 
         ${tieneAplicaciones ? aplicacionesHtml : ''}
+
+        ${fichaHtml}
 
         <section class="specs-section">
             <div class="container">
@@ -1856,8 +1859,6 @@ function renderizarLandingProducto(producto) {
             </div>
         </section>
         
-        ${fichaHtml}
-
         ${caracteristicasComercialHtml}
                                 
         ${antesDeComprarHtml}
@@ -1881,8 +1882,7 @@ function renderizarLandingProducto(producto) {
             <div class="container">
                 <div class="footer-grid">
                     <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad, combinando belleza, exclusividad y excelencia en cada proyecto.</p></div>
-                    <div class="footer-social">
-                    <h4>Redes Sociales</h4>
+                    <div class="footer-social"><h4>Redes Sociales</h4>
                     <a href="https://www.facebook.com/gallosmarmol/"><i class="fab fa-facebook-f"></i> Facebook</a>
                     <a href="https://www.instagram.com/gallosmarmol/"><i class="fab fa-instagram"></i> Instagram</a>
                     <a href="https://www.tiktok.com/@gallos.marmol.ofic"><i class="fab fa-tiktok"></i> TikTok</a></div>
@@ -1899,30 +1899,13 @@ function renderizarLandingProducto(producto) {
                 const rangosCompleto = ${JSON.stringify(rangosArray)};
                 const imagenPrincipal = "${imagenPrincipal}";
                 
-                // ========== ZOOM PRINCIPAL (para imágenes de la página) ==========
-                const imagenesPagina = [...galeriaCompleta, ...rangosCompleto];
-                let indicePaginaActual = 0;
-                
+                // ========== ZOOM PRINCIPAL SOLO PARA IMAGEN HERO ==========
                 const modalPrincipal = document.getElementById('zoomModalPrincipal');
                 const imgPrincipal = document.getElementById('zoomPrincipalImage');
-                const counterPrincipal = document.getElementById('zoomPrincipalCounter');
-                const prevPrincipal = document.getElementById('zoomPrincipalPrev');
-                const nextPrincipal = document.getElementById('zoomPrincipalNext');
                 const closePrincipal = document.querySelector('#zoomModalPrincipal .modal-close');
                 
-                function abrirZoomPrincipal(indice) {
-                    if (indice === 'hero') {
-                        imgPrincipal.src = imagenPrincipal;
-                        counterPrincipal.innerText = '1 / 1';
-                        if (prevPrincipal) prevPrincipal.style.display = 'none';
-                        if (nextPrincipal) nextPrincipal.style.display = 'none';
-                    } else {
-                        indicePaginaActual = Math.min(Math.max(0, indice), imagenesPagina.length - 1);
-                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
-                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
-                        if (prevPrincipal) prevPrincipal.style.display = 'flex';
-                        if (nextPrincipal) nextPrincipal.style.display = 'flex';
-                    }
+                function abrirZoomPrincipal() {
+                    imgPrincipal.src = imagenPrincipal;
                     modalPrincipal.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 }
@@ -1932,34 +1915,15 @@ function renderizarLandingProducto(producto) {
                     document.body.style.overflow = '';
                 }
                 
-                function siguientePrincipal() {
-                    if (indicePaginaActual < imagenesPagina.length - 1) {
-                        indicePaginaActual++;
-                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
-                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
-                    }
-                }
-                
-                function anteriorPrincipal() {
-                    if (indicePaginaActual > 0) {
-                        indicePaginaActual--;
-                        imgPrincipal.src = imagenesPagina[indicePaginaActual];
-                        counterPrincipal.innerText = (indicePaginaActual + 1) + ' / ' + imagenesPagina.length;
-                    }
-                }
-                
                 if (closePrincipal) closePrincipal.addEventListener('click', cerrarZoomPrincipal);
-                if (prevPrincipal) prevPrincipal.addEventListener('click', anteriorPrincipal);
-                if (nextPrincipal) nextPrincipal.addEventListener('click', siguientePrincipal);
                 if (modalPrincipal) modalPrincipal.addEventListener('click', (e) => { if (e.target === modalPrincipal) cerrarZoomPrincipal(); });
                 
-                // Zoom para imagen hero
                 const heroZoomBtn = document.getElementById('heroZoomBtn');
                 const heroImage = document.getElementById('heroImage');
-                if (heroZoomBtn) heroZoomBtn.addEventListener('click', () => abrirZoomPrincipal('hero'));
-                if (heroImage) heroImage.addEventListener('click', () => abrirZoomPrincipal('hero'));
+                if (heroZoomBtn) heroZoomBtn.addEventListener('click', abrirZoomPrincipal);
+                if (heroImage) heroImage.addEventListener('click', abrirZoomPrincipal);
                 
-                // ========== ZOOM PARA GALERÍA ==========
+                // ========== ZOOM PARA GALERÍA (para las 3 fotos iniciales) ==========
                 let indiceGaleriaActual = 0;
                 const modalZoomGaleria = document.getElementById('zoomModalGaleria');
                 const imgZoomGaleria = document.getElementById('zoomGaleriaImage');
@@ -2002,7 +1966,7 @@ function renderizarLandingProducto(producto) {
                 if (nextZoomGaleria) nextZoomGaleria.addEventListener('click', siguienteGaleria);
                 if (modalZoomGaleria) modalZoomGaleria.addEventListener('click', (e) => { if (e.target === modalZoomGaleria) cerrarZoomGaleria(); });
                 
-                // ========== ZOOM PARA RANGOS ==========
+                // ========== ZOOM PARA RANGOS (para las 3 fotos iniciales) ==========
                 let indiceRangosActual = 0;
                 const modalZoomRangos = document.getElementById('zoomModalRangos');
                 const imgZoomRangos = document.getElementById('zoomRangosImage');
@@ -2045,8 +2009,40 @@ function renderizarLandingProducto(producto) {
                 if (nextZoomRangos) nextZoomRangos.addEventListener('click', siguienteRangos);
                 if (modalZoomRangos) modalZoomRangos.addEventListener('click', (e) => { if (e.target === modalZoomRangos) cerrarZoomRangos(); });
                 
-                // ========== FUNCIÓN PARA ABRIR MODAL DE GALERÍA ==========
-                function abrirModalGaleria() {
+                // ========== ZOOM PARA LAS 3 FOTOS INICIALES DE GALERÍA ==========
+                document.querySelectorAll('.zoom-btn-galeria-inicial').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.dataset.galeriaIndex);
+                        if (!isNaN(idx)) abrirZoomGaleria(idx);
+                    });
+                });
+                
+                document.querySelectorAll('.galeria-item img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const idx = parseInt(img.dataset.galeriaIndex);
+                        if (!isNaN(idx)) abrirZoomGaleria(idx);
+                    });
+                });
+                
+                // ========== ZOOM PARA LAS 3 FOTOS INICIALES DE RANGOS ==========
+                document.querySelectorAll('.zoom-btn-rango-inicial').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.dataset.rangoIndex);
+                        if (!isNaN(idx)) abrirZoomRangos(idx);
+                    });
+                });
+                
+                document.querySelectorAll('.rango-item img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const idx = parseInt(img.dataset.rangoIndex);
+                        if (!isNaN(idx)) abrirZoomRangos(idx);
+                    });
+                });
+                
+                // ========== FUNCIÓN PARA ABRIR MODAL DE GALERÍA COMPLETA ==========
+                function abrirModalGaleriaCompleta() {
                     const modal = document.getElementById('modalGaleria');
                     const body = document.getElementById('modalGaleriaBody');
                     if (!modal || !body) return;
@@ -2067,7 +2063,7 @@ function renderizarLandingProducto(producto) {
                     document.body.style.overflow = 'hidden';
                 }
                 
-                function abrirModalRangos() {
+                function abrirModalRangosCompleta() {
                     const modal = document.getElementById('modalRangos');
                     const body = document.getElementById('modalRangosBody');
                     if (!modal || !body) return;
@@ -2099,8 +2095,8 @@ function renderizarLandingProducto(producto) {
                 // Botones ver todas
                 const verTodaGaleriaBtn = document.getElementById('verTodaGaleriaBtn');
                 const verTodosRangosBtn = document.getElementById('verTodosRangosBtn');
-                if (verTodaGaleriaBtn) verTodaGaleriaBtn.addEventListener('click', abrirModalGaleria);
-                if (verTodosRangosBtn) verTodosRangosBtn.addEventListener('click', abrirModalRangos);
+                if (verTodaGaleriaBtn) verTodaGaleriaBtn.addEventListener('click', abrirModalGaleriaCompleta);
+                if (verTodosRangosBtn) verTodosRangosBtn.addEventListener('click', abrirModalRangosCompleta);
                 
                 // Cerrar modales
                 const modalGaleriaClose = document.querySelector('.modal-galeria-close');
@@ -2115,38 +2111,6 @@ function renderizarLandingProducto(producto) {
                 });
                 if (modalRangosElem) modalRangosElem.addEventListener('click', (e) => {
                     if (e.target === modalRangosElem) cerrarModalGaleria('modalRangos');
-                });
-                
-                // Zoom para imágenes de galería (las 3 iniciales)
-                document.querySelectorAll('.zoom-btn-galeria').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const idx = parseInt(btn.dataset.galeriaIndex);
-                        if (!isNaN(idx)) abrirZoomPrincipal(idx);
-                    });
-                });
-                
-                document.querySelectorAll('.galeria-item img').forEach(img => {
-                    img.addEventListener('click', () => {
-                        const idx = parseInt(img.dataset.galeriaIndex);
-                        if (!isNaN(idx)) abrirZoomPrincipal(idx);
-                    });
-                });
-                
-                // Zoom para imágenes de rangos (las 3 iniciales)
-                document.querySelectorAll('.zoom-btn-rango').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const idx = parseInt(btn.dataset.rangoIndex);
-                        if (!isNaN(idx)) abrirZoomPrincipal(galeriaCompleta.length + idx);
-                    });
-                });
-                
-                document.querySelectorAll('.rango-item img').forEach(img => {
-                    img.addEventListener('click', () => {
-                        const idx = parseInt(img.dataset.rangoIndex);
-                        if (!isNaN(idx)) abrirZoomPrincipal(galeriaCompleta.length + idx);
-                    });
                 });
                 
                 // Botón subir
@@ -2164,7 +2128,7 @@ function renderizarLandingProducto(producto) {
                     if (e.key === 'F12') e.preventDefault();
                 });
                 
-                console.log('✅ Landing page cargada - Modales independientes funcionando');
+                console.log('✅ Landing page cargada - Zooms independientes por sección');
             })();
         </script>
     </body>
@@ -2739,7 +2703,7 @@ function renderizarPaginaOutlet(productos) {
             btn.style.color = 'white';
         });
         
-        mostrarModal('✅ Selección limpiada', 'Todos los productos han sido removidos de tu cotización.', 'success', { timer: 2000, showConfirmButton: false });
+        mostrarModal('Selección limpiada', 'Todos los productos han sido removidos de tu cotización.', 'success', { timer: 2000, showConfirmButton: false });
     }
     
     window.limpiarCotizacion = function() {
@@ -3154,7 +3118,7 @@ function renderizarPaginaOutlet(productos) {
                         }, 100);
                     }
                     
-                    mostrarModal('✅ Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000 });
+                    mostrarModal('Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000 });
                 },
                 (errorMessage) => {}
             );
@@ -3286,7 +3250,7 @@ function renderizarPaginaOutlet(productos) {
                 productosLista += `${i+1}. ${p.nombre}${p.codigo ? ` (${p.codigo})` : ''}\n`;
             });
             
-            const mensaje = `📋 *NUEVA COTIZACIÓN - OUTLET*
+            const mensaje = `*NUEVA COTIZACIÓN - OUTLET*
 
 *N° Cotización:* ${numero}
 *Fecha:* ${new Date().toLocaleString()}
@@ -3309,9 +3273,9 @@ ${productosLista}
                     whatsappNumber = `51${whatsappNumber}`;
                 }
                 window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensaje)}`, '_blank');
-                await mostrarModal('✅ Cotización enviada', `Enviada a ${asesor.nombre}`, 'success', { timer: 3000, showConfirmButton: false });
+                await mostrarModal('Cotización enviada', `Enviada a ${asesor.nombre}`, 'success', { timer: 3000, showConfirmButton: false });
             } else {
-                await mostrarModal('⚠️ No se pudo enviar', 'Cotización registrada exitosamente', 'warning', { confirmButtonText: 'Entendido' });
+                await mostrarModal('No se pudo enviar', 'Cotización registrada exitosamente', 'warning', { confirmButtonText: 'Entendido' });
             }
             
             // Limpiar selección
@@ -3440,166 +3404,163 @@ ${productosLista}
                 const modoInicial = window.modoAsignacion || 'auto';
                 
                 body.innerHTML = `
-                    <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
-                            <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-sm">1</span>
+                    <!-- SECCIÓN 1: PRODUCTOS -->
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span class="text-primary font-bold text-xs">1</span>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Productos seleccionados</h4>
+                            <h4 class="font-semibold text-gray-800 text-sm">Productos seleccionados</h4>
                             <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">${cotizacionSeleccionados.length} producto(s)</span>
                         </div>
-                        <div class="border rounded-lg p-2 max-h-48 overflow-y-auto bg-gray-50">
+                        <div class="productos-lista">
                             ${productosHtml || '<p class="text-gray-400 text-sm text-center py-4">No hay productos</p>'}
                         </div>
                     </div>
                     
-                    <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
-                            <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-sm">2</span>
+                    <!-- SECCIÓN 2: ASIGNACIÓN DE ASESOR (MEJORADA MOBILE) -->
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span class="text-primary font-bold text-xs">2</span>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Asignación de asesor</h4>
+                            <h4 class="font-semibold text-gray-800 text-sm">Asignación de asesor</h4>
                         </div>
                         
-                        <div class="bg-blue-50 rounded-lg p-3 mb-3 border border-blue-200">
+                        <!-- Tarjeta informativa -->
+                        <div class="asignacion-info-card">
                             <div class="flex items-start gap-2">
-                                <i class="fas fa-info-circle text-blue-500 mt-0.5 text-sm"></i>
-                                <div class="text-xs text-blue-700">
-                                    <p class="font-medium mb-1">¿Cómo funciona la asignación?</p>
-                                    <p>• <strong>Automático:</strong> El sistema asignará el asesor automáticamente.</p>
-                                    <p>• <strong>Elegir asesor:</strong> Selecciona manualmente a tu asesor preferido.</p>
-                                    <p>• <strong>Buscar por email:</strong> Ingresa tu correo para encontrar a tu asesor habitual.</p>
-                                </div>
+                                <i class="fas fa-info-circle text-primary mt-0.5 text-xs"></i>
+                                <p class="text-gray-600">El sistema asignará automáticamente el asesor. También puedes elegir uno manualmente o buscarlo por tu correo electrónico.</p>
                             </div>
                         </div>
                         
-                        <div class="bg-gray-50 rounded-lg p-3 mb-3">
-                            <div class="flex gap-6 mb-3">
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="tipoAsignacion" value="auto" onchange="window.cambiarModoAsignacion('auto')" ${modoInicial === 'auto' ? 'checked' : ''}> 
-                                    <span class="text-sm font-medium">Automático</span>
+                        <!-- Opciones de asignación -->
+                        <div class="asignacion-opciones">
+                            <div class="asignacion-radio-group">
+                                <label>
+                                    <input type="radio" name="tipoAsignacion" value="auto" onchange="window.cambiarModoAsignacion('auto')" ${modoInicial === 'auto' ? 'checked' : ''}>
+                                    <span>Automático</span>
                                 </label>
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="tipoAsignacion" value="manual" onchange="window.cambiarModoAsignacion('manual')" ${modoInicial === 'manual' ? 'checked' : ''}> 
-                                    <span class="text-sm font-medium">Elegir asesor</span>
+                                <label>
+                                    <input type="radio" name="tipoAsignacion" value="manual" onchange="window.cambiarModoAsignacion('manual')" ${modoInicial === 'manual' ? 'checked' : ''}>
+                                    <span>Elegir asesor</span>
                                 </label>
                             </div>
                             
-                            <div id="selector-asesor-manual" class="${modoInicial === 'manual' ? '' : 'hidden'}">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Selecciona un asesor:</label>
-                                <select id="asesor-manual-select" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white" onchange="window.actualizarAsesorSeleccionadoManual()">
+                            <!-- Selector manual -->
+                            <div id="selector-asesor-manual" class="selector-manual ${modoInicial === 'manual' ? '' : 'hidden'}">
+                                <label>Selecciona un asesor</label>
+                                <select id="asesor-manual-select" class="w-full">
                                     ${asesoresOptions}
                                 </select>
                             </div>
                             
-                            <div id="campo-email-cliente-modal" class="${modoInicial === 'manual' ? 'hidden' : ''}">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">¿Ya has trabajado con nosotros? Busca tu asesor:</label>
-                                <div class="flex gap-2">
-                                    <input type="email" id="cliente-email-modal" class="flex-1 p-2 border border-gray-300 rounded-lg text-sm bg-white" placeholder="correo@ejemplo.com" value="${window.clienteEmailCache || ''}">
-                                    <button id="btnBuscarAsesorEmail" style="background-color: #39080a; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px;">
-                                        <i class="fas fa-search text-xs"></i> Buscar
+                            <!-- Búsqueda por email (MEJORADA MOBILE) -->
+                            <div id="campo-email-cliente-modal" class="campo-email-container ${modoInicial === 'manual' ? 'hidden' : ''}">
+                                <label>¿Ya has trabajado con nosotros?</label>
+                                <div class="email-search-wrapper">
+                                    <input type="email" id="cliente-email-modal" 
+                                        placeholder="correo@ejemplo.com" 
+                                        value="${window.clienteEmailCache || ''}"
+                                        autocomplete="email">
+                                    <button id="btnBuscarAsesorEmail" class="btn-buscar-email">
+                                        <i class="fas fa-search"></i>
+                                        <span>Buscar asesor</span>
                                     </button>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-1">Si tu correo está registrado, te mostraremos a tu asesor habitual.</p>
+                                <p class="text-xs text-gray-400 mt-2">Ingresa tu correo para encontrar a tu asesor habitual</p>
                             </div>
                             
+                            <!-- Resultado de búsqueda -->
                             <div id="asesor-info-modal" class="hidden mt-3"></div>
                         </div>
                         
-                        <div id="asesor-asignado-container" class="mt-4">
-                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
-                                <i class="fas fa-spinner fa-spin text-primary"></i>
-                                <p class="text-sm text-gray-500 mt-2">Cargando asesor...</p>
-                            </div>
-                        </div>
+                        <!-- Asesor asignado -->
+                        <div id="asesor-asignado-container" class="mt-4"></div>
                     </div>
                     
-                    <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
-                            <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-sm">3</span>
+                    <!-- SECCIÓN 3: DATOS DE CONTACTO -->
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span class="text-primary font-bold text-xs">3</span>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Datos de contacto</h4>
+                            <h4 class="font-semibold text-gray-800 text-sm">Datos de contacto</h4>
                         </div>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">
-                                    Nombre completo <span class="text-red-500">*</span>
-                                </label>
+                        
+                        <div class="space-y-3">
+                            <div class="form-group">
+                                <label>Nombre completo <span class="required">*</span></label>
                                 <input type="text" id="cliente-nombre-modal" 
-                                    class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" 
                                     placeholder="Ej: Juan Pérez"
                                     value="${window.clienteNombreCache || ''}"
                                     oninput="window.validarCampoNombre(this)">
-                                <div id="error-nombre" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
+                                <div id="error-nombre" class="mensaje-error hidden text-red-500"></div>
                             </div>
                             
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">
-                                    Correo electrónico <span class="text-red-500">*</span>
-                                </label>
+                            <div class="form-group">
+                                <label>Correo electrónico <span class="required">*</span></label>
                                 <input type="email" id="cliente-correo-modal" 
-                                    class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" 
                                     placeholder="cliente@ejemplo.com"
                                     value="${window.clienteEmailCache || ''}"
                                     oninput="window.validarCampoEmail(this)">
-                                <div id="error-email" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
+                                <div id="error-email" class="mensaje-error hidden text-red-500"></div>
                             </div>
                             
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">
-                                    Teléfono <span class="text-red-500">*</span>
-                                </label>
-                                <div class="flex gap-2">
-                                    <select id="prefijo-pais" class="w-32 p-2 border border-gray-300 rounded-lg text-sm bg-white" onchange="window.actualizarPlaceholderTelefono()">
-                                        <option value="51" selected>🇵🇪 Perú (+51)</option>
-                                        <option value="1">🇺🇸 EE.UU (+1)</option>
-                                        <option value="34">🇪🇸 España (+34)</option>
-                                        <option value="52">🇲🇽 México (+52)</option>
+                            <div class="form-group">
+                                <label>Teléfono <span class="required">*</span></label>
+                                <div class="telefono-wrapper">
+                                    <select id="prefijo-pais" onchange="window.actualizarPlaceholderTelefono()">
+                                        <option value="51" selected>🇵🇪 +51</option>
+                                        <option value="1">🇺🇸 +1</option>
+                                        <option value="34">🇪🇸 +34</option>
+                                        <option value="52">🇲🇽 +52</option>
+                                        <option value="54">🇦🇷 +54</option>
+                                        <option value="56">🇨🇱 +56</option>
+                                        <option value="57">🇨🇴 +57</option>
                                     </select>
                                     <input type="tel" id="cliente-telefono-modal" 
-                                        class="flex-1 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" 
-                                        placeholder="Ej: 987654321"
+                                        placeholder="987654321"
                                         value="${window.clienteTelefonoCache || ''}"
                                         oninput="window.validarCampoTelefono(this)">
                                 </div>
-                                <div id="error-telefono" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
+                                <div id="error-telefono" class="mensaje-error hidden text-red-500"></div>
                             </div>
                             
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">
-                                    Empresa <span class="text-gray-400">(opcional)</span>
-                                </label>
+                            <div class="form-group">
+                                <label>Empresa <span class="optional">(opcional)</span></label>
                                 <input type="text" id="cliente-empresa-modal" 
-                                    class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" 
                                     placeholder="Nombre de tu empresa"
-                                    value="${window.clienteEmpresaCache || ''}"
-                                    oninput="window.validarCampoEmpresa(this)">
-                                <div id="error-empresa" class="mensaje-error hidden" style="color: #dc3545; font-size: 11px; margin-top: 4px;"></div>
+                                    value="${window.clienteEmpresaCache || ''}">
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-200">
-                            <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-sm">4</span>
+                    <!-- SECCIÓN 4: INFORMACIÓN ADICIONAL -->
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span class="text-primary font-bold text-xs">4</span>
                             </div>
-                            <h4 class="font-semibold text-gray-800">Información adicional</h4>
+                            <h4 class="font-semibold text-gray-800 text-sm">Información adicional</h4>
                         </div>
+                        
                         <div class="space-y-3">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Ubicación del proyecto</label>
-                                <select id="ubicacion-proyecto-modal" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white">
+                            <div class="form-group">
+                                <label>📍 Ubicación del proyecto</label>
+                                <select id="ubicacion-proyecto-modal">
                                     <option value="">Seleccionar ubicación</option>
                                     <option value="Lima" ${window.ubicacionCache === 'Lima' ? 'selected' : ''}>Lima</option>
                                     <option value="Provincia" ${window.ubicacionCache === 'Provincia' ? 'selected' : ''}>Provincia</option>
                                     <option value="Exterior" ${window.ubicacionCache === 'Exterior' ? 'selected' : ''}>Exterior</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Observaciones</label>
-                                <textarea id="observaciones-modal" rows="2" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Comentarios adicionales...">${window.observacionesCache || ''}</textarea>
+                            
+                            <div class="form-group">
+                                <label>💬 Observaciones</label>
+                                <textarea id="observaciones-modal" rows="3" 
+                                        placeholder="Comentarios adicionales...">${window.observacionesCache || ''}</textarea>
                             </div>
                         </div>
                     </div>
@@ -3855,10 +3816,7 @@ ${productosLista}
                     
                     return `
                         <div class="p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-200 shadow-sm">
-                            <div class="flex items-start gap-3">
-                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                    
-                                </div>
+                            <div class="flex items-center gap-3">
                                 <div class="flex-1">
                                     <div class="flex flex-wrap items-center gap-2 mb-1">
                                         <h5 class="font-bold text-gray-800">${escapeHtml(asesor.nombre || 'Asesor')}</h5>
@@ -3997,7 +3955,7 @@ ${productosLista}
                         'question',
                         {
                             showCancelButton: true,
-                            confirmButtonText: '✅ Reasignar',
+                            confirmButtonText: 'Reasignar',
                             cancelButtonText: 'Cancelar'
                         }
                     ).then(async (result) => {
@@ -4034,7 +3992,7 @@ ${productosLista}
                                     }
                                 }
                                 
-                                mostrarModal('✅ Asesor reasignado', `Ahora serás atendido por: ${asesorSeleccionado.nombre}`, 'success', { timer: 2000 });
+                                mostrarModal('Asesor reasignado', `Ahora serás atendido por: ${asesorSeleccionado.nombre}`, 'success', { timer: 2000 });
                             }
                         }
                     });
@@ -4095,7 +4053,7 @@ ${productosLista}
                                 `;
                                 asesorInfo.classList.remove('hidden');
                                 
-                                mostrarModal('✅ Asesor encontrado', `Serás atendido por ${asesor.nombre}`, 'success', { timer: 2000 });
+                                mostrarModal('Asesor encontrado', `Serás atendido por ${asesor.nombre}`, 'success', { timer: 2000 });
                             } else {
                                 asesorInfo.innerHTML = `
                                     <div class="mt-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
@@ -4445,18 +4403,221 @@ ${productosLista}
             
             .filtros-modal{position:fixed;top:0;right:-100%;width:85%;max-width:320px;height:100%;background:white;z-index:1000;transition:right 0.3s ease;box-shadow:-5px 0 25px rgba(0,0,0,0.1);display:flex;flex-direction:column}
             .filtros-modal.show{right:0}
-            .filtros-modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:none}
-            .filtros-modal-overlay.show{display:block}
-            .filtros-modal-header{padding:20px;background:var(--primary);color:white;display:flex;justify-content:space-between;align-items:center}
-            .filtros-modal-header h3{font-size:1.2rem}
-            .close-modal-btn{background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-            .filtros-modal-body{flex:1;padding:20px;overflow-y:auto}
-            .filtros-modal-footer{padding:20px;border-top:1px solid var(--gray-200);display:flex;gap:12px}
-            .filtros-modal-footer button{flex:1;padding:12px;border-radius:40px;font-weight:600;cursor:pointer}
+            /* ============================================
+            MODAL DE FILTROS - MOBILE MEJORADO
+            ============================================ */
+
+            /* Overlay del modal */
+            .filtros-modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                z-index: 10000;  /* Mayor que la barra de cotización (z-index:1000) */
+                display: none;
+            }
+
+            .filtros-modal-overlay.show {
+                display: block;
+            }
+
+            /* Modal de filtros */
+            .filtros-modal {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100%;
+                background: white;
+                z-index: 10001;  /* Mayor que el overlay */
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+                display: flex;
+                flex-direction: column;
+            }
+
+            .filtros-modal.show {
+                right: 0;
+            }
+
+            /* Header del modal */
+            .filtros-modal-header {
+                padding: 20px;
+                background: #39080a;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .filtros-modal-header h3 {
+                font-size: 1.2rem;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .close-modal-btn {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+            }
+
+            .close-modal-btn:active {
+                background: rgba(255,255,255,0.3);
+                transform: scale(0.95);
+            }
+
+            /* Body del modal - con scroll */
+            .filtros-modal-body {
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;
+                padding-bottom: 80px; /* Espacio para los botones fijos */
+            }
+
+            /* Grupo de filtros */
+            .filtro-group {
+                margin-bottom: 20px;
+            }
+
+            .filtro-group label {
+                display: block;
+                font-size: 0.75rem;
+                font-weight: 600;
+                color: #6b7280;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+            }
+
+            .filtro-group select {
+                width: 100%;
+                padding: 14px 16px;
+                border: 1px solid #e5e7eb;
+                border-radius: 16px;
+                font-size: 0.9rem;
+                background: #f9fafb;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .filtro-group select:focus {
+                outline: none;
+                border-color: #39080a;
+                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
+            }
+
+            /* Footer con botones fijos */
+            .filtros-modal-footer {
+                position: sticky;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 16px 20px;
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                display: flex;
+                gap: 12px;
+                flex-shrink: 0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+                z-index: 2;
+            }
+
+            .filtros-modal-footer button {
+                flex: 1;
+                padding: 14px;
+                border-radius: 40px;
+                font-weight: 600;
+                cursor: pointer;
+                border: none;
+                transition: all 0.2s ease;
+                font-size: 0.9rem;
+            }
+
+            .filtros-modal-footer button:active {
+                transform: scale(0.98);
+            }
+
+            .btn-filter {
+                background: #39080a;
+                color: white;
+            }
+
+            .btn-clear {
+                background: #f3f4f6;
+                color: #4b5563;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Ajustes para móvil pequeño */
+            @media (max-width: 480px) {
+                .filtros-modal {
+                    width: 100%;
+                    max-width: none;
+                    right: -100%;
+                }
+                
+                .filtros-modal-header {
+                    padding: 16px;
+                }
+                
+                .filtros-modal-body {
+                    padding: 16px;
+                    padding-bottom: 80px;
+                }
+                
+                .filtros-modal-footer {
+                    padding: 12px 16px;
+                }
+                
+                .filtros-modal-footer button {
+                    padding: 12px;
+                    font-size: 0.85rem;
+                }
+            }
             
-            /* Scroll Top Button */
-            .scroll-top-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--primary);color:white;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.2);z-index:80}
-            
+            .scroll-top-btn {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: var(--primary);
+                color: white;
+                border: none;
+                cursor: pointer;
+                display: none;  /* Oculto por defecto */
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 80;
+                transition: all 0.3s ease;
+            }
+
+            .scroll-top-btn:hover {
+                transform: scale(1.05);
+                background: var(--primary-dark);
+            }
+
+            /* Mostrar el botón después de hacer scroll */
+            .scroll-top-btn.show {
+                display: flex;
+            }
+
             /* Productos Grid */
             .productos-grid-enhanced{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px}
             .producto-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid var(--gray-200);transition:all 0.3s ease}
@@ -4487,15 +4648,624 @@ ${productosLista}
             .btn-modal-confirmar{background:#dc3545;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
             .btn-modal-cancelar{background:#e5e7eb;color:#374151;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
             
-            .modal-cotizacion{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10001;justify-content:center;align-items:center;overflow-y:auto}
-            .modal-cotizacion.active{display:flex}
-            .modal-cotizacion-contenido{background:white;border-radius:20px;width:90%;max-width:750px;max-height:90vh;overflow-y:auto;margin:20px auto}
-            .modal-cotizacion-header{background:#39080a;color:white;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
-            .modal-cotizacion-header h3{font-size:1.25rem;margin:0}
-            .modal-cotizacion-close{background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;width:36px;height:36px;border-radius:50%}
-            .modal-cotizacion-body{padding:24px}
-            .modal-cotizacion-footer{padding:16px 24px;display:flex;gap:12px;justify-content:flex-end;border-top:1px solid #e5e7eb;background:#f9fafb}
-            
+            .modal-cotizacion {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                z-index: 10001;
+                justify-content: center;
+                align-items: center;
+                padding: 16px;
+            }
+
+            .modal-cotizacion.active {
+                display: flex;
+            }
+
+            .modal-cotizacion-contenido {
+                background: white;
+                border-radius: 24px;
+                width: 100%;
+                max-width: 750px;
+                max-height: 90vh;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            }
+
+            /* Header fijo */
+            .modal-cotizacion-header {
+                background: #39080a;
+                color: white;
+                padding: 16px 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                flex-shrink: 0;
+            }
+
+            .modal-cotizacion-header h3 {
+                font-size: 1.1rem;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .modal-cotizacion-header h3 i {
+                font-size: 1rem;
+            }
+
+            .modal-cotizacion-close {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+            }
+
+            .modal-cotizacion-close:hover {
+                background: rgba(255,255,255,0.3);
+            }
+
+            /* Body con scroll */
+            .modal-cotizacion-body {
+                padding: 20px;
+                overflow-y: auto;
+                flex: 1;
+            }
+
+            /* Footer fijo */
+            .modal-cotizacion-footer {
+                padding: 16px 20px;
+                display: flex;
+                gap: 12px;
+                justify-content: flex-end;
+                border-top: 1px solid #e5e7eb;
+                background: #f9fafb;
+                flex-shrink: 0;
+                flex-wrap: wrap;
+            }
+
+/* ============================================
+   SECCIÓN DE ASIGNACIÓN DE ASESOR - MOBILE FIRST
+   ============================================ */
+
+            .asignacion-info-card {
+                background: #eef2ff;
+                border-radius: 16px;
+                padding: 12px;
+                margin-bottom: 16px;
+                border-left: 4px solid #39080a;
+            }
+
+            .asignacion-info-card i {
+                color: #39080a;
+                font-size: 0.9rem;
+            }
+
+            .asignacion-info-card p {
+                font-size: 0.7rem;
+                line-height: 1.4;
+                margin: 0;
+            }
+
+            /* Opciones de asignación */
+            .asignacion-opciones {
+                background: #f9fafb;
+                border-radius: 16px;
+                padding: 12px;
+                margin-bottom: 16px;
+            }
+
+            .asignacion-radio-group {
+                display: flex;
+                gap: 16px;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+            }
+
+            .asignacion-radio-group label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.85rem;
+                cursor: pointer;
+                padding: 6px 0;
+            }
+
+            .asignacion-radio-group input[type="radio"] {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+                accent-color: #39080a;
+            }
+
+            /* Selector manual */
+            .selector-manual {
+                margin-top: 12px;
+            }
+
+            .selector-manual label {
+                display: block;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: #6b7280;
+                margin-bottom: 6px;
+                text-transform: uppercase;
+            }
+
+            .selector-manual select {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                font-size: 0.85rem;
+                background: white;
+                cursor: pointer;
+            }
+
+            /* Campo de búsqueda por email (Mobile First) */
+            .campo-email-container {
+                margin-top: 12px;
+            }
+
+            .campo-email-container label {
+                display: block;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: #6b7280;
+                margin-bottom: 6px;
+                text-transform: uppercase;
+            }
+
+            .email-search-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .email-search-wrapper input {
+                flex: 1;
+                padding: 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                font-size: 0.85rem;
+                background: white;
+            }
+
+            .email-search-wrapper button {
+                background: #39080a;
+                color: white;
+                border: none;
+                padding: 12px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 0.85rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: all 0.2s ease;
+            }
+
+            .email-search-wrapper button:active {
+                transform: scale(0.98);
+            }
+
+            .email-search-wrapper button i {
+                font-size: 0.8rem;
+            }
+
+            /* Resultado de búsqueda */
+            .asesor-info-result {
+                margin-top: 12px;
+                padding: 12px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+            }
+
+            .asesor-info-result.success {
+                background: #ecfdf5;
+                border: 1px solid #10b981;
+                color: #065f46;
+            }
+
+            .asesor-info-result.warning {
+                background: #fffbeb;
+                border: 1px solid #f59e0b;
+                color: #92400e;
+            }
+
+            /* Asesor asignado card */
+            .asesor-asignado-card {
+                background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+                border-radius: 16px;
+                padding: 16px;
+                border: 1px solid #e5e7eb;
+                margin-top: 16px;
+            }
+
+            .asesor-asignado-content {
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .asesor-avatar {
+                width: 48px;
+                height: 48px;
+                background: rgba(57,8,10,0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .asesor-avatar i {
+                font-size: 1.5rem;
+                color: #39080a;
+            }
+
+            .asesor-info {
+                flex: 1;
+            }
+
+            .asesor-nombre {
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 4px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .asesor-badge {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+                border-radius: 20px;
+                font-weight: 500;
+            }
+
+            .asesor-badge.auto { background: #dbeafe; color: #1e40af; }
+            .asesor-badge.manual { background: #dcfce7; color: #166534; }
+            .asesor-badge.email { background: #f3e8ff; color: #6b21a5; }
+            .asesor-badge.reasignado { background: #ffedd5; color: #9a3412; }
+
+            .asesor-contacto {
+                font-size: 0.7rem;
+                color: #6b7280;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 4px;
+            }
+
+            .asesor-contacto span {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .btn-reasignar {
+                background: none;
+                border: none;
+                color: #39080a;
+                font-size: 0.7rem;
+                cursor: pointer;
+                padding: 4px 8px;
+                border-radius: 20px;
+                transition: all 0.2s ease;
+            }
+
+            .btn-reasignar:hover {
+                background: rgba(57,8,10,0.1);
+            }
+
+            /* ============================================
+            SECCIÓN DE PRODUCTOS
+            ============================================ */
+
+            .productos-lista {
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 8px;
+                max-height: 200px;
+                overflow-y: auto;
+                background: #f9fafb;
+            }
+
+            .producto-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                border-bottom: 1px solid #e5e7eb;
+                transition: all 0.2s ease;
+            }
+
+            .producto-item:last-child {
+                border-bottom: none;
+            }
+
+            .producto-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .producto-nombre {
+                font-weight: 600;
+                font-size: 0.85rem;
+                color: #1f2937;
+                margin-bottom: 2px;
+                word-break: break-word;
+            }
+
+            .producto-codigo {
+                font-size: 0.7rem;
+                color: #9ca3af;
+                font-family: monospace;
+            }
+
+            .producto-especificaciones {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 4px;
+            }
+
+            .producto-especificacion {
+                font-size: 0.65rem;
+                background: #f3f4f6;
+                padding: 2px 8px;
+                border-radius: 20px;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                color: #4b5563;
+            }
+
+            .btn-eliminar-producto {
+                background: none;
+                border: none;
+                color: #ef4444;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 50%;
+                transition: all 0.2s ease;
+                flex-shrink: 0;
+            }
+
+            .btn-eliminar-producto:active {
+                background: rgba(239,68,68,0.1);
+            }
+
+            /* ============================================
+            SECCIÓN DE DATOS DE CONTACTO
+            ============================================ */
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                display: block;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: #6b7280;
+                margin-bottom: 6px;
+                text-transform: uppercase;
+            }
+
+            .form-group label .required {
+                color: #ef4444;
+            }
+
+            .form-group label .optional {
+                color: #9ca3af;
+                font-weight: normal;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                font-size: 0.85rem;
+                background: white;
+                transition: all 0.2s ease;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #39080a;
+                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
+            }
+
+            /* Teléfono con prefijo */
+            .telefono-wrapper {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .telefono-wrapper select {
+                width: auto;
+                min-width: 100px;
+            }
+
+            .telefono-wrapper input {
+                flex: 1;
+            }
+
+            /* Mensajes de error */
+            .mensaje-error {
+                font-size: 0.65rem;
+                margin-top: 4px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            /* ============================================
+            DESKTOP (pantallas mayores a 768px)
+            ============================================ */
+            @media (min-width: 768px) {
+                .modal-cotizacion {
+                    padding: 20px;
+                }
+                
+                .modal-cotizacion-header h3 {
+                    font-size: 1.25rem;
+                }
+                
+                .modal-cotizacion-body {
+                    padding: 24px;
+                }
+                
+                .modal-cotizacion-footer {
+                    padding: 16px 24px;
+                }
+                
+                /* Email search en desktop */
+                .email-search-wrapper {
+                    flex-direction: row;
+                }
+                
+                .email-search-wrapper input {
+                    padding: 12px 16px;
+                }
+                
+                .email-search-wrapper button {
+                    width: auto;
+                    padding: 12px 24px;
+                }
+                
+                /* Asignación radio group */
+                .asignacion-radio-group {
+                    gap: 24px;
+                }
+                
+                /* Teléfono wrapper */
+                .telefono-wrapper {
+                    flex-wrap: nowrap;
+                }
+                
+                /* Productos */
+                .producto-nombre {
+                    font-size: 0.9rem;
+                }
+            }
+
+            /* ============================================
+            PANTALLAS MUY PEQUEÑAS (menos de 480px)
+            ============================================ */
+            @media (max-width: 480px) {
+                .modal-cotizacion {
+                    padding: 8px;
+                }
+                
+                .modal-cotizacion-body {
+                    padding: 16px;
+                }
+                
+                .modal-cotizacion-header {
+                    padding: 12px 16px;
+                }
+                
+                .modal-cotizacion-header h3 {
+                    font-size: 1rem;
+                }
+                
+                .modal-cotizacion-footer {
+                    padding: 12px 16px;
+                    flex-direction: column;
+                }
+                
+                .modal-cotizacion-footer button {
+                    width: 100%;
+                    justify-content: center;
+                }
+                
+                /* Asignación */
+                .asignacion-radio-group {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                
+                .asesor-asignado-content {
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                }
+                
+                .asesor-contacto {
+                    justify-content: center;
+                }
+                
+                /* Teléfono */
+                .telefono-wrapper {
+                    flex-direction: column;
+                }
+                
+                .telefono-wrapper select {
+                    width: 100%;
+                }
+            }
+
+            .btn-buscar-email {
+                background: #39080a;
+                color: white;
+                border: none;
+                padding: 12px 16px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 0.85rem;
+                font-weight: 600;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn-buscar-email:active {
+                transform: scale(0.98);
+            }
+
+            .btn-buscar-email i {
+                font-size: 0.8rem;
+            }
+
+            /* Mobile small */
+            @media (max-width: 480px) {
+                .btn-buscar-email {
+                    padding: 10px 12px;
+                    font-size: 0.8rem;
+                }
+            }
+
             .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:20000;justify-content:center;align-items:center}
             .modal-overlay.active{display:flex}
             .modal-custom{background:white;border-radius:20px;width:90%;max-width:450px;overflow:hidden}
@@ -4977,7 +5747,7 @@ ${productosLista}
                 .card-image{height:140px}
                 .card-info h3{font-size:0.75rem}
                 .btn-detalle-enhanced{padding:8px 10px}
-                .scroll-top-btn{width:45px;height:45px;bottom:15px;right:15px}
+                .scroll-top-btn{width:50px;height:50px;bottom:90px;right:15px}
                 .filtros-fab{width:50px;height:50px;bottom:150px;right:15px}
                 .footer-grid{text-align:center}
                 .footer-social a,.footer-links a{justify-content:center}
@@ -5208,7 +5978,7 @@ ${productosLista}
                             searchInput.value = decodedText;
                             if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
                         }
-                        mostrarModal('✅ Código encontrado', decodedText, 'success');
+                        mostrarModal('Código encontrado', decodedText, 'success');
                     },
                     (errorMessage) => {}
                 ).catch(err => {
@@ -5528,6 +6298,29 @@ ${productosLista}
         setTimeout(() => {
             toggleClearButton();
         }, 100);
+
+        // ============================================
+        // BOTÓN PARA SUBIR AL INICIO (SCROLL TOP)
+        // ============================================
+        const scrollBtn = document.getElementById('scrollTopBtn');
+
+        function toggleScrollButton() {
+            if (scrollBtn) {
+                if (window.scrollY > 300) {
+                    scrollBtn.style.display = 'flex';
+                    scrollBtn.classList.add('show');
+                } else {
+                    scrollBtn.style.display = 'none';
+                    scrollBtn.classList.remove('show');
+                }
+            }
+        }
+
+        // Escuchar evento scroll
+        window.addEventListener('scroll', toggleScrollButton);
+
+        // Verificar al cargar
+        toggleScrollButton();
 
         // Detectar scroll para mostrar/ocultar barra
         let ultimoScroll = 0;
