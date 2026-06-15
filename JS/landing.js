@@ -4350,7 +4350,7 @@ ${productosLista}
             /* Header */
             header{position:fixed;top:0;left:0;right:0;background:var(--primary);z-index:1000;padding:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
             .navbar{display:flex;justify-content:center;align-items:center}
-            .logo img{width:200px;height:auto}
+            .logo img{width:250px;height:auto}
             
             /* Hero Section */
             .hero-outlet{min-height:85vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(0,0,0,0.5)),url('${heroBackgroundImage}');background-size:cover;background-position:center;padding:120px 0 80px}
