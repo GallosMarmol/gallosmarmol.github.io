@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Etiqueta - Gallos Mármol</title>
+    <meta name="description" content="Sistema de generación de etiquetas para productos terminados de Gallos Mármol">
+    <meta name="keywords" content="gallos mármol, etiquetas, productos terminados, inventario">
+    <meta name="author" content="Gallos Mármol">
+    <link rel="icon" type="image/x-icon" href="../../FOTO/ICONO/Icono_01.ico">
+    
+    <!-- Librerías externas optimizadas -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+    <style>
+        /* ===== VARIABLES Y RESET ===== */
+        :root {
+            --primary-color: #CB3E2C;
+            --primary-light: #e74c3c;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #fff;
+            --text-muted: #6c757d;
+            --bg-color: #f7f7f7;
+            --card-bg: #fff;
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius-sm: 8px;
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --header-height: 70px;
+        }
+
+        .dark-mode {
+            --primary-color: #CB3E2C;
+            --primary-light: #e74c3c;
+            --secondary-color: #34495e;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #d68910;
+            --danger-color: #cb4335;
+            --light-color: #2c2c2c;
+            --light-gray: #1e1e1e;
+            --dark-color: #121212;
+            --text-color: #e0e0e0;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== ESTRUCTURA PRINCIPAL ===== */
+        #app {
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER MOBILE-FIRST ===== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            max-width: 60%;
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius-sm);
+            object-fit: contain;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle, .fullscreen-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover, .fullscreen-btn:hover {
+            background-color: var(--light-color);
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            padding-top: var(--header-height);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* ===== SECCIONES ===== */
+        .section-title {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ===== BOTONES ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #2ecc71;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ===== SELECT FORMATO ===== */
+        .format-selector {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .format-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .format-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .format-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .format-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(203, 62, 44, 0.1);
+        }
+
+        .format-size {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .format-description {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            padding: 1rem;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-error {
+            background-color: var(--danger-color);
+        }
+
+        .toast-warning {
+            background-color: var(--warning-color);
+        }
+
+        .toast-info {
+            background-color: var(--secondary-color);
+        }
+
+        .toast-icon {
+            font-size: 1.25rem;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            color: white;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+        }
+
+        /* ===== ESTILOS PARA ETIQUETA ===== */
+        .etiqueta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .etiqueta-preview {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .etiqueta-content {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.3cm;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .etiqueta-content.formato-75x5 {
+            width: 7.5cm;
+            height: 5cm;
+        }
+
+        .etiqueta-content.formato-10x5 {
+            width: 10cm;
+            height: 5cm;
+        }
+
+        .etiqueta-header {
+            text-align: center;
+            padding-bottom: 0.1cm;
+            margin-bottom: 0.1cm;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .etiqueta-titulo {
+            font-weight: bold;
+            margin: 0;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-titulo {
+            font-size: 10px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-titulo {
+            font-size: 12px;
+        }
+
+        .etiqueta-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .etiqueta-info {
+            display: grid;
+            gap: 0.1cm;
+            margin-bottom: 0.1cm;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-info {
+            grid-template-columns: 1fr 1fr;
+            font-size: 8px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-info {
+            grid-template-columns: 1fr 1fr 1fr;
+            font-size: 9px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #000;
+            font-size: 0.9em;
+        }
+
+        .info-value {
+            color: #000;
+            font-size: 0.85em;
+        }
+
+        .etiqueta-footer {
+            text-align: center;
+            border-top: 1px solid #ddd;
+            padding-top: 0.1cm;
+            margin-top: 0.1cm;
+            color: #666;
+        }
+
+        .etiqueta-content.formato-75x5 .etiqueta-footer {
+            font-size: 6px;
+        }
+
+        .etiqueta-content.formato-10x5 .etiqueta-footer {
+            font-size: 7px;
+        }
+
+        .etiqueta-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .etiqueta-content {
+                width: 100%;
+                max-width: 7.5cm;
+            }
+            
+            .etiqueta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .format-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Aplicación principal -->
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../../FOTO/LOGO/Logo_01.webp" alt="Gallos Mármol" class="logo-img">
+                </div>
+                <div class="header-actions">
+                    <button class="fullscreen-btn" id="fullscreenBtn" title="Pantalla completa" aria-label="Pantalla completa">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Generador de Etiquetas</h2>
+                    <small>Crea etiquetas para productos terminados del inventario</small>
+                </div>
+
+                <!-- Selector de formato -->
+                <div class="format-selector">
+                    <h3>Selecciona el formato de etiqueta</h3>
+                    <div class="format-options">
+                        <div class="format-option selected" data-format="75x5">
+                            <div class="format-size">7.5 x 5 cm</div>
+                            <div class="format-description">Formato estándar</div>
+                        </div>
+                        <div class="format-option" data-format="10x5">
+                            <div class="format-size">10 x 5 cm</div>
+                            <div class="format-description">Formato ampliado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vista previa de etiqueta -->
+                <div class="etiqueta-container">
+                    <div class="etiqueta-preview">
+                        <div class="etiqueta-content formato-75x5" id="etiquetaContent">
+                            <div class="etiqueta-header">
+                                <h3 class="etiqueta-titulo" id="etiquetaTitulo">Título del Producto</h3>
+                            </div>
+                            <div class="etiqueta-body">
+                                <div class="etiqueta-info">
+                                    <div class="info-item">
+                                        <span class="info-label">Largo:</span>
+                                        <span class="info-value" id="etiquetaLargo">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Ancho:</span>
+                                        <span class="info-value" id="etiquetaAncho">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Cantidad:</span>
+                                        <span class="info-value" id="etiquetaCantidad">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Metraje:</span>
+                                        <span class="info-value" id="etiquetaMetraje">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Ubicación:</span>
+                                        <span class="info-value" id="etiquetaUbicacion">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Fecha:</span>
+                                        <span class="info-value" id="etiquetaFecha">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Creado por:</span>
+                                        <span class="info-value" id="etiquetaCreado">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Código:</span>
+                                        <span class="info-value" id="etiquetaCodigo">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="etiqueta-footer">
+                                <p>Gallos Mármol - Sistema de Inventario</p>
+                            </div>
+                        </div>
+                        
+                        <div class="etiqueta-actions">
+                            <button class="btn btn-primary" id="generarPdfBtn">
+                                <i class="fas fa-file-pdf"></i> Generar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toastMessage">Operación completada con éxito</span>
+        <button class="toast-close" aria-label="Cerrar notificación">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay" aria-live="polite" aria-busy="true">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Cargando...</div>
+    </div>
+
+    <script>
+        // ===== ESTADO DE LA APLICACIÓN =====
+        const AppState = {
+            darkMode: localStorage.getItem('darkMode') === 'true',
+            parametrosURL: {},
+            formatoSeleccionado: '75x5'
+        };
+
+        // ===== FUNCIONES DE UTILIDAD =====
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('.toast-icon');
+            
+            if (!toast || !toastMessage) return;
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            
+            const toastConfig = {
+                success: { icon: 'check-circle', color: 'toast' },
+                error: { icon: 'exclamation-circle', color: 'toast-error' },
+                warning: { icon: 'exclamation-triangle', color: 'toast-warning' },
+                info: { icon: 'info-circle', color: 'toast-info' }
+            };
+            
+            const config = toastConfig[type] || toastConfig.success;
+            toastIcon.className = `fas fa-${config.icon} toast-icon`;
+            toast.classList.add(config.color);
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        function showLoadingOverlay(show, message = 'Cargando...') {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            
+            if (show) {
+                loadingText.textContent = message;
+                loadingOverlay.classList.add('active');
+            } else {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+
+        // ===== FUNCIONES PARA PARÁMETROS URL =====
+        function obtenerParametrosURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const parametros = {};
+            
+            parametros.titulo = urlParams.get('titulo') || 'Producto Sin Título';
+            parametros.largo = urlParams.get('largo') || 'N/A';
+            parametros.unidad = urlParams.get('unidad') || '';
+            parametros.ancho = urlParams.get('ancho') || 'N/A';
+            parametros.unidad2 = urlParams.get('unidad2') || '';
+            parametros.cantidad = urlParams.get('cantidad') || 'N/A';
+            parametros.metraje = urlParams.get('metraje') || 'N/A';
+            parametros.ubicacion = urlParams.get('ubicacion') || 'N/A';
+            parametros.fecha = urlParams.get('fecha') || 'N/A';
+            parametros.creado = urlParams.get('creado') || 'N/A';
+            parametros.codigo = urlParams.get('codigo') || 'N/A';
+            
+            // Validar parámetros críticos
+            if (!parametros.codigo || parametros.codigo === 'N/A') {
+                showToast('Advertencia: No se proporcionó código del producto', 'warning');
+            }
+            
+            if (!parametros.titulo || parametros.titulo === 'Producto Sin Título') {
+                showToast('Advertencia: No se proporcionó título del producto', 'warning');
+            }
+            
+            AppState.parametrosURL = parametros;
+            return parametros;
+        }
+
+        function actualizarVistaPrevia() {
+            const params = AppState.parametrosURL;
+            
+            document.getElementById('etiquetaTitulo').textContent = params.titulo;
+            document.getElementById('etiquetaLargo').textContent = `${params.largo} ${params.unidad}`;
+            document.getElementById('etiquetaAncho').textContent = `${params.ancho} ${params.unidad2}`;
+            document.getElementById('etiquetaCantidad').textContent = params.cantidad;
+            document.getElementById('etiquetaMetraje').textContent = `${params.metraje} M²`;
+            document.getElementById('etiquetaUbicacion').textContent = params.ubicacion;
+            document.getElementById('etiquetaFecha').textContent = formatearFecha(params.fecha);
+            document.getElementById('etiquetaCreado').textContent = params.creado;
+            document.getElementById('etiquetaCodigo').textContent = params.codigo;
+        }
+
+        function formatearFecha(fechaStr) {
+            if (!fechaStr || fechaStr === 'N/A') return 'N/A';
+            
+            try {
+                const fecha = new Date(fechaStr);
+                if (isNaN(fecha.getTime())) return fechaStr;
+                
+                return fecha.toLocaleDateString('es-ES');
+            } catch (e) {
+                return fechaStr;
+            }
+        }
+
+        // ===== FUNCIONES PARA FORMATO DE ETIQUETA =====
+        function cambiarFormatoEtiqueta(formato) {
+            AppState.formatoSeleccionado = formato;
+            
+            const etiquetaContent = document.getElementById('etiquetaContent');
+            etiquetaContent.className = 'etiqueta-content';
+            etiquetaContent.classList.add(`formato-${formato}`);
+            
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`.format-option[data-format="${formato}"]`).classList.add('selected');
+        }
+
+        // ===== FUNCIONES PARA GENERAR PDF =====
+        async function generarPDF() {
+            // Validar parámetros antes de generar PDF
+            const params = AppState.parametrosURL;
+            
+            if (!params.codigo || params.codigo === 'N/A') {
+                showToast('Error: No se puede generar PDF sin código de producto', 'error');
+                return;
+            }
+            
+            showLoadingOverlay(true, 'Generando PDF...');
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                
+                if (typeof jsPDF === 'undefined') {
+                    throw new Error('Librería PDF no disponible');
+                }
+                
+                const formato = AppState.formatoSeleccionado;
+                
+                // Configurar PDF con tamaño real
+                let pdf, etiquetaWidth, etiquetaHeight;
+                
+                if (formato === '75x5') {
+                    etiquetaWidth = 7.5;
+                    etiquetaHeight = 5;
+                    pdf = new jsPDF({
+                        orientation: "landscape",
+                        unit: "cm",
+                        format: [etiquetaWidth, etiquetaHeight]
+                    });
+                } else {
+                    etiquetaWidth = 10;
+                    etiquetaHeight = 5;
+                    pdf = new jsPDF({
+                        orientation: "landscape", 
+                        unit: "cm",
+                        format: [etiquetaWidth, etiquetaHeight]
+                    });
+                }
+                
+                // Márgenes optimizados
+                const margin = 0.15;
+                const contentWidth = etiquetaWidth - (margin * 2);
+                const contentHeight = etiquetaHeight - (margin * 2);
+                
+                // Fondo blanco
+                pdf.setFillColor(255, 255, 255);
+                pdf.rect(margin, margin, contentWidth, contentHeight, 'F');
+                                
+                // ENCABEZADO EN BLANCO Y NEGRO
+                const headerHeight = formato === '75x5' ? 0.7 : 0.8; // Reducido para dar más espacio al contenido
+                pdf.setFillColor(255, 255, 255); // Fondo blanco
+                pdf.rect(margin, margin, contentWidth, headerHeight, 'F');
+                
+                // Borde inferior del header
+                pdf.setDrawColor(0, 0, 0);
+                pdf.setLineWidth(0.02);
+                pdf.line(margin, margin + headerHeight, margin + contentWidth, margin + headerHeight);
+                
+                // TÍTULO EN NEGRO - CONTROL COMPLETO DE LÍNEAS
+                let fontSizeTitulo = formato === '75x5' ? 7 : 8; // Reducido para caber mejor
+                let tituloLines = [];
+                let tituloDisplayLines = [];
+                let tituloTruncado = false;
+                const maxTituloWidth = contentWidth - 0.3;
+
+                // Intentar con diferentes tamaños de fuente
+                for (let i = 0; i < 3; i++) {
+                    pdf.setFontSize(fontSizeTitulo);
+                    tituloLines = pdf.splitTextToSize(params.titulo.toUpperCase(), maxTituloWidth);
+                    
+                    if (tituloLines.length <= 3) { // Máximo 3 líneas para el título
+                        break; // Tamaño adecuado encontrado
+                    }
+                    
+                    // Reducir tamaño de fuente para siguiente intento
+                    fontSizeTitulo -= 1;
+                    
+                    // Si ya es el último intento y sigue teniendo muchas líneas, truncar
+                    if (i === 2 && tituloLines.length > 3) {
+                        tituloDisplayLines = tituloLines.slice(0, 2);
+                        const terceraLinea = tituloLines[2];
+                        tituloDisplayLines.push(terceraLinea.substring(0, Math.max(terceraLinea.length - 3, 5)) + '...');
+                        tituloTruncado = true;
+                        break;
+                    }
+                }
+
+                // Aplicar el tamaño de fuente final
+                pdf.setFontSize(fontSizeTitulo);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setTextColor(0, 0, 0);
+
+                // Si no se truncó, usar todas las líneas (máximo 3)
+                if (!tituloTruncado) {
+                    tituloDisplayLines = tituloLines.slice(0, 3);
+                }
+
+                // LINE HEIGHT OPTIMIZADO
+                const lineHeight = 0.2;
+                const tituloTotalHeight = tituloDisplayLines.length * lineHeight;
+
+                // Centrar verticalmente en el header
+                const headerCenterY = margin + (headerHeight / 2);
+                const tituloStartY = headerCenterY - (tituloTotalHeight / 2) + 0.06;
+
+                // Dibujar cada línea del título
+                tituloDisplayLines.forEach((line, index) =>  {
+                    pdf.text(line, margin + 0.15, tituloStartY + (index * lineHeight));
+                });
+
+                // Mostrar advertencia si fue necesario truncar o reducir tamaño
+                if (tituloTruncado || fontSizeTitulo < (formato === '75x5' ? 7 : 8)) {
+                    showToast('El título fue ajustado para caber en el espacio disponible', 'warning');
+                }
+                
+                // CONFIGURACIÓN DE PARÁMETROS EN BLANCO Y NEGRO
+                const parametros = [
+                    { 
+                        label: "CÓDIGO", 
+                        value: params.codigo,
+                        type: "secondary"
+                    },
+                    { 
+                        label: "MEDIDAS", 
+                        value: `${params.largo} ${params.unidad}  ×  ${params.ancho} ${params.unidad2}`,
+                        type: "secondary"
+                    },
+                    { 
+                        label: "CANTIDAD", 
+                        value: params.cantidad,
+                        type: "secondary"
+                    },
+                    { 
+                        label: "METRAJE", 
+                        value: `${params.metraje} M²`,
+                        type: "secondary"
+                    },
+                    { 
+                        label: "UBICACIÓN", 
+                        value: params.ubicacion,
+                        type: "secondary"
+                    }
+                ];
+
+                // ESPACIO DISPONIBLE PARA PARÁMETROS (más espacio ahora)
+                const espacioParametros = contentHeight - headerHeight - 0.3;
+                
+                // POSICIÓN INICIAL OPTIMIZADA
+                let currentY = margin + headerHeight + 0.2;
+
+                if (formato === '75x5') {
+                    // DISEÑO 7.5x5 - 3 filas × 2 columnas CON ALTURAS OPTIMIZADAS
+                    const colWidth = contentWidth / 2;
+                    
+                    // DISTRIBUCIÓN CON ALTURAS BALANCEADAS
+                    const fila1Height = 1.0;  // Código
+                    const fila2Height = 0.9;  // Medidas y Cantidad
+                    const fila3Height = 0.9;  // Metraje y Ubicación
+                    
+                    // Fila 1: Código (ocupa ancho completo)
+                    dibujarParametro75x5BN(pdf, parametros[0], margin + 0.1, currentY, contentWidth - 0.2, fila1Height, false);
+                    currentY += fila1Height;
+                                        
+                    // Fila 2: Medidas y Cantidad
+                    dibujarParametro75x5BN(pdf, parametros[1], margin + 0.1, currentY, colWidth - 0.15, fila2Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[2], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila2Height, false);
+                    currentY += fila2Height;
+
+                    // Fila 3: Metraje y Ubicación
+                    dibujarParametro75x5BN(pdf, parametros[3], margin + 0.1, currentY, colWidth - 0.15, fila3Height, false);
+                    dibujarParametro75x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila3Height, false);
+                    
+                } else {
+                    // DISEÑO 10x5 - 2 filas × 3 columnas CON ALTURAS OPTIMIZADAS
+                    const colWidth = contentWidth / 3;
+                    
+                    // DISTRIBUCIÓN BALANCEADA
+                    const fila1Height = 1.0;  // Código, Medidas, Cantidad
+                    const fila2Height = 1.0;  // Metraje y Ubicación
+                    
+                    // Fila 1: Código, Medidas, Cantidad
+                    dibujarParametro10x5BN(pdf, parametros[0], margin + 0.1, currentY, colWidth - 0.15, fila1Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[1], margin + colWidth + 0.05, currentY, colWidth - 0.15, fila1Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[2], margin + (colWidth * 2) + 0.05, currentY, colWidth - 0.15, fila1Height, false);
+                    currentY += fila1Height;
+                                        
+                    // Fila 2: Metraje y Ubicación (ubicación ocupa 2 columnas)
+                    dibujarParametro10x5BN(pdf, parametros[3], margin + 0.1, currentY, colWidth - 0.15, fila2Height, false);
+                    dibujarParametro10x5BN(pdf, parametros[4], margin + colWidth + 0.05, currentY, (colWidth * 2) - 0.2, fila2Height, false);
+                }
+                
+                // PIE DE PÁGINA EN BLANCO Y NEGRO
+                const footerY = margin + contentHeight - 0.1;
+                                
+                // Información de creación
+                pdf.setFontSize(4); // Reducido para caber mejor
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(0, 0, 0); // Texto negro
+                
+                const creadoInfo = `${params.creado} | ${formatearFecha(params.fecha)}`;
+                pdf.text(creadoInfo, margin + 0.1, footerY - 0.05);
+                                
+                // Guardar PDF
+                const fileName = `etiqueta_${params.codigo}_${formato}.pdf`;
+                pdf.save(fileName);
+                
+                showToast("PDF generado correctamente", 'success');
+                
+            } catch (error) {
+                console.error('Error generando PDF:', error);
+                showToast('Error al generar el PDF: ' + error.message, 'error');
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
+        // FUNCIÓN 7.5x5cm EN BLANCO Y NEGRO - CON TAMAÑOS OPTIMIZADOS
+        function dibujarParametro75x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+            // TAMAÑOS DE FUENTE OPTIMIZADOS PARA CABER
+            const fontSizeLabel = 5.5; // Reducido para caber mejor
+            const fontSizeValue = 6; // Reducido para caber mejor
+            
+            // Label en negro con diferente peso
+            pdf.setFontSize(fontSizeLabel);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(0, 0, 0); // Negro
+            
+            // POSICIONES CON ESPACIADO OPTIMIZADO
+            const labelY = y + (height * 0.3);
+            pdf.text(parametro.label + ":", x, labelY);
+            
+            // Valor en negro
+            pdf.setFontSize(fontSizeValue);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setTextColor(0, 0, 0); // Negro
+            
+            // Ajustar valor si es muy largo
+            const maxValueWidth = width - 0.2;
+            let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+            
+            // POSICIÓN DEL VALOR OPTIMIZADA
+            const valueStartY = y + (height * 0.6);
+            
+            // LINE HEIGHT OPTIMIZADO
+            const lineHeightValue = 0.18;
+            
+            // Dibujar cada línea del valor
+            valueLines.forEach((line, index) => {
+                if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+                    pdf.text(line, x, valueStartY + (index * lineHeightValue));
+                }
+            });
+        }
+
+        // FUNCIÓN 10x5cm EN BLANCO Y NEGRO - CON TAMAÑOS OPTIMIZADOS
+        function dibujarParametro10x5BN(pdf, parametro, x, y, width, height, esPrimario) {
+            // TAMAÑOS DE FUENTE OPTIMIZADOS PARA CABER
+            const fontSizeLabel = 6; // Reducido para caber mejor
+            const fontSizeValue = 7; // Reducido para caber mejor
+            
+            // Label en negro
+            pdf.setFontSize(fontSizeLabel);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(0, 0, 0); // Negro
+            
+            // POSICIONES CON ESPACIADO OPTIMIZADO
+            const labelY = y + (height * 0.3);
+            pdf.text(parametro.label + ":", x, labelY);
+            
+            // Valor en negro
+            pdf.setFontSize(fontSizeValue);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setTextColor(0, 0, 0); // Negro
+            
+            // Ajustar valor si es muy largo
+            const maxValueWidth = width - 0.3;
+            let valueLines = pdf.splitTextToSize(parametro.value, maxValueWidth);
+            
+            // POSICIÓN DEL VALOR OPTIMIZADA
+            const valueStartY = y + (height * 0.6);
+            
+            // LINE HEIGHT OPTIMIZADO
+            const lineHeightValue = 0.18;
+            
+            // Dibujar cada línea del valor
+            valueLines.forEach((line, index) => {
+                if (valueStartY + (index * lineHeightValue) < y + height - 0.1) {
+                    pdf.text(line, x, valueStartY + (index * lineHeightValue));
+                }
+            });
+        }
+
+        // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Toggle de tema
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+            
+            // Pantalla completa
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+            }
+            
+            // Selector de formato
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const formato = this.getAttribute('data-format');
+                    cambiarFormatoEtiqueta(formato);
+                });
+            });
+            
+            // Botón de generar PDF
+            document.getElementById('generarPdfBtn').addEventListener('click', generarPDF);
+            
+            // Cerrar toast
+            const toastClose = document.querySelector('.toast-close');
+            if (toastClose) {
+                toastClose.addEventListener('click', function() {
+                    document.getElementById('toast').classList.remove('show');
+                });
+            }
+        }
+
+        function toggleTheme() {
+            AppState.darkMode = !AppState.darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', AppState.darkMode);
+            
+            const icon = document.getElementById('themeToggle').querySelector('i');
+            icon.className = AppState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            
+            showToast("Modo " + (AppState.darkMode ? 'oscuro' : 'claro') + " activado", 'success');
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(function(err) {
+                    console.error('Error al activar pantalla completa:', err);
+                    showToast('No se pudo activar el modo pantalla completa', 'error');
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando sistema de etiquetas...');
+            
+            // Aplicar tema guardado
+            if (AppState.darkMode) {
+                document.body.classList.add('dark-mode');
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            }
+            
+            // Obtener parámetros de la URL
+            const parametros = obtenerParametrosURL();
+            console.log('📋 Parámetros recibidos:', parametros);
+            
+            // Actualizar vista previa
+            actualizarVistaPrevia();
+            
+            // Configurar event listeners
+            setupEventListeners();
+            
+            showToast('Sistema de etiquetas cargado correctamente', 'success');
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
