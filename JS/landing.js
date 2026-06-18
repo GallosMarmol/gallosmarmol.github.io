@@ -1169,6 +1169,19 @@ function renderizarLandingProducto(producto) {
         }
     }
     
+    // ========== FLAGS DEL PRODUCTO ==========
+    const esPiedraNatural = producto.es_piedra_natural === true;
+    const mostrarNotaNatural = producto.mostrar_nota_natural === true;
+    const mostrarCaracteristicas = producto.mostrar_caracteristicas === true;
+    const mostrarVariaciones = producto.mostrar_variaciones === true;
+    
+    console.log('🏷️ Flags del producto:', { 
+        esPiedraNatural, 
+        mostrarNotaNatural, 
+        mostrarCaracteristicas,
+        mostrarVariaciones 
+    });
+    
     // ========== OBTENER DATOS CON LAS URLs CORREGIDAS ==========
     const imagenPrincipal = optimizarGoogleDriveUrl(producto.imagen_principal);
     
@@ -1180,18 +1193,31 @@ function renderizarLandingProducto(producto) {
         ? producto.rangos.map(img => optimizarGoogleDriveUrl(img))
         : [];
     
+    const variacionesArray = (producto.variaciones && producto.variaciones.length > 0) 
+        ? producto.variaciones.map(img => optimizarGoogleDriveUrl(img))
+        : [];
+    
+    const patronesArray = (producto.patrones_instalacion && producto.patrones_instalacion.length > 0) 
+        ? producto.patrones_instalacion.map(img => optimizarGoogleDriveUrl(img))
+        : [];
+    
     const tieneGaleria = galeriaImagenes.length > 0;
-    const tieneRangos = rangosArray.length > 0;
+    const tieneRangos = esPiedraNatural && rangosArray.length > 0;
+    const tieneVariaciones = mostrarVariaciones && variacionesArray.length > 0;
+    const tienePatrones = patronesArray.length > 0;
     const tieneAplicaciones = producto.aplicaciones && producto.aplicaciones.length > 0;
     
     const galeriaInicial = galeriaImagenes.slice(0, FOTOS_POR_CARGA);
-    const rangosIniciales = rangosArray.slice(0, FOTOS_POR_CARGA);
+    const rangosIniciales = tieneRangos ? rangosArray.slice(0, FOTOS_POR_CARGA) : [];
+    const variacionesIniciales = tieneVariaciones ? variacionesArray.slice(0, FOTOS_POR_CARGA) : [];
+    const patronesIniciales = tienePatrones ? patronesArray.slice(0, FOTOS_POR_CARGA) : [];
     
     const nombrePartes = producto.nombre.split(' ');
     const primeraPalabra = nombrePartes[0];
     const restoPalabras = nombrePartes.slice(1).join(' ');
     
-    // ========== MODAL PARA GALERÍA (Inspiración) ==========
+    // ========== MODALES ==========
+    // Modal para galería de inspiración
     const modalGaleriaHtml = `
         <div id="modalGaleria" class="modal-galeria">
             <div class="modal-galeria-content">
@@ -1203,7 +1229,6 @@ function renderizarLandingProducto(producto) {
             </div>
         </div>
         
-        <!-- Modal de zoom para galería -->
         <div id="zoomModalGaleria" class="image-modal">
             <div class="modal-content">
                 <div class="modal-close">✕</div>
@@ -1215,8 +1240,8 @@ function renderizarLandingProducto(producto) {
         </div>
     `;
     
-    // ========== MODAL PARA RANGOS ==========
-    const modalRangosHtml = `
+    // Modal para rangos
+    const modalRangosHtml = tieneRangos ? `
         <div id="modalRangos" class="modal-galeria">
             <div class="modal-galeria-content">
                 <div class="modal-galeria-header">
@@ -1227,7 +1252,6 @@ function renderizarLandingProducto(producto) {
             </div>
         </div>
         
-        <!-- Modal de zoom para rangos -->
         <div id="zoomModalRangos" class="image-modal">
             <div class="modal-content">
                 <div class="modal-close">✕</div>
@@ -1237,9 +1261,55 @@ function renderizarLandingProducto(producto) {
                 <div id="zoomRangosCounter" class="modal-counter">1 / 1</div>
             </div>
         </div>
-    `;
+    ` : '';
     
-    // ========== MODAL DE ZOOM PRINCIPAL SOLO PARA IMAGEN HERO ==========
+    // Modal para variaciones disponibles
+    const modalVariacionesHtml = tieneVariaciones ? `
+        <div id="modalVariaciones" class="modal-galeria">
+            <div class="modal-galeria-content">
+                <div class="modal-galeria-header">
+                    <h3><i class="fas fa-swatchbook"></i> Variaciones Disponibles - ${producto.nombre}</h3>
+                    <button class="modal-variaciones-close">&times;</button>
+                </div>
+                <div class="modal-galeria-body" id="modalVariacionesBody"></div>
+            </div>
+        </div>
+        
+        <div id="zoomModalVariaciones" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <div class="modal-prev" id="zoomVariacionesPrev">❮</div>
+                <div class="modal-next" id="zoomVariacionesNext">❯</div>
+                <img id="zoomVariacionesImage" src="" alt="Imagen ampliada">
+                <div id="zoomVariacionesCounter" class="modal-counter">1 / 1</div>
+            </div>
+        </div>
+    ` : '';
+    
+    // Modal para patrones de instalación
+    const modalPatronesHtml = tienePatrones ? `
+        <div id="modalPatrones" class="modal-galeria">
+            <div class="modal-galeria-content">
+                <div class="modal-galeria-header">
+                    <h3><i class="fas fa-th"></i> Patrones de Instalación - ${producto.nombre}</h3>
+                    <button class="modal-patrones-close">&times;</button>
+                </div>
+                <div class="modal-galeria-body" id="modalPatronesBody"></div>
+            </div>
+        </div>
+        
+        <div id="zoomModalPatrones" class="image-modal">
+            <div class="modal-content">
+                <div class="modal-close">✕</div>
+                <div class="modal-prev" id="zoomPatronesPrev">❮</div>
+                <div class="modal-next" id="zoomPatronesNext">❯</div>
+                <img id="zoomPatronesImage" src="" alt="Imagen ampliada">
+                <div id="zoomPatronesCounter" class="modal-counter">1 / 1</div>
+            </div>
+        </div>
+    ` : '';
+    
+    // Modal de zoom principal para imagen hero
     const modalZoomPrincipalHtml = `
         <div id="zoomModalPrincipal" class="image-modal">
             <div class="modal-content">
@@ -1257,7 +1327,7 @@ function renderizarLandingProducto(producto) {
                 <div class="container">
                     <div class="section-title">
                         <h2>Inspiración y Diseño</h2>
-                        <p>Visualiza cómo ${primeraPalabra} transforma cada ambiente</p>
+                        <p>Visualiza cómo se transforma cada ambiente</p>
                     </div>
                     <div class="gallery-grid" id="galleryGrid">
                         ${galeriaInicial.map((img, i) => {
@@ -1300,7 +1370,7 @@ function renderizarLandingProducto(producto) {
                         <div class="aviso-flex">
                             <i class="fas fa-info-circle"></i>
                             <div>
-                                <strong>⚠️ IMPORTANTE: VARIABILIDAD NATURAL</strong>
+                                <strong>IMPORTANTE: VARIABILIDAD NATURAL</strong>
                                 <p>Las imágenes mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. Al tratarse de piedra natural, no podemos garantizar que el producto final sea idéntico a las muestras mostradas.</p>
                             </div>
                         </div>
@@ -1332,8 +1402,82 @@ function renderizarLandingProducto(producto) {
         `;
     }
     
+    // ========== GENERAR HTML DE VARIACIONES DISPONIBLES ==========
+    let variacionesHtml = '';
+    if (tieneVariaciones) {
+        variacionesHtml = `
+            <section class="variaciones-section">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Variaciones Disponibles</h2>
+                        <p>Diferentes tonos y acabados que ofrece el producto</p>
+                    </div>
+                    <div class="variaciones-grid" id="variacionesGrid">
+                        ${variacionesIniciales.map((img, i) => {
+                            return `
+                                <div class="variacion-item">
+                                    <img src="${img}" alt="${producto.nombre} - Variación ${i+1}" 
+                                         loading="lazy" 
+                                         onerror="this.src='FOTO/foto_04.webp'" 
+                                         data-variacion-index="${i}">
+                                    <button class="zoom-btn-variacion-inicial" data-variacion-index="${i}">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${variacionesArray.length > FOTOS_POR_CARGA ? `
+                        <div class="ver-mas-container text-center">
+                            <button class="btn-ver-mas" id="verTodasVariacionesBtn">
+                                <i class="fas fa-swatchbook"></i> Ver todas las variaciones (${variacionesArray.length})
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            </section>
+        `;
+    }
+    
+    // ========== GENERAR HTML DE PATRONES DE INSTALACIÓN ==========
+    let patronesHtml = '';
+    if (tienePatrones) {
+        patronesHtml = `
+            <section class="patrones-section">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Patrones de Instalación</h2>
+                        <p>Inspírate con diferentes formas de instalar el producto</p>
+                    </div>
+                    <div class="patrones-grid" id="patronesGrid">
+                        ${patronesIniciales.map((img, i) => {
+                            return `
+                                <div class="patron-item">
+                                    <img src="${img}" alt="${producto.nombre} - Patrón ${i+1}" 
+                                         loading="lazy" 
+                                         onerror="this.src='FOTO/foto_04.webp'" 
+                                         data-patron-index="${i}">
+                                    <button class="zoom-btn-patron-inicial" data-patron-index="${i}">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${patronesArray.length > FOTOS_POR_CARGA ? `
+                        <div class="ver-mas-container text-center">
+                            <button class="btn-ver-mas" id="verTodosPatronesBtn">
+                                <i class="fas fa-th"></i> Ver todos los patrones (${patronesArray.length})
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            </section>
+        `;
+    }
+    
     // ========== CARACTERÍSTICAS COMERCIALES ==========
-    const caracteristicasComercialHtml = `
+    const caracteristicasComercialHtml = mostrarCaracteristicas ? `
         <section class="caracteristicas-section">
             <div class="container">
                 <div class="section-title">
@@ -1364,7 +1508,7 @@ function renderizarLandingProducto(producto) {
                 </div>
             </div>
         </section>
-    `;
+    ` : '';
     
     // ========== APLICACIONES ==========
     let aplicacionesHtml = '';
@@ -1390,20 +1534,27 @@ function renderizarLandingProducto(producto) {
     }
     
     // ========== BANNER ADVERTENCIA ==========
-    const bannerAdvertencia = `
-        <div class="aviso-sticky">
-            <div class="container">
-                <div class="aviso-flex-center">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span><strong>IMPORTANTE:</strong> Las imágenes son referenciales. La piedra natural presenta variaciones en vetas, tonos y textura. 
-                    <a href="#nota-natural">Más información</a></span>
+    let bannerAdvertencia = '';
+    if (producto.es_piedra_natural !== undefined) {
+        const textoAviso = esPiedraNatural 
+            ? 'Las imágenes son referenciales. La piedra natural presenta variaciones en vetas, tonos y textura. Solicita una muestra física antes de tu pedido.'
+            : 'Las imágenes son referenciales. Los colores y acabados pueden variar ligeramente según la configuración de tu pantalla. Te recomendamos solicitar una muestra física.';
+        
+        bannerAdvertencia = `
+            <div class="aviso-sticky">
+                <div class="container">
+                    <div class="aviso-flex-center">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span><strong>IMPORTANTE:</strong> ${textoAviso}</span>
+                        ${esPiedraNatural ? '<a href="#nota-natural">Más información</a>' : ''}
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }
     
     // ========== ANTES DE COMPRAR ==========
-    const antesDeComprarHtml = `
+    const antesDeComprarHtml = esPiedraNatural ? `
         <section class="antes-comprar-section">
             <div class="container">
                 <div class="section-title">
@@ -1417,6 +1568,22 @@ function renderizarLandingProducto(producto) {
                     <div class="info-item"><span>Solicita una muestra física antes de tu pedido</span></div>
                     <div class="info-item"><span>El producto final puede diferir de las muestras mostradas</span></div>
                     <div class="info-item"><span>Las variaciones son características de calidad, no defectos</span></div>
+                </div>
+            </div>
+        </section>
+    ` : `
+        <section class="antes-comprar-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Lo que debes saber antes de comprar</h2>
+                    <p>Información clave para tu decisión de compra</p>
+                </div>
+                <div class="antes-comprar-grid">
+                    <div class="info-item"><span>Las imágenes son REFERENCIALES, no contractuales</span></div>
+                    <div class="info-item"><span>Los colores pueden variar ligeramente según lote de producción</span></div>
+                    <div class="info-item"><span>Solicita una muestra física antes de tu pedido</span></div>
+                    <div class="info-item"><span>El producto final puede diferir ligeramente de las imágenes</span></div>
+                    <div class="info-item"><span>Las dimensiones pueden tener tolerancias de fabricación</span></div>
                 </div>
             </div>
         </section>
@@ -1449,7 +1616,7 @@ function renderizarLandingProducto(producto) {
     ` : '';
     
     // ========== NOTA INFORMATIVA ==========
-    const notaInformativaHtml = `
+    const notaInformativaHtml = mostrarNotaNatural ? `
         <section class="nota-section" id="nota-natural">
             <div class="container">
                 <div class="nota-card">
@@ -1464,7 +1631,7 @@ function renderizarLandingProducto(producto) {
                 </div>
             </div>
         </section>
-    `;
+    ` : '';
     
     // ========== BOTÓN FLOTANTE SOLO SUBIR ==========
     const botonFlotante = `
@@ -1479,7 +1646,7 @@ function renderizarLandingProducto(producto) {
     // ========== SEO META TAGS ==========
     const metaTags = `
         <meta name="description" content="${producto.descripcion_corta || 'Piedra natural de alta calidad para arquitectura y diseño.'}">
-        <meta property="og:title" content="${producto.nombre} | Gallos Mármol">
+        <meta property="og:title" content="${producto.nombre} | GALLOS MÁRMOL">
         <meta property="og:description" content="${producto.descripcion_corta || 'Descubre la elegancia de la piedra natural.'}">
         <meta property="og:image" content="${imagenPrincipal}">
         <meta property="og:type" content="product">
@@ -1496,7 +1663,7 @@ function renderizarLandingProducto(producto) {
             "description": "${(producto.descripcion_corta || '').replace(/"/g, '\\"')}",
             "image": "${imagenPrincipal}",
             "sku": "${producto.codigo || ''}",
-            "brand": {"@type": "Brand", "name": "Gallos Mármol"}
+            "brand": {"@type": "Brand", "name": "GALLOS MÁRMOL"}
         }
         <\/script>
     `;
@@ -1648,43 +1815,55 @@ function renderizarLandingProducto(producto) {
             .caracteristica-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; display: block; }
             .caracteristica-card h3 { font-size: 0.9rem; margin-bottom: 8px; color: var(--primary); }
             .caracteristica-card p { font-size: 0.8rem; color: var(--gray-600); }
+            
+            /* Galería */
+            .gallery-section, .rangos-section, .variaciones-section, .patrones-section { background: var(--gray-100); }
+            .gallery-grid, .rangos-grid, .variaciones-grid, .patrones-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+            .galeria-item, .rango-item, .variacion-item, .patron-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
+            .galeria-item img, .rango-item img, .variacion-item img, .patron-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
+            .galeria-item:hover img, .rango-item:hover img, .variacion-item:hover img, .patron-item:hover img { transform: scale(1.03); }
+            .zoom-btn-galeria-inicial, .zoom-btn-rango-inicial, .zoom-btn-variacion-inicial, .zoom-btn-patron-inicial, .zoom-btn-hero { 
+                position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; 
+            }
+            .zoom-btn-galeria-inicial:hover, .zoom-btn-rango-inicial:hover, .zoom-btn-variacion-inicial:hover, .zoom-btn-patron-inicial:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
+            
+            .ver-mas-container { margin-top: 25px; }
+            .btn-ver-mas { background: var(--primary); color: var(--white); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+            .btn-ver-mas:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            
             .apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .app-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 20px 12px; border-radius: var(--border-radius-sm); text-align: center; }
             .app-card i { font-size: 1.8rem; color: var(--secondary); margin-bottom: 8px; }
             .app-card h3 { font-size: 0.8rem; font-weight: 500; }
-            .gallery-section, .rangos-section { background: var(--gray-100); }
-            .gallery-grid, .rangos-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-            .galeria-item, .rango-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
-            .galeria-item img, .rango-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
-            .galeria-item:hover img, .rango-item:hover img { transform: scale(1.03); }
-            .zoom-btn-galeria-inicial, .zoom-btn-rango-inicial, .zoom-btn-hero { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; }
-            .zoom-btn-galeria-inicial:hover, .zoom-btn-rango-inicial:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
-            .ver-mas-container { margin-top: 25px; }
-            .btn-ver-mas { background: var(--primary); color: var(--white); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
-            .btn-ver-mas:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            
             .aviso-variabilidad { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; margin-bottom: 25px; border-radius: 8px; }
             .aviso-flex { display: flex; gap: 12px; align-items: flex-start; }
             .aviso-flex i { color: #856404; font-size: 1.1rem; margin-top: 2px; }
             .aviso-flex strong { display: block; margin-bottom: 4px; color: #856404; font-size: 0.8rem; }
             .aviso-flex p { margin: 0; font-size: 0.75rem; color: #856404; }
+            
             .antes-comprar-section { background: #e8f4f8; }
             .antes-comprar-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
             .info-item { display: flex; gap: 10px; align-items: center; background: var(--white); padding: 12px 15px; border-radius: 10px; font-size: 0.8rem; }
             .info-item i { color: #28a745; font-size: 1.1rem; flex-shrink: 0; }
+            
             .trust-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
             .trust-card { background: var(--gray-100); padding: 20px; border-radius: var(--border-radius-sm); text-align: center; }
             .trust-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
             .trust-card h3 { font-size: 0.9rem; margin-bottom: 6px; color: var(--primary); }
             .trust-card p { font-size: 0.8rem; color: var(--gray-600); }
+            
             .ficha-section { background: var(--gray-100); padding: 30px 0; text-align: center; }
             .btn-ficha { background: var(--primary); color: var(--white); padding: 12px 28px; border-radius: 40px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease; }
             .btn-ficha:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            
             .nota-section { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px 0; }
             .nota-card { background: var(--white); border-radius: 20px; padding: 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); border-left: 5px solid var(--primary); }
             .nota-icon { flex-shrink: 0; width: 40px; height: 40px; background: rgba(57,8,10,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
             .nota-icon i { font-size: 1.2rem; color: var(--primary); }
             .nota-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
             .nota-content p { font-size: 0.8rem; color: var(--gray-700); line-height: 1.5; margin-bottom: 8px; }
+            
             footer { background: var(--primary-dark); color: var(--white); padding: 35px 20px 25px; }
             .footer-grid { display: grid; grid-template-columns: 1fr; gap: 25px; text-align: center; }
             .footer-logo img { width: 120px; margin-bottom: 10px; pointer-events: none; }
@@ -1702,8 +1881,8 @@ function renderizarLandingProducto(producto) {
             .modal-galeria-header { background: var(--primary); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
             .modal-galeria-header h3 { font-size: 1rem; margin: 0; }
             .modal-galeria-header h3 i { margin-right: 8px; }
-            .modal-galeria-close, .modal-rangos-close { background: none; border: none; color: var(--white); font-size: 28px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-            .modal-galeria-close:hover, .modal-rangos-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+            .modal-galeria-close, .modal-rangos-close, .modal-variaciones-close, .modal-patrones-close { background: none; border: none; color: var(--white); font-size: 28px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+            .modal-galeria-close:hover, .modal-rangos-close:hover, .modal-variaciones-close:hover, .modal-patrones-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
             .modal-galeria-body { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; max-height: calc(100vh - 80px); overflow-y: auto; }
             .modal-img-item { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; cursor: pointer; transition: transform 0.3s ease; }
             .modal-img-item:hover { transform: scale(1.02); }
@@ -1731,7 +1910,7 @@ function renderizarLandingProducto(producto) {
             
             /* MEDIA QUERIES */
             @media (min-width: 480px) {
-                .gallery-grid, .rangos-grid { grid-template-columns: repeat(2, 1fr); }
+                .gallery-grid, .rangos-grid, .variaciones-grid, .patrones-grid { grid-template-columns: repeat(2, 1fr); }
                 .specs-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
                 .apps-grid { grid-template-columns: repeat(3, 1fr); }
                 .antes-comprar-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1771,7 +1950,7 @@ function renderizarLandingProducto(producto) {
                 }
                 .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
                 .apps-grid { grid-template-columns: repeat(4, 1fr); }
-                .gallery-grid, .rangos-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+                .gallery-grid, .rangos-grid, .variaciones-grid, .patrones-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
                 .caracteristicas-grid { grid-template-columns: repeat(4, 1fr); }
                 .footer-grid { grid-template-columns: repeat(3, 1fr); text-align: left; }
                 .footer-social a, .footer-links a { justify-content: flex-start; }
@@ -1798,19 +1977,12 @@ function renderizarLandingProducto(producto) {
         </style>
     </head>
     <body>
-        <!-- Modal de zoom principal solo para imagen hero -->
-        <div id="zoomModalPrincipal" class="image-modal">
-            <div class="modal-content">
-                <div class="modal-close">✕</div>
-                <img id="zoomPrincipalImage" src="" alt="Imagen ampliada">
-            </div>
-        </div>
-        
-        <!-- Modal para galería de inspiración -->
+        <!-- Modales de zoom -->
+        ${modalZoomPrincipalHtml}
         ${modalGaleriaHtml}
-        
-        <!-- Modal para rangos -->
         ${modalRangosHtml}
+        ${modalVariacionesHtml}
+        ${modalPatronesHtml}
         
         <header>
             <div class="container navbar">
@@ -1824,7 +1996,6 @@ function renderizarLandingProducto(producto) {
             <div class="container hero-content">
                 <div class="hero-text">
                     <h1>${primeraPalabra} <span>${restoPalabras}</span></h1>
-                    <p>${producto.descripcion_corta || 'Sobriedad, resistencia y elegancia atemporal.'}</p>
                     <div class="hero-buttons">
                         <a href="#galeria" class="btn btn-secondary">Ver Inspiración</a>
                     </div>
@@ -1837,11 +2008,10 @@ function renderizarLandingProducto(producto) {
         </section>
         
         ${tieneGaleria ? galeriaHtml : ''}
-
         ${tieneRangos ? rangosHtml : ''}
-
+        ${tieneVariaciones ? variacionesHtml : ''}
+        ${tienePatrones ? patronesHtml : ''}
         ${tieneAplicaciones ? aplicacionesHtml : ''}
-
         ${fichaHtml}
 
         <section class="specs-section">
@@ -1860,7 +2030,6 @@ function renderizarLandingProducto(producto) {
         </section>
         
         ${caracteristicasComercialHtml}
-                                
         ${antesDeComprarHtml}
         
         <section>
@@ -1875,7 +2044,6 @@ function renderizarLandingProducto(producto) {
         </section>
                 
         ${notaInformativaHtml}
-        
         ${botonFlotante}
         
         <footer>
@@ -1897,9 +2065,13 @@ function renderizarLandingProducto(producto) {
                 // ========== DATOS ==========
                 const galeriaCompleta = ${JSON.stringify(galeriaImagenes)};
                 const rangosCompleto = ${JSON.stringify(rangosArray)};
+                const variacionesCompleto = ${JSON.stringify(variacionesArray)};
+                const patronesCompleto = ${JSON.stringify(patronesArray)};
                 const imagenPrincipal = "${imagenPrincipal}";
+                const esPiedraNatural = ${esPiedraNatural};
+                const mostrarVariaciones = ${mostrarVariaciones};
                 
-                // ========== ZOOM PRINCIPAL SOLO PARA IMAGEN HERO ==========
+                // ========== ZOOM PRINCIPAL - HERO ==========
                 const modalPrincipal = document.getElementById('zoomModalPrincipal');
                 const imgPrincipal = document.getElementById('zoomPrincipalImage');
                 const closePrincipal = document.querySelector('#zoomModalPrincipal .modal-close');
@@ -1923,7 +2095,7 @@ function renderizarLandingProducto(producto) {
                 if (heroZoomBtn) heroZoomBtn.addEventListener('click', abrirZoomPrincipal);
                 if (heroImage) heroImage.addEventListener('click', abrirZoomPrincipal);
                 
-                // ========== ZOOM PARA GALERÍA (para las 3 fotos iniciales) ==========
+                // ========== ZOOM PARA GALERÍA ==========
                 let indiceGaleriaActual = 0;
                 const modalZoomGaleria = document.getElementById('zoomModalGaleria');
                 const imgZoomGaleria = document.getElementById('zoomGaleriaImage');
@@ -1933,6 +2105,7 @@ function renderizarLandingProducto(producto) {
                 const closeZoomGaleria = document.querySelector('#zoomModalGaleria .modal-close');
                 
                 function abrirZoomGaleria(indice) {
+                    if (!galeriaCompleta.length) return;
                     indiceGaleriaActual = indice;
                     imgZoomGaleria.src = galeriaCompleta[indiceGaleriaActual];
                     counterZoomGaleria.innerText = (indiceGaleriaActual + 1) + ' / ' + galeriaCompleta.length;
@@ -1966,7 +2139,7 @@ function renderizarLandingProducto(producto) {
                 if (nextZoomGaleria) nextZoomGaleria.addEventListener('click', siguienteGaleria);
                 if (modalZoomGaleria) modalZoomGaleria.addEventListener('click', (e) => { if (e.target === modalZoomGaleria) cerrarZoomGaleria(); });
                 
-                // ========== ZOOM PARA RANGOS (para las 3 fotos iniciales) ==========
+                // ========== ZOOM PARA RANGOS ==========
                 let indiceRangosActual = 0;
                 const modalZoomRangos = document.getElementById('zoomModalRangos');
                 const imgZoomRangos = document.getElementById('zoomRangosImage');
@@ -1976,6 +2149,7 @@ function renderizarLandingProducto(producto) {
                 const closeZoomRangos = document.querySelector('#zoomModalRangos .modal-close');
                 
                 function abrirZoomRangos(indice) {
+                    if (!rangosCompleto.length) return;
                     indiceRangosActual = indice;
                     imgZoomRangos.src = rangosCompleto[indiceRangosActual];
                     counterZoomRangos.innerText = (indiceRangosActual + 1) + ' / ' + rangosCompleto.length;
@@ -1984,7 +2158,7 @@ function renderizarLandingProducto(producto) {
                 }
                 
                 function cerrarZoomRangos() {
-                    modalZoomRangos.classList.remove('active');
+                    if (modalZoomRangos) modalZoomRangos.classList.remove('active');
                     document.body.style.overflow = '';
                 }
                 
@@ -2009,7 +2183,96 @@ function renderizarLandingProducto(producto) {
                 if (nextZoomRangos) nextZoomRangos.addEventListener('click', siguienteRangos);
                 if (modalZoomRangos) modalZoomRangos.addEventListener('click', (e) => { if (e.target === modalZoomRangos) cerrarZoomRangos(); });
                 
-                // ========== ZOOM PARA LAS 3 FOTOS INICIALES DE GALERÍA ==========
+                // ========== ZOOM PARA VARIACIONES ==========
+                let indiceVariacionesActual = 0;
+                const modalZoomVariaciones = document.getElementById('zoomModalVariaciones');
+                const imgZoomVariaciones = document.getElementById('zoomVariacionesImage');
+                const counterZoomVariaciones = document.getElementById('zoomVariacionesCounter');
+                const prevZoomVariaciones = document.getElementById('zoomVariacionesPrev');
+                const nextZoomVariaciones = document.getElementById('zoomVariacionesNext');
+                const closeZoomVariaciones = document.querySelector('#zoomModalVariaciones .modal-close');
+                
+                function abrirZoomVariaciones(indice) {
+                    if (!variacionesCompleto.length) return;
+                    indiceVariacionesActual = indice;
+                    imgZoomVariaciones.src = variacionesCompleto[indiceVariacionesActual];
+                    counterZoomVariaciones.innerText = (indiceVariacionesActual + 1) + ' / ' + variacionesCompleto.length;
+                    modalZoomVariaciones.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarZoomVariaciones() {
+                    if (modalZoomVariaciones) modalZoomVariaciones.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                function siguienteVariaciones() {
+                    if (indiceVariacionesActual < variacionesCompleto.length - 1) {
+                        indiceVariacionesActual++;
+                        imgZoomVariaciones.src = variacionesCompleto[indiceVariacionesActual];
+                        counterZoomVariaciones.innerText = (indiceVariacionesActual + 1) + ' / ' + variacionesCompleto.length;
+                    }
+                }
+                
+                function anteriorVariaciones() {
+                    if (indiceVariacionesActual > 0) {
+                        indiceVariacionesActual--;
+                        imgZoomVariaciones.src = variacionesCompleto[indiceVariacionesActual];
+                        counterZoomVariaciones.innerText = (indiceVariacionesActual + 1) + ' / ' + variacionesCompleto.length;
+                    }
+                }
+                
+                if (closeZoomVariaciones) closeZoomVariaciones.addEventListener('click', cerrarZoomVariaciones);
+                if (prevZoomVariaciones) prevZoomVariaciones.addEventListener('click', anteriorVariaciones);
+                if (nextZoomVariaciones) nextZoomVariaciones.addEventListener('click', siguienteVariaciones);
+                if (modalZoomVariaciones) modalZoomVariaciones.addEventListener('click', (e) => { if (e.target === modalZoomVariaciones) cerrarZoomVariaciones(); });
+                
+                // ========== ZOOM PARA PATRONES ==========
+                let indicePatronesActual = 0;
+                const modalZoomPatrones = document.getElementById('zoomModalPatrones');
+                const imgZoomPatrones = document.getElementById('zoomPatronesImage');
+                const counterZoomPatrones = document.getElementById('zoomPatronesCounter');
+                const prevZoomPatrones = document.getElementById('zoomPatronesPrev');
+                const nextZoomPatrones = document.getElementById('zoomPatronesNext');
+                const closeZoomPatrones = document.querySelector('#zoomModalPatrones .modal-close');
+                
+                function abrirZoomPatrones(indice) {
+                    if (!patronesCompleto.length) return;
+                    indicePatronesActual = indice;
+                    imgZoomPatrones.src = patronesCompleto[indicePatronesActual];
+                    counterZoomPatrones.innerText = (indicePatronesActual + 1) + ' / ' + patronesCompleto.length;
+                    modalZoomPatrones.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function cerrarZoomPatrones() {
+                    if (modalZoomPatrones) modalZoomPatrones.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                function siguientePatrones() {
+                    if (indicePatronesActual < patronesCompleto.length - 1) {
+                        indicePatronesActual++;
+                        imgZoomPatrones.src = patronesCompleto[indicePatronesActual];
+                        counterZoomPatrones.innerText = (indicePatronesActual + 1) + ' / ' + patronesCompleto.length;
+                    }
+                }
+                
+                function anteriorPatrones() {
+                    if (indicePatronesActual > 0) {
+                        indicePatronesActual--;
+                        imgZoomPatrones.src = patronesCompleto[indicePatronesActual];
+                        counterZoomPatrones.innerText = (indicePatronesActual + 1) + ' / ' + patronesCompleto.length;
+                    }
+                }
+                
+                if (closeZoomPatrones) closeZoomPatrones.addEventListener('click', cerrarZoomPatrones);
+                if (prevZoomPatrones) prevZoomPatrones.addEventListener('click', anteriorPatrones);
+                if (nextZoomPatrones) nextZoomPatrones.addEventListener('click', siguientePatrones);
+                if (modalZoomPatrones) modalZoomPatrones.addEventListener('click', (e) => { if (e.target === modalZoomPatrones) cerrarZoomPatrones(); });
+                
+                // ========== ASIGNAR EVENTOS DE ZOOM ==========
+                // Galería
                 document.querySelectorAll('.zoom-btn-galeria-inicial').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -2017,7 +2280,6 @@ function renderizarLandingProducto(producto) {
                         if (!isNaN(idx)) abrirZoomGaleria(idx);
                     });
                 });
-                
                 document.querySelectorAll('.galeria-item img').forEach(img => {
                     img.addEventListener('click', () => {
                         const idx = parseInt(img.dataset.galeriaIndex);
@@ -2025,23 +2287,56 @@ function renderizarLandingProducto(producto) {
                     });
                 });
                 
-                // ========== ZOOM PARA LAS 3 FOTOS INICIALES DE RANGOS ==========
-                document.querySelectorAll('.zoom-btn-rango-inicial').forEach(btn => {
+                // Rangos
+                if (esPiedraNatural) {
+                    document.querySelectorAll('.zoom-btn-rango-inicial').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const idx = parseInt(btn.dataset.rangoIndex);
+                            if (!isNaN(idx)) abrirZoomRangos(idx);
+                        });
+                    });
+                    document.querySelectorAll('.rango-item img').forEach(img => {
+                        img.addEventListener('click', () => {
+                            const idx = parseInt(img.dataset.rangoIndex);
+                            if (!isNaN(idx)) abrirZoomRangos(idx);
+                        });
+                    });
+                }
+                
+                // Variaciones
+                if (mostrarVariaciones) {
+                    document.querySelectorAll('.zoom-btn-variacion-inicial').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const idx = parseInt(btn.dataset.variacionIndex);
+                            if (!isNaN(idx)) abrirZoomVariaciones(idx);
+                        });
+                    });
+                    document.querySelectorAll('.variacion-item img').forEach(img => {
+                        img.addEventListener('click', () => {
+                            const idx = parseInt(img.dataset.variacionIndex);
+                            if (!isNaN(idx)) abrirZoomVariaciones(idx);
+                        });
+                    });
+                }
+                
+                // Patrones
+                document.querySelectorAll('.zoom-btn-patron-inicial').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        const idx = parseInt(btn.dataset.rangoIndex);
-                        if (!isNaN(idx)) abrirZoomRangos(idx);
+                        const idx = parseInt(btn.dataset.patronIndex);
+                        if (!isNaN(idx)) abrirZoomPatrones(idx);
                     });
                 });
-                
-                document.querySelectorAll('.rango-item img').forEach(img => {
+                document.querySelectorAll('.patron-item img').forEach(img => {
                     img.addEventListener('click', () => {
-                        const idx = parseInt(img.dataset.rangoIndex);
-                        if (!isNaN(idx)) abrirZoomRangos(idx);
+                        const idx = parseInt(img.dataset.patronIndex);
+                        if (!isNaN(idx)) abrirZoomPatrones(idx);
                     });
                 });
                 
-                // ========== FUNCIÓN PARA ABRIR MODAL DE GALERÍA COMPLETA ==========
+                // ========== FUNCIONES PARA ABRIR MODALES COMPLETOS ==========
                 function abrirModalGaleriaCompleta() {
                     const modal = document.getElementById('modalGaleria');
                     const body = document.getElementById('modalGaleriaBody');
@@ -2084,6 +2379,48 @@ function renderizarLandingProducto(producto) {
                     document.body.style.overflow = 'hidden';
                 }
                 
+                function abrirModalVariacionesCompleta() {
+                    const modal = document.getElementById('modalVariaciones');
+                    const body = document.getElementById('modalVariacionesBody');
+                    if (!modal || !body) return;
+                    
+                    body.innerHTML = '';
+                    variacionesCompleto.forEach((img, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'modal-img-item';
+                        div.innerHTML = \`
+                            <img src="\${img}" alt="Variación \${idx+1}" loading="lazy" onerror="this.src='FOTO/foto_04.webp'">
+                            <div class="zoom-badge"><i class="fas fa-search-plus"></i></div>
+                        \`;
+                        div.addEventListener('click', () => abrirZoomVariaciones(idx));
+                        body.appendChild(div);
+                    });
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function abrirModalPatronesCompleta() {
+                    const modal = document.getElementById('modalPatrones');
+                    const body = document.getElementById('modalPatronesBody');
+                    if (!modal || !body) return;
+                    
+                    body.innerHTML = '';
+                    patronesCompleto.forEach((img, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'modal-img-item';
+                        div.innerHTML = \`
+                            <img src="\${img}" alt="Patrón \${idx+1}" loading="lazy" onerror="this.src='FOTO/foto_04.webp'">
+                            <div class="zoom-badge"><i class="fas fa-search-plus"></i></div>
+                        \`;
+                        div.addEventListener('click', () => abrirZoomPatrones(idx));
+                        body.appendChild(div);
+                    });
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
                 function cerrarModalGaleria(modalId) {
                     const modal = document.getElementById(modalId);
                     if (modal) {
@@ -2092,28 +2429,47 @@ function renderizarLandingProducto(producto) {
                     }
                 }
                 
-                // Botones ver todas
+                // ========== BOTONES VER TODAS ==========
                 const verTodaGaleriaBtn = document.getElementById('verTodaGaleriaBtn');
                 const verTodosRangosBtn = document.getElementById('verTodosRangosBtn');
-                if (verTodaGaleriaBtn) verTodaGaleriaBtn.addEventListener('click', abrirModalGaleriaCompleta);
-                if (verTodosRangosBtn) verTodosRangosBtn.addEventListener('click', abrirModalRangosCompleta);
+                const verTodasVariacionesBtn = document.getElementById('verTodasVariacionesBtn');
+                const verTodosPatronesBtn = document.getElementById('verTodosPatronesBtn');
                 
-                // Cerrar modales
+                if (verTodaGaleriaBtn) verTodaGaleriaBtn.addEventListener('click', abrirModalGaleriaCompleta);
+                if (verTodosRangosBtn && esPiedraNatural) verTodosRangosBtn.addEventListener('click', abrirModalRangosCompleta);
+                if (verTodasVariacionesBtn && mostrarVariaciones) verTodasVariacionesBtn.addEventListener('click', abrirModalVariacionesCompleta);
+                if (verTodosPatronesBtn) verTodosPatronesBtn.addEventListener('click', abrirModalPatronesCompleta);
+                
+                // ========== CERRAR MODALES ==========
                 const modalGaleriaClose = document.querySelector('.modal-galeria-close');
                 const modalRangosClose = document.querySelector('.modal-rangos-close');
-                if (modalGaleriaClose) modalGaleriaClose.addEventListener('click', () => cerrarModalGaleria('modalGaleria'));
-                if (modalRangosClose) modalRangosClose.addEventListener('click', () => cerrarModalGaleria('modalRangos'));
+                const modalVariacionesClose = document.querySelector('.modal-variaciones-close');
+                const modalPatronesClose = document.querySelector('.modal-patrones-close');
                 
-                const modalGaleria = document.getElementById('modalGaleria');
+                if (modalGaleriaClose) modalGaleriaClose.addEventListener('click', () => cerrarModalGaleria('modalGaleria'));
+                if (modalRangosClose && esPiedraNatural) modalRangosClose.addEventListener('click', () => cerrarModalGaleria('modalRangos'));
+                if (modalVariacionesClose && mostrarVariaciones) modalVariacionesClose.addEventListener('click', () => cerrarModalGaleria('modalVariaciones'));
+                if (modalPatronesClose) modalPatronesClose.addEventListener('click', () => cerrarModalGaleria('modalPatrones'));
+                
+                const modalGaleriaElem = document.getElementById('modalGaleria');
                 const modalRangosElem = document.getElementById('modalRangos');
-                if (modalGaleria) modalGaleria.addEventListener('click', (e) => {
-                    if (e.target === modalGaleria) cerrarModalGaleria('modalGaleria');
+                const modalVariacionesElem = document.getElementById('modalVariaciones');
+                const modalPatronesElem = document.getElementById('modalPatrones');
+                
+                if (modalGaleriaElem) modalGaleriaElem.addEventListener('click', (e) => {
+                    if (e.target === modalGaleriaElem) cerrarModalGaleria('modalGaleria');
                 });
-                if (modalRangosElem) modalRangosElem.addEventListener('click', (e) => {
+                if (modalRangosElem && esPiedraNatural) modalRangosElem.addEventListener('click', (e) => {
                     if (e.target === modalRangosElem) cerrarModalGaleria('modalRangos');
                 });
+                if (modalVariacionesElem && mostrarVariaciones) modalVariacionesElem.addEventListener('click', (e) => {
+                    if (e.target === modalVariacionesElem) cerrarModalGaleria('modalVariaciones');
+                });
+                if (modalPatronesElem) modalPatronesElem.addEventListener('click', (e) => {
+                    if (e.target === modalPatronesElem) cerrarModalGaleria('modalPatrones');
+                });
                 
-                // Botón subir
+                // ========== BOTÓN SUBIR ==========
                 const topBtn = document.getElementById('floatingTopBtn');
                 if (topBtn) {
                     topBtn.addEventListener('click', () => {
@@ -2121,14 +2477,23 @@ function renderizarLandingProducto(producto) {
                     });
                 }
                 
-                // Prevenir descarga de imágenes
+                // ========== PREVENIR DESCARGA DE IMÁGENES ==========
                 document.addEventListener('contextmenu', (e) => { if (e.target.tagName === 'IMG') e.preventDefault(); });
                 document.addEventListener('keydown', (e) => {
                     if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'U')) e.preventDefault();
                     if (e.key === 'F12') e.preventDefault();
                 });
                 
-                console.log('✅ Landing page cargada - Zooms independientes por sección');
+                console.log('✅ Landing page cargada con todas las secciones');
+                console.log('📋 Secciones activas:', {
+                    galeria: ${tieneGaleria},
+                    rangos: ${tieneRangos},
+                    variaciones: ${tieneVariaciones},
+                    patrones: ${tienePatrones},
+                    aplicaciones: ${tieneAplicaciones},
+                    caracteristicas: ${mostrarCaracteristicas},
+                    notaNatural: ${mostrarNotaNatural}
+                });
             })();
         </script>
     </body>
