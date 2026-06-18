@@ -1286,7 +1286,6 @@ function generarVistaCardsProductos(productos) {
     `;
 }
 
-// ==================== ABRIR MODAL NUEVO PRODUCTO ====================
 window.abrirModalNuevoProducto = async function() {
     // Verificar si el modal existe, si no, crearlo
     let modal = document.getElementById('productoModal');
@@ -1323,6 +1322,22 @@ window.abrirModalNuevoProducto = async function() {
     
     const ordenInput = document.getElementById('producto_orden');
     if (ordenInput) ordenInput.value = '0';
+    
+    // ============================================
+    // RESETEAR FLAGS DEL PRODUCTO (NUEVOS CAMPOS)
+    // ============================================
+    
+    const esPiedraNaturalCheck = document.getElementById('producto_es_piedra_natural');
+    if (esPiedraNaturalCheck) esPiedraNaturalCheck.checked = false;
+    
+    const mostrarNotaNaturalCheck = document.getElementById('producto_mostrar_nota_natural');
+    if (mostrarNotaNaturalCheck) mostrarNotaNaturalCheck.checked = false;
+    
+    const mostrarCaracteristicasCheck = document.getElementById('producto_mostrar_caracteristicas');
+    if (mostrarCaracteristicasCheck) mostrarCaracteristicasCheck.checked = false;
+    
+    const mostrarVariacionesCheck = document.getElementById('producto_mostrar_variaciones');
+    if (mostrarVariacionesCheck) mostrarVariacionesCheck.checked = false;
     
     // Limpiar checkboxes de categorías especiales
     const outletCheck = document.getElementById('categoria_outlet');
@@ -1396,6 +1411,16 @@ window.abrirModalNuevoProducto = async function() {
     const rangosTextarea = document.getElementById('producto_rangos');
     if (rangosTextarea) rangosTextarea.value = '';
     
+    // ============================================
+    // LIMPIAR NUEVOS CAMPOS: VARIACIONES Y PATRONES
+    // ============================================
+    
+    const variacionesTextarea = document.getElementById('producto_variaciones');
+    if (variacionesTextarea) variacionesTextarea.value = '';
+    
+    const patronesTextarea = document.getElementById('producto_patrones_instalacion');
+    if (patronesTextarea) patronesTextarea.value = '';
+    
     const fichaTecnica = document.getElementById('producto_ficha_tecnica');
     if (fichaTecnica) fichaTecnica.value = '';
     
@@ -1414,7 +1439,17 @@ window.abrirModalNuevoProducto = async function() {
     if (previewRangos) previewRangos.innerHTML = '';
     
     // ============================================
-    // CARGAR SELECTS DE CATÁLOGOS (los que NO dependen del modal visible)
+    // LIMPIAR VISTA PREVIA DE NUEVOS CAMPOS
+    // ============================================
+    
+    const previewVariaciones = document.getElementById('preview_variaciones');
+    if (previewVariaciones) previewVariaciones.innerHTML = '';
+    
+    const previewPatrones = document.getElementById('preview_patrones');
+    if (previewPatrones) previewPatrones.innerHTML = '';
+    
+    // ============================================
+    // CARGAR SELECTS DE CATÁLOGOS
     // ============================================
     
     try {
@@ -1462,18 +1497,23 @@ window.abrirModalNuevoProducto = async function() {
     }
     
     // ============================================
-    // CONFIGURAR EVENTOS
+    // PASO 6: CONFIGURAR EVENTOS PARA NUEVOS CAMPOS
     // ============================================
     
-    // Configurar evento de generación de slug
+    // ============================================
+    // 1. Evento de generación de slug
+    // ============================================
     const nombreInputEvent = document.getElementById('producto_nombre');
     if (nombreInputEvent && typeof generarSlugProducto === 'function') {
         const nuevoNombreInput = nombreInputEvent.cloneNode(true);
         nombreInputEvent.parentNode.replaceChild(nuevoNombreInput, nombreInputEvent);
         nuevoNombreInput.addEventListener('change', generarSlugProducto);
+        nuevoNombreInput.addEventListener('input', generarSlugProducto);
     }
     
-    // Configurar evento de previsualización de imagen principal
+    // ============================================
+    // 2. Evento de previsualización de imagen principal
+    // ============================================
     const imagenInput = document.getElementById('producto_imagen_principal');
     if (imagenInput && typeof previsualizarImagen === 'function') {
         const nuevaImagenInput = imagenInput.cloneNode(true);
@@ -1488,7 +1528,9 @@ window.abrirModalNuevoProducto = async function() {
         });
     }
     
-    // Configurar evento de previsualización de galería
+    // ============================================
+    // 3. Evento de previsualización de galería
+    // ============================================
     const galeriaTextareaEvent = document.getElementById('producto_galeria');
     if (galeriaTextareaEvent && typeof mostrarPreviewGaleria === 'function') {
         const nuevaGaleriaTextarea = galeriaTextareaEvent.cloneNode(true);
@@ -1502,7 +1544,9 @@ window.abrirModalNuevoProducto = async function() {
         });
     }
     
-    // Configurar evento de previsualización de rangos
+    // ============================================
+    // 4. Evento de previsualización de rangos
+    // ============================================
     const rangosTextareaEvent = document.getElementById('producto_rangos');
     if (rangosTextareaEvent && typeof mostrarPreviewRangos === 'function') {
         const nuevaRangosTextarea = rangosTextareaEvent.cloneNode(true);
@@ -1513,6 +1557,61 @@ window.abrirModalNuevoProducto = async function() {
             if (typeof mostrarPreviewRangos === 'function') {
                 mostrarPreviewRangos(urls);
             }
+        });
+    }
+    
+    // ============================================
+    // 5. Evento de previsualización de variaciones (NUEVO)
+    // ============================================
+    const variacionesTextareaEvent = document.getElementById('producto_variaciones');
+    if (variacionesTextareaEvent && typeof mostrarPreviewVariaciones === 'function') {
+        const nuevaVariacionesTextarea = variacionesTextareaEvent.cloneNode(true);
+        variacionesTextareaEvent.parentNode.replaceChild(nuevaVariacionesTextarea, variacionesTextareaEvent);
+        
+        nuevaVariacionesTextarea.addEventListener('input', function() {
+            const urls = this.value.split(',').map(u => u.trim()).filter(u => u);
+            if (typeof mostrarPreviewVariaciones === 'function') {
+                mostrarPreviewVariaciones(urls);
+            }
+        });
+    }
+    
+    // ============================================
+    // 6. Evento de previsualización de patrones (NUEVO)
+    // ============================================
+    const patronesTextareaEvent = document.getElementById('producto_patrones_instalacion');
+    if (patronesTextareaEvent && typeof mostrarPreviewPatrones === 'function') {
+        const nuevoPatronesTextarea = patronesTextareaEvent.cloneNode(true);
+        patronesTextareaEvent.parentNode.replaceChild(nuevoPatronesTextarea, patronesTextareaEvent);
+        
+        nuevoPatronesTextarea.addEventListener('input', function() {
+            const urls = this.value.split(',').map(u => u.trim()).filter(u => u);
+            if (typeof mostrarPreviewPatrones === 'function') {
+                mostrarPreviewPatrones(urls);
+            }
+        });
+    }
+    
+    // ============================================
+    // 7. Evento para el checkbox de mostrar_variaciones (NUEVO)
+    // ============================================
+    const mostrarVariacionesCheckEvent = document.getElementById('producto_mostrar_variaciones');
+    if (mostrarVariacionesCheckEvent) {
+        const nuevoCheckbox = mostrarVariacionesCheckEvent.cloneNode(true);
+        mostrarVariacionesCheckEvent.parentNode.replaceChild(nuevoCheckbox, mostrarVariacionesCheckEvent);
+        
+        nuevoCheckbox.addEventListener('change', function() {
+            const variacionesContainer = document.getElementById('producto_variaciones')?.closest('.col-span-2');
+            if (variacionesContainer) {
+                if (this.checked) {
+                    variacionesContainer.style.opacity = '1';
+                    variacionesContainer.style.pointerEvents = 'auto';
+                } else {
+                    variacionesContainer.style.opacity = '0.5';
+                    variacionesContainer.style.pointerEvents = 'none';
+                }
+            }
+            console.log('📌 Mostrar variaciones:', this.checked);
         });
     }
     
@@ -1528,7 +1627,6 @@ window.abrirModalNuevoProducto = async function() {
     setTimeout(async () => {
         console.log('🔄 Cargando unidades de medida después de abrir modal...');
         
-        // Intentar cargar las unidades de medida
         if (typeof window.cargarUnidadesMedidaSelect === 'function') {
             await window.cargarUnidadesMedidaSelect();
         } else if (typeof cargarUnidadesMedidaSelect === 'function') {
@@ -1644,6 +1742,62 @@ function crearModalProducto() {
                                 <input type="text" id="producto_descripcion_corta" class="form-input w-full" 
                                     placeholder="Texto que aparece en el hero de la landing page">
                                 <p class="text-xs text-gray-400 mt-1">Breve descripción que aparecerá en la sección principal</p>
+                            </div>
+                        </div>
+                        
+                        <!-- ============================================ -->
+                        <!-- FLAGS DEL PRODUCTO (NUEVOS CAMPOS) -->
+                        <!-- ============================================ -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="col-span-3">
+                                <h3 class="font-semibold text-primary border-b pb-1 mb-3">
+                                    <i class="fas fa-flag mr-2"></i>Configuración de Secciones
+                                </h3>
+                                <p class="text-xs text-gray-400 mb-2">Controla qué secciones se muestran en la landing page del producto</p>
+                            </div>
+                            
+                            <!-- es_piedra_natural -->
+                            <div>
+                                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" id="producto_es_piedra_natural" class="w-4 h-4 text-primary rounded focus:ring-primary">
+                                    <div>
+                                        <span class="font-medium text-gray-700">🪨 Piedra Natural</span>
+                                        <p class="text-xs text-gray-400">Mármol, granito, travertino, etc.</p>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- mostrar_nota_natural -->
+                            <div>
+                                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" id="producto_mostrar_nota_natural" class="w-4 h-4 text-primary rounded focus:ring-primary">
+                                    <div>
+                                        <span class="font-medium text-gray-700">📝 Nota de Variabilidad</span>
+                                        <p class="text-xs text-gray-400">Sección sobre variabilidad natural</p>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- mostrar_caracteristicas -->
+                            <div>
+                                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" id="producto_mostrar_caracteristicas" class="w-4 h-4 text-primary rounded focus:ring-primary">
+                                    <div>
+                                        <span class="font-medium text-gray-700">⚙️ Características</span>
+                                        <p class="text-xs text-gray-400">Esquinas postilladas, marcas de disco, etc.</p>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- mostrar_variaciones -->
+                            <div>
+                                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" id="producto_mostrar_variaciones" class="w-4 h-4 text-primary rounded focus:ring-primary">
+                                    <div>
+                                        <span class="font-medium text-gray-700">🎨 Variaciones Disponibles</span>
+                                        <p class="text-xs text-gray-400">Diferentes tonos y acabados</p>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                         
@@ -1884,11 +2038,50 @@ function crearModalProducto() {
                             
                             <!-- Rangos -->
                             <div class="col-span-2">
-                                <label class="form-label">Rangos y Variaciones (URLs separadas por coma)</label>
+                                <label class="form-label">Rangos y Variaciones Naturales (URLs separadas por coma)</label>
                                 <textarea id="producto_rangos" class="form-input w-full" rows="2" 
                                     placeholder="https://imagen1.jpg, https://imagen2.jpg, https://imagen3.jpg"></textarea>
                                 <div id="preview_rangos" class="flex flex-wrap gap-2 mt-2"></div>
-                                <p class="text-xs text-gray-400 mt-1">URLs de imágenes de rangos/variaciones, separadas por comas (soporta Google Drive)</p>
+                                <p class="text-xs text-gray-400 mt-1">URLs de imágenes de rangos/variaciones naturales, separadas por comas (soporta Google Drive)</p>
+                            </div>
+                            
+                            <!-- ============================================ -->
+                            <!-- NUEVOS CAMPOS: VARIACIONES Y PATRONES -->
+                            <!-- ============================================ -->
+                            
+                            <!-- Variaciones Disponibles -->
+                            <div class="col-span-2">
+                                <div class="flex items-center justify-between">
+                                    <label class="form-label font-semibold">Variaciones Disponibles</label>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-gray-400">Mostrar sección:</span>
+                                        <label class="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+                                            <input type="checkbox" id="producto_mostrar_variaciones" class="rounded">
+                                            <span>Activar</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <textarea id="producto_variaciones" class="form-input w-full" rows="2" 
+                                    placeholder="https://variacion1.jpg, https://variacion2.jpg, https://variacion3.jpg"></textarea>
+                                <div id="preview_variaciones" class="flex flex-wrap gap-2 mt-2"></div>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    <i class="fas fa-info-circle"></i> URLs de variaciones disponibles (tonos, colores), separadas por comas. 
+                                    <strong>Marque "Activar" para mostrar la sección en la landing page.</strong>
+                                </p>
+                            </div>
+                            
+                            <!-- Patrones de Instalación -->
+                            <div class="col-span-2">
+                                <div class="flex items-center justify-between">
+                                    <label class="form-label font-semibold">Patrones de Instalación</label>
+                                    <span class="text-xs text-gray-400">Se muestra automáticamente si hay imágenes</span>
+                                </div>
+                                <textarea id="producto_patrones_instalacion" class="form-input w-full" rows="2" 
+                                    placeholder="https://patron1.jpg, https://patron2.jpg, https://patron3.jpg"></textarea>
+                                <div id="preview_patrones" class="flex flex-wrap gap-2 mt-2"></div>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    <i class="fas fa-info-circle"></i> URLs de patrones de instalación (espiga, cartabón, etc.), separadas por comas.
+                                </p>
                             </div>
                             
                             <!-- Ficha Técnica -->
@@ -2000,6 +2193,15 @@ window.guardarProducto = async function(e) {
         const unidadMedidaId = unidadMedidaSelect && unidadMedidaSelect.value !== '' ? unidadMedidaSelect.value : null;
         
         // ============================================
+        // OBTENER FLAGS DEL PRODUCTO (NUEVOS CAMPOS)
+        // ============================================
+        
+        const esPiedraNatural = document.getElementById('producto_es_piedra_natural')?.checked || false;
+        const mostrarNotaNatural = document.getElementById('producto_mostrar_nota_natural')?.checked || false;
+        const mostrarCaracteristicas = document.getElementById('producto_mostrar_caracteristicas')?.checked || false;
+        const mostrarVariaciones = document.getElementById('producto_mostrar_variaciones')?.checked || false;
+        
+        // ============================================
         // OBTENER CATEGORÍAS ESPECIALES (OUTLET Y SALDOS)
         // ============================================
         
@@ -2024,7 +2226,7 @@ window.guardarProducto = async function(e) {
         }
         
         // ============================================
-        // PROCESAR GALERÍA Y RANGOS
+        // PROCESAR GALERÍA, RANGOS, VARIACIONES Y PATRONES
         // ============================================
         
         const galeriaTexto = document.getElementById('producto_galeria')?.value || '';
@@ -2032,6 +2234,13 @@ window.guardarProducto = async function(e) {
         
         const rangosTexto = document.getElementById('producto_rangos')?.value || '';
         const rangos = rangosTexto.split(',').map(u => u.trim()).filter(u => u);
+        
+        // NUEVOS CAMPOS
+        const variacionesTexto = document.getElementById('producto_variaciones')?.value || '';
+        const variaciones = variacionesTexto.split(',').map(u => u.trim()).filter(u => u);
+        
+        const patronesTexto = document.getElementById('producto_patrones_instalacion')?.value || '';
+        const patrones = patronesTexto.split(',').map(u => u.trim()).filter(u => u);
         
         // ============================================
         // VALIDACIONES DE CAMPOS OBLIGATORIOS
@@ -2120,6 +2329,10 @@ window.guardarProducto = async function(e) {
             slug = `${slug}-${Date.now().toString().slice(-4)}`;
         }
         
+        // ============================================
+        // CONSTRUIR OBJETO DATA CON TODOS LOS CAMPOS
+        // ============================================
+        
         const data = {
             codigo: codigo,
             nombre: nombre,
@@ -2143,8 +2356,26 @@ window.guardarProducto = async function(e) {
             imagen_principal: document.getElementById('producto_imagen_principal')?.value || null,
             galeria: galeria,
             rangos: rangos,
-            ficha_tecnica_url: document.getElementById('producto_ficha_tecnica')?.value || null
+            ficha_tecnica_url: document.getElementById('producto_ficha_tecnica')?.value || null,
+            es_piedra_natural: esPiedraNatural,
+            mostrar_nota_natural: mostrarNotaNatural,
+            mostrar_caracteristicas: mostrarCaracteristicas,
+            mostrar_variaciones: mostrarVariaciones,
+            variaciones: variaciones,
+            patrones_instalacion: patrones
         };
+        
+        // ============================================
+        // LOG PARA DEPURACIÓN
+        // ============================================
+        console.log('📦 Datos a guardar:', {
+            ...data,
+            // Ocultar arrays largos para legibilidad
+            galeria: data.galeria?.length || 0,
+            rangos: data.rangos?.length || 0,
+            variaciones: data.variaciones?.length || 0,
+            patrones_instalacion: data.patrones_instalacion?.length || 0
+        });
         
         let productoId;
         
@@ -2240,7 +2471,6 @@ window.guardarProducto = async function(e) {
     }
 };
                 
-// ==================== EDITAR PRODUCTO ====================
 window.editarProducto = async function(id) {
     mostrarLoading('Cargando producto...');
     
@@ -2337,6 +2567,7 @@ window.editarProducto = async function(id) {
         // LLENAR CAMPOS DEL FORMULARIO
         // ============================================
         
+        // Información básica
         document.getElementById('producto_id').value = producto.id;
         document.getElementById('producto_codigo').value = producto.codigo || '';
         document.getElementById('producto_nombre').value = producto.nombre || '';
@@ -2344,12 +2575,45 @@ window.editarProducto = async function(id) {
         document.getElementById('producto_activo').value = producto.activo ? 'true' : 'false';
         document.getElementById('producto_orden').value = producto.orden || 0;
         document.getElementById('producto_descripcion_corta').value = producto.descripcion_corta || '';
+        
+        // SEO
         document.getElementById('producto_titulo_seo').value = producto.titulo_seo || '';
         document.getElementById('producto_descripcion_seo').value = producto.descripcion_seo || '';
         document.getElementById('producto_palabras_clave').value = producto.palabras_clave || '';
+        
+        // Especificaciones técnicas
         document.getElementById('producto_modelo').value = producto.modelo || '';
         document.getElementById('producto_medida').value = producto.medida || '';
         document.getElementById('producto_espesor').value = producto.espesor || '';
+        
+        // ============================================
+        // CARGAR FLAGS DEL PRODUCTO (NUEVOS CAMPOS)
+        // ============================================
+        
+        const esPiedraNaturalCheck = document.getElementById('producto_es_piedra_natural');
+        if (esPiedraNaturalCheck) {
+            esPiedraNaturalCheck.checked = producto.es_piedra_natural === true;
+        }
+        
+        const mostrarNotaNaturalCheck = document.getElementById('producto_mostrar_nota_natural');
+        if (mostrarNotaNaturalCheck) {
+            mostrarNotaNaturalCheck.checked = producto.mostrar_nota_natural === true;
+        }
+        
+        const mostrarCaracteristicasCheck = document.getElementById('producto_mostrar_caracteristicas');
+        if (mostrarCaracteristicasCheck) {
+            mostrarCaracteristicasCheck.checked = producto.mostrar_caracteristicas === true;
+        }
+        
+        const mostrarVariacionesCheck = document.getElementById('producto_mostrar_variaciones');
+        if (mostrarVariacionesCheck) {
+            mostrarVariacionesCheck.checked = producto.mostrar_variaciones === true;
+        }
+        
+        // ============================================
+        // CARGAR IMÁGENES Y DOCUMENTOS
+        // ============================================
+        
         document.getElementById('producto_imagen_principal').value = producto.imagen_principal || '';
         document.getElementById('producto_ficha_tecnica').value = producto.ficha_tecnica_url || '';
         
@@ -2371,9 +2635,22 @@ window.editarProducto = async function(id) {
         document.getElementById('producto_rangos').value = rangosTexto;
         
         // ============================================
+        // CARGAR NUEVOS CAMPOS: VARIACIONES Y PATRONES
+        // ============================================
+        
+        // Variaciones
+        const variacionesTexto = (producto.variaciones || []).join(', ');
+        document.getElementById('producto_variaciones').value = variacionesTexto;
+        
+        // Patrones de instalación
+        const patronesTexto = (producto.patrones_instalacion || []).join(', ');
+        document.getElementById('producto_patrones_instalacion').value = patronesTexto;
+        
+        // ============================================
         // MOSTRAR VISTA PREVIA DE IMÁGENES
         // ============================================
         
+        // Imagen principal
         if (producto.imagen_principal && producto.imagen_principal.trim() !== '') {
             setTimeout(() => {
                 if (typeof previsualizarImagen === 'function') {
@@ -2382,6 +2659,7 @@ window.editarProducto = async function(id) {
             }, 200);
         }
         
+        // Galería
         if (producto.galeria && producto.galeria.length > 0) {
             setTimeout(() => {
                 if (typeof mostrarPreviewGaleria === 'function') {
@@ -2390,12 +2668,35 @@ window.editarProducto = async function(id) {
             }, 250);
         }
         
+        // Rangos
         if (producto.rangos && producto.rangos.length > 0) {
             setTimeout(() => {
                 if (typeof mostrarPreviewRangos === 'function') {
                     mostrarPreviewRangos(producto.rangos);
                 }
             }, 300);
+        }
+        
+        // ============================================
+        // MOSTRAR VISTA PREVIA DE NUEVOS CAMPOS
+        // ============================================
+        
+        // Variaciones
+        if (producto.variaciones && producto.variaciones.length > 0) {
+            setTimeout(() => {
+                if (typeof mostrarPreviewVariaciones === 'function') {
+                    mostrarPreviewVariaciones(producto.variaciones);
+                }
+            }, 350);
+        }
+        
+        // Patrones
+        if (producto.patrones_instalacion && producto.patrones_instalacion.length > 0) {
+            setTimeout(() => {
+                if (typeof mostrarPreviewPatrones === 'function') {
+                    mostrarPreviewPatrones(producto.patrones_instalacion);
+                }
+            }, 400);
         }
         
         ocultarLoading();
@@ -4298,6 +4599,80 @@ function limpiarPreviewRangos() {
     if (container) container.innerHTML = '';
 }
 
+// ============================================
+// PREVIEW DE VARIACIONES
+// ============================================
+
+function mostrarPreviewVariaciones(urls) {
+    const container = document.getElementById('preview_variaciones');
+    if (!container) return;
+    
+    if (!urls || urls.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    const urlsArray = Array.isArray(urls) ? urls : urls.split(',').map(u => u.trim()).filter(u => u);
+    
+    container.innerHTML = urlsArray.map((url, i) => `
+        <div class="relative group">
+            <img src="${optimizarUrlGoogleDrive(url, 'imagen')}" 
+                 class="w-20 h-20 object-cover rounded-lg border border-gray-200" 
+                 onerror="this.src='FOTO/foto_01.webp'">
+            <button type="button" 
+                    onclick="eliminarImagenVariacion(${i})" 
+                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">
+                ×
+            </button>
+        </div>
+    `).join('');
+}
+
+function eliminarImagenVariacion(index) {
+    const textarea = document.getElementById('producto_variaciones');
+    const urls = textarea.value.split(',').map(u => u.trim()).filter(u => u);
+    urls.splice(index, 1);
+    textarea.value = urls.join(', ');
+    mostrarPreviewVariaciones(urls);
+}
+
+// ============================================
+// PREVIEW DE PATRONES
+// ============================================
+
+function mostrarPreviewPatrones(urls) {
+    const container = document.getElementById('preview_patrones');
+    if (!container) return;
+    
+    if (!urls || urls.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    const urlsArray = Array.isArray(urls) ? urls : urls.split(',').map(u => u.trim()).filter(u => u);
+    
+    container.innerHTML = urlsArray.map((url, i) => `
+        <div class="relative group">
+            <img src="${optimizarUrlGoogleDrive(url, 'imagen')}" 
+                 class="w-20 h-20 object-cover rounded-lg border border-gray-200" 
+                 onerror="this.src='FOTO/foto_01.webp'">
+            <button type="button" 
+                    onclick="eliminarImagenPatron(${i})" 
+                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">
+                ×
+            </button>
+        </div>
+    `).join('');
+}
+
+function eliminarImagenPatron(index) {
+    const textarea = document.getElementById('producto_patrones_instalacion');
+    const urls = textarea.value.split(',').map(u => u.trim()).filter(u => u);
+    urls.splice(index, 1);
+    textarea.value = urls.join(', ');
+    mostrarPreviewPatrones(urls);
+}
+
 // Actualizar preview de categorías especiales
 function actualizarPreviewCategoriasEspeciales() {
     const container = document.getElementById('categorias_especiales_preview');
@@ -4460,7 +4835,7 @@ async function generarPDFProducto(productoId) {
             <html lang="es">
             <head>
                 <meta charset="UTF-8">
-                <title>Ficha Técnica - ${producto.nombre}</title>
+                <title>FICHA TÉCNICA - ${producto.nombre}</title>
                 <style>
                     * {
                         margin: 0;
@@ -4782,7 +5157,7 @@ async function generarPDFProducto(productoId) {
                         <!-- Header compacto -->
                         <div class="pdf-header">
                             <h1>GALLOS MÁRMOL</h1>
-                            <div class="subtitle">FICHA TÉCNICA DE PRODUCTO</div>
+                            <div class="subtitle">FICHA TÉCNICA DEL PRODUCTO</div>
                             <div class="family-badge">${producto.familia?.nombre?.toUpperCase() || 'MATERIAL SELECCIONADO'}</div>
                         </div>
                         
@@ -4796,7 +5171,7 @@ async function generarPDFProducto(productoId) {
                                     <div class="card-title">PRODUCTO</div>
                                     <div class="product-image">
                                         ${imagenPrincipal ? 
-                                            `<img src="${imagenPrincipal}" alt="${producto.nombre}" onerror="this.src='FOTO/foto_01.webp'">` : 
+                                            `<img src="${imagenPrincipal}" alt="${producto.nombre}" onerror="this.src='FOTO/foto_04.webp'">` : 
                                             '<div style="background: #f3f4f6; height: 160px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"><p style="color: #9ca3af; font-size: 11px;">Sin imagen disponible</p></div>'
                                         }
                                     </div>
@@ -4853,35 +5228,35 @@ async function generarPDFProducto(productoId) {
                                     <div class="info-grid">
                                         <div class="info-row">
                                             <span class="info-label">Nombre</span>
-                                            <span class="info-value"><strong>${producto.nombre || 'N/A'}</strong></span>
+                                            <span class="info-value"><strong>${producto.nombre || ''}</strong></span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Código</span>
-                                            <span class="info-value">${producto.codigo || 'N/A'}</span>
+                                            <span class="info-value">${producto.codigo || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Familia</span>
-                                            <span class="info-value">${producto.familia?.nombre || 'N/A'}</span>
+                                            <span class="info-value">${producto.familia?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Acabado</span>
-                                            <span class="info-value">${producto.acabado?.nombre || 'N/A'}</span>
+                                            <span class="info-value">${producto.acabado?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Material</span>
-                                            <span class="info-value">${producto.material?.nombre || 'N/A'}</span>
+                                            <span class="info-value">${producto.material?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Modelo</span>
-                                            <span class="info-value">${producto.modelo || 'N/A'}</span>
+                                            <span class="info-value">${producto.modelo || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Borde</span>
-                                            <span class="info-value">${producto.borde?.nombre || 'N/A'}</span>
+                                            <span class="info-value">${producto.borde?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Calidad</span>
-                                            <span class="info-value">${producto.calidad?.nombre || 'N/A'}</span>
+                                            <span class="info-value">${producto.calidad?.nombre || ''}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -4892,19 +5267,19 @@ async function generarPDFProducto(productoId) {
                                     <div class="comercializacion-grid">
                                         <div class="comercializacion-item">
                                             <div class="comercializacion-label">Medida</div>
-                                            <div class="comercializacion-value"><strong>${producto.medida || 'N/A'}</strong></div>
+                                            <div class="comercializacion-value"><strong>${producto.medida || ''}</strong></div>
                                         </div>
                                         <div class="comercializacion-item">
                                             <div class="comercializacion-label">Espesor</div>
-                                            <div class="comercializacion-value"><strong>${producto.espesor || 'N/A'}</strong></div>
+                                            <div class="comercializacion-value"><strong>${producto.espesor || ''}</strong></div>
                                         </div>
                                         <div class="comercializacion-item">
-                                            <div class="comercializacion-label">Unidad de venta</div>
-                                            <div class="comercializacion-value">${producto.unidad_medida?.nombre || 'Unidad'} ${producto.unidad_medida?.abreviatura ? `(${producto.unidad_medida.abreviatura})` : ''}</div>
+                                            <div class="comercializacion-label">Unidad de medida</div>
+                                            <div class="comercializacion-value">${producto.unidad_medida?.nombre || ''} ${producto.unidad_medida?.abreviatura ? `(${producto.unidad_medida.abreviatura})` : ''}</div>
                                         </div>
                                         <div class="comercializacion-item">
                                             <div class="comercializacion-label">Stock</div>
-                                            <div class="comercializacion-value">Consultar</div>
+                                            <div class="comercializacion-value">CONSULTAR</div>
                                         </div>
                                     </div>
                                 </div>
