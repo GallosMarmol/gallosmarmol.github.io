@@ -2328,7 +2328,7 @@ function renderizarLandingProducto(producto) {
                 .antes-comprar-grid { grid-template-columns: repeat(2, 1fr); }
                 .trust-grid { grid-template-columns: repeat(3, 1fr); }
                 .caracteristicas-grid { grid-template-columns: repeat(2, 1fr); }
-                .hero-image img { max-height: 320px; max-width: 80%; }
+                .hero-image img { max-height: 320px; }
             }
             
             @media (min-width: 768px) {
