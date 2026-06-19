@@ -1120,6 +1120,138 @@ function cerrarLoadingModal() {
     if (modal) modal.classList.remove('active');
 }
 
+// ============================================
+// FUNCIONES AUXILIARES PARA EL HERO MEJORADO
+// ============================================
+
+// 1. Obtener badges del producto
+function obtenerBadgesHero(producto, esPiedraNatural) {
+    const badges = [];
+    
+    // Badge de categorías especiales
+    if (producto.categorias_especiales && producto.categorias_especiales.length > 0) {
+        if (producto.categorias_especiales.includes('OUTLET')) {
+            badges.push({ 
+                tipo: 'outlet', 
+                texto: '🔥 OUTLET', 
+                clase: 'badge-outlet' 
+            });
+        }
+        if (producto.categorias_especiales.includes('SALDOS_EXPORTACION')) {
+            badges.push({ 
+                tipo: 'saldos', 
+                texto: '📦 SALDOS', 
+                clase: 'badge-saldos' 
+            });
+        }
+    }
+    
+    // Badge de calidad
+    if (producto.calidad?.nombre) {
+        const calidad = producto.calidad.nombre.toLowerCase();
+        if (calidad.includes('premium') || calidad.includes('excelente')) {
+            badges.push({ 
+                tipo: 'premium', 
+                texto: '⭐ Premium', 
+                clase: 'badge-premium' 
+            });
+        } else if (calidad.includes('primera')) {
+            badges.push({ 
+                tipo: 'primera', 
+                texto: '🏆 Primera Calidad', 
+                clase: 'badge-primera' 
+            });
+        }
+    }
+    
+    // Badge de piedra natural
+    if (esPiedraNatural) {
+        badges.push({ 
+            tipo: 'natural', 
+            texto: '🪨 Piedra Natural', 
+            clase: 'badge-natural' 
+        });
+    }
+    
+    return badges;
+}
+
+// 2. Obtener especificaciones rápidas
+function obtenerEspecificacionesRapidas(producto) {
+    const specs = [];
+    
+    if (producto.medida) {
+        specs.push({
+            icono: 'fa-ruler-combined',
+            texto: producto.medida,
+            label: 'Medida'
+        });
+    }
+    
+    if (producto.espesor) {
+        specs.push({
+            icono: 'fa-arrows-alt-h',
+            texto: producto.espesor,
+            label: 'Espesor'
+        });
+    }
+    
+    if (producto.familia?.nombre) {
+        specs.push({
+            icono: 'fa-layer-group',
+            texto: producto.familia.nombre,
+            label: 'Familia'
+        });
+    }
+    
+    if (producto.acabado?.nombre) {
+        specs.push({
+            icono: 'fa-palette',
+            texto: producto.acabado.nombre,
+            label: 'Acabado'
+        });
+    }
+    
+    // Limitar a 4 items
+    return specs.slice(0, 4);
+}
+
+// 3. Obtener indicadores de confianza
+function obtenerIndicadoresConfianza(producto) {
+    const indicadores = [
+        { icono: 'fa-check-circle', texto: 'Stock disponible', clase: 'trust-stock' }
+    ];
+    
+    if (producto.ficha_tecnica_url) {
+        indicadores.push({ 
+            icono: 'fa-file-pdf', 
+            texto: 'Ficha técnica', 
+            clase: 'trust-ficha' 
+        });
+    }
+    
+    if (producto.categorias_especiales && producto.categorias_especiales.length > 0) {
+        indicadores.push({ 
+            icono: 'fa-tags', 
+            texto: 'Precios especiales', 
+            clase: 'trust-oferta' 
+        });
+    }
+    
+    indicadores.push({ 
+        icono: 'fa-truck', 
+        texto: 'Envío a todo el país', 
+        clase: 'trust-envio' 
+    });
+    indicadores.push({ 
+        icono: 'fa-shield-alt', 
+        texto: 'Garantía de calidad', 
+        clase: 'trust-garantia' 
+    });
+    
+    return indicadores;
+}
+
 // ==================== RENDERIZAR LANDING PAGE PRODUCTO ====================
 function renderizarLandingProducto(producto) {
     console.log('🎨 Renderizando landing page para:', producto.nombre);
@@ -1319,6 +1451,61 @@ function renderizarLandingProducto(producto) {
         </div>
     `;
     
+    // ========== OBTENER DATOS PARA EL HERO ==========
+
+    // Especificaciones rápidas (3 items como máximo)
+    const especificacionesRapidas = [
+        { icono: 'fa-ruler-combined', texto: producto.medida || 'N/A', label: 'Medida' },
+        { icono: 'fa-arrows-alt-h', texto: producto.espesor || 'N/A', label: 'Espesor' },
+        { icono: 'fa-layer-group', texto: producto.familia?.nombre || 'N/A', label: 'Familia' }
+    ].filter(spec => spec.texto !== 'N/A').slice(0, 3);
+
+    // Descripción extendida
+    const descripcionHero = producto.descripcion_corta || 
+        'Descubre la belleza y elegancia de este producto, diseñado para transformar tus espacios con estilo y calidad.';
+
+    // ========== GENERAR HTML DE ESPECIFICACIONES ==========
+    const specsHtml = especificacionesRapidas.map(spec => `
+        <div class="spec-item">
+            <i class="fas ${spec.icono}"></i>
+            <span>${spec.texto}</span>
+        </div>
+    `).join('');
+
+    // ========== HERO OPTIMIZADO ==========
+    const heroHtml = `
+        <section class="hero">
+            <div class="container hero-content">
+                <!-- COLUMNA IZQUIERDA -->
+                <div class="hero-text">
+                    <h1>${primeraPalabra} <span>${restoPalabras}</span></h1>
+                    <p class="hero-description">${descripcionHero}</p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#galeria" class="btn btn-primary">Ver Inspiración</a>
+                    </div>
+                    
+                    ${specsHtml ? `<div class="hero-specs">${specsHtml}</div>` : ''}
+                </div>
+                
+                <!-- COLUMNA DERECHA -->
+                <div class="hero-image-wrapper">
+                    <div class="hero-image">
+                        <img src="${imagenPrincipal}" 
+                            alt="${producto.nombre}" 
+                            loading="eager" 
+                            onerror="this.src='FOTO/foto_04.webp'" 
+                            id="heroImage"
+                            data-index="0">
+                        <button class="zoom-btn-hero" id="heroZoomBtn" data-index="0">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+        
     // ========== GENERAR HTML DE GALERÍA ==========
     let galeriaHtml = '';
     if (tieneGaleria) {
@@ -1710,94 +1897,319 @@ function renderizarLandingProducto(producto) {
             .section-title p { font-size: 0.85rem; color: var(--gray-600); max-width: 600px; margin: 0 auto; }
             header { position: fixed; top: 0; left: 0; right: 0; background: var(--primary); z-index: 1000; padding: 10px 0; box-shadow: var(--shadow-sm); }
             .navbar { display: flex; justify-content: center; align-items: center; }
-            .logo img { width: 200px; height: auto; pointer-events: none; }
-            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 90px; z-index: 99; }
+            .logo img { width: 290px; height: auto; pointer-events: none; }
+            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 120px; z-index: 99; }
             .aviso-flex-center { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 0.75rem; color: #856404; }
             .aviso-flex-center a { color: #856404; text-decoration: underline; }
             
-            /* HERO SECTION */
-            .hero { 
-                min-height: 100vh; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                background: linear-gradient(135deg, rgba(57,8,10,0.92), rgba(57,8,10,0.88)); 
-                padding: 80px 0 50px; 
-            }
-            .hero-content { 
-                display: flex; 
-                flex-direction: column; 
+            /* ============================================ */
+            /* HERO OPTIMIZADO - MOBILE FIRST */
+            /* ============================================ */
+
+            .hero {
+                min-height: 100vh;
+                display: flex;
                 align-items: center;
-                justify-content: center;
-                gap: 30px; 
+                background: linear-gradient(135deg, rgba(57,8,10,0.92), rgba(57,8,10,0.88));
+                padding: 90px 0 50px;
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
                 width: 100%;
             }
-            .hero-text { 
-                text-align: center; 
-                order: 2; 
+
+            /* ===== TEXTO ===== */
+            .hero-text {
+                text-align: center;
                 width: 100%;
+                order: 2;
             }
-            .hero h1 { 
-                font-size: 1.6rem; 
-                color: var(--white); 
-                margin-bottom: 12px; 
+
+            .hero h1 {
+                font-size: 1.6rem;
+                color: var(--white);
+                margin-bottom: 8px;
+                line-height: 1.2;
             }
-            .hero h1 span { 
-                color: var(--secondary); 
+
+            .hero h1 span {
+                color: var(--secondary);
             }
-            .hero p { 
-                color: rgba(255,255,255,0.9); 
-                font-size: 0.85rem; 
-                margin-bottom: 20px; 
+
+            .hero-description {
+                color: rgba(255,255,255,0.9);
+                font-size: 0.85rem;
+                line-height: 1.5;
                 max-width: 500px;
+                margin: 0 auto 16px;
+                padding: 0 4px;
+            }
+
+            /* ===== BOTONES ===== */
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border-radius: 40px;
+                font-weight: 600;
+                font-size: 0.85rem;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .btn-primary {
+                background: var(--secondary);
+                color: var(--primary);
+            }
+
+            .btn-primary:hover {
+                background: var(--secondary);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(212, 212, 174, 0.3);
+            }
+
+            .btn-secondary {
+                border: 2px solid var(--secondary);
+                color: var(--secondary);
+                background: transparent;
+            }
+
+            .btn-secondary:hover {
+                background: var(--secondary);
+                color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            /* ===== ESPECIFICACIONES RÁPIDAS ===== */
+            .hero-specs {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                margin-top: 10px;
+                max-width: 400px;
                 margin-left: auto;
                 margin-right: auto;
             }
-            .hero-buttons { 
-                display: flex; 
-                flex-direction: column; 
-                gap: 10px; 
+
+            .spec-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                background: rgba(255,255,255,0.08);
+                backdrop-filter: blur(10px);
+                padding: 10px 6px;
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,0.06);
+                text-align: center;
+            }
+
+            .spec-item i {
+                color: var(--secondary);
+                font-size: 1rem;
+            }
+
+            .spec-item span {
+                font-size: 0.7rem;
+                color: white;
+                font-weight: 500;
+                line-height: 1.2;
+                word-break: break-word;
+            }
+
+            /* ===== IMAGEN ===== */
+            .hero-image-wrapper {
+                order: 1;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
                 align-items: center;
             }
-            .hero-image { 
-                position: relative; 
-                order: 1; 
-                text-align: center; 
-                display: flex;
-                justify-content: center;
+
+            .hero-image {
+                position: relative;
                 width: 100%;
+                max-width: 340px;
+                aspect-ratio: 4 / 3;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             }
-            .hero-image img { 
-                width: auto;
-                max-width: 85%;
-                height: auto;
-                max-height: 280px;
+
+            .hero-image img {
+                width: 100%;
+                height: 100%;
                 object-fit: contain;
-                border-radius: 20px; 
-                box-shadow: var(--shadow-lg); 
-                cursor: pointer; 
+                display: block;
             }
-            .btn { 
-                padding: 12px 20px; 
-                border-radius: 40px; 
-                font-weight: 600; 
-                font-size: 0.85rem; 
-                text-decoration: none; 
-                display: inline-block; 
-                text-align: center; 
-                transition: all 0.3s ease; 
-                border: none; 
-                cursor: pointer; 
+
+            .hero-image .zoom-btn-hero {
+                position: absolute;
+                bottom: 12px;
+                right: 12px;
+                background: rgba(0,0,0,0.7);
+                color: white;
+                border: none;
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                z-index: 10;
+                backdrop-filter: blur(5px);
             }
-            .btn-secondary { 
-                border: 2px solid var(--secondary); 
-                color: var(--secondary); 
-                background: transparent; 
+
+            .hero-image .zoom-btn-hero:hover {
+                background: var(--primary);
+                transform: scale(1.1);
             }
-            .btn-secondary:hover { 
-                background: var(--secondary); 
-                color: var(--primary); 
-                transform: translateY(-2px); 
+
+            /* ============================================ */
+            /* RESPONSIVE */
+            /* ============================================ */
+
+            /* Tablet y Desktop */
+            @media (min-width: 768px) {
+                .hero {
+                    padding: 110px 0 70px;
+                    min-height: 100vh;
+                }
+                
+                .hero-content {
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 40px;
+                    max-width: 1100px;
+                    margin: 0 auto;
+                }
+                
+                .hero-text {
+                    flex: 1.1;
+                    text-align: left;
+                    order: 1;
+                }
+                
+                .hero h1 {
+                    font-size: 2.2rem;
+                }
+                
+                .hero-description {
+                    margin-left: 0;
+                    margin-right: 0;
+                    max-width: 90%;
+                    font-size: 0.95rem;
+                }
+                
+                .hero-buttons {
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    gap: 12px;
+                }
+                
+                .btn {
+                    width: auto;
+                    max-width: none;
+                    padding: 12px 28px;
+                }
+                
+                .hero-specs {
+                    max-width: 90%;
+                    margin-left: 0;
+                    margin-right: 0;
+                    justify-content: flex-start;
+                    gap: 10px;
+                }
+                
+                .spec-item {
+                    flex-direction: row;
+                    gap: 8px;
+                    padding: 8px 14px;
+                    min-width: 80px;
+                }
+                
+                .spec-item i {
+                    font-size: 0.9rem;
+                }
+                
+                .spec-item span {
+                    font-size: 0.75rem;
+                }
+                
+                .hero-image-wrapper {
+                    flex: 0.9;
+                    order: 2;
+                    align-items: flex-end;
+                }
+                
+                .hero-image {
+                    max-width: 380px;
+                }
+            }
+
+            /* Desktop grande */
+            @media (min-width: 1024px) {
+                .hero h1 {
+                    font-size: 2.8rem;
+                }
+                
+                .hero-description {
+                    font-size: 1rem;
+                }
+                
+                .hero-image {
+                    max-width: 440px;
+                }
+            }
+
+            /* Móviles pequeños */
+            @media (max-width: 380px) {
+                .hero h1 {
+                    font-size: 1.3rem;
+                }
+                
+                .hero-description {
+                    font-size: 0.8rem;
+                }
+                
+                .hero-specs {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 6px;
+                }
+                
+                .spec-item {
+                    padding: 8px 4px;
+                }
+                
+                .spec-item i {
+                    font-size: 0.85rem;
+                }
+                
+                .spec-item span {
+                    font-size: 0.65rem;
+                }
+                
+                .hero-image {
+                    max-width: 280px;
+                }
             }
             
             section { padding: 50px 0; }
@@ -1820,7 +2232,7 @@ function renderizarLandingProducto(producto) {
             .gallery-section, .rangos-section, .variaciones-section, .patrones-section { background: var(--gray-100); }
             .gallery-grid, .rangos-grid, .variaciones-grid, .patrones-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
             .galeria-item, .rango-item, .variacion-item, .patron-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
-            .galeria-item img, .rango-item img, .variacion-item img, .patron-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
+            .galeria-item img, .rango-item img, .variacion-item img, .patron-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; display: block; }
             .galeria-item:hover img, .rango-item:hover img, .variacion-item:hover img, .patron-item:hover img { transform: scale(1.03); }
             .zoom-btn-galeria-inicial, .zoom-btn-rango-inicial, .zoom-btn-variacion-inicial, .zoom-btn-patron-inicial, .zoom-btn-hero { 
                 position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; 
@@ -1992,20 +2404,7 @@ function renderizarLandingProducto(producto) {
         
         ${bannerAdvertencia}
         
-        <section class="hero">
-            <div class="container hero-content">
-                <div class="hero-text">
-                    <h1>${primeraPalabra} <span>${restoPalabras}</span></h1>
-                    <div class="hero-buttons">
-                        <a href="#galeria" class="btn btn-secondary">Ver Inspiración</a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <img src="${imagenPrincipal}" alt="${producto.nombre}" loading="eager" onerror="this.src='FOTO/foto_04.webp'" id="heroImage">
-                    <button class="zoom-btn-hero" id="heroZoomBtn"><i class="fas fa-search-plus"></i></button>
-                </div>
-            </div>
-        </section>
+        ${heroHtml}
         
         ${tieneGaleria ? galeriaHtml : ''}
         ${tieneRangos ? rangosHtml : ''}
@@ -4715,7 +5114,7 @@ ${productosLista}
             /* Header */
             header{position:fixed;top:0;left:0;right:0;background:var(--primary);z-index:1000;padding:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
             .navbar{display:flex;justify-content:center;align-items:center}
-            .logo img{width:250px;height:auto}
+            .logo img{width:290px;height:auto}
             
             /* Hero Section */
             .hero-outlet{min-height:85vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(0,0,0,0.5)),url('${heroBackgroundImage}');background-size:cover;background-position:center;padding:120px 0 80px}
@@ -7494,3 +7893,4 @@ window.mostrarModalOpcionesProducto = mostrarModalOpcionesProducto;
         window.esLandingPage = false;
     }
 })();
+
