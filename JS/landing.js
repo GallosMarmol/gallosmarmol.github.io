@@ -234,106 +234,6 @@ function guardarSeleccionCotizacion() {
     localStorage.setItem(cotizacionStorageKey, JSON.stringify(cotizacionSeleccionados));
 }
 
-function actualizarBarraFlotante() {
-    let barra = document.getElementById('barra-cotizacion');
-    const total = cotizacionSeleccionados.length;
-    
-    if (!barra && total > 0) {
-        // Crear la barra por primera vez
-        barra = document.createElement('div');
-        barra.id = 'barra-cotizacion';
-        barra.className = 'barra-cotizacion mini';
-        
-        barra.innerHTML = `
-            <!-- Modo Mini (Colapsado) -->
-            <div class="barra-cotizacion-mini">
-                <div class="barra-info-mini">
-                    <div class="barra-icono">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="badge-cantidad" id="badge-cantidad">${total}</span>
-                    </div>
-                    <div class="barra-texto-mini">
-                        <span id="contador-cotizacion-mini">${total}</span> producto(s)
-                    </div>
-                </div>
-                <div class="barra-acciones-mini">
-                    <button class="btn-cotizar-mini" id="btn-ver-cotizacion-mini">
-                        <i class="fas fa-file-invoice"></i> Cotizar
-                    </button>
-                    <button class="btn-expandir" id="btn-expandir-barra">
-                        <i class="fas fa-chevron-up"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Modo Expandido (Detalles) - Oculto inicialmente -->
-            <div class="barra-cotizacion-expanded" style="display: none;">
-                <div class="barra-productos-preview" id="preview-productos">
-                    ${generarPreviewProductos()}
-                </div>
-                <div class="barra-acciones-expanded">
-                    <button class="btn-limpiar" id="btn-limpiar-barra">
-                        <i class="fas fa-trash-alt"></i> Limpiar todo
-                    </button>
-                    <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded">
-                        <i class="fas fa-file-invoice"></i> Ver cotización completa
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(barra);
-        configurarEventosBarra(barra);
-        
-        // Ajustar padding del body
-        const alturaBarra = barra.offsetHeight;
-        document.body.style.paddingBottom = `${alturaBarra + 10}px`;
-        
-    } else if (barra && total === 0) {
-        barra.remove();
-        document.body.style.paddingBottom = '';
-        
-    } else if (barra && total > 0) {
-        // ACTUALIZAR ELEMENTOS EXISTENTES
-        
-        // Actualizar badge y contador mini
-        const badge = document.getElementById('badge-cantidad');
-        if (badge) badge.textContent = total;
-        
-        const contadorMini = document.getElementById('contador-cotizacion-mini');
-        if (contadorMini) contadorMini.textContent = total;
-        
-        // 👇 IMPORTANTE: Actualizar el preview de productos SIEMPRE
-        const previewContainer = document.getElementById('preview-productos');
-        if (previewContainer) {
-            previewContainer.innerHTML = generarPreviewProductos();
-            console.log('📦 Preview actualizado:', cotizacionSeleccionados.length, 'productos');
-        }
-        
-        // Si la barra está expandida, asegurar que el contenido se vea bien
-        const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
-        if (expandedSection && expandedSection.style.display !== 'none') {
-            // Forzar reflow para asegurar que se muestre correctamente
-            expandedSection.style.display = 'flex';
-        }
-    }
-}
-
-function actualizarBotonCard(productoId, estabaSeleccionado) {
-    const btn = document.querySelector(`.btn-cotizar[data-id="${productoId}"]`);
-    if (btn) {
-        if (!estabaSeleccionado) {
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado';
-            btn.style.background = '#10b981';
-            btn.style.color = 'white';
-        } else {
-            btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-            btn.style.background = '#39080a';
-            btn.style.color = 'white';
-        }
-    }
-}
-
 // ==================== LIMPIAR COTIZACIÓN ====================
 function limpiarCotizacion() {
     mostrarModal(
@@ -717,272 +617,6 @@ function validarFormularioCotizacion() {
             requiereEnvio: document.getElementById('requiere-envio')?.value || 'no',
             observaciones: document.getElementById('observaciones')?.value || null
         };
-    }
-}
-
-// ==================== ENVIAR COTIZACIÓN (CON SOPORTE PARA cotizacion_detalles) ====================
-async function enviarCotizacion(datosCliente, asesor) {
-    mostrarModal('Procesando', 'Guardando cotización...', 'info', { showConfirmButton: false });
-    
-    try {
-        const numero = `COT-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
-        const fechaActual = new Date().toISOString();
-        
-        // ============================================
-        // PREPARAR DATOS DE LA COTIZACIÓN
-        // ============================================
-        
-        // Datos para el campo JSON (productos)
-        const productosJSON = cotizacionSeleccionados.map(p => ({
-            id: p.id,
-            nombre: p.nombre,
-            codigo: p.codigo || ''
-        }));
-        
-        // Datos principales de la cotización
-        const cotizacion = {
-            numero: numero,
-            cliente_nombre: datosCliente.nombre,
-            cliente_email: datosCliente.email,
-            cliente_telefono: datosCliente.telefono,
-            cliente_empresa: datosCliente.empresa || null,
-            tipo_cliente: 'NUEVO',
-            asesor_asignado_id: asesor.id,
-            productos: productosJSON,  // Mantenemos JSON por compatibilidad
-            observaciones: datosCliente.observaciones || null,
-            ubicacion_proyecto: datosCliente.ubicacionProyecto || null,
-            estado: 'PENDIENTE',
-            creado_el: fechaActual,
-            creado_por: usuarioActual.id
-        };
-        
-        // ============================================
-        // 1. GUARDAR COTIZACIÓN PRINCIPAL
-        // ============================================
-        
-        const { data: nuevaCotizacion, error: cotizacionError } = await window.supabaseClient
-            .from('cotizaciones')
-            .insert(cotizacion)
-            .select()
-            .single();
-        
-        if (cotizacionError) {
-            console.error('Error guardando cotización:', cotizacionError);
-            throw cotizacionError;
-        }
-        
-        const cotizacionId = nuevaCotizacion.id;
-        console.log('Cotización guardada:', numero, 'ID:', cotizacionId);
-        
-        // ============================================
-        // 2. GUARDAR DETALLES DE PRODUCTOS EN cotizacion_detalles
-        // ============================================
-        
-        let detallesGuardados = 0;
-        let erroresDetalles = [];
-        
-        for (const producto of cotizacionSeleccionados) {
-            const { error: detalleError } = await window.supabaseClient
-                .from('cotizacion_detalles')
-                .insert({
-                    cotizacion_id: cotizacionId,
-                    producto_id: producto.id,
-                    codigo: producto.codigo || '',
-                    nombre: producto.nombre,
-                    creado_el: fechaActual
-                });
-            
-            if (detalleError) {
-                console.error(`Error guardando detalle para producto ${producto.nombre}:`, detalleError);
-                erroresDetalles.push({ producto: producto.nombre, error: detalleError.message });
-            } else {
-                detallesGuardados++;
-            }
-        }
-        
-        console.log(`Detalles guardados: ${detallesGuardados} de ${cotizacionSeleccionados.length} productos`);
-        
-        if (erroresDetalles.length > 0) {
-            console.warn('Algunos detalles no se guardaron:', erroresDetalles);
-        }
-        
-        // ============================================
-        // 3. INCREMENTAR CONTADOR DEL ASESOR
-        // ============================================
-        
-        try {
-            const nuevoContador = (asesor.leads_asignados_hoy || 0) + 1;
-            await window.supabaseClient
-                .from('vendedores')
-                .update({ 
-                    leads_asignados_hoy: nuevoContador,
-                    ultima_asignacion: fechaActual
-                })
-                .eq('id', asesor.id);
-            console.log(`Contador actualizado para ${asesor.nombre}: ${nuevoContador}`);
-        } catch (err) {
-            console.error('Error al incrementar contador:', err);
-            // No detenemos el proceso si falla el contador
-        }
-        
-        // ============================================
-        // 4. GUARDAR RELACIÓN CLIENTE-ASESOR
-        // ============================================
-        
-        if (asesor.id && datosCliente.email) {
-            try {
-                const { data: existente } = await window.supabaseClient
-                    .from('clientes_asesores')
-                    .select('id')
-                    .eq('email', datosCliente.email)
-                    .maybeSingle();
-                
-                if (existente) {
-                    await window.supabaseClient
-                        .from('clientes_asesores')
-                        .update({
-                            telefono: datosCliente.telefono,
-                            vendedor_id: asesor.id,
-                            ultima_cotizacion: fechaActual
-                        })
-                        .eq('id', existente.id);
-                } else {
-                    await window.supabaseClient
-                        .from('clientes_asesores')
-                        .insert({
-                            email: datosCliente.email,
-                            telefono: datosCliente.telefono,
-                            vendedor_id: asesor.id,
-                            ultima_cotizacion: fechaActual,
-                            creado_el: fechaActual
-                        });
-                }
-                console.log('Relación cliente-asesor guardada');
-            } catch (err) {
-                console.error('Error guardando relación cliente-asesor:', err);
-            }
-        }
-        
-        // ============================================
-        // 5. CERRAR MODAL DE CARGA
-        // ============================================
-        
-        const modalOverlay = document.querySelector('.modal-overlay.active');
-        if (modalOverlay) modalOverlay.classList.remove('active');
-        
-        // ============================================
-        // 6. GENERAR MENSAJE DE WHATSAPP
-        // ============================================
-        
-        let productosLista = '';
-        cotizacionSeleccionados.forEach((p, i) => {
-            productosLista += `${i+1}. ${p.nombre}${p.codigo ? ` (Código: ${p.codigo})` : ''}\n`;
-        });
-        
-        const modoTexto = datosCliente.modoAsignacion === 'manual' ? 'Manual (cliente eligió asesor)' : 'Automático (distribución justa)';
-        
-        const mensaje = `*NUEVA COTIZACIÓN - OUTLET*
-
-*N° Cotización:* ${numero}
-*Fecha:* ${new Date().toLocaleString()}
-*Modo asignación:* ${modoTexto}
-
-*Datos del cliente:*
-👤 *Nombre:* ${datosCliente.nombre}
-📧 *Email:* ${datosCliente.email}
-📞 *Teléfono:* ${datosCliente.telefono}
-🏢 *Empresa:* ${datosCliente.empresa || 'No especifica'}
-📍 *Ubicación proyecto:* ${datosCliente.ubicacionProyecto || 'No especifica'}
-
-*📦 Productos solicitados:*
-${productosLista}
-*💬 Observaciones:*
-${datosCliente.observaciones || 'Sin observaciones'}
-
-*👨‍💼 Asesor asignado:* ${asesor.nombre} ${asesor.telefono ? `(${asesor.telefono})` : ''}
----
-🌐 *Sistema de Gestión Gallos Mármol*
-Por favor contactar al cliente para brindar precios y disponibilidad.`;
-        
-        // ============================================
-        // 7. ENVIAR WHATSAPP
-        // ============================================
-        
-        const telefonoAsesor = asesor?.telefono?.replace(/\D/g, '');
-        
-        if (telefonoAsesor && telefonoAsesor.length >= 9) {
-            // Asegurar código de país para Perú si es necesario
-            let whatsappNumber = telefonoAsesor;
-            if (whatsappNumber.length === 9) {
-                whatsappNumber = `51${whatsappNumber}`;
-            }
-            
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
-            window.open(whatsappUrl, '_blank');
-            
-            console.log('📱 WhatsApp enviado a:', asesor.nombre, 'Número:', whatsappNumber);
-            
-            await mostrarModal('Cotización enviada', 
-                `Cotización ${numero} enviada a ${asesor.nombre} por WhatsApp.\n\nUn asesor se contactará contigo pronto.`, 
-                'success', 
-                { timer: 4000, showConfirmButton: false }
-            );
-        } else {
-            await mostrarModal('No se pudo enviar automáticamente', 
-                `Cotización N°: ${numero}\n\nNo se pudo enviar por WhatsApp porque el asesor ${asesor.nombre} no tiene un número de teléfono configurado.\n\nLa cotización ha sido registrada en el sistema.`, 
-                'warning', 
-                { confirmButtonText: 'Entendido' }
-            );
-        }
-        
-        // ============================================
-        // 8. LIMPIAR SELECCIÓN DE PRODUCTOS
-        // ============================================
-        
-        cotizacionSeleccionados = [];
-        localStorage.removeItem(cotizacionStorageKey);
-        actualizarBarraFlotante();
-        
-        // Resetear botones de cotización
-        document.querySelectorAll('.btn-cotizar').forEach(btn => {
-            btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-            btn.style.background = '#39080a';
-            btn.style.color = 'white';
-        });
-        
-        // Resetear variables globales
-        window.modoAsignacion = 'auto';
-        window.asesorPreasignadoId = null;
-        
-        // Limpiar caché del formulario
-        window.clienteNombreCache = '';
-        window.clienteEmailCache = '';
-        window.clienteTelefonoCache = '';
-        window.clienteEmpresaCache = '';
-        window.ubicacionCache = '';
-        window.observacionesCache = '';
-        
-        console.log('Proceso de cotización completado exitosamente');
-        
-    } catch (error) {
-        // Cerrar modal de carga si está abierto
-        const modalOverlay = document.querySelector('.modal-overlay.active');
-        if (modalOverlay) modalOverlay.classList.remove('active');
-        
-        console.error('❌ Error detallado en enviarCotizacion:', error);
-        
-        // Mostrar mensaje de error específico
-        let mensajeError = 'Ocurrió un error al procesar la cotización';
-        
-        if (error.message?.includes('duplicate')) {
-            mensajeError = 'Ya existe una cotización con este número. Por favor, intenta nuevamente.';
-        } else if (error.message?.includes('foreign key')) {
-            mensajeError = 'El asesor seleccionado no es válido. Por favor, selecciona otro.';
-        } else if (error.message) {
-            mensajeError = error.message;
-        }
-        
-        await mostrarModal('Error', mensajeError, 'error');
     }
 }
 
@@ -1463,6 +1097,9 @@ function renderizarLandingProducto(producto) {
     // Descripción extendida
     const descripcionHero = producto.descripcion_corta || 
         'Descubre la belleza y elegancia de este producto, diseñado para transformar tus espacios con estilo y calidad.';
+    
+    // Verificar si hay contenido después del Hero
+    const haySeccionesDespues = tieneGaleria || tieneRangos || tieneVariaciones || tienePatrones || tieneAplicaciones;
 
     // ========== GENERAR HTML DE ESPECIFICACIONES ==========
     const specsHtml = especificacionesRapidas.map(spec => `
@@ -1472,7 +1109,7 @@ function renderizarLandingProducto(producto) {
         </div>
     `).join('');
 
-    // ========== HERO OPTIMIZADO ==========
+    // ========== HERO OPTIMIZADO CON INDICADOR DE SCROLL ==========
     const heroHtml = `
         <section class="hero">
             <div class="container hero-content">
@@ -1503,6 +1140,21 @@ function renderizarLandingProducto(producto) {
                     </div>
                 </div>
             </div>
+            
+            <!-- INDICADOR DE SCROLL -->
+            ${haySeccionesDespues ? `
+                <div class="scroll-indicator" id="scrollIndicator">
+                    <span class="scroll-text">Desliza para descubrir</span>
+                    <div class="scroll-mouse">
+                        <span class="scroll-wheel"></span>
+                    </div>
+                    <div class="scroll-arrows">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            ` : ''}
         </section>
     `;
         
@@ -1731,7 +1383,6 @@ function renderizarLandingProducto(producto) {
             <div class="aviso-sticky">
                 <div class="container">
                     <div class="aviso-flex-center">
-                        <i class="fas fa-exclamation-triangle"></i>
                         <span><strong>IMPORTANTE:</strong> ${textoAviso}</span>
                         ${esPiedraNatural ? '<a href="#nota-natural">Más información</a>' : ''}
                     </div>
@@ -1896,60 +1547,106 @@ function renderizarLandingProducto(producto) {
             .section-title h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
             .section-title p { font-size: 0.85rem; color: var(--gray-600); max-width: 600px; margin: 0 auto; }
             header { position: fixed; top: 0; left: 0; right: 0; background: var(--primary); z-index: 1000; padding: 10px 0; box-shadow: var(--shadow-sm); }
-            .navbar { display: flex; justify-content: center; align-items: center; }
-            .logo img { width: 290px; height: auto; pointer-events: none; }
-            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 120px; z-index: 99; }
+            .navbar {
+                display: flex;
+                justify-content: center; /* Centra el logo */
+                align-items: center;
+                padding: 8px 16px;
+                position: relative;
+            }
+
+            .logo {
+                flex: 0 1 auto;
+            }
+
+            .logo a {
+                display: inline-block;
+                text-decoration: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .logo a:hover {
+                transform: scale(1.03);
+                opacity: 0.9;
+            }
+
+            .logo a:active {
+                transform: scale(0.95);
+            }
+
+            .logo img {
+                width: 200px;
+                height: auto;
+                display: block;
+            }
+
+            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 110px; z-index: 99; }
             .aviso-flex-center { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 0.75rem; color: #856404; }
             .aviso-flex-center a { color: #856404; text-decoration: underline; }
             
             /* ============================================ */
-            /* HERO OPTIMIZADO - MOBILE FIRST */
+            /* HERO CON INDICADOR DE SCROLL */
             /* ============================================ */
-
+            
             .hero {
-                min-height: 100vh;
+                min-height: 85vh;
                 display: flex;
                 align-items: center;
                 background: linear-gradient(135deg, rgba(57,8,10,0.92), rgba(57,8,10,0.88));
-                padding: 90px 0 50px;
+                padding: 100px 0 80px;
+                position: relative;
+                overflow: hidden;
             }
-
+            
+            .hero::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 80px;
+                background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.03));
+                pointer-events: none;
+                z-index: 1;
+            }
+            
             .hero-content {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 25px;
+                gap: 30px;
                 width: 100%;
+                position: relative;
+                z-index: 2;
             }
-
-            /* ===== TEXTO ===== */
+            
             .hero-text {
                 text-align: center;
                 width: 100%;
                 order: 2;
             }
-
+            
             .hero h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
                 color: var(--white);
-                margin-bottom: 8px;
+                margin-bottom: 10px;
                 line-height: 1.2;
             }
-
+            
             .hero h1 span {
                 color: var(--secondary);
             }
-
+            
             .hero-description {
                 color: rgba(255,255,255,0.9);
-                font-size: 0.85rem;
-                line-height: 1.5;
+                font-size: 0.9rem;
+                line-height: 1.6;
                 max-width: 500px;
-                margin: 0 auto 16px;
+                margin: 0 auto 18px;
                 padding: 0 4px;
             }
-
-            /* ===== BOTONES ===== */
+            
             .hero-buttons {
                 display: flex;
                 flex-direction: column;
@@ -1957,7 +1654,7 @@ function renderizarLandingProducto(producto) {
                 align-items: center;
                 margin-bottom: 16px;
             }
-
+            
             .btn {
                 padding: 12px 24px;
                 border-radius: 40px;
@@ -1972,31 +1669,30 @@ function renderizarLandingProducto(producto) {
                 width: 100%;
                 max-width: 280px;
             }
-
+            
             .btn-primary {
                 background: var(--secondary);
                 color: var(--primary);
             }
-
+            
             .btn-primary:hover {
                 background: var(--secondary);
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(212, 212, 174, 0.3);
             }
-
+            
             .btn-secondary {
                 border: 2px solid var(--secondary);
                 color: var(--secondary);
                 background: transparent;
             }
-
+            
             .btn-secondary:hover {
                 background: var(--secondary);
                 color: var(--primary);
                 transform: translateY(-2px);
             }
-
-            /* ===== ESPECIFICACIONES RÁPIDAS ===== */
+            
             .hero-specs {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -2006,7 +1702,7 @@ function renderizarLandingProducto(producto) {
                 margin-left: auto;
                 margin-right: auto;
             }
-
+            
             .spec-item {
                 display: flex;
                 flex-direction: column;
@@ -2019,12 +1715,12 @@ function renderizarLandingProducto(producto) {
                 border: 1px solid rgba(255,255,255,0.06);
                 text-align: center;
             }
-
+            
             .spec-item i {
                 color: var(--secondary);
                 font-size: 1rem;
             }
-
+            
             .spec-item span {
                 font-size: 0.7rem;
                 color: white;
@@ -2032,8 +1728,7 @@ function renderizarLandingProducto(producto) {
                 line-height: 1.2;
                 word-break: break-word;
             }
-
-            /* ===== IMAGEN ===== */
+            
             .hero-image-wrapper {
                 order: 1;
                 width: 100%;
@@ -2041,7 +1736,7 @@ function renderizarLandingProducto(producto) {
                 flex-direction: column;
                 align-items: center;
             }
-
+            
             .hero-image {
                 position: relative;
                 width: 100%;
@@ -2051,14 +1746,14 @@ function renderizarLandingProducto(producto) {
                 overflow: hidden;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             }
-
+            
             .hero-image img {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
                 display: block;
             }
-
+            
             .hero-image .zoom-btn-hero {
                 position: absolute;
                 bottom: 12px;
@@ -2077,27 +1772,120 @@ function renderizarLandingProducto(producto) {
                 z-index: 10;
                 backdrop-filter: blur(5px);
             }
-
+            
             .hero-image .zoom-btn-hero:hover {
                 background: var(--primary);
                 transform: scale(1.1);
             }
-
+            
             /* ============================================ */
-            /* RESPONSIVE */
+            /* INDICADOR DE SCROLL */
             /* ============================================ */
-
-            /* Tablet y Desktop */
+            
+            .scroll-indicator {
+                position: absolute;
+                bottom: 25px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                z-index: 10;
+                animation: bounceIndicator 2.5s ease-in-out infinite;
+                padding: 10px 20px;
+                border-radius: 30px;
+                background: rgba(0,0,0,0.15);
+                backdrop-filter: blur(5px);
+                transition: all 0.3s ease;
+            }
+            
+            .scroll-indicator:hover {
+                background: rgba(0,0,0,0.25);
+                transform: translateX(-50%) scale(1.05);
+            }
+            
+            .scroll-text {
+                font-size: 0.6rem;
+                color: rgba(255,255,255,0.5);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-weight: 300;
+            }
+            
+            .scroll-mouse {
+                width: 22px;
+                height: 34px;
+                border: 2px solid rgba(255,255,255,0.25);
+                border-radius: 12px;
+                position: relative;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .scroll-wheel {
+                position: absolute;
+                top: 6px;
+                width: 3px;
+                height: 8px;
+                background: rgba(255,255,255,0.4);
+                border-radius: 2px;
+                animation: scrollWheel 1.8s ease-in-out infinite;
+            }
+            
+            @keyframes scrollWheel {
+                0% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(16px); }
+            }
+            
+            .scroll-arrows {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+            }
+            
+            .scroll-arrows span {
+                display: block;
+                width: 12px;
+                height: 12px;
+                border-right: 2px solid rgba(255,255,255,0.3);
+                border-bottom: 2px solid rgba(255,255,255,0.3);
+                transform: rotate(45deg);
+                opacity: 0;
+                animation: scrollArrow 2s ease-in-out infinite;
+            }
+            
+            .scroll-arrows span:nth-child(1) { animation-delay: 0s; }
+            .scroll-arrows span:nth-child(2) { animation-delay: 0.15s; }
+            .scroll-arrows span:nth-child(3) { animation-delay: 0.3s; }
+            
+            @keyframes scrollArrow {
+                0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
+                50% { opacity: 1; }
+                100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+            }
+            
+            @keyframes bounceIndicator {
+                0%, 100% { transform: translateX(-50%) translateY(0); }
+                50% { transform: translateX(-50%) translateY(-6px); }
+            }
+            
+            /* ============================================ */
+            /* RESPONSIVE HERO */
+            /* ============================================ */
+            
             @media (min-width: 768px) {
                 .hero {
-                    padding: 110px 0 70px;
-                    min-height: 100vh;
+                    min-height: 85vh;
+                    padding: 120px 0 90px;
                 }
                 
                 .hero-content {
                     flex-direction: row;
                     align-items: center;
-                    gap: 40px;
+                    gap: 50px;
                     max-width: 1100px;
                     margin: 0 auto;
                 }
@@ -2108,9 +1896,7 @@ function renderizarLandingProducto(producto) {
                     order: 1;
                 }
                 
-                .hero h1 {
-                    font-size: 2.2rem;
-                }
+                .hero h1 { font-size: 2.4rem; }
                 
                 .hero-description {
                     margin-left: 0;
@@ -2146,13 +1932,8 @@ function renderizarLandingProducto(producto) {
                     min-width: 80px;
                 }
                 
-                .spec-item i {
-                    font-size: 0.9rem;
-                }
-                
-                .spec-item span {
-                    font-size: 0.75rem;
-                }
+                .spec-item i { font-size: 0.9rem; }
+                .spec-item span { font-size: 0.75rem; }
                 
                 .hero-image-wrapper {
                     flex: 0.9;
@@ -2160,56 +1941,39 @@ function renderizarLandingProducto(producto) {
                     align-items: flex-end;
                 }
                 
-                .hero-image {
-                    max-width: 380px;
-                }
+                .hero-image { max-width: 400px; }
+                
+                .scroll-arrows { display: flex; }
+                .scroll-mouse { display: none; }
+                .scroll-text { font-size: 0.7rem; }
             }
-
-            /* Desktop grande */
+            
             @media (min-width: 1024px) {
-                .hero h1 {
-                    font-size: 2.8rem;
+                .hero {
+                    min-height: 80vh;
                 }
-                
-                .hero-description {
-                    font-size: 1rem;
-                }
-                
-                .hero-image {
-                    max-width: 440px;
-                }
+                .hero h1 { font-size: 3rem; }
+                .hero-description { font-size: 1rem; }
+                .hero-image { max-width: 460px; }
             }
-
-            /* Móviles pequeños */
+            
+            @media (max-width: 480px) {
+                .hero h1 { font-size: 1.4rem; }
+                .hero-description { font-size: 0.8rem; }
+                .hero-specs { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+                .spec-item { padding: 8px 4px; }
+                .spec-item i { font-size: 0.8rem; }
+                .spec-item span { font-size: 0.6rem; }
+                .hero-image { max-width: 280px; }
+                .scroll-text { font-size: 0.5rem; }
+                .scroll-mouse { width: 18px; height: 28px; }
+                .scroll-wheel { width: 2px; height: 6px; }
+            }
+            
             @media (max-width: 380px) {
-                .hero h1 {
-                    font-size: 1.3rem;
-                }
-                
-                .hero-description {
-                    font-size: 0.8rem;
-                }
-                
-                .hero-specs {
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 6px;
-                }
-                
-                .spec-item {
-                    padding: 8px 4px;
-                }
-                
-                .spec-item i {
-                    font-size: 0.85rem;
-                }
-                
-                .spec-item span {
-                    font-size: 0.65rem;
-                }
-                
-                .hero-image {
-                    max-width: 280px;
-                }
+                .hero-specs { grid-template-columns: repeat(2, 1fr); }
+                .hero h1 { font-size: 1.2rem; }
+                .hero-description { font-size: 0.75rem; }
             }
             
             section { padding: 50px 0; }
@@ -2382,7 +2146,7 @@ function renderizarLandingProducto(producto) {
                 .section-title h2 { font-size: 1.3rem; }
                 .floating-btn { width: 45px; height: 45px; }
                 .btn { padding: 10px 16px; font-size: 0.8rem; }
-                .hero-image img { max-height: 220px; max-width: 90%; }
+                .hero-image img { max-height: 220px;}
             }
             
             img { -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
@@ -2398,7 +2162,11 @@ function renderizarLandingProducto(producto) {
         
         <header>
             <div class="container navbar">
-                <div class="logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"></div>
+                <div class="logo">
+                    <a href="https://gallosmarmol.github.io/?seccion=outlet" title="Ir a Outlet">
+                        <img src="FOTO/foto_01.webp" alt="Gallos Mármol">
+                    </a>
+                </div>
             </div>
         </header>
         
@@ -2868,6 +2636,48 @@ function renderizarLandingProducto(producto) {
                     if (e.target === modalPatronesElem) cerrarModalGaleria('modalPatrones');
                 });
                 
+                // ========== SCROLL INDICATOR ==========
+                function initScrollIndicator() {
+                    const scrollIndicator = document.getElementById('scrollIndicator');
+                    if (!scrollIndicator) return;
+                    
+                    scrollIndicator.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const nextSection = document.querySelector('#galeria') || 
+                                           document.querySelector('.gallery-section') || 
+                                           document.querySelector('.rangos-section') ||
+                                           document.querySelector('.variaciones-section') ||
+                                           document.querySelector('.patrones-section') ||
+                                           document.querySelector('section:not(.hero)');
+                        
+                        if (nextSection) {
+                            const offset = 80;
+                            const targetPosition = nextSection.getBoundingClientRect().top + window.scrollY - offset;
+                            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                        }
+                    });
+                    
+                    let timeoutId;
+                    window.addEventListener('scroll', function() {
+                        if (window.scrollY > 50) {
+                            scrollIndicator.style.opacity = '0';
+                            scrollIndicator.style.transition = 'opacity 0.5s ease';
+                            clearTimeout(timeoutId);
+                        } else {
+                            scrollIndicator.style.opacity = '1';
+                        }
+                    });
+                    
+                    window.addEventListener('scroll', function() {
+                        if (window.scrollY < 20) {
+                            clearTimeout(timeoutId);
+                            timeoutId = setTimeout(() => {
+                                scrollIndicator.style.opacity = '1';
+                            }, 500);
+                        }
+                    });
+                }
+                
                 // ========== BOTÓN SUBIR ==========
                 const topBtn = document.getElementById('floatingTopBtn');
                 if (topBtn) {
@@ -2882,6 +2692,9 @@ function renderizarLandingProducto(producto) {
                     if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'U')) e.preventDefault();
                     if (e.key === 'F12') e.preventDefault();
                 });
+                
+                // ========== INICIALIZAR ==========
+                initScrollIndicator();
                 
                 console.log('✅ Landing page cargada con todas las secciones');
                 console.log('📋 Secciones activas:', {
@@ -2905,7 +2718,7 @@ function renderizarLandingProducto(producto) {
 }
 
 function renderizarPaginaOutlet(productos) {
-    console.log('Renderizando página de Outlet con todas las funcionalidades');
+    console.log('Renderizando página de Outlet con todas las funcionalidades mobile first');
     
     // ============================================
     // CONFIGURACIÓN Y CONSTANTES
@@ -2934,7 +2747,12 @@ function renderizarPaginaOutlet(productos) {
     let cotizacionSeleccionados = [];
     let html5QrCode = null;
     let escaneoActivo = false;
+    let iniciandoEscaneo = false; 
     let observerImagenes = null;
+    let pasoActualCotizacion = 1;
+    const PASOS_TOTALES = 4;
+    let asesorSeleccionadoActual = null;
+    let modoAsignacionActual = 'auto';
     
     // Variables para caché del formulario
     window.clienteNombreCache = '';
@@ -2950,10 +2768,8 @@ function renderizarPaginaOutlet(productos) {
     function optimizarGoogleDriveUrl(url, size = 'w400-h400') {
         if (!url || url === '') return CONFIG.DEFAULT_IMAGE;
         
-        // Si ya es una URL optimizada de Google Drive
         if (url.includes('lh3.googleusercontent.com')) return url;
         
-        // Extraer ID de Google Drive
         const patterns = [
             /\/file\/d\/([a-zA-Z0-9_-]+)/,
             /id=([a-zA-Z0-9_-]+)/,
@@ -3053,11 +2869,9 @@ function renderizarPaginaOutlet(productos) {
     function cargarImagenConLazy(imgElement, url) {
         if (!imgElement) return;
         
-        // Placeholder mientras carga
         imgElement.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3C/svg%3E';
         imgElement.style.background = '#f0f0f0';
         
-        // Cargar imagen real
         const imagen = new Image();
         imagen.onload = () => {
             imgElement.src = url;
@@ -3092,7 +2906,6 @@ function renderizarPaginaOutlet(productos) {
                 observerImagenes.observe(img);
             });
         } else {
-            // Fallback para navegadores antiguos
             document.querySelectorAll('img[data-src]').forEach(img => {
                 cargarImagenConLazy(img, img.getAttribute('data-src'));
             });
@@ -3100,18 +2913,21 @@ function renderizarPaginaOutlet(productos) {
     }
     
     // ============================================
-    // GENERAR CARDS CON LAZY LOADING
+    // GENERAR CARDS CON LAZY LOADING - CORREGIDO
     // ============================================
     window.generarCardsOutlet = function(productosLista) {
         if (!productosLista || productosLista.length === 0) {
             return '<div class="no-results"><i class="fas fa-box-open"></i><p>No hay productos que coincidan con los filtros</p><button onclick="limpiarFiltrosOutlet()" class="btn-primary" style="margin-top: 16px;">Limpiar filtros</button></div>';
         }
         
+        // Asegurarnos de que cotizacionSeleccionados esté actualizado
+        const seleccionados = cotizacionSeleccionados || [];
+        
         return productosLista.map(p => {
-            const estaSeleccionado = cotizacionSeleccionados && cotizacionSeleccionados.some(item => item && item.id === p.id);
-            const imagenUrl = optimizarGoogleDriveUrl(p.imagen_principal, 'w300-h300');
+            // Verificar si el producto está en la lista de seleccionados
+            const estaSeleccionado = seleccionados.some(item => item && item.id === p.id);
+            const imagenUrl = optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE, 'w300-h300');
             
-            // Escapar correctamente todos los datos
             const nombreEscapado = escapeHtml(p.nombre || 'Producto');
             const codigoEscapado = escapeHtml(p.codigo || '');
             const imagenEscapada = escapeHtml(p.imagen_principal || '');
@@ -3120,9 +2936,14 @@ function renderizarPaginaOutlet(productos) {
             const espesorEscapado = escapeHtml(p.espesor || '');
             const productId = p.id;
             
+            // Determinar estado del botón basado en cotizacionSeleccionados
+            const btnTexto = estaSeleccionado ? 'Agregado ✓' : 'Cotizar';
+            const btnIcono = estaSeleccionado ? 'fa-check-circle' : 'fa-plus-circle';
+            const btnClase = estaSeleccionado ? 'btn-cotizar-bottom seleccionado' : 'btn-cotizar-bottom';
+            
             return `
                 <div class="producto-card" data-id="${productId}">
-                    <div class="card-image">
+                    <div class="card-image" onclick="window.irDetalleProducto('${slugEscapado}')">
                         <img data-src="${imagenUrl}" 
                             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3C/svg%3E"
                             alt="${nombreEscapado}" 
@@ -3130,23 +2951,23 @@ function renderizarPaginaOutlet(productos) {
                             class="lazy-image">
                     </div>
                     <div class="card-info">
-                        <h3>${nombreEscapado}</h3>
+                        <h3 onclick="window.irDetalleProducto('${slugEscapado}')" style="cursor:pointer;">${nombreEscapado}</h3>
                         <p class="codigo">${codigoEscapado || 'Sin código'}</p>
                         <div class="specs-badges">
                             ${p.medida ? `<span class="spec-badge"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
                             ${p.espesor ? `<span class="spec-badge"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                            <a href="/?producto=${slugEscapado}" class="btn-detalle-enhanced" style="flex: 1;">
-                                <span>Ver Detalle</span>
-                            </a>
                             <button onclick="window.toggleSeleccionCotizacionWrapper('${productId}', '${nombreEscapado.replace(/'/g, "\\'")}', '${codigoEscapado.replace(/'/g, "\\'")}', '${imagenEscapada.replace(/'/g, "\\'")}', '${slugEscapado.replace(/'/g, "\\'")}', '${medidaEscapada.replace(/'/g, "\\'")}', '${espesorEscapado.replace(/'/g, "\\'")}')" 
-                                    class="btn-cotizar" 
-                                    data-id="${productId}"
-                                    style="background: ${estaSeleccionado ? '#10b981' : '#39080a'}; color: white; border: none; padding: 8px 12px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.8rem; justify-content: center; font-weight: 600">
-                                <i class="fas ${estaSeleccionado ? 'fa-check-circle' : 'fa-plus-circle'}"></i>
-                                ${estaSeleccionado ? 'Agregado' : 'Cotizar'}
+                                    class="${btnClase}" 
+                                    data-id="${productId}">
+                                <i class="fas ${btnIcono}"></i>
+                                ${btnTexto}
                             </button>
+                            <a href="/?producto=${slugEscapado}" class="btn-detalle-enhanced" onclick="event.stopPropagation();">
+                                <span>Ver Detalle</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -3154,7 +2975,13 @@ function renderizarPaginaOutlet(productos) {
         }).join('');
     };
     
-    // Función wrapper para manejar el clic del botón cotizar de manera segura
+    // Función para ir al detalle del producto
+    window.irDetalleProducto = function(slug) {
+        if (slug) {
+            window.location.href = `/?producto=${slug}`;
+        }
+    };
+    
     window.toggleSeleccionCotizacionWrapper = function(id, nombre, codigo, imagen, slug, medida, espesor) {
         console.log('🖱️ Click en cotizar:', { id, nombre, codigo, medida, espesor });
         
@@ -3205,6 +3032,9 @@ function renderizarPaginaOutlet(productos) {
         if (acabadoId && acabadoId !== '') activos++;
         if (materialId && materialId !== '') activos++;
         if (busqueda) activos++;
+        
+        actualizarChipsFiltrosActivos();
+        
         const badge = document.getElementById('filtrosBadge');
         if (badge) { 
             if (activos > 0) { 
@@ -3214,6 +3044,18 @@ function renderizarPaginaOutlet(productos) {
                 badge.style.display = 'none'; 
             } 
         }
+        
+        // Actualizar badge móvil
+        const badgeMobile = document.getElementById('filtrosBadgeMobile');
+        if (badgeMobile) {
+            if (activos > 0) {
+                badgeMobile.textContent = activos;
+                badgeMobile.style.display = 'flex';
+            } else {
+                badgeMobile.style.display = 'none';
+            }
+        }
+        
         if (window.innerWidth <= 768) { 
             const modal = document.getElementById('filtrosModal'); 
             if (modal) { 
@@ -3227,6 +3069,65 @@ function renderizarPaginaOutlet(productos) {
         }
     };
     
+    // ============================================
+    // CHIPS DE FILTROS ACTIVOS
+    // ============================================
+    function actualizarChipsFiltrosActivos() {
+        const container = document.getElementById('filtrosActivosChips');
+        if (!container) return;
+        
+        const filtros = [];
+        const familiaSelect = document.getElementById('filtroFamilia');
+        const acabadoSelect = document.getElementById('filtroAcabado');
+        const materialSelect = document.getElementById('filtroMaterial');
+        const searchInput = document.getElementById('searchOutlet');
+        
+        if (familiaSelect && familiaSelect.value && familiaSelect.value !== '') {
+            const text = familiaSelect.options[familiaSelect.selectedIndex]?.text || familiaSelect.value;
+            filtros.push({ key: 'familia', value: familiaSelect.value, label: text, type: 'familia' });
+        }
+        if (acabadoSelect && acabadoSelect.value && acabadoSelect.value !== '') {
+            const text = acabadoSelect.options[acabadoSelect.selectedIndex]?.text || acabadoSelect.value;
+            filtros.push({ key: 'acabado', value: acabadoSelect.value, label: text, type: 'acabado' });
+        }
+        if (materialSelect && materialSelect.value && materialSelect.value !== '') {
+            const text = materialSelect.options[materialSelect.selectedIndex]?.text || materialSelect.value;
+            filtros.push({ key: 'material', value: materialSelect.value, label: text, type: 'material' });
+        }
+        if (searchInput && searchInput.value && searchInput.value.trim() !== '') {
+            filtros.push({ key: 'busqueda', value: searchInput.value, label: `"${searchInput.value}"`, type: 'busqueda' });
+        }
+        
+        if (filtros.length === 0) {
+            container.innerHTML = '';
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'flex';
+        container.innerHTML = filtros.map(f => `
+            <span class="chip-filtro">
+                ${f.label}
+                <button onclick="window.eliminarFiltro('${f.type}')" class="chip-eliminar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </span>
+        `).join('');
+    }
+    
+    window.eliminarFiltro = function(tipo) {
+        if (tipo === 'busqueda') {
+            const searchInput = document.getElementById('searchOutlet');
+            if (searchInput) searchInput.value = '';
+            const btnClear = document.getElementById('btnLimpiarBusqueda');
+            if (btnClear) btnClear.style.display = 'none';
+        } else {
+            const select = document.getElementById(`filtro${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
+            if (select) select.value = '';
+        }
+        window.aplicarFiltrosOutlet();
+    };
+    
     window.limpiarFiltrosOutlet = function() {
         const searchInput = document.getElementById('searchOutlet');
         const familiaSelect = document.getElementById('filtroFamilia');
@@ -3237,6 +3138,9 @@ function renderizarPaginaOutlet(productos) {
         if (familiaSelect) familiaSelect.value = '';
         if (acabadoSelect) acabadoSelect.value = '';
         if (materialSelect) materialSelect.value = '';
+        
+        const btnClear = document.getElementById('btnLimpiarBusqueda');
+        if (btnClear) btnClear.style.display = 'none';
         
         const productosData = window.outletProductosCache.map(p => ({ 
             ...p, 
@@ -3255,6 +3159,11 @@ function renderizarPaginaOutlet(productos) {
         const badge = document.getElementById('filtrosBadge');
         if (badge) badge.style.display = 'none';
         
+        const badgeMobile = document.getElementById('filtrosBadgeMobile');
+        if (badgeMobile) badgeMobile.style.display = 'none';
+        
+        actualizarChipsFiltrosActivos();
+        
         if (window.innerWidth <= 768) { 
             const modal = document.getElementById('filtrosModal'); 
             if (modal) { 
@@ -3267,26 +3176,271 @@ function renderizarPaginaOutlet(productos) {
             window.actualizarBotonLimpiarTodo();
         }
     };
-    
+        
     // ============================================
-    // FUNCIONES DE MODALES DE FILTROS
+    // CONFIGURACIÓN DE BÚSQUEDA MEJORADA
     // ============================================
-    window.openFiltrosModal = function() { 
-        const modal = document.getElementById('filtrosModal'); 
-        if (modal) { 
-            modal.classList.add('show'); 
-            document.body.style.overflow = 'hidden'; 
-        } 
+    function configurarBusquedaOutlet() {
+        const searchInput = document.getElementById('searchOutlet');
+        const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
+        const btnLimpiarExterno = document.getElementById('btnLimpiarBusquedaExterno');
+        
+        if (!searchInput) {
+            console.warn('⚠️ Input de búsqueda no encontrado');
+            return;
+        }
+
+        // Variable para el timeout del debounce
+        let timeoutBusqueda = null;
+
+        // Función para toggle del botón de limpiar
+        function toggleClearButton() {
+            const tieneTexto = searchInput.value && searchInput.value.trim().length > 0;
+            
+            // Botón interno (visible en móvil)
+            if (btnLimpiarBusqueda) {
+                btnLimpiarBusqueda.style.display = (tieneTexto && window.innerWidth <= 768) ? 'flex' : 'none';
+            }
+            
+            // Botón externo (visible en desktop y móvil)
+            if (btnLimpiarExterno) {
+                if (tieneTexto) {
+                    btnLimpiarExterno.style.display = 'flex';
+                    btnLimpiarExterno.classList.add('visible');
+                    btnLimpiarExterno.classList.remove('hidden');
+                } else {
+                    btnLimpiarExterno.style.display = 'none';
+                    btnLimpiarExterno.classList.remove('visible');
+                    btnLimpiarExterno.classList.add('hidden');
+                }
+            }
+        }
+
+        // Función para limpiar el campo
+        function limpiarCampoBusqueda() {
+            searchInput.value = '';
+            toggleClearButton();
+            
+            // Disparar evento de input para actualizar filtros
+            const event = new Event('input', { bubbles: true });
+            searchInput.dispatchEvent(event);
+            
+            // Aplicar filtros inmediatamente
+            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                window.aplicarFiltrosOutlet();
+            }
+            
+            searchInput.focus();
+        }
+
+        // ============================================
+        // EVENTO INPUT - FILTRADO AUTOMÁTICO CON DEBOUNCE
+        // ============================================
+        searchInput.addEventListener('input', function(e) {
+            const valor = this.value;
+            console.log(`🔍 Búsqueda: "${valor}"`);
+            
+            // Mostrar/ocultar botón de limpiar
+            toggleClearButton();
+            
+            // Limpiar timeout anterior
+            if (timeoutBusqueda) {
+                clearTimeout(timeoutBusqueda);
+            }
+            
+            // Aplicar filtros con debounce de 300ms
+            timeoutBusqueda = setTimeout(() => {
+                if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                }
+                
+                // Actualizar chips de filtros activos
+                if (typeof window.actualizarChipsFiltrosActivos === 'function') {
+                    window.actualizarChipsFiltrosActivos();
+                }
+                
+                timeoutBusqueda = null;
+            }, 300);
+        });
+
+        // ============================================
+        // EVENTO KEYDOWN - TECLAS ESPECIALES
+        // ============================================
+        searchInput.addEventListener('keydown', function(e) {
+            // Escape: limpiar búsqueda
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                limpiarCampoBusqueda();
+            }
+            
+            // Enter: aplicar filtros inmediatamente (sin esperar debounce)
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (timeoutBusqueda) {
+                    clearTimeout(timeoutBusqueda);
+                    timeoutBusqueda = null;
+                }
+                if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                }
+            }
+        });
+
+        // ============================================
+        // EVENTO FOCUS - MOSTRAR BOTÓN DE LIMPIAR SI HAY TEXTO
+        // ============================================
+        searchInput.addEventListener('focus', function() {
+            toggleClearButton();
+        });
+
+        // ============================================
+        // EVENTO BLUR - OCULTAR BOTÓN SI ESTÁ VACÍO
+        // ============================================
+        searchInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (!this.value || this.value.trim().length === 0) {
+                    if (btnLimpiarExterno) {
+                        btnLimpiarExterno.style.display = 'none';
+                        btnLimpiarExterno.classList.remove('visible');
+                        btnLimpiarExterno.classList.add('hidden');
+                    }
+                    if (btnLimpiarBusqueda) {
+                        btnLimpiarBusqueda.style.display = 'none';
+                    }
+                }
+            }, 200);
+        });
+
+        // ============================================
+        // CONFIGURAR BOTÓN DE LIMPIAR INTERNO
+        // ============================================
+        if (btnLimpiarBusqueda) {
+            // Clonar para eliminar event listeners previos
+            const nuevoBtnInterno = btnLimpiarBusqueda.cloneNode(true);
+            btnLimpiarBusqueda.parentNode.replaceChild(nuevoBtnInterno, btnLimpiarBusqueda);
+            
+            nuevoBtnInterno.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                limpiarCampoBusqueda();
+            });
+        }
+
+        // ============================================
+        // CONFIGURAR BOTÓN DE LIMPIAR EXTERNO
+        // ============================================
+        if (btnLimpiarExterno) {
+            const nuevoBtnExterno = btnLimpiarExterno.cloneNode(true);
+            btnLimpiarExterno.parentNode.replaceChild(nuevoBtnExterno, btnLimpiarExterno);
+            
+            nuevoBtnExterno.addEventListener('click', function(e) {
+                e.preventDefault();
+                limpiarCampoBusqueda();
+            });
+        }
+
+        // ============================================
+        // CONFIGURAR BOTÓN DE ESCANEO QR (si existe)
+        // ============================================
+        const btnEscanear = document.getElementById('btnEscanearQR');
+        if (btnEscanear) {
+            btnEscanear.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (typeof window.iniciarEscaneoQR === 'function') {
+                    window.iniciarEscaneoQR();
+                }
+            });
+        }
+
+        // Estado inicial
+        toggleClearButton();
+        
+        console.log('✅ Búsqueda configurada correctamente');
+    }
+
+    // ============================================
+    // EXPONER FUNCIONES GLOBALES PARA EL HTML
+    // ============================================
+    window.limpiarCampoBusqueda = function() {
+        const searchInput = document.getElementById('searchOutlet');
+        if (searchInput) {
+            searchInput.value = '';
+            // Disparar evento input
+            const event = new Event('input', { bubbles: true });
+            searchInput.dispatchEvent(event);
+            // Aplicar filtros
+            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                window.aplicarFiltrosOutlet();
+            }
+            searchInput.focus();
+        }
+    };
+
+    window.configurarBusquedaOutlet = configurarBusquedaOutlet;
+
+    // ============================================
+    // FUNCIONES DE MODALES DE FILTROS - CORREGIDAS
+    // ============================================
+    window.openFiltrosModal = function() {
+        console.log('📱 Abriendo modal de filtros...');
+        
+        // Solo permitir en móvil
+        if (window.innerWidth > 768) {
+            console.log('📱 Los filtros móviles solo están disponibles en dispositivos móviles');
+            return;
+        }
+        
+        const modal = document.getElementById('filtrosModal');
+        const overlay = document.getElementById('filtrosModalOverlay');
+        
+        // Sincronizar selects
+        syncModalSelects();
+        
+        // ✅ MOSTRAR OVERLAY
+        if (overlay) {
+            overlay.style.display = 'block';
+            // Forzar reflow para animación
+            void overlay.offsetWidth;
+            overlay.classList.add('show');
+        }
+        
+        // Mostrar modal
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.right = '0';
+        }
+        
+        // Bloquear scroll
+        document.body.style.overflow = 'hidden';
+        
+        console.log('✅ Modal de filtros abierto');
     };
     
-    window.closeFiltrosModal = function() { 
-        const modal = document.getElementById('filtrosModal'); 
-        if (modal) { 
-            modal.classList.remove('show'); 
-            document.body.style.overflow = ''; 
-        } 
-    };
+    window.closeFiltrosModal = function() {
+    console.log('🔒 Cerrando modal de filtros...');
+        
+        const modal = document.getElementById('filtrosModal');
+        const overlay = document.getElementById('filtrosModalOverlay');
+        
+        // Cerrar modal
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.right = '-100%'; // Asegurar que se oculte
+        }
+        
+        // ✅ OCULTAR OVERLAY COMPLETAMENTE
+        if (overlay) {
+            overlay.classList.remove('show');
+            overlay.style.display = 'none'; // ← Esto es lo que faltaba
+        }
+        
+        // Restaurar scroll
+        document.body.style.overflow = '';
+        
+        console.log('✅ Modal de filtros cerrado correctamente');
+    }
     
+    // Sincronizar selects entre desktop y móvil
     window.syncModalSelects = function() {
         const familiaDesktop = document.getElementById('filtroFamilia');
         const acabadoDesktop = document.getElementById('filtroAcabado');
@@ -3295,12 +3449,20 @@ function renderizarPaginaOutlet(productos) {
         const acabadoModal = document.getElementById('filtroAcabadoModal');
         const materialModal = document.getElementById('filtroMaterialModal');
         
-        if (familiaDesktop && familiaModal) familiaModal.value = familiaDesktop.value;
-        if (acabadoDesktop && acabadoModal) acabadoModal.value = acabadoDesktop.value;
-        if (materialDesktop && materialModal) materialModal.value = materialDesktop.value;
+        if (familiaDesktop && familiaModal) {
+            familiaModal.value = familiaDesktop.value;
+        }
+        if (acabadoDesktop && acabadoModal) {
+            acabadoModal.value = acabadoDesktop.value;
+        }
+        if (materialDesktop && materialModal) {
+            materialModal.value = materialDesktop.value;
+        }
     };
     
     window.aplicarFiltrosDesdeModal = function() {
+        console.log('✅ Aplicando filtros desde modal...');
+        
         const familiaModal = document.getElementById('filtroFamiliaModal');
         const acabadoModal = document.getElementById('filtroAcabadoModal');
         const materialModal = document.getElementById('filtroMaterialModal');
@@ -3308,24 +3470,25 @@ function renderizarPaginaOutlet(productos) {
         const acabadoDesktop = document.getElementById('filtroAcabado');
         const materialDesktop = document.getElementById('filtroMaterial');
         
+        // Sincronizar selects
         if (familiaDesktop && familiaModal) familiaDesktop.value = familiaModal.value;
         if (acabadoDesktop && acabadoModal) acabadoDesktop.value = acabadoModal.value;
         if (materialDesktop && materialModal) materialDesktop.value = materialModal.value;
         
+        // Aplicar filtros
         if (typeof window.aplicarFiltrosOutlet === 'function') {
             window.aplicarFiltrosOutlet();
         }
         
-        if (window.innerWidth <= 768) {
-            const modal = document.getElementById('filtrosModal');
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        }
+        // ✅ CERRAR MODAL CORRECTAMENTE
+        closeFiltrosModal();
+        
+        console.log('✅ Filtros aplicados y modal cerrado');
     };
     
     window.limpiarFiltrosDesdeModal = function() {
+        console.log('🧹 Limpiando filtros desde modal...');
+        
         const familiaModal = document.getElementById('filtroFamiliaModal');
         const acabadoModal = document.getElementById('filtroAcabadoModal');
         const materialModal = document.getElementById('filtroMaterialModal');
@@ -3338,21 +3501,81 @@ function renderizarPaginaOutlet(productos) {
             window.limpiarFiltrosOutlet();
         }
         
-        if (window.innerWidth <= 768) {
-            const modal = document.getElementById('filtrosModal');
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        }
+        // ✅ CERRAR MODAL CORRECTAMENTE
+        closeFiltrosModal();
+        
+        console.log('✅ Filtros limpiados y modal cerrado');
     };
     
+    // ============================================
+    // CONFIGURAR EVENTOS DEL MODAL DE FILTROS
+    // ============================================
+    function configurarEventosFiltros() {
+        console.log('🔧 Configurando eventos de filtros...');
+        
+        const overlay = document.getElementById('filtrosModalOverlay');
+        const modal = document.getElementById('filtrosModal');
+        const btnCerrar = document.querySelector('.close-modal-btn');
+        
+        // ✅ Clic en overlay (fondo negro)
+        if (overlay) {
+            const nuevoOverlay = overlay.cloneNode(true);
+            overlay.parentNode.replaceChild(nuevoOverlay, overlay);
+            
+            nuevoOverlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    console.log('🖱️ Click en overlay de filtros');
+                    closeFiltrosModal();
+                }
+            });
+            console.log('✅ Evento overlay configurado');
+        }
+        
+        // ✅ Botón de cerrar (X)
+        if (btnCerrar) {
+            const nuevoBtn = btnCerrar.cloneNode(true);
+            btnCerrar.parentNode.replaceChild(nuevoBtn, btnCerrar);
+            
+            nuevoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Click en cerrar (X)');
+                closeFiltrosModal();
+            });
+            console.log('✅ Botón cerrar (X) configurado');
+        }
+        
+        // ✅ Tecla Escape
+        document.removeEventListener('keydown', handleEscapeFiltros);
+        document.addEventListener('keydown', handleEscapeFiltros);
+        console.log('✅ Tecla Escape configurada para filtros');
+        
+        console.log('✅ Eventos de filtros configurados correctamente');
+    }
+
+    // ============================================
+    // MANEJADOR DE TECLA ESCAPE PARA FILTROS
+    // ============================================
+    function handleEscapeFiltros(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('filtrosModal');
+            if (modal && modal.classList.contains('show')) {
+                console.log('🟥 Escape presionado - cerrando filtros');
+                closeFiltrosModal();
+            }
+        }
+    }
+
+    // EXPONER FUNCIONES
+    window.configurarEventosFiltros = configurarEventosFiltros;
+
+
     window.scrollToTop = function() { 
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
     };
     
     // ============================================
-    // FUNCIONES DE MODALES PERSONALIZADOS
+    // FUNCIONES DE MODALES PERSONALIZADOS - CORREGIDAS
     // ============================================
     function mostrarModal(titulo, mensaje, tipo = 'info', opciones = {}) {
         return new Promise((resolve) => {
@@ -3360,7 +3583,7 @@ function renderizarPaginaOutlet(productos) {
             
             if (!modal) {
                 const modalHtml = `
-                <div id="modalPersonalizado" class="modal-overlay">
+                <div id="modalPersonalizado" class="modal-overlay" style="display:none;">
                     <div class="modal-custom">
                         <div class="modal-custom-header" id="modalHeader">
                             <i id="modalIcon" class="fas fa-info-circle"></i>
@@ -3430,7 +3653,9 @@ function renderizarPaginaOutlet(productos) {
             const btnCancel = document.getElementById('modalBtnCancel');
             
             const cerrar = (resultado) => {
+                modal.style.display = 'none';
                 modal.classList.remove('active');
+                document.body.style.overflow = '';
                 resolve(resultado);
             };
             
@@ -3441,7 +3666,9 @@ function renderizarPaginaOutlet(productos) {
                 if (e.target === modal) cerrar({ isConfirmed: false });
             };
             
+            modal.style.display = 'flex';
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             
             if (opciones.timer) {
                 setTimeout(() => {
@@ -3457,19 +3684,22 @@ function renderizarPaginaOutlet(productos) {
     // FUNCIONES DE COTIZACIÓN
     // ============================================
     function ejecutarLimpieza() {
+        console.log('🧹 Ejecutando limpieza de cotización...');
+        
         cotizacionSeleccionados = [];
         localStorage.removeItem(CONFIG.COTIZACION_STORAGE_KEY);
+        
+        // ✅ ACTUALIZAR TODOS LOS COMPONENTES
+        actualizarTodosLosBotonesCotizar();
         actualizarBarraFlotante();
+        actualizarBadgeHeader();
         
-        document.querySelectorAll('.btn-cotizar').forEach(btn => {
-            btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-            btn.style.background = '#39080a';
-            btn.style.color = 'white';
-        });
+        // ✅ Mostrar feedback
+        mostrarToast('Todos los productos han sido removidos de tu cotización', 'error');
         
-        mostrarModal('Selección limpiada', 'Todos los productos han sido removidos de tu cotización.', 'success', { timer: 2000, showConfirmButton: false });
+        console.log('✅ Limpieza completada');
     }
-    
+
     window.limpiarCotizacion = function() {
         mostrarModal(
             '¿Limpiar selección?',
@@ -3486,55 +3716,108 @@ function renderizarPaginaOutlet(productos) {
             }
         });
     };
-    
+        
+    // ============================================
+    // ACTUALIZAR TODOS LOS BOTONES - CORREGIDO
+    // ============================================
     function actualizarTodosLosBotonesCotizar() {
-        const botones = document.querySelectorAll('.btn-cotizar');
+        console.log('🔄 Actualizando todos los botones de cotizar...');
+        
+        // Asegurarnos de que cotizacionSeleccionados esté cargado
+        if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
+            // Intentar cargar desde localStorage
+            const guardado = localStorage.getItem(CONFIG.COTIZACION_STORAGE_KEY);
+            if (guardado) {
+                try {
+                    cotizacionSeleccionados = JSON.parse(guardado);
+                    console.log('📦 Cotización cargada para actualizar botones:', cotizacionSeleccionados.length);
+                } catch(e) {
+                    cotizacionSeleccionados = [];
+                }
+            }
+        }
+        
+        // Buscar todos los botones de cotizar (tanto en la posición vieja como nueva)
+        const botones = document.querySelectorAll('.btn-cotizar-bottom, .btn-cotizar-top');
+        console.log(`🔍 Encontrados ${botones.length} botones para actualizar`);
+        
         botones.forEach(btn => {
             const productoId = btn.getAttribute('data-id');
-            const estaSeleccionado = cotizacionSeleccionados.some(item => item.id === productoId);
+            if (!productoId) return;
+            
+            const estaSeleccionado = cotizacionSeleccionados.some(item => item && item.id === productoId);
             
             if (estaSeleccionado) {
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado ✓';
+                btn.classList.add('seleccionado');
             } else {
                 btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-                btn.style.background = '#39080a';
-                btn.style.color = 'white';
+                btn.classList.remove('seleccionado');
             }
         });
+        
+        // Actualizar también la barra y el badge
+        actualizarBarraFlotante();
+        actualizarBadgeHeader();
+        
+        console.log('✅ Botones actualizados correctamente');
     }
-    
+
+    // EXPONER FUNCIÓN GLOBAL
+    window.actualizarTodosLosBotonesCotizar = actualizarTodosLosBotonesCotizar;
+
+
+    // ============================================
+    // CARGA DE COTIZACIÓN DESDE LOCALSTORAGE
+    // ============================================
     function cargarSeleccionCotizacion() {
         const guardado = localStorage.getItem(CONFIG.COTIZACION_STORAGE_KEY);
         if (guardado) {
             try {
                 cotizacionSeleccionados = JSON.parse(guardado);
                 console.log('📦 Cotización cargada desde localStorage:', cotizacionSeleccionados.length, 'productos');
-                setTimeout(() => {
-                    actualizarTodosLosBotonesCotizar();
-                }, 100);
+                return cotizacionSeleccionados;
             } catch(e) { 
                 console.error('Error cargando cotización:', e);
                 cotizacionSeleccionados = [];
+                return [];
             }
         } else {
             cotizacionSeleccionados = [];
+            return [];
         }
     }
 
+    function actualizarBadgeHeader() {
+        const badge = document.getElementById('headerCotizacionBadge');
+        const contador = document.getElementById('headerContador');
+        const total = cotizacionSeleccionados?.length || 0;
+        
+        if (badge && contador) {
+            if (total > 0) {
+                badge.style.display = 'flex';
+                contador.textContent = total;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    }
+
+    // ============================================
+    // ACTUALIZAR BARRA DE COTIZACIÓN CON ANIMACIÓN
+    // ============================================
     function actualizarBarraFlotante() {
         let barra = document.getElementById('barra-cotizacion');
         const total = cotizacionSeleccionados.length;
         
         if (!barra && total > 0) {
-            // Crear la barra por primera vez
+            // Crear barra con animación de entrada
             barra = document.createElement('div');
             barra.id = 'barra-cotizacion';
             barra.className = 'barra-cotizacion mini';
+            barra.style.animation = 'slideUp 0.5s ease';
             
             barra.innerHTML = `
-                <!-- Modo Mini (Colapsado) -->
                 <div class="barra-cotizacion-mini">
                     <div class="barra-info-mini">
                         <div class="barra-icono">
@@ -3545,8 +3828,8 @@ function renderizarPaginaOutlet(productos) {
                         </div>
                     </div>
                     <div class="barra-acciones-mini">
-                        <button class="btn-cotizar-mini" id="btn-ver-cotizacion-mini">
-                            <i class="fas fa-file-invoice"></i> Cotizar
+                        <button class="btn-cotizar-principal" id="btn-cotizar-principal">
+                            <i class="fab fa-whatsapp"></i> Cotizar ahora
                         </button>
                         <button class="btn-expandir" id="btn-expandir-barra">
                             <i class="fas fa-chevron-up"></i>
@@ -3554,7 +3837,6 @@ function renderizarPaginaOutlet(productos) {
                     </div>
                 </div>
                 
-                <!-- Modo Expandido (Detalles) - Oculto inicialmente -->
                 <div class="barra-cotizacion-expanded" style="display: none;">
                     <div class="barra-productos-preview" id="preview-productos">
                         ${generarPreviewProductos()}
@@ -3564,7 +3846,7 @@ function renderizarPaginaOutlet(productos) {
                             <i class="fas fa-trash-alt"></i> Limpiar todo
                         </button>
                         <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded">
-                            <i class="fas fa-file-invoice"></i> Ver cotización completa
+                            <i class="fas fa-file-invoice"></i> Ver cotización
                         </button>
                     </div>
                 </div>
@@ -3573,67 +3855,71 @@ function renderizarPaginaOutlet(productos) {
             document.body.appendChild(barra);
             configurarEventosBarra(barra);
             
-            // Ajustar padding del body
             const alturaBarra = barra.offsetHeight;
             document.body.style.paddingBottom = `${alturaBarra + 10}px`;
             
         } else if (barra && total === 0) {
-            // Eliminar barra si no hay productos
-            barra.remove();
-            document.body.style.paddingBottom = '';
+            // Ocultar barra con animación
+            barra.style.animation = 'slideDown 0.3s ease forwards';
+            setTimeout(() => {
+                barra.remove();
+                document.body.style.paddingBottom = '';
+            }, 300);
             
         } else if (barra && total > 0) {
-            // Actualizar solo los elementos que existen
-            
-            // Verificar y actualizar badge (modo mini)
+            // Actualizar contador con animación
             const badge = document.getElementById('badge-cantidad');
             if (badge) {
                 badge.textContent = total;
+                badge.classList.remove('animado');
+                // Forzar reflow para reiniciar animación
+                void badge.offsetWidth;
+                badge.classList.add('animado');
             }
             
-            // Verificar y actualizar contador mini
             const contadorMini = document.getElementById('contador-cotizacion-mini');
             if (contadorMini) {
                 contadorMini.textContent = total;
             }
             
-            // Verificar si el modo expandido está visible
+            // Actualizar vista expandida si está visible
             const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
             if (expandedSection && expandedSection.style.display !== 'none') {
-                // Si está expandido, actualizar el preview
                 const previewContainer = document.getElementById('preview-productos');
                 if (previewContainer) {
                     previewContainer.innerHTML = generarPreviewProductos();
                 }
             }
+            
+            // Hacer que la barra "respire" cuando hay productos
+            barra.style.animation = 'none';
+            setTimeout(() => {
+                barra.style.animation = 'barraUpdate 0.4s ease';
+            }, 10);
         }
+        
+        actualizarBadgeHeader();
     }
 
     function generarPreviewProductos() {
-        // Verificar que hay productos
         if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
             return '<div class="preview-item" style="justify-content: center; color: #999;">No hay productos seleccionados</div>';
         }
         
         let html = '';
-        
-        // Mostrar TODOS los productos (sin límite) para que se vean todos en el preview
         cotizacionSeleccionados.forEach((p, index) => {
             html += `
-                <div class="preview-item" data-producto-id="${p.id}" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <div class="preview-info" style="flex: 1; min-width: 0;">
-                        <div class="preview-nombre" style="font-size: 0.75rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            ${escapeHtml(p.nombre || 'Producto')}
-                        </div>
-                        <div class="preview-detalles" style="display: flex; gap: 8px; margin-top: 2px; flex-wrap: wrap;">
-                            ${p.codigo ? `<span style="font-size: 0.6rem; opacity: 0.7; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 10px;">${escapeHtml(p.codigo)}</span>` : ''}
-                            ${p.medida ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
-                            ${p.espesor ? `<span style="font-size: 0.6rem; opacity: 0.7;"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
+                <div class="preview-item" data-producto-id="${p.id}">
+                    <div class="preview-info">
+                        <div class="preview-nombre">${escapeHtml(p.nombre || 'Producto')}</div>
+                        <div class="preview-detalles">
+                            ${p.codigo ? `<span>${escapeHtml(p.codigo)}</span>` : ''}
+                            ${p.medida ? `<span><i class="fas fa-ruler-combined"></i> ${escapeHtml(p.medida)}</span>` : ''}
+                            ${p.espesor ? `<span><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(p.espesor)}</span>` : ''}
                         </div>
                     </div>
-                    <button class="preview-eliminar" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')" 
-                            style="background: none; border: none; color: #ff6b6b; cursor: pointer; padding: 4px 8px; border-radius: 20px; transition: all 0.2s ease;">
-                        <i class="fas fa-trash-alt" style="font-size: 0.7rem;"></i>
+                    <button class="preview-eliminar" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')">
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             `;
@@ -3643,14 +3929,13 @@ function renderizarPaginaOutlet(productos) {
     }
 
     function configurarEventosBarra(barra) {
-        // Botones mini
-        const btnCotizarMini = document.getElementById('btn-ver-cotizacion-mini');
+        const btnCotizarPrincipal = document.getElementById('btn-cotizar-principal');
         const btnExpandir = document.getElementById('btn-expandir-barra');
         const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
         const miniSection = barra.querySelector('.barra-cotizacion-mini');
         
-        if (btnCotizarMini) {
-            btnCotizarMini.onclick = () => window.abrirModalCotizacion();
+        if (btnCotizarPrincipal) {
+            btnCotizarPrincipal.onclick = () => window.abrirModalCotizacion();
         }
         
         if (btnExpandir) {
@@ -3659,39 +3944,63 @@ function renderizarPaginaOutlet(productos) {
                 e.stopPropagation();
                 
                 if (expandedSection.style.display === 'none' || expandedSection.style.display === '') {
-                    // Expandir
                     expandedSection.style.display = 'flex';
                     miniSection.style.display = 'none';
                     barra.classList.add('expanded');
                     barra.classList.remove('mini');
                     btnExpandir.innerHTML = '<i class="fas fa-chevron-down"></i>';
                     
-                    // 👇 IMPORTANTE: Actualizar el preview al expandir
                     const previewContainer = document.getElementById('preview-productos');
                     if (previewContainer) {
                         previewContainer.innerHTML = generarPreviewProductos();
-                        console.log('📦 Preview actualizado al expandir');
                     }
                     
-                    // Ajustar padding
                     const nuevaAltura = barra.offsetHeight;
                     document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
                 } else {
-                    // Colapsar
                     expandedSection.style.display = 'none';
                     miniSection.style.display = 'flex';
                     barra.classList.remove('expanded');
                     barra.classList.add('mini');
                     btnExpandir.innerHTML = '<i class="fas fa-chevron-up"></i>';
                     
-                    // Ajustar padding
                     const nuevaAltura = barra.offsetHeight;
                     document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
                 }
             };
         }
         
-        // Botones expandidos
+        // Gestos de arrastre para expandir/colapsar en móvil
+        let startY = 0;
+        let isDragging = false;
+        
+        barra.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        }, { passive: true });
+        
+        barra.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const currentY = e.touches[0].clientY;
+            const diff = startY - currentY;
+            
+            if (diff > 50) {
+                if (expandedSection.style.display === 'none' || expandedSection.style.display === '') {
+                    btnExpandir?.click();
+                }
+                isDragging = false;
+            } else if (diff < -50) {
+                if (expandedSection.style.display !== 'none') {
+                    btnExpandir?.click();
+                }
+                isDragging = false;
+            }
+        }, { passive: true });
+        
+        barra.addEventListener('touchend', () => {
+            isDragging = false;
+        }, { passive: true });
+        
         const btnLimpiar = document.getElementById('btn-limpiar-barra');
         const btnVerCotizacion = document.getElementById('btn-ver-cotizacion-expanded');
         
@@ -3704,7 +4013,6 @@ function renderizarPaginaOutlet(productos) {
         }
     }
 
-    // Detectar cambios de orientación para ajustar padding
     window.addEventListener('resize', () => {
         const barra = document.getElementById('barra-cotizacion');
         if (barra) {
@@ -3713,50 +4021,91 @@ function renderizarPaginaOutlet(productos) {
         }
     });    
 
+    // ============================================
+    // ACTUALIZAR BOTÓN DE LA CARD
+    // ============================================
     function actualizarBotonCard(productoId, estabaSeleccionado) {
-        const btn = document.querySelector(`.btn-cotizar[data-id="${productoId}"]`);
+        const btn = document.querySelector(`.btn-cotizar-bottom[data-id="${productoId}"]`);
         if (btn) {
             if (!estabaSeleccionado) {
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
+                // Cambiar a estado "Agregado"
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado ✓';
+                btn.classList.add('seleccionado');
+                // Animación de escala
+                btn.style.animation = 'none';
+                setTimeout(() => {
+                    btn.style.animation = 'btnAgregadoPulse 0.5s ease';
+                }, 10);
             } else {
+                // Cambiar a estado "Cotizar"
                 btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-                btn.style.background = '#39080a';
-                btn.style.color = 'white';
+                btn.classList.remove('seleccionado');
+                btn.style.animation = 'none';
             }
         }
     }
     
-    function mostrarToast(mensaje) {
+    // ============================================
+    // TOAST NOTIFICACIONES MEJORADAS
+    // ============================================
+    function mostrarToast(mensaje, tipo = 'success') {
+        // Eliminar toast anterior
+        const toastExistente = document.querySelector('.toast-notificacion');
+        if (toastExistente) toastExistente.remove();
+        
         const toast = document.createElement('div');
-        toast.className = 'toast-notificacion';
-        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+        toast.className = `toast-notificacion ${tipo === 'error' ? 'error' : 'success'}`;
+        
+        // Icono según tipo
+        const icono = tipo === 'error' ? 'fa-times-circle' : 'fa-check-circle';
+        toast.innerHTML = `<i class="fas ${icono}"></i> ${mensaje}`;
+        
         document.body.appendChild(toast);
         
+        // Animar entrada
         setTimeout(() => {
-            toast.remove();
-        }, 2000);
+            toast.classList.add('show');
+        }, 10);
+        
+        // Remover después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
     }
 
+    // ============================================
+    // TOGGLE SELECCIÓN CON PERSISTENCIA
+    // ============================================
     function toggleSeleccionCotizacion(producto) {
         if (!producto || !producto.id) {
             console.error('Producto inválido:', producto);
             return;
         }
         
-        const existe = cotizacionSeleccionados.find(p => p.id === producto.id);
+        console.log('🔄 Toggle producto:', producto.nombre);
         
-        // Buscar el producto completo en el cache para obtener medida y espesor
+        // Buscar si ya existe
+        const existe = cotizacionSeleccionados.find(p => p.id === producto.id);
         const productoCompleto = window.outletProductosCache.find(p => p.id === producto.id);
         
         if (existe) {
+            // REMOVER PRODUCTO
             cotizacionSeleccionados = cotizacionSeleccionados.filter(p => p.id !== existe.id);
-            if (typeof mostrarToast === 'function') {
-                mostrarToast("PRODUCTO REMOVIDO");
-            }
+            localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
+            
+            // ✅ ACTUALIZAR UI
+            actualizarTodosLosBotonesCotizar();
+            actualizarBarraFlotante();
+            actualizarBadgeHeader();
+            
+            mostrarToast(`${producto.nombre} removido de cotización`, 'error');
+            
         } else {
-            cotizacionSeleccionados.push({
+            // AGREGAR PRODUCTO
+            const nuevoProducto = {
                 id: producto.id,
                 nombre: producto.nombre || 'Producto',
                 codigo: producto.codigo || '',
@@ -3764,144 +4113,445 @@ function renderizarPaginaOutlet(productos) {
                 slug: producto.slug || producto.id,
                 medida: productoCompleto?.medida || producto.medida || null,
                 espesor: productoCompleto?.espesor || producto.espesor || null
-            });
+            };
             
-            if (typeof mostrarToast === 'function') {
-                mostrarToast("AGREGADO A LA COTIZACIÓN");
-            }
+            cotizacionSeleccionados.push(nuevoProducto);
+            localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
             
-            // Animar badge si existe
-            const badge = document.getElementById('badge-cantidad');
-            if (badge) {
-                badge.classList.add('animado');
-                setTimeout(() => badge.classList.remove('animado'), 300);
-            }
-        }
-        
-        // Guardar en localStorage
-        localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
-        
-        // Actualizar barra (siempre verificar que existe antes de actualizar)
-        if (typeof actualizarBarraFlotante === 'function') {
+            // ✅ ACTUALIZAR UI
+            actualizarTodosLosBotonesCotizar();
             actualizarBarraFlotante();
+            actualizarBadgeHeader();
+            
+            // Mostrar modal de confirmación
+            mostrarModalConfirmacionAgregado(producto.nombre);
         }
-        
-        // Actualizar botón de la card
-        actualizarBotonCard(producto.id, existe);
     }
+
+    window.toggleSeleccionCotizacion = toggleSeleccionCotizacion;
     
+    // ============================================
+    // MODAL DE CONFIRMACIÓN CON ANIMACIÓN
+    // ============================================
+    function mostrarModalConfirmacionAgregado(nombreProducto) {
+        // Crear modal dinámico
+        const modalHtml = `
+            <div id="modalConfirmacionAgregado" class="modal-confirmacion-agregado">
+                <div class="modal-confirmacion-contenido">
+                    <div class="modal-confirmacion-icono">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>¡Producto agregado!</h3>
+                    <p>"${escapeHtml(nombreProducto)}" ha sido añadido a tu cotización</p>
+                    <div class="modal-confirmacion-acciones">
+                        <button onclick="window.cerrarModalConfirmacion()" class="btn-seguir-comprando">
+                            <i class="fas fa-shopping-bag"></i> Seguir comprando
+                        </button>
+                        <button onclick="window.irACotizacion()" class="btn-ir-cotizacion">
+                            <i class="fas fa-file-invoice"></i> Ver cotización
+                        </button>
+                    </div>
+                    <div class="modal-confirmacion-barra">
+                        <span>Encuentra tus productos en la <strong>barra de cotización</strong> en la parte inferior</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Eliminar modal anterior si existe
+        const modalExistente = document.getElementById('modalConfirmacionAgregado');
+        if (modalExistente) modalExistente.remove();
+        
+        // Insertar modal
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Mostrar con animación
+        const modal = document.getElementById('modalConfirmacionAgregado');
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+        
+        // Auto-cerrar después de 5 segundos
+        setTimeout(() => {
+            cerrarModalConfirmacion();
+        }, 5000);
+        
+        // Cerrar al hacer clic fuera
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                cerrarModalConfirmacion();
+            }
+        });
+    }
+
+    // ============================================
+    // CERRAR MODAL DE CONFIRMACIÓN
+    // ============================================
+    function cerrarModalConfirmacion() {
+        const modal = document.getElementById('modalConfirmacionAgregado');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
+        }
+    }
+
+    // ============================================
+    // IR A COTIZACIÓN
+    // ============================================
+    function irACotizacion() {
+        cerrarModalConfirmacion();
+        window.abrirModalCotizacion();
+    }
+
     window.toggleSeleccionCotizacion = toggleSeleccionCotizacion;
     window.actualizarBarraFlotante = actualizarBarraFlotante;
+    window.actualizarChipsFiltrosActivos = actualizarChipsFiltrosActivos;
+    window.actualizarBadgeHeader = actualizarBadgeHeader;
+    window.mostrarModalConfirmacionAgregado = mostrarModalConfirmacionAgregado;
+    window.cerrarModalConfirmacion = cerrarModalConfirmacion;
+    window.irACotizacion = irACotizacion;
+    window.mostrarToast = mostrarToast;
     
-    // ============================================
-    // FUNCIONES DE ESCANEO QR CON CÁMARA TRASERA
-    // ============================================
-    function detenerEscaneoQR() {
-        console.log('🛑 Deteniendo escáner QR...');
-        if (html5QrCode && escaneoActivo) {
+// ============================================
+// FUNCIÓN PARA DETENER EL ESCÁNER QR
+// ============================================
+function detenerEscaneoQR() {
+    console.log('🛑 Deteniendo escáner QR...');
+    
+    if (html5QrCode && escaneoActivo) {
+        try {
             html5QrCode.stop().then(() => {
                 console.log('✅ Escáner QR detenido correctamente');
                 escaneoActivo = false;
                 html5QrCode = null;
+                iniciandoEscaneo = false;
+                
+                const readerElement = document.getElementById('qr-reader');
+                if (readerElement) {
+                    readerElement.innerHTML = '';
+                }
             }).catch(err => {
-                console.warn('Error al detener escáner:', err);
-                html5QrCode = null;
+                console.log('⚠️ Escáner ya detenido:', err);
                 escaneoActivo = false;
+                html5QrCode = null;
+                iniciandoEscaneo = false;
+                
+                const readerElement = document.getElementById('qr-reader');
+                if (readerElement) {
+                    readerElement.innerHTML = '';
+                }
             });
-        }
-    }
-    
-    function cerrarModalQR() {
-        console.log('🔒 Cerrando modal QR...');
-        detenerEscaneoQR();
-        const modalQR = document.getElementById('modalQR');
-        if (modalQR) {
-            modalQR.style.display = 'none';
-            // Limpiar el contenido del reader para liberar la cámara
+        } catch(e) {
+            console.warn('Error al detener:', e);
+            escaneoActivo = false;
+            html5QrCode = null;
+            iniciandoEscaneo = false;
+            
             const readerElement = document.getElementById('qr-reader');
             if (readerElement) {
                 readerElement.innerHTML = '';
             }
         }
+    } else {
+        escaneoActivo = false;
+        html5QrCode = null;
+        iniciandoEscaneo = false;
+        
+        const readerElement = document.getElementById('qr-reader');
+        if (readerElement) {
+            readerElement.innerHTML = '';
+        }
+    }
+}
+
+// ============================================
+// FUNCIÓN PARA CERRAR EL MODAL QR - CORREGIDA
+// ============================================
+function cerrarModalQR() {
+    console.log('🔒 Cerrando modal QR...');
+    
+    // Detener escáner
+    detenerEscaneoQR();
+    
+    // Resetear flag inmediatamente
+    iniciandoEscaneo = false;
+    
+    // Ocultar modal
+    const modalQR = document.getElementById('modalQR');
+    if (modalQR) {
+        modalQR.style.display = 'none';
+        modalQR.classList.remove('active');
+        document.body.style.overflow = '';
+        console.log('✅ Modal QR ocultado');
+    } else {
+        console.warn('⚠️ Modal QR no encontrado');
+    }
+}
+
+// ============================================
+// FUNCIÓN PARA INICIAR EL ESCANEO QR
+// ============================================
+async function iniciarEscaneoQR() {
+    console.log('🔍 Intentando iniciar escaneo QR...');
+    
+    // Prevenir múltiples inicios
+    if (iniciandoEscaneo) {
+        console.warn('⚠️ Ya se está iniciando el escáner, ignorando solicitud');
+        return;
     }
     
-    async function iniciarEscaneoQR() {
-        console.log('🔍 Iniciando escaneo QR...');
-        
-        const modalQR = document.getElementById('modalQR');
-        const readerElement = document.getElementById('qr-reader');
-        
-        if (!modalQR || !readerElement) {
-            console.error('❌ Modal QR no encontrado');
-            return;
+    if (escaneoActivo) {
+        console.warn('⚠️ El escáner ya está activo, ignorando solicitud');
+        return;
+    }
+    
+    // Marcar que estamos iniciando
+    iniciandoEscaneo = true;
+    
+    const modalQR = document.getElementById('modalQR');
+    const readerElement = document.getElementById('qr-reader');
+    
+    if (!modalQR || !readerElement) {
+        console.error('❌ Modal QR o reader no encontrado');
+        iniciandoEscaneo = false;
+        if (typeof mostrarModal === 'function') {
+            mostrarModal('Error', 'No se pudo abrir el escáner', 'error');
         }
-        
-        detenerEscaneoQR();
-        readerElement.innerHTML = '';
-        modalQR.style.display = 'flex';
-        
-        if (typeof Html5Qrcode === 'undefined') {
-            modalQR.style.display = 'none';
+        return;
+    }
+    
+    // Limpiar completamente el contenedor
+    readerElement.innerHTML = '';
+    
+    // Mostrar modal
+    modalQR.style.display = 'flex';
+    modalQR.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Verificar que Html5Qrcode esté disponible
+    if (typeof Html5Qrcode === 'undefined') {
+        modalQR.style.display = 'none';
+        modalQR.classList.remove('active');
+        document.body.style.overflow = '';
+        iniciandoEscaneo = false;
+        if (typeof mostrarModal === 'function') {
             mostrarModal('Error', 'La biblioteca de escaneo QR no está cargada', 'error');
-            return;
         }
+        return;
+    }
+    
+    try {
+        console.log('📷 Creando instancia del escáner...');
         
-        try {
-            html5QrCode = new Html5Qrcode("qr-reader");
-            
-            const config = {
-                fps: CONFIG.QR_FPS,
-                qrbox: { width: CONFIG.QR_BOX_SIZE, height: CONFIG.QR_BOX_SIZE },
-                aspectRatio: 1.0
-            };
-            
-            await html5QrCode.start(
-                { facingMode: "environment" },
-                config,
-                (decodedText) => {
-                    console.log('✅ QR escaneado:', decodedText);
-                    detenerEscaneoQR();
-                    if (modalQR) modalQR.style.display = 'none';
+        // Crear NUEVA instancia
+        html5QrCode = new Html5Qrcode("qr-reader");
+        
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+        
+        console.log('📷 Iniciando cámara...');
+        
+        await html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            (decodedText) => {
+                console.log('✅ QR escaneado:', decodedText);
+                
+                // Detener escáner y cerrar modal
+                detenerEscaneoQR();
+                cerrarModalQR();
+                
+                // Procesar el código
+                const searchInput = document.getElementById('searchOutlet');
+                if (searchInput) {
+                    searchInput.value = decodedText;
                     
-                    const searchInput = document.getElementById('searchOutlet');
-                    if (searchInput) {
-                        // Establecer el valor
-                        searchInput.value = decodedText;
-                        
-                        // 👇 IMPORTANTE: Mostrar el botón de limpiar
-                        const btnClear = document.getElementById('btnLimpiarBusqueda');
-                        if (btnClear) {
-                            btnClear.style.display = 'flex';
-                        }
-                        
-                        // Aplicar filtros
-                        setTimeout(() => {
-                            if (typeof window.aplicarFiltrosOutlet === 'function') {
-                                window.aplicarFiltrosOutlet();
-                            }
-                        }, 100);
+                    const btnClear = document.getElementById('btnLimpiarBusqueda');
+                    if (btnClear) {
+                        btnClear.style.display = 'flex';
                     }
                     
-                    mostrarModal('Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000 });
-                },
-                (errorMessage) => {}
-            );
-            
-            escaneoActivo = true;
-            console.log('✅ Escáner QR iniciado correctamente');
-            
-        } catch (err) {
-            console.error('❌ Error al iniciar escáner:', err);
-            if (modalQR) modalQR.style.display = 'none';
-        mostrarModal('Error', 'No se pudo acceder a la cámara', 'error');
+                    setTimeout(() => {
+                        if (typeof window.aplicarFiltrosOutlet === 'function') {
+                            window.aplicarFiltrosOutlet();
+                        }
+                    }, 100);
+                }
+                
+                if (typeof mostrarModal === 'function') {
+                    mostrarModal('Código encontrado', `Se encontró: ${decodedText}`, 'success', { timer: 2000, showConfirmButton: false });
+                }
+            },
+            (errorMessage) => {
+                // Ignorar errores de escaneo (normales)
+                if (!errorMessage.includes('No MultiFormat Readers') && 
+                    !errorMessage.includes('Could not find') &&
+                    !errorMessage.includes('No QR code found')) {
+                    console.log('🔍 Escaneando...', errorMessage);
+                }
+            }
+        );
+        
+        escaneoActivo = true;
+        iniciandoEscaneo = false;
+        console.log('✅ Escáner QR iniciado correctamente');
+        
+    } catch (err) {
+        console.error('❌ Error al iniciar escáner:', err);
+        
+        if (modalQR) {
+            modalQR.style.display = 'none';
+            modalQR.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        let mensajeError = 'No se pudo acceder a la cámara.';
+        if (err.message?.includes('NotAllowedError')) {
+            mensajeError = 'Permiso denegado para acceder a la cámara. Por favor, permite el acceso en la configuración del navegador.';
+        } else if (err.message?.includes('NotFoundError')) {
+            mensajeError = 'No se encontró una cámara en tu dispositivo.';
+        } else if (err.message?.includes('NotReadableError')) {
+            mensajeError = 'La cámara está siendo usada por otra aplicación.';
+        }
+        
+        if (typeof mostrarModal === 'function') {
+            mostrarModal('Error de cámara', mensajeError, 'error');
+        }
+        
+        html5QrCode = null;
+        escaneoActivo = false;
+        iniciandoEscaneo = false;
+        readerElement.innerHTML = '';
     }
+}
+
+// ============================================
+// CONFIGURAR EVENTOS QR - ENFOQUE ALTERNATIVO
+// ============================================
+function configurarEventosQR() {
+    console.log('🔧 Configurando eventos del modal QR (alternativo)...');
+    
+    // ============================================
+    // BOTÓN CERRAR (X)
+    // ============================================
+    const btnCerrarQR = document.getElementById('btnCerrarQR');
+    if (btnCerrarQR) {
+        // Remover todos los event listeners anteriores
+        const nuevoBtn = btnCerrarQR.cloneNode(true);
+        btnCerrarQR.parentNode.replaceChild(nuevoBtn, btnCerrarQR);
+        
+        // Agregar nuevo event listener
+        nuevoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🟥 Click en cerrar (X) - alternativo');
+            
+            // Llamar directamente a cerrarModalQR
+            if (typeof window.cerrarModalQR === 'function') {
+                window.cerrarModalQR();
+            } else {
+                // Fallback: cerrar manualmente
+                const modalQR = document.getElementById('modalQR');
+                if (modalQR) {
+                    modalQR.style.display = 'none';
+                    modalQR.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                // Detener escáner
+                if (html5QrCode && escaneoActivo) {
+                    html5QrCode.stop().catch(() => {});
+                    escaneoActivo = false;
+                    html5QrCode = null;
+                }
+                iniciandoEscaneo = false;
+            }
+        });
+        console.log('✅ Botón cerrar (X) configurado (alternativo)');
     }
     
+    // ============================================
+    // BOTÓN CANCELAR
+    // ============================================
+    const btnCancelarQR = document.getElementById('btnCancelarQR');
+    if (btnCancelarQR) {
+        const nuevoBtn = btnCancelarQR.cloneNode(true);
+        btnCancelarQR.parentNode.replaceChild(nuevoBtn, btnCancelarQR);
+        
+        nuevoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🟥 Click en cancelar - alternativo');
+            
+            // Llamar directamente a cerrarModalQR
+            if (typeof window.cerrarModalQR === 'function') {
+                window.cerrarModalQR();
+            } else {
+                // Fallback: cerrar manualmente
+                const modalQR = document.getElementById('modalQR');
+                if (modalQR) {
+                    modalQR.style.display = 'none';
+                    modalQR.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                // Detener escáner
+                if (html5QrCode && escaneoActivo) {
+                    html5QrCode.stop().catch(() => {});
+                    escaneoActivo = false;
+                    html5QrCode = null;
+                }
+                iniciandoEscaneo = false;
+            }
+        });
+        console.log('✅ Botón cancelar configurado (alternativo)');
+    }
+}
+
+// ============================================
+// MANEJADOR DE TECLA ESCAPE
+// ============================================
+function handleEscapeKeyQR(e) {
+    if (e.key === 'Escape') {
+        const modalQR = document.getElementById('modalQR');
+        if (modalQR && modalQR.style.display === 'flex') {
+            console.log('🟥 Escape presionado');
+            cerrarModalQR();
+        }
+    }
+}
+
+// ============================================
+// EXPONER FUNCIONES GLOBALES - MUY IMPORTANTE
+// ============================================
+window.iniciarEscaneoQR = iniciarEscaneoQR;
+window.cerrarModalQR = cerrarModalQR;
+window.detenerEscaneoQR = detenerEscaneoQR;
+window.configurarEventosQR = configurarEventosQR;
+window.handleEscapeKeyQR = handleEscapeKeyQR;
+
+console.log('✅ Funciones QR expuestas globalmente');
+     
+
+    function handleEscapeKey(e) {
+        if (e.key === 'Escape') {
+            const modalQR = document.getElementById('modalQR');
+            if (modalQR && modalQR.style.display === 'flex') {
+                cerrarModalQR();
+            }
+        }
+    }
+
     // ============================================
     // FUNCIÓN DE ENVÍO DE COTIZACIÓN COMPLETA
     // ============================================
     async function enviarCotizacion(datosCliente, asesor) {
         console.log('🚀 INICIO de enviarCotizacion');
+        console.log('📋 Datos cliente:', datosCliente);
+        console.log('👤 Asesor:', asesor);
         
         if (!asesor || !asesor.id) {
             console.error('❌ Error: asesor inválido');
@@ -3918,7 +4568,7 @@ function renderizarPaginaOutlet(productos) {
             const cotizacion = {
                 numero: numero,
                 cliente_nombre: datosCliente.nombre,
-                cliente_email: datosCliente.email,
+                cliente_email: datosCliente.email || null,
                 cliente_telefono: datosCliente.telefono,
                 cliente_empresa: datosCliente.empresa || null,
                 tipo_cliente: 'NUEVO',
@@ -3940,7 +4590,6 @@ function renderizarPaginaOutlet(productos) {
             const cotizacionId = nuevaCotizacion.id;
             console.log('✅ Cotización guardada:', numero, 'ID:', cotizacionId);
             
-            // Guardar detalles de productos
             for (const producto of cotizacionSeleccionados) {
                 const { error: detalleError } = await window.supabaseClient
                     .from('cotizacion_detalles')
@@ -3955,7 +4604,6 @@ function renderizarPaginaOutlet(productos) {
                 if (detalleError) console.error(`Error guardando detalle para ${producto.nombre}:`, detalleError);
             }
             
-            // Incrementar contador del asesor
             try {
                 const nuevoContador = (asesor.leads_asignados_hoy || 0) + 1;
                 await window.supabaseClient
@@ -3970,7 +4618,6 @@ function renderizarPaginaOutlet(productos) {
                 console.error('Error actualizando contador:', err);
             }
             
-            // Guardar relación cliente-asesor
             if (asesor.id && datosCliente.email) {
                 try {
                     const { data: existente } = await window.supabaseClient
@@ -4004,11 +4651,9 @@ function renderizarPaginaOutlet(productos) {
                 }
             }
             
-            // Cerrar modal de carga
             const modalOverlay = document.querySelector('.modal-overlay.active');
-            if (modalOverlay) modalOverlay.classList.remove('active');
+            if (modalOverlay) modalOverlay.style.display = 'none';
             
-            // Enviar WhatsApp
             let productosLista = '';
             cotizacionSeleccionados.forEach((p, i) => {
                 productosLista += `${i+1}. ${p.nombre}${p.codigo ? ` (${p.codigo})` : ''}\n`;
@@ -4021,7 +4666,7 @@ function renderizarPaginaOutlet(productos) {
 *Asesor:* ${asesor.nombre}
 
 *Cliente:* ${datosCliente.nombre}
-*Email:* ${datosCliente.email}
+*Email:* ${datosCliente.email || 'No especificado'}
 *Teléfono:* ${datosCliente.telefono}
 *Empresa:* ${datosCliente.empresa || 'No especifica'}
 
@@ -4042,19 +4687,23 @@ ${productosLista}
                 await mostrarModal('No se pudo enviar', 'Cotización registrada exitosamente', 'warning', { confirmButtonText: 'Entendido' });
             }
             
-            // Limpiar selección
             cotizacionSeleccionados = [];
             localStorage.removeItem(CONFIG.COTIZACION_STORAGE_KEY);
+
+            actualizarTodosLosBotonesCotizar();
+
             actualizarBarraFlotante();
             
-            document.querySelectorAll('.btn-cotizar').forEach(btn => {
+            actualizarBadgeHeader();
+
+            document.querySelectorAll('.btn-cotizar-top').forEach(btn => {
                 btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-                btn.style.background = '#39080a';
-                btn.style.color = 'white';
+                btn.classList.remove('seleccionado');
             });
             
-            window.modoAsignacion = 'auto';
+            window.modoAsignacionActual = 'auto';
             window.asesorPreasignadoId = null;
+            asesorSeleccionadoActual = null;
             
             window.clienteNombreCache = '';
             window.clienteEmailCache = '';
@@ -4065,7 +4714,7 @@ ${productosLista}
             
         } catch (error) {
             const modalOverlay = document.querySelector('.modal-overlay.active');
-            if (modalOverlay) modalOverlay.classList.remove('active');
+            if (modalOverlay) modalOverlay.style.display = 'none';
             
             console.error('❌ Error detallado:', error);
             await mostrarModal('Error', 'Ocurrió un error al procesar la cotización: ' + (error.message || 'Error desconocido'), 'error');
@@ -4073,7 +4722,7 @@ ${productosLista}
     }
     
     // ============================================
-    // FUNCIONES DE COTIZACIÓN MODAL (ABRIR MODAL)
+    // FUNCIONES DE COTIZACIÓN MODAL CON PASOS (STEPPER)
     // ============================================
     window.abrirModalCotizacion = async function() {
         if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
@@ -4090,15 +4739,7 @@ ${productosLista}
             return;
         }
         
-        // Guardar valores actuales del formulario
-        if (document.getElementById('cliente-nombre-modal')) {
-            window.clienteNombreCache = document.getElementById('cliente-nombre-modal').value || '';
-            window.clienteEmailCache = document.getElementById('cliente-correo-modal').value || '';
-            window.clienteTelefonoCache = document.getElementById('cliente-telefono-modal').value || '';
-            window.clienteEmpresaCache = document.getElementById('cliente-empresa-modal').value || '';
-            window.ubicacionCache = document.getElementById('ubicacion-proyecto-modal')?.value || '';
-            window.observacionesCache = document.getElementById('observaciones-modal')?.value || '';
-        }
+        pasoActualCotizacion = 1;
         
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -4122,824 +4763,7 @@ ${productosLista}
                     vendedores = await precargarAsesoresOutlet();
                 }
                 
-                const asesoresOptions = vendedores && vendedores.length > 0 
-                    ? vendedores.map(v => `<option value="${v.id}">${escapeHtml(v.nombre)}${v.telefono ? ` (${v.telefono})` : ''}</option>`).join('')
-                    : '<option value="" disabled>No hay asesores disponibles</option>';
-                
-                const productosHtml = cotizacionSeleccionados.map(p => {
-                    // Buscar el producto original en el cache para obtener medida y espesor
-                    const productoOriginal = window.outletProductosCache.find(prod => prod.id === p.id);
-                    
-                    // Obtener medida y espesor del producto original o del objeto actual
-                    const medida = productoOriginal?.medida || p.medida || 'No especifica';
-                    const espesor = productoOriginal?.espesor || p.espesor || 'No especifica';
-                    
-                    return `
-                        <div class="flex justify-between items-center py-2 border-b last:border-b-0 hover:bg-gray-100 transition-colors rounded-lg px-2" style="transition: all 0.2s ease;">
-                            <div class="flex-1">
-                                <div class="flex items-start gap-2">
-                                    <div class="flex-1">
-                                        <p class="font-medium text-sm text-gray-800">${escapeHtml(p.nombre) || 'Producto'}</p>
-                                        <p class="text-xs text-gray-400 font-mono mt-0.5">Código: ${escapeHtml(p.codigo) || 'N/A'}</p>
-                                        <div class="flex flex-wrap gap-3 mt-1">
-                                            ${medida !== 'No especifica' ? `
-                                            <span class="text-xs inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
-                                                <i class="fas fa-ruler-combined text-[10px]"></i> ${escapeHtml(medida)}
-                                            </span>
-                                            ` : ''}
-                                            ${espesor !== 'No especifica' ? `
-                                            <span class="text-xs inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
-                                                <i class="fas fa-arrows-alt-h text-[10px]"></i> ${escapeHtml(espesor)}
-                                            </span>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onclick="window.eliminarProductoCotizacion('${p.id}', '${(p.nombre || '').replace(/'/g, "\\'")}')" 
-                                    class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all ml-2 flex-shrink-0"
-                                    title="Eliminar producto">
-                                <i class="fas fa-trash-alt text-sm"></i>
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-                
-                const modoInicial = window.modoAsignacion || 'auto';
-                
-                body.innerHTML = `
-                    <!-- SECCIÓN 1: PRODUCTOS -->
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-xs">1</span>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Productos seleccionados</h4>
-                            <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">${cotizacionSeleccionados.length} producto(s)</span>
-                        </div>
-                        <div class="productos-lista">
-                            ${productosHtml || '<p class="text-gray-400 text-sm text-center py-4">No hay productos</p>'}
-                        </div>
-                    </div>
-                    
-                    <!-- SECCIÓN 2: ASIGNACIÓN DE ASESOR (MEJORADA MOBILE) -->
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-xs">2</span>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Asignación de asesor</h4>
-                        </div>
-                        
-                        <!-- Tarjeta informativa -->
-                        <div class="asignacion-info-card">
-                            <div class="flex items-start gap-2">
-                                <i class="fas fa-info-circle text-primary mt-0.5 text-xs"></i>
-                                <p class="text-gray-600">El sistema asignará automáticamente el asesor. También puedes elegir uno manualmente o buscarlo por tu correo electrónico.</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Opciones de asignación -->
-                        <div class="asignacion-opciones">
-                            <div class="asignacion-radio-group">
-                                <label>
-                                    <input type="radio" name="tipoAsignacion" value="auto" onchange="window.cambiarModoAsignacion('auto')" ${modoInicial === 'auto' ? 'checked' : ''}>
-                                    <span>Automático</span>
-                                </label>
-                                <label>
-                                    <input type="radio" name="tipoAsignacion" value="manual" onchange="window.cambiarModoAsignacion('manual')" ${modoInicial === 'manual' ? 'checked' : ''}>
-                                    <span>Elegir asesor</span>
-                                </label>
-                            </div>
-                            
-                            <!-- Selector manual -->
-                            <div id="selector-asesor-manual" class="selector-manual ${modoInicial === 'manual' ? '' : 'hidden'}">
-                                <label>Selecciona un asesor</label>
-                                <select id="asesor-manual-select" class="w-full">
-                                    ${asesoresOptions}
-                                </select>
-                            </div>
-                            
-                            <!-- Búsqueda por email (MEJORADA MOBILE) -->
-                            <div id="campo-email-cliente-modal" class="campo-email-container ${modoInicial === 'manual' ? 'hidden' : ''}">
-                                <label>¿Ya has trabajado con nosotros?</label>
-                                <div class="email-search-wrapper">
-                                    <input type="email" id="cliente-email-modal" 
-                                        placeholder="correo@ejemplo.com" 
-                                        value="${window.clienteEmailCache || ''}"
-                                        autocomplete="email">
-                                    <button id="btnBuscarAsesorEmail" class="btn-buscar-email">
-                                        <i class="fas fa-search"></i>
-                                        <span>Buscar asesor</span>
-                                    </button>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-2">Ingresa tu correo para encontrar a tu asesor habitual</p>
-                            </div>
-                            
-                            <!-- Resultado de búsqueda -->
-                            <div id="asesor-info-modal" class="hidden mt-3"></div>
-                        </div>
-                        
-                        <!-- Asesor asignado -->
-                        <div id="asesor-asignado-container" class="mt-4"></div>
-                    </div>
-                    
-                    <!-- SECCIÓN 3: DATOS DE CONTACTO -->
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-xs">3</span>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Datos de contacto</h4>
-                        </div>
-                        
-                        <div class="space-y-3">
-                            <div class="form-group">
-                                <label>Nombre completo <span class="required">*</span></label>
-                                <input type="text" id="cliente-nombre-modal" 
-                                    placeholder="Ej: Juan Pérez"
-                                    value="${window.clienteNombreCache || ''}"
-                                    oninput="window.validarCampoNombre(this)">
-                                <div id="error-nombre" class="mensaje-error hidden text-red-500"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Correo electrónico <span class="required">*</span></label>
-                                <input type="email" id="cliente-correo-modal" 
-                                    placeholder="cliente@ejemplo.com"
-                                    value="${window.clienteEmailCache || ''}"
-                                    oninput="window.validarCampoEmail(this)">
-                                <div id="error-email" class="mensaje-error hidden text-red-500"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Teléfono <span class="required">*</span></label>
-                                <div class="telefono-wrapper">
-                                    <select id="prefijo-pais" onchange="window.actualizarPlaceholderTelefono()">
-                                        <option value="51" selected>🇵🇪 +51</option>
-                                        <option value="1">🇺🇸 +1</option>
-                                        <option value="34">🇪🇸 +34</option>
-                                        <option value="52">🇲🇽 +52</option>
-                                        <option value="54">🇦🇷 +54</option>
-                                        <option value="56">🇨🇱 +56</option>
-                                        <option value="57">🇨🇴 +57</option>
-                                    </select>
-                                    <input type="tel" id="cliente-telefono-modal" 
-                                        placeholder="987654321"
-                                        value="${window.clienteTelefonoCache || ''}"
-                                        oninput="window.validarCampoTelefono(this)">
-                                </div>
-                                <div id="error-telefono" class="mensaje-error hidden text-red-500"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Empresa <span class="optional">(opcional)</span></label>
-                                <input type="text" id="cliente-empresa-modal" 
-                                    placeholder="Nombre de tu empresa"
-                                    value="${window.clienteEmpresaCache || ''}">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- SECCIÓN 4: INFORMACIÓN ADICIONAL -->
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span class="text-primary font-bold text-xs">4</span>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Información adicional</h4>
-                        </div>
-                        
-                        <div class="space-y-3">
-                            <div class="form-group">
-                                <label>📍 Ubicación del proyecto</label>
-                                <select id="ubicacion-proyecto-modal">
-                                    <option value="">Seleccionar ubicación</option>
-                                    <option value="Lima" ${window.ubicacionCache === 'Lima' ? 'selected' : ''}>Lima</option>
-                                    <option value="Provincia" ${window.ubicacionCache === 'Provincia' ? 'selected' : ''}>Provincia</option>
-                                    <option value="Exterior" ${window.ubicacionCache === 'Exterior' ? 'selected' : ''}>Exterior</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>💬 Observaciones</label>
-                                <textarea id="observaciones-modal" rows="3" 
-                                        placeholder="Comentarios adicionales...">${window.observacionesCache || ''}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Funciones de validación
-                function validarCampoNombre(input) {
-                    const valor = input.value.trim();
-                    const errorDiv = document.getElementById('error-nombre');
-                    if (!errorDiv) return true;
-                    
-                    if (valor.length === 0) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre es obligatorio';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (valor.length < 3) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre debe tener al menos 3 caracteres';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (valor.length > 100) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre no puede exceder 100 caracteres';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (/\d/.test(valor)) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre no debe contener números';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    errorDiv.classList.add('hidden');
-                    input.classList.remove('border-red-500');
-                    input.classList.add('border-green-500');
-                    return true;
-                }
-                
-                function validarCampoEmail(input) {
-                    const valor = input.value.trim();
-                    const errorDiv = document.getElementById('error-email');
-                    if (!errorDiv) return true;
-                    
-                    if (valor.length === 0) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El correo electrónico es obligatorio';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                    if (!emailRegex.test(valor)) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Ingresa un correo electrónico válido';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (valor.length > 100) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El correo no puede exceder 100 caracteres';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    errorDiv.classList.add('hidden');
-                    input.classList.remove('border-red-500');
-                    input.classList.add('border-green-500');
-                    return true;
-                }
-                
-                function validarCampoTelefono(input) {
-                    const valor = input.value.trim();
-                    const prefijoSelect = document.getElementById('prefijo-pais');
-                    const prefijo = prefijoSelect ? prefijoSelect.value : '51';
-                    const errorDiv = document.getElementById('error-telefono');
-                    if (!errorDiv) return true;
-                    
-                    if (valor.length === 0) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El teléfono es obligatorio';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    const soloNumeros = valor.replace(/\D/g, '');
-                    let esValido = false;
-                    let mensajeError = '';
-                    
-                    switch(prefijo) {
-                        case '51':
-                            if (soloNumeros.length === 9) esValido = true;
-                            else mensajeError = 'El número debe tener 9 dígitos (ej: 987654321)';
-                            break;
-                        case '1':
-                            if (soloNumeros.length === 10) esValido = true;
-                            else mensajeError = 'El número debe tener 10 dígitos';
-                            break;
-                        case '34':
-                            if (soloNumeros.length === 9) esValido = true;
-                            else mensajeError = 'El número debe tener 9 dígitos';
-                            break;
-                        default:
-                            if (soloNumeros.length >= 7 && soloNumeros.length <= 15) esValido = true;
-                            else mensajeError = 'El número debe tener entre 7 y 15 dígitos';
-                    }
-                    
-                    if (!esValido) {
-                        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensajeError}`;
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (valor !== soloNumeros) {
-                        input.value = soloNumeros;
-                    }
-                    
-                    errorDiv.classList.add('hidden');
-                    input.classList.remove('border-red-500');
-                    input.classList.add('border-green-500');
-                    return true;
-                }
-                
-                function validarCampoEmpresa(input) {
-                    const valor = input.value.trim();
-                    const errorDiv = document.getElementById('error-empresa');
-                    if (!errorDiv) return true;
-                    
-                    if (valor.length > 0 && valor.length < 2) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre de la empresa es demasiado corto';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    if (valor.length > 150) {
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> El nombre no puede exceder 150 caracteres';
-                        errorDiv.classList.remove('hidden');
-                        input.classList.add('border-red-500');
-                        input.classList.remove('border-green-500');
-                        return false;
-                    }
-                    
-                    errorDiv.classList.add('hidden');
-                    input.classList.remove('border-red-500');
-                    if (valor.length > 0) {
-                        input.classList.add('border-green-500');
-                    } else {
-                        input.classList.remove('border-green-500');
-                    }
-                    return true;
-                }
-                
-                function actualizarPlaceholderTelefono() {
-                    const prefijoSelect = document.getElementById('prefijo-pais');
-                    const telefonoInput = document.getElementById('cliente-telefono-modal');
-                    if (!prefijoSelect || !telefonoInput) return;
-                    
-                    const placeholders = {
-                        '51': 'Ej: 987654321 (9 dígitos)',
-                        '1': 'Ej: 2125551234 (10 dígitos)',
-                        '34': 'Ej: 612345678 (9 dígitos)',
-                        '52': 'Ej: 5512345678 (10 dígitos)'
-                    };
-                    telefonoInput.placeholder = placeholders[prefijoSelect.value] || 'Ej: 123456789';
-                }
-                
-                function obtenerTelefonoCompleto() {
-                    const prefijoSelect = document.getElementById('prefijo-pais');
-                    const telefonoInput = document.getElementById('cliente-telefono-modal');
-                    if (!prefijoSelect || !telefonoInput) return '';
-                    
-                    const prefijo = prefijoSelect.value;
-                    const numero = telefonoInput.value.trim().replace(/\D/g, '');
-                    if (!numero) return '';
-                    
-                    let numeroLimpio = numero;
-                    if (numero.startsWith(prefijo)) {
-                        numeroLimpio = numero.substring(prefijo.length);
-                    }
-                    return `${prefijo}${numeroLimpio}`;
-                }
-                
-                function validarTodosLosCampos() {
-                    const nombreInput = document.getElementById('cliente-nombre-modal');
-                    const emailInput = document.getElementById('cliente-correo-modal');
-                    const telefonoInput = document.getElementById('cliente-telefono-modal');
-                    
-                    let nombreValido = true;
-                    let emailValido = true;
-                    let telefonoValido = true;
-                    
-                    if (nombreInput) nombreValido = validarCampoNombre(nombreInput);
-                    if (emailInput) emailValido = validarCampoEmail(emailInput);
-                    if (telefonoInput) telefonoValido = validarCampoTelefono(telefonoInput);
-                    
-                    return nombreValido && emailValido && telefonoValido;
-                }
-                
-                window.validarCampoNombre = validarCampoNombre;
-                window.validarCampoEmail = validarCampoEmail;
-                window.validarCampoTelefono = validarCampoTelefono;
-                window.validarCampoEmpresa = validarCampoEmpresa;
-                window.actualizarPlaceholderTelefono = actualizarPlaceholderTelefono;
-                window.obtenerTelefonoCompleto = obtenerTelefonoCompleto;
-                window.validarTodosLosCampos = validarTodosLosCampos;
-                
-                // Funciones de asignación de asesor
-                function generarAsesorAsignadoHTML(asesor, origen) {
-                    if (!asesor) {
-                        return `
-                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
-                                <i class="fas fa-user-slash text-gray-400 text-2xl mb-2"></i>
-                                <p class="text-sm text-gray-500">No hay asesores disponibles</p>
-                            </div>
-                        `;
-                    }
-                    
-                    let badgeTexto = '';
-                    let badgeColor = '';
-                    
-                    if (origen === 'auto') {
-                        badgeTexto = 'Asignado automáticamente';
-                        badgeColor = 'bg-blue-100 text-blue-700';
-                    } else if (origen === 'manual') {
-                        badgeTexto = 'Seleccionado por ti';
-                        badgeColor = 'bg-green-100 text-green-700';
-                    } else if (origen === 'email') {
-                        badgeTexto = 'Asociado a tu correo';
-                        badgeColor = 'bg-purple-100 text-purple-700';
-                    } else if (origen === 'reasignado') {
-                        badgeTexto = 'Reasignado manualmente';
-                        badgeColor = 'bg-orange-100 text-orange-700';
-                    }
-                    
-                    return `
-                        <div class="p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-200 shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                                        <h5 class="font-bold text-gray-800">${escapeHtml(asesor.nombre || 'Asesor')}</h5>
-                                        <span class="text-xs px-2 py-0.5 rounded-full ${badgeColor}">${badgeTexto}</span>
-                                    </div>
-                                    ${asesor.email ? `<p class="text-xs text-gray-500"><i class="fas fa-envelope"></i> ${escapeHtml(asesor.email)}</p>` : ''}
-                                    ${asesor.telefono ? `<p class="text-xs text-gray-500"><i class="fas fa-phone"></i> ${escapeHtml(asesor.telefono)}</p>` : ''}
-                                </div>
-                                <button onclick="window.abrirSelectorReasignacion()" class="text-xs text-primary hover:underline">
-                                    <i class="fas fa-exchange-alt"></i> Reasignar
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                function actualizarVisualizacionAsesor(asesor, origen) {
-                    const container = document.getElementById('asesor-asignado-container');
-                    if (container && asesor) {
-                        container.innerHTML = generarAsesorAsignadoHTML(asesor, origen);
-                        window.asesorPreasignadoId = asesor.id;
-                        
-                        const selectManual = document.getElementById('asesor-manual-select');
-                        if (selectManual) {
-                            for (let i = 0; i < selectManual.options.length; i++) {
-                                if (selectManual.options[i].value === asesor.id) {
-                                    selectManual.selectedIndex = i;
-                                    break;
-                                }
-                            }
-                        }
-                        window.asesorActualSeleccionado = asesor;
-                    }
-                }
-                
-                async function asignarAsesorAutomatico() {
-                    mostrarModal('Asignando', 'Buscando el mejor asesor para ti...', 'info', { showConfirmButton: false });
-                    
-                    try {
-                        const { data: vendedoresActualizados } = await window.supabaseClient
-                            .from('vendedores')
-                            .select('id, nombre, telefono, email, leads_asignados_hoy')
-                            .eq('activo', true)
-                            .eq('atiende_outlet', true);
-                        
-                        if (vendedoresActualizados && vendedoresActualizados.length > 0) {
-                            vendedoresActualizados.sort((a, b) => (a.leads_asignados_hoy || 0) - (b.leads_asignados_hoy || 0));
-                            const mejorAsesor = vendedoresActualizados[0];
-                            window.modoAsignacion = 'auto';
-                            window.asesorPreasignadoId = mejorAsesor.id;
-                            actualizarVisualizacionAsesor(mejorAsesor, 'auto');
-                            
-                            const radioAuto = document.querySelector('input[name="tipoAsignacion"][value="auto"]');
-                            if (radioAuto) radioAuto.checked = true;
-                            
-                            const selectorManual = document.getElementById('selector-asesor-manual');
-                            const campoEmail = document.getElementById('campo-email-cliente-modal');
-                            if (selectorManual) selectorManual.style.display = 'none';
-                            if (campoEmail) campoEmail.style.display = 'block';
-                            
-                            const asesorInfo = document.getElementById('asesor-info-modal');
-                            if (asesorInfo) asesorInfo.classList.add('hidden');
-                            
-                            mostrarModal('Asesor asignado', `Se te ha asignado: ${mejorAsesor.nombre}`, 'success', { timer: 2000, showConfirmButton: false });
-                        } else {
-                            mostrarModal('Error', 'No hay asesores disponibles para asignar', 'error');
-                        }
-                    } catch (error) {
-                        console.error('Error en asignación automática:', error);
-                        mostrarModal('Error', 'No se pudo asignar un asesor automáticamente', 'error');
-                    }
-                }
-                
-                function cambiarModoAsignacion(modo) {
-                    const selectorManual = document.getElementById('selector-asesor-manual');
-                    const campoEmail = document.getElementById('campo-email-cliente-modal');
-                    window.modoAsignacion = modo;
-                    
-                    if (modo === 'manual') {
-                        if (selectorManual) selectorManual.style.display = 'block';
-                        if (campoEmail) campoEmail.style.display = 'none';
-                        
-                        const selectManualElem = document.getElementById('asesor-manual-select');
-                        if (selectManualElem && selectManualElem.value) {
-                            const asesorId = selectManualElem.value;
-                            const asesor = (vendedores || []).find(v => v.id === asesorId);
-                            if (asesor) {
-                                actualizarVisualizacionAsesor(asesor, 'manual');
-                            }
-                        }
-                    } else {
-                        if (selectorManual) selectorManual.style.display = 'none';
-                        if (campoEmail) campoEmail.style.display = 'block';
-                        asignarAsesorAutomatico();
-                    }
-                }
-                
-                function actualizarAsesorSeleccionadoManual() {
-                    const selectManual = document.getElementById('asesor-manual-select');
-                    if (selectManual && selectManual.value) {
-                        const asesorId = selectManual.value;
-                        const asesor = (vendedores || []).find(v => v.id === asesorId);
-                        if (asesor) {
-                            window.modoAsignacion = 'manual';
-                            actualizarVisualizacionAsesor(asesor, 'manual');
-                        }
-                    }
-                }
-                
-                window.cambiarModoAsignacion = cambiarModoAsignacion;
-                window.actualizarAsesorSeleccionadoManual = actualizarAsesorSeleccionadoManual;
-                
-                // Función de reasignación
-                window.abrirSelectorReasignacion = async function() {
-                    const vendedoresActuales = vendedores || [];
-                    if (vendedoresActuales.length === 0) {
-                        mostrarModal('Sin asesores', 'No hay asesores disponibles para reasignar', 'warning');
-                        return;
-                    }
-                    
-                    const opcionesAsesores = vendedoresActuales.map(v => 
-                        `<option value="${v.id}">${escapeHtml(v.nombre)}${v.telefono ? ` (${v.telefono})` : ''}</option>`
-                    ).join('');
-                    
-                    mostrarModal(
-                        'Reasignar asesor',
-                        `
-                        <div class="text-left space-y-3">
-                            <p class="text-sm text-gray-600">Selecciona el asesor que prefieras:</p>
-                            <select id="select-reasignar-asesor" class="w-full p-2 border border-gray-300 rounded-lg text-sm">
-                                <option value="">-- Seleccionar asesor --</option>
-                                ${opcionesAsesores}
-                            </select>
-                        </div>
-                        `,
-                        'question',
-                        {
-                            showCancelButton: true,
-                            confirmButtonText: 'Reasignar',
-                            cancelButtonText: 'Cancelar'
-                        }
-                    ).then(async (result) => {
-                        if (result.isConfirmed) {
-                            const selectElement = document.getElementById('select-reasignar-asesor');
-                            const asesorId = selectElement?.value;
-                            
-                            if (!asesorId) {
-                                mostrarModal('Aviso', 'Debes seleccionar un asesor', 'warning');
-                                return;
-                            }
-                            
-                            const asesorSeleccionado = vendedoresActuales.find(v => v.id === asesorId);
-                            if (asesorSeleccionado) {
-                                window.modoAsignacion = 'manual';
-                                window.asesorPreasignadoId = asesorSeleccionado.id;
-                                actualizarVisualizacionAsesor(asesorSeleccionado, 'reasignado');
-                                
-                                const radioManual = document.querySelector('input[name="tipoAsignacion"][value="manual"]');
-                                if (radioManual) radioManual.checked = true;
-                                
-                                const selectorManual = document.getElementById('selector-asesor-manual');
-                                const campoEmail = document.getElementById('campo-email-cliente-modal');
-                                if (selectorManual) selectorManual.style.display = 'block';
-                                if (campoEmail) campoEmail.style.display = 'none';
-                                
-                                const selectManual = document.getElementById('asesor-manual-select');
-                                if (selectManual) {
-                                    for (let i = 0; i < selectManual.options.length; i++) {
-                                        if (selectManual.options[i].value === asesorId) {
-                                            selectManual.selectedIndex = i;
-                                            break;
-                                        }
-                                    }
-                                }
-                                
-                                mostrarModal('Asesor reasignado', `Ahora serás atendido por: ${asesorSeleccionado.nombre}`, 'success', { timer: 2000 });
-                            }
-                        }
-                    });
-                };
-                
-                // Configurar eventos
-                const btnBuscar = document.getElementById('btnBuscarAsesorEmail');
-                if (btnBuscar && !btnBuscar.hasAttribute('data-listener')) {
-                    btnBuscar.setAttribute('data-listener', 'true');
-                    btnBuscar.onclick = async function() {
-                        const email = document.getElementById('cliente-email-modal')?.value;
-                        if (!email) {
-                            mostrarModal('Aviso', 'Ingresa tu correo electrónico para buscar a tu asesor', 'warning');
-                            return;
-                        }
-                        
-                        mostrarModal('Buscando', 'Buscando asesor asociado...', 'info', { showConfirmButton: false });
-                        
-                        try {
-                            const { data: cliente } = await window.supabaseClient
-                                .from('clientes_asesores')
-                                .select('vendedor_id, vendedores:vendedor_id(id, nombre, telefono, email)')
-                                .eq('email', email.trim().toLowerCase())
-                                .maybeSingle();
-                            
-                            const asesorInfo = document.getElementById('asesor-info-modal');
-                            
-                            if (cliente && cliente.vendedores) {
-                                const asesor = cliente.vendedores;
-                                window.modoAsignacion = 'manual';
-                                window.asesorPreasignadoId = asesor.id;
-                                actualizarVisualizacionAsesor(asesor, 'email');
-                                
-                                document.querySelector('input[name="tipoAsignacion"][value="manual"]').checked = true;
-                                document.getElementById('selector-asesor-manual').style.display = 'block';
-                                document.getElementById('campo-email-cliente-modal').style.display = 'none';
-                                
-                                const selectManual = document.getElementById('asesor-manual-select');
-                                if (selectManual) {
-                                    for (let i = 0; i < selectManual.options.length; i++) {
-                                        if (selectManual.options[i].value === asesor.id) {
-                                            selectManual.selectedIndex = i;
-                                            break;
-                                        }
-                                    }
-                                }
-                                
-                                asesorInfo.innerHTML = `
-                                    <div class="mt-2 p-3 bg-green-50 rounded-lg border border-green-200">
-                                        <div class="flex items-center gap-2">
-                                            <i class="fas fa-user-check text-green-600"></i>
-                                            <div>
-                                                <p class="font-medium text-green-800">¡Asesor encontrado!</p>
-                                                <p class="text-sm font-semibold">${escapeHtml(asesor.nombre)}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                asesorInfo.classList.remove('hidden');
-                                
-                                mostrarModal('Asesor encontrado', `Serás atendido por ${asesor.nombre}`, 'success', { timer: 2000 });
-                            } else {
-                                asesorInfo.innerHTML = `
-                                    <div class="mt-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                                        <div class="flex items-center gap-2">
-                                            <i class="fas fa-info-circle text-yellow-600"></i>
-                                            <div>
-                                                <p class="font-medium text-yellow-800">Asesor no encontrado</p>
-                                                <p class="text-sm text-yellow-700">Se te asignará uno automáticamente.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                asesorInfo.classList.remove('hidden');
-                                await asignarAsesorAutomatico();
-                            }
-                        } catch (error) {
-                            console.error('Error:', error);
-                            mostrarModal('Error', 'No se pudo buscar el asesor', 'error');
-                        }
-                    };
-                }
-                
-                const selectManual = document.getElementById('asesor-manual-select');
-                if (selectManual && !selectManual.hasAttribute('data-listener')) {
-                    selectManual.setAttribute('data-listener', 'true');
-                    selectManual.onchange = function() {
-                        actualizarAsesorSeleccionadoManual();
-                    };
-                }
-                
-                // Botón enviar cotización
-                const btnEnviar = document.getElementById('btnEnviarCotizacion');
-                if (btnEnviar && !btnEnviar.hasAttribute('data-listener')) {
-                    btnEnviar.setAttribute('data-listener', 'true');
-                    btnEnviar.onclick = async () => {
-                        if (!window.validarTodosLosCampos || !window.validarTodosLosCampos()) {
-                            mostrarModal('Campos inválidos', 'Corrige los errores marcados', 'warning');
-                            return;
-                        }
-                        
-                        const nombre = document.getElementById('cliente-nombre-modal')?.value;
-                        const email = document.getElementById('cliente-correo-modal')?.value;
-                        const telefonoCompleto = window.obtenerTelefonoCompleto ? window.obtenerTelefonoCompleto() : document.getElementById('cliente-telefono-modal')?.value;
-                        
-                        if (!nombre || !email || !telefonoCompleto) {
-                            mostrarModal('Campos incompletos', 'Completa todos los campos obligatorios', 'warning');
-                            return;
-                        }
-                        
-                        let asesor = null;
-                        
-                        if (window.modoAsignacion === 'manual') {
-                            const selectManual = document.getElementById('asesor-manual-select');
-                            const asesorId = selectManual?.value;
-                            
-                            if (!asesorId) {
-                                mostrarModal('Asesor requerido', 'Selecciona un asesor de la lista', 'warning');
-                                return;
-                            }
-                            
-                            asesor = (vendedores || []).find(a => a.id === asesorId);
-                            
-                            if (!asesor) {
-                                const { data: vendedor } = await window.supabaseClient
-                                    .from('vendedores')
-                                    .select('id, nombre, telefono, email, leads_asignados_hoy')
-                                    .eq('id', asesorId)
-                                    .single();
-                                asesor = vendedor;
-                            }
-                        } else {
-                            try {
-                                const { data: vendedoresData } = await window.supabaseClient
-                                    .from('vendedores')
-                                    .select('id, nombre, telefono, email, leads_asignados_hoy')
-                                    .eq('activo', true)
-                                    .eq('atiende_outlet', true);
-                                
-                                if (vendedoresData && vendedoresData.length > 0) {
-                                    vendedoresData.sort((a, b) => (a.leads_asignados_hoy || 0) - (b.leads_asignados_hoy || 0));
-                                    asesor = vendedoresData[0];
-                                } else {
-                                    mostrarModal('Error', 'No hay asesores disponibles', 'error');
-                                    return;
-                                }
-                            } catch (error) {
-                                console.error('Error:', error);
-                                mostrarModal('Error', 'No se pudo asignar un asesor', 'error');
-                                return;
-                            }
-                        }
-                        
-                        if (!asesor || !asesor.id) {
-                            mostrarModal('Error', 'No se pudo asignar un asesor válido', 'error');
-                            return;
-                        }
-                        
-                        const datosCliente = {
-                            nombre: nombre,
-                            email: email,
-                            telefono: telefonoCompleto,
-                            empresa: document.getElementById('cliente-empresa-modal')?.value || null,
-                            ubicacionProyecto: document.getElementById('ubicacion-proyecto-modal')?.value || null,
-                            observaciones: document.getElementById('observaciones-modal')?.value || null,
-                            modoAsignacion: window.modoAsignacion || 'auto'
-                        };
-                        
-                        window.cerrarModalCotizacion();
-                        await enviarCotizacion(datosCliente, asesor);
-                    };
-                }
-                
-                if (modoInicial === 'auto') {
-                    await asignarAsesorAutomatico();
-                } else if (window.asesorPreasignadoId) {
-                    const asesorManual = (vendedores || []).find(v => v.id === window.asesorPreasignadoId);
-                    if (asesorManual) {
-                        actualizarVisualizacionAsesor(asesorManual, 'manual');
-                    }
-                }
-                
-                actualizarPlaceholderTelefono();
+                await renderizarPasoCotizacion(1, vendedores);
                 
             } catch (error) {
                 console.error('Error cargando modal:', error);
@@ -4954,7 +4778,941 @@ ${productosLista}
         }, 50);
     };
     
-    function eliminarProductoCotizacion(productoId, productoNombre) {
+    // ============================================
+    // RENDERIZAR PASOS DE COTIZACIÓN (STEPPER)
+    // ============================================
+    async function renderizarPasoCotizacion(paso, vendedores) {
+        const body = document.getElementById('modalCotizacionBody');
+        if (!body) return;
+        
+        const nombresPasos = ['Productos', 'Asesor', 'Datos', 'Enviar'];
+        
+        let stepperHtml = `
+            <div class="stepper-container">
+                <div class="stepper">
+                    ${nombresPasos.map((nombre, index) => {
+                        const numPaso = index + 1;
+                        let estado = '';
+                        if (numPaso < paso) estado = 'completado';
+                        else if (numPaso === paso) estado = 'activo';
+                        else estado = 'pendiente';
+                        
+                        return `
+                            <div class="stepper-step ${estado}" data-paso="${numPaso}">
+                                <div class="stepper-circle">
+                                    ${numPaso < paso ? '<i class="fas fa-check"></i>' : numPaso}
+                                </div>
+                                <div class="stepper-label">${nombre}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="stepper-line"></div>
+            </div>
+        `;
+        
+        let contenidoHtml = '';
+        
+        switch(paso) {
+            case 1:
+                contenidoHtml = await renderizarPasoProductos();
+                break;
+            case 2:
+                contenidoHtml = await renderizarPasoAsesor(vendedores);
+                break;
+            case 3:
+                contenidoHtml = await renderizarPasoDatos();
+                break;
+            case 4:
+                contenidoHtml = await renderizarPasoEnviar(vendedores);
+                break;
+        }
+        
+        body.innerHTML = `
+            ${stepperHtml}
+            <div class="paso-contenido">
+                ${contenidoHtml}
+            </div>
+            <div class="paso-acciones">
+                ${paso > 1 ? `<button class="btn-paso-anterior" onclick="window.irPasoCotizacion(${paso - 1})"><i class="fas fa-arrow-left"></i> Anterior</button>` : ''}
+                ${paso < 4 ? `<button class="btn-paso-siguiente" onclick="window.irPasoCotizacion(${paso + 1})">Siguiente <i class="fas fa-arrow-right"></i></button>` : ''}
+                ${paso === 4 ? `<button class="btn-paso-enviar" id="btnEnviarCotizacionFinal"><i class="fab fa-whatsapp"></i> Enviar Cotización</button>` : ''}
+            </div>
+        `;
+                
+        if (paso === 4) {
+            const btnEnviar = document.getElementById('btnEnviarCotizacionFinal');
+            if (btnEnviar) {
+                // ✅ IMPORTANTE: Remover event listeners anteriores
+                const nuevoBtn = btnEnviar.cloneNode(true);
+                btnEnviar.parentNode.replaceChild(nuevoBtn, btnEnviar);
+                
+                nuevoBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    console.log('📤 Click en enviar cotización');
+                    console.log('📋 Datos guardados:', {
+                        nombre: window.clienteNombreCache,
+                        email: window.clienteEmailCache,
+                        telefono: window.clienteTelefonoCache,
+                        empresa: window.clienteEmpresaCache,
+                        ubicacion: window.ubicacionCache,
+                        observaciones: window.observacionesCache
+                    });
+                    
+                    // ✅ USAR SOLO VARIABLES GLOBALES
+                    const nombre = window.clienteNombreCache || '';
+                    const email = window.clienteEmailCache || '';
+                    const telefono = window.clienteTelefonoCache || '';
+                    const empresa = window.clienteEmpresaCache || '';
+                    const ubicacion = window.ubicacionCache || '';
+                    const observaciones = window.observacionesCache || '';
+                    
+                    // Validar campos obligatorios
+                    if (!nombre || nombre.trim().length < 3) {
+                        mostrarModal('Campo incompleto', 
+                            'El nombre completo es obligatorio y debe tener al menos 3 caracteres.', 
+                            'warning');
+                        return;
+                    }
+                    
+                    if (!telefono || telefono.length < 7) {
+                        mostrarModal('Campo incompleto', 
+                            'El teléfono es obligatorio y debe tener al menos 7 dígitos.', 
+                            'warning');
+                        return;
+                    }
+                    
+                    // Validar email si está presente
+                    if (email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+                        mostrarModal('Email inválido', 
+                            'Ingresa un correo electrónico válido.', 
+                            'warning');
+                        return;
+                    }
+                    
+                    // Obtener asesor seleccionado
+                    let asesor = asesorSeleccionadoActual;
+                    
+                    if (!asesor) {
+                        mostrarModal('Error', 
+                            'No se pudo identificar al asesor. Por favor, intenta nuevamente.', 
+                            'error');
+                        return;
+                    }
+                    
+                    // Preparar datos del cliente
+                    const datosCliente = {
+                        nombre: nombre.trim(),
+                        email: email.trim() || null,
+                        telefono: telefono,
+                        empresa: empresa.trim() || null,
+                        ubicacionProyecto: ubicacion || null,
+                        observaciones: observaciones.trim() || null
+                    };
+                    
+                    console.log('📤 Enviando cotización con datos:', datosCliente);
+                    console.log('👤 Asesor:', asesor);
+                    
+                    // Cerrar modal y enviar
+                    window.cerrarModalCotizacion();
+                    await enviarCotizacion(datosCliente, asesor);
+                });
+            }
+        }
+    }
+    
+    // ============================================
+    // RENDERIZAR PASO 1: PRODUCTOS
+    // ============================================
+    async function renderizarPasoProductos() {
+        const productosHtml = cotizacionSeleccionados.map(p => {
+            const productoOriginal = window.outletProductosCache.find(prod => prod.id === p.id);
+            const medida = productoOriginal?.medida || p.medida || 'No especifica';
+            const espesor = productoOriginal?.espesor || p.espesor || 'No especifica';
+            
+            return `
+                <div class="producto-item">
+                    <div class="producto-info">
+                        <div class="producto-nombre">${escapeHtml(p.nombre) || 'Producto'}</div>
+                        <div class="producto-codigo">${escapeHtml(p.codigo) || 'N/A'}</div>
+                        <div class="producto-especificaciones">
+                            ${medida !== 'No especifica' ? `<span class="producto-especificacion"><i class="fas fa-ruler-combined"></i> ${escapeHtml(medida)}</span>` : ''}
+                            ${espesor !== 'No especifica' ? `<span class="producto-especificacion"><i class="fas fa-arrows-alt-h"></i> ${escapeHtml(espesor)}</span>` : ''}
+                        </div>
+                    </div>
+                    <button class="btn-eliminar-producto" onclick="window.eliminarProductoCotizacion('${p.id}', '${escapeHtml(p.nombre)}')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
+        
+        return `
+            <div class="paso-productos">
+                <h4>Productos seleccionados</h4>
+                <p class="paso-subtitulo">${cotizacionSeleccionados.length} producto(s) en tu cotización</p>
+                <div class="productos-lista">
+                    ${productosHtml || '<p class="text-center text-gray-400 py-4">No hay productos seleccionados</p>'}
+                </div>
+                <button class="btn-agregar-mas" onclick="window.agregarMasProductos()">
+                    <i class="fas fa-plus-circle"></i> Agregar más productos
+                </button>
+            </div>
+        `;
+    }
+    
+    // ============================================
+    // OBTENER MEJOR ASESOR DISPONIBLE
+    // ============================================
+    function obtenerMejorAsesor(vendedores) {
+        if (!vendedores || vendedores.length === 0) return null;
+        
+        // Ordenar por cantidad de leads asignados (menor es mejor)
+        const ordenados = [...vendedores].sort((a, b) => {
+            const leadsA = a.leads_asignados_hoy || 0;
+            const leadsB = b.leads_asignados_hoy || 0;
+            return leadsA - leadsB;
+        });
+        
+        return ordenados[0];
+    }
+
+    // ============================================
+    // FUNCIONES DE CONTROL DE ASESOR - PROPUESTA 1
+    // ============================================
+
+    // Cambiar modo de asignación
+    window.setModoAsesor = function(modo) {
+        console.log('🔄 Cambiando modo a:', modo);
+        modoAsignacionActual = modo;
+        
+        if (modo === 'auto') {
+            // Asignar automáticamente el mejor asesor
+            const vendedores = asesoresPrecargados;
+            if (vendedores && vendedores.length > 0) {
+                asesorSeleccionadoActual = obtenerMejorAsesor(vendedores);
+            }
+        }
+        
+        // Re-renderizar el paso
+        renderizarPasoCotizacion(2, asesoresPrecargados);
+    };
+
+    // Usar asignación automática (desde el botón)
+    window.usarAsignacionAuto = function() {
+        window.setModoAsesor('auto');
+    };
+
+    // Usar selección manual (desde el botón)
+    window.usarSeleccionManual = function() {
+        window.setModoAsesor('manual');
+    };
+
+    // Seleccionar asesor manualmente desde la lista
+    window.seleccionarAsesorManual = function(asesorId) {
+        console.log('👤 Seleccionando asesor:', asesorId);
+        
+        const vendedores = asesoresPrecargados;
+        if (!vendedores) return;
+        
+        const asesor = vendedores.find(v => v.id === asesorId);
+        if (asesor) {
+            asesorSeleccionadoActual = asesor;
+            modoAsignacionActual = 'manual';
+            
+            // Actualizar el input oculto
+            const inputId = document.getElementById('asesor-seleccionado-id');
+            if (inputId) {
+                inputId.value = asesor.id;
+            }
+            
+            // Re-renderizar para mostrar la selección
+            renderizarPasoCotizacion(2, asesoresPrecargados);
+        }
+    };
+
+    // Cambiar asesor (desde el botón "Cambiar" en el asesor asignado)
+    window.cambiarAsesorModal = function() {
+        console.log('🔄 Cambiando asesor...');
+        
+        // Cambiar a modo manual para mostrar la lista
+        modoAsignacionActual = 'manual';
+        
+        // Re-renderizar
+        renderizarPasoCotizacion(2, asesoresPrecargados);
+    };
+
+    // ============================================
+    // RENDERIZAR PASO 2: ASESOR - PROPUESTA 1
+    // ============================================
+    async function renderizarPasoAsesor(vendedores) {
+        if (!vendedores || vendedores.length === 0) {
+            return `
+                <div class="paso-asesor">
+                    <div class="alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>No hay asesores disponibles en este momento.</p>
+                        <p class="text-sm">Por favor, contacta al administrador.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Obtener mejor asesor automático
+        const mejorAsesor = obtenerMejorAsesor(vendedores);
+        
+        // Si no hay asesor seleccionado, asignar el mejor automáticamente
+        if (!asesorSeleccionadoActual) {
+            asesorSeleccionadoActual = mejorAsesor;
+            modoAsignacionActual = 'auto';
+        }
+
+        return `
+            <div class="paso-asesor">
+                <h4>¿Cómo quieres ser atendido?</h4>
+                <p class="paso-subtitulo">Elige la opción que prefieras</p>
+                
+                <div class="opciones-asesor">
+                    <!-- ========================================== -->
+                    <!-- OPCIÓN 1: ASIGNACIÓN AUTOMÁTICA -->
+                    <!-- ========================================== -->
+                    <div class="opcion-asesor ${modoAsignacionActual === 'auto' ? 'activa' : ''}" 
+                        onclick="window.setModoAsesor('auto')">
+                        <div class="opcion-header">
+                            <div class="opcion-texto">
+                                <strong>Asignación Automática</strong>
+                                <span>Te asignaremos el mejor asesor disponible</span>
+                            </div>
+                            ${modoAsignacionActual === 'auto' ? 
+                                '<span class="check"><i class="fas fa-check-circle"></i></span>' : 
+                                ''}
+                        </div>
+                        
+                        <!-- Mostrar asesor asignado si está en modo automático -->
+                        ${modoAsignacionActual === 'auto' && asesorSeleccionadoActual ? `
+                            <div class="asesor-asignado">
+                                <div class="asesor-avatar">
+                                    ${asesorSeleccionadoActual.nombre?.charAt(0) || 'A'}
+                                </div>
+                                <div class="asesor-info">
+                                    <div class="asesor-nombre">
+                                        ${escapeHtml(asesorSeleccionadoActual.nombre)}
+                                        <span class="badge-auto">Asignado automáticamente</span>
+                                    </div>
+                                    <div class="asesor-detalles">
+                                        ${asesorSeleccionadoActual.telefono ? 
+                                            `<span><i class="fas fa-phone"></i> ${escapeHtml(asesorSeleccionadoActual.telefono)}</span>` : 
+                                            ''}
+                                        ${asesorSeleccionadoActual.email ? 
+                                            `<span><i class="fas fa-envelope"></i> ${escapeHtml(asesorSeleccionadoActual.email)}</span>` : 
+                                            ''}
+                                    </div>
+                                </div>
+                                <button class="btn-cambiar-asesor-mini" 
+                                        onclick="event.stopPropagation(); window.cambiarAsesorModal()">
+                                    <i class="fas fa-sync-alt"></i> Cambiar
+                                </button>
+                            </div>
+                        ` : ''}
+                        
+                        ${modoAsignacionActual !== 'auto' ? `
+                            <button class="btn-usar-auto" onclick="window.usarAsignacionAuto()">
+                                Usar asignación automática
+                            </button>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- ========================================== -->
+                    <!-- OPCIÓN 2: SELECCIÓN MANUAL -->
+                    <!-- ========================================== -->
+                    <div class="opcion-asesor ${modoAsignacionActual === 'manual' ? 'activa' : ''}" 
+                        onclick="window.setModoAsesor('manual')">
+                        <div class="opcion-header">
+                            <div class="opcion-icono">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="opcion-texto">
+                                <strong>Selección Manual</strong>
+                                <span>Elige quién te gustaría que te atienda</span>
+                            </div>
+                            ${modoAsignacionActual === 'manual' ? 
+                                '<span class="check"><i class="fas fa-check-circle"></i></span>' : 
+                                ''}
+                        </div>
+                        
+                        ${modoAsignacionActual === 'manual' ? `
+                            <div class="asesores-lista">
+                                ${vendedores.map(v => `
+                                    <div class="asesor-item ${asesorSeleccionadoActual?.id === v.id ? 'selected' : ''}" 
+                                        onclick="event.stopPropagation(); window.seleccionarAsesorManual('${v.id}')">
+                                        <div class="asesor-avatar-small">
+                                            ${v.nombre?.charAt(0) || 'A'}
+                                        </div>
+                                        <div class="asesor-info">
+                                            <div class="asesor-nombre">${escapeHtml(v.nombre)}</div>
+                                            <div class="asesor-detalles">
+                                                ${v.telefono ? `<span><i class="fas fa-phone"></i> ${escapeHtml(v.telefono)}</span>` : ''}
+                                            </div>
+                                        </div>
+                                        ${asesorSeleccionadoActual?.id === v.id ? 
+                                            '<span class="seleccionado-badge"><i class="fas fa-check"></i> Seleccionado</span>' : 
+                                            '<button class="btn-seleccionar">Seleccionar</button>'}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <button class="btn-usar-manual" onclick="window.usarSeleccionManual()">
+                                Elegir manualmente
+                            </button>
+                        `}
+                    </div>
+                </div>
+                
+                <!-- Mensaje informativo sobre búsqueda por email (próximamente) -->
+                <div class="email-future">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>¿Tienes un asesor habitual?</strong>
+                        <span>Próximamente podrás buscarlo por email. Por ahora, elige de la lista.</span>
+                    </div>
+                </div>
+                
+                <!-- Input oculto para guardar el ID del asesor -->
+                <input type="hidden" id="asesor-seleccionado-id" value="${asesorSeleccionadoActual?.id || ''}">
+            </div>
+        `;
+    }
+    
+    // ============================================
+    // RENDERIZAR PASO 3: DATOS - CORREGIDO
+    // ============================================
+    async function renderizarPasoDatos() {
+        return `
+            <div class="paso-datos">
+                <h4>Datos de contacto</h4>
+                <p class="paso-subtitulo">Completa tus datos para recibir la cotización</p>
+                
+                <div class="form-group">
+                    <label>Nombre completo <span class="required">*</span></label>
+                    <input type="text" id="cliente-nombre-modal" 
+                        placeholder="Ej: Juan Pérez"
+                        value="${window.clienteNombreCache || ''}"
+                        oninput="window.clienteNombreCache = this.value.trim(); window.validarCampoPaso('nombre')">
+                    <div id="error-nombre" class="mensaje-error hidden"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Correo electrónico <span class="optional">(opcional)</span></label>
+                    <input type="email" id="cliente-correo-modal" 
+                        placeholder="cliente@ejemplo.com"
+                        value="${window.clienteEmailCache || ''}"
+                        oninput="window.clienteEmailCache = this.value.trim(); window.validarCampoPaso('email')">
+                    <div id="error-email" class="mensaje-error hidden"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Teléfono <span class="required">*</span></label>
+                    <div class="telefono-wrapper">
+                        <select id="prefijo-pais" onchange="window.actualizarPlaceholderTelefono()">
+                            <option value="51" selected>🇵🇪 +51</option>
+                            <option value="1">🇺🇸 +1</option>
+                            <option value="34">🇪🇸 +34</option>
+                            <option value="52">🇲🇽 +52</option>
+                            <option value="54">🇦🇷 +54</option>
+                            <option value="56">🇨🇱 +56</option>
+                            <option value="57">🇨🇴 +57</option>
+                        </select>
+                        <input type="tel" id="cliente-telefono-modal" 
+                            placeholder="987654321"
+                            value="${window.clienteTelefonoCache || ''}"
+                            oninput="window.clienteTelefonoCache = this.value.replace(/\\D/g, ''); window.validarCampoPaso('telefono')">
+                    </div>
+                    <div id="error-telefono" class="mensaje-error hidden"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Empresa <span class="optional">(opcional)</span></label>
+                    <input type="text" id="cliente-empresa-modal" 
+                        placeholder="Nombre de tu empresa"
+                        value="${window.clienteEmpresaCache || ''}"
+                        oninput="window.clienteEmpresaCache = this.value.trim()">
+                </div>
+                
+                <div class="form-group">
+                    <label>Ubicación del proyecto</label>
+                    <select id="ubicacion-proyecto-modal" onchange="window.ubicacionCache = this.value">
+                        <option value="">Seleccionar ubicación</option>
+                        <option value="Lima" ${window.ubicacionCache === 'Lima' ? 'selected' : ''}>Lima</option>
+                        <option value="Provincia" ${window.ubicacionCache === 'Provincia' ? 'selected' : ''}>Provincia</option>
+                        <option value="Exterior" ${window.ubicacionCache === 'Exterior' ? 'selected' : ''}>Exterior</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="observaciones-modal" rows="3" 
+                            placeholder="Comentarios adicionales..."
+                            oninput="window.observacionesCache = this.value">${window.observacionesCache || ''}</textarea>
+                </div>
+                
+                <div id="mensaje-error-paso3" class="hidden mensaje-error-paso3">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    <span id="texto-error-paso3">Por favor, completa todos los campos obligatorios.</span>
+                </div>
+            </div>
+        `;
+    }
+        
+    // ============================================
+    // RENDERIZAR PASO 4: ENVIAR - CORREGIDO
+    // ============================================
+    async function renderizarPasoEnviar(vendedores) {
+        // ✅ USAR SOLO VARIABLES GLOBALES
+        const nombre = window.clienteNombreCache || '';
+        const email = window.clienteEmailCache || '';
+        const telefono = window.clienteTelefonoCache || '';
+        const empresa = window.clienteEmpresaCache || '';
+        const ubicacion = window.ubicacionCache || '';
+        const observaciones = window.observacionesCache || '';
+
+console.log('📋 PASO 4 - Variables globales:', {
+    nombre: window.clienteNombreCache,
+    email: window.clienteEmailCache,
+    telefono: window.clienteTelefonoCache,
+    empresa: window.clienteEmpresaCache,
+    ubicacion: window.ubicacionCache,
+    observaciones: window.observacionesCache
+});        
+        
+        // Obtener el asesor seleccionado
+        let asesorNombre = 'No asignado';
+        let asesorTelefono = '';
+        let asesorEmail = '';
+        
+        if (asesorSeleccionadoActual) {
+            asesorNombre = asesorSeleccionadoActual.nombre || 'Asesor';
+            asesorTelefono = asesorSeleccionadoActual.telefono || '';
+            asesorEmail = asesorSeleccionadoActual.email || '';
+        }
+        
+        return `
+            <div class="paso-enviar">
+                <div class="resumen-envio">
+                    <div class="resumen-icono">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4>¡Todo listo!</h4>
+                    <p class="paso-subtitulo">Revisa tus datos antes de enviar</p>
+                    
+                    <div class="resumen-datos">
+                        <div class="resumen-item">
+                            <span class="resumen-label">Cliente</span>
+                            <span class="resumen-valor">${escapeHtml(nombre) || 'No especificado'}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Email</span>
+                            <span class="resumen-valor">${escapeHtml(email) || 'No especificado'}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Teléfono</span>
+                            <span class="resumen-valor">${escapeHtml(telefono) || 'No especificado'}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Empresa</span>
+                            <span class="resumen-valor">${escapeHtml(empresa) || 'No especifica'}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Ubicación</span>
+                            <span class="resumen-valor">${escapeHtml(ubicacion) || 'No especifica'}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Asesor</span>
+                            <span class="resumen-valor">
+                                ${escapeHtml(asesorNombre)}
+                                ${asesorTelefono ? `<span class="text-sm text-gray-400">(${escapeHtml(asesorTelefono)})</span>` : ''}
+                            </span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Productos</span>
+                            <span class="resumen-valor">${cotizacionSeleccionados.length} producto(s)</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-label">Modo de asignación</span>
+                            <span class="resumen-valor">
+                                ${modoAsignacionActual === 'auto' ? 'Automática' : 'Manual'}
+                            </span>
+                        </div>
+                        ${observaciones ? `
+                            <div class="resumen-item">
+                                <span class="resumen-label">Observaciones</span>
+                                <span class="resumen-valor">${escapeHtml(observaciones)}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // ============================================
+    // VALIDACIONES DE PASO 3 - CORREGIDAS
+    // ============================================
+    window.validarCampoPaso = function(campo) {
+        const errorElement = document.getElementById(`error-${campo}`);
+        const inputElement = document.getElementById(`cliente-${campo === 'nombre' ? 'nombre-modal' : campo === 'email' ? 'correo-modal' : 'telefono-modal'}`);
+        
+        if (!errorElement || !inputElement) return;
+        
+        const valor = inputElement.value.trim();
+        let esValido = true;
+        let mensajeError = '';
+        
+        switch(campo) {
+            case 'nombre':
+                if (valor.length === 0) {
+                    esValido = false;
+                    mensajeError = 'El nombre es obligatorio';
+                } else if (valor.length < 3) {
+                    esValido = false;
+                    mensajeError = 'El nombre debe tener al menos 3 caracteres';
+                } else if (/\d/.test(valor)) {
+                    esValido = false;
+                    mensajeError = 'El nombre no debe contener números';
+                } else {
+                    // ✅ GUARDAR EN VARIABLE GLOBAL
+                    window.clienteNombreCache = valor;
+                }
+                break;
+            case 'email':
+                if (valor.length > 0 && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(valor)) {
+                    esValido = false;
+                    mensajeError = 'Ingresa un correo electrónico válido';
+                } else {
+                    // ✅ GUARDAR EN VARIABLE GLOBAL
+                    window.clienteEmailCache = valor;
+                }
+                break;
+            case 'telefono':
+                const prefijoSelect = document.getElementById('prefijo-pais');
+                const prefijo = prefijoSelect ? prefijoSelect.value : '51';
+                const soloNumeros = valor.replace(/\D/g, '');
+                
+                if (valor.length === 0) {
+                    esValido = false;
+                    mensajeError = 'El teléfono es obligatorio';
+                } else {
+                    let longitudMinima = 7;
+                    let longitudMaxima = 15;
+                    
+                    switch(prefijo) {
+                        case '51': longitudMinima = 9; longitudMaxima = 9; break;
+                        case '1': longitudMinima = 10; longitudMaxima = 10; break;
+                        case '34': longitudMinima = 9; longitudMaxima = 9; break;
+                        default: longitudMinima = 7; longitudMaxima = 15;
+                    }
+                    
+                    if (soloNumeros.length < longitudMinima || soloNumeros.length > longitudMaxima) {
+                        esValido = false;
+                        mensajeError = `El número debe tener ${longitudMinima} dígitos`;
+                    } else {
+                        // ✅ GUARDAR EN VARIABLE GLOBAL
+                        window.clienteTelefonoCache = soloNumeros;
+                    }
+                }
+                break;
+        }
+        
+        if (esValido) {
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+            inputElement.style.borderColor = '#10b981';
+        } else {
+            errorElement.classList.remove('hidden');
+            errorElement.textContent = mensajeError;
+            inputElement.style.borderColor = '#dc2626';
+        }
+    };
+    
+    // ============================================
+    // VALIDAR TODOS LOS CAMPOS DEL PASO 3
+    // ============================================
+    function validarTodosCamposPaso3() {
+        // ✅ USAR VARIABLES GLOBALES
+        const nombre = window.clienteNombreCache || '';
+        const telefono = window.clienteTelefonoCache || '';
+        const email = window.clienteEmailCache || '';
+        
+        // Validar que los campos obligatorios estén completos
+        const nombreValido = nombre.length >= 3 && !/\d/.test(nombre);
+        const telefonoValido = telefono.length >= 7;
+        
+        // Validar email si está presente
+        let emailValido = true;
+        if (email && email.length > 0) {
+            emailValido = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+        }
+        
+        const errorMsg = document.getElementById('mensaje-error-paso3');
+        const textoError = document.getElementById('texto-error-paso3');
+        
+        const camposCompletos = nombreValido && telefonoValido && emailValido;
+        
+        if (camposCompletos) {
+            if (errorMsg) errorMsg.classList.add('hidden');
+            return true;
+        } else {
+            if (errorMsg) {
+                errorMsg.classList.remove('hidden');
+                if (!nombreValido) {
+                    textoError.textContent = 'El nombre debe tener al menos 3 caracteres y no contener números.';
+                } else if (!telefonoValido) {
+                    textoError.textContent = 'El teléfono es obligatorio y debe tener al menos 7 dígitos.';
+                } else if (!emailValido) {
+                    textoError.textContent = 'Ingresa un correo electrónico válido.';
+                } else {
+                    textoError.textContent = 'Por favor, completa todos los campos obligatorios.';
+                }
+            }
+            return false;
+        }
+    }
+    
+    // ============================================
+    // FUNCIONES DE NAVEGACIÓN DE PASOS
+    // ============================================
+
+    // ============================================
+    // NAVEGACIÓN DE PASOS - CORREGIDA
+    // ============================================
+    window.irPasoCotizacion = function(paso) {
+        if (paso < 1 || paso > 4) return;
+        
+        // ✅ Si vamos del paso 3 al 4, guardar los datos primero
+        if (paso === 4 && pasoActualCotizacion === 3) {
+            // Guardar datos desde los inputs actuales
+            const nombreInput = document.getElementById('cliente-nombre-modal');
+            const telefonoInput = document.getElementById('cliente-telefono-modal');
+            const emailInput = document.getElementById('cliente-correo-modal');
+            const empresaInput = document.getElementById('cliente-empresa-modal');
+            const ubicacionInput = document.getElementById('ubicacion-proyecto-modal');
+            const observacionesInput = document.getElementById('observaciones-modal');
+            
+            if (nombreInput) window.clienteNombreCache = nombreInput.value.trim();
+            if (telefonoInput) window.clienteTelefonoCache = telefonoInput.value.replace(/\D/g, '');
+            if (emailInput) window.clienteEmailCache = emailInput.value.trim();
+            if (empresaInput) window.clienteEmpresaCache = empresaInput.value.trim();
+            if (ubicacionInput) window.ubicacionCache = ubicacionInput.value;
+            if (observacionesInput) window.observacionesCache = observacionesInput.value;
+            
+            // Validar campos
+            const nombre = window.clienteNombreCache || '';
+            const telefono = window.clienteTelefonoCache || '';
+            const email = window.clienteEmailCache || '';
+            
+            // Validar nombre
+            if (!nombre || nombre.length < 3) {
+                mostrarModal('Campo incompleto', 
+                    'El nombre completo es obligatorio y debe tener al menos 3 caracteres.', 
+                    'warning');
+                return;
+            }
+            
+            // Validar teléfono
+            if (!telefono || telefono.length < 7) {
+                mostrarModal('Campo incompleto', 
+                    'El teléfono es obligatorio y debe tener al menos 7 dígitos.', 
+                    'warning');
+                return;
+            }
+            
+            // Validar email si está presente
+            if (email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+                mostrarModal('Email inválido', 
+                    'Ingresa un correo electrónico válido.', 
+                    'warning');
+                return;
+            }
+        }
+        
+        // Validar paso 2 -> paso 3: debe tener asesor asignado
+        if (paso === 3 && !asesorSeleccionadoActual) {
+            mostrarModal('Asesor requerido', 
+                'Debes tener un asesor asignado para continuar. ' +
+                'Elige entre asignación automática o selección manual.', 
+                'warning');
+            return;
+        }
+        
+        pasoActualCotizacion = paso;
+        renderizarPasoCotizacion(paso, asesoresPrecargados);
+    };
+    
+    window.agregarMasProductos = function() {
+        window.cerrarModalCotizacion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const productosSection = document.getElementById('productos');
+        if (productosSection) {
+            productosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            productosSection.style.border = '3px solid #10b981';
+            setTimeout(() => {
+                productosSection.style.border = 'none';
+            }, 3000);
+        }
+    };
+    
+    window.cambiarModoAsignacionPaso = function(modo) {
+        modoAsignacionActual = modo;
+        const selectorManual = document.getElementById('selector-asesor-paso');
+        const campoEmail = document.getElementById('campo-email-paso');
+        
+        if (modo === 'manual') {
+            if (selectorManual) selectorManual.style.display = 'block';
+            if (campoEmail) campoEmail.style.display = 'none';
+            
+            const select = document.getElementById('asesor-manual-paso');
+            if (select && select.value) {
+                const asesor = asesoresPrecargados?.find(a => a.id === select.value);
+                if (asesor) {
+                    asesorSeleccionadoActual = asesor;
+                    actualizarAsesorSeleccionadoPaso(asesor, 'manual');
+                }
+            }
+        } else {
+            if (selectorManual) selectorManual.style.display = 'none';
+            if (campoEmail) campoEmail.style.display = 'block';
+            asignarAsesorAutomaticoPaso();
+        }
+    };
+    
+    window.seleccionarAsesorManualPaso = function(asesorId) {
+        const asesor = asesoresPrecargados?.find(a => a.id === asesorId);
+        if (asesor) {
+            asesorSeleccionadoActual = asesor;
+            actualizarAsesorSeleccionadoPaso(asesor, 'manual');
+        }
+    };
+    
+    window.buscarAsesorPorEmailPaso = async function() {
+        const email = document.getElementById('cliente-email-paso')?.value;
+        if (!email) {
+            mostrarModal('Aviso', 'Ingresa tu correo electrónico para buscar a tu asesor', 'warning');
+            return;
+        }
+        
+        try {
+            const { data: cliente } = await window.supabaseClient
+                .from('clientes_asesores')
+                .select('vendedor_id, vendedores:vendedor_id(id, nombre, telefono, email)')
+                .eq('email', email.trim().toLowerCase())
+                .maybeSingle();
+            
+            const asesorInfo = document.getElementById('asesor-info-paso');
+            
+            if (cliente && cliente.vendedores) {
+                const asesor = cliente.vendedores;
+                asesorSeleccionadoActual = asesor;
+                actualizarAsesorSeleccionadoPaso(asesor, 'email');
+                
+                if (asesorInfo) {
+                    asesorInfo.innerHTML = `
+                        <div class="asesor-info-result success">
+                            <i class="fas fa-user-check"></i> ¡Asesor encontrado! ${escapeHtml(asesor.nombre)}
+                        </div>
+                    `;
+                    asesorInfo.classList.remove('hidden');
+                }
+            } else {
+                if (asesorInfo) {
+                    asesorInfo.innerHTML = `
+                        <div class="asesor-info-result warning">
+                            <i class="fas fa-info-circle"></i> Asesor no encontrado. Se te asignará uno automáticamente.
+                        </div>
+                    `;
+                    asesorInfo.classList.remove('hidden');
+                }
+                await asignarAsesorAutomaticoPaso();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarModal('Error', 'No se pudo buscar el asesor', 'error');
+        }
+    };
+    
+    async function asignarAsesorAutomaticoPaso() {
+        try {
+            const { data: vendedoresActualizados } = await window.supabaseClient
+                .from('vendedores')
+                .select('id, nombre, telefono, email, leads_asignados_hoy')
+                .eq('activo', true)
+                .eq('atiende_outlet', true);
+            
+            if (vendedoresActualizados && vendedoresActualizados.length > 0) {
+                vendedoresActualizados.sort((a, b) => (a.leads_asignados_hoy || 0) - (b.leads_asignados_hoy || 0));
+                const mejorAsesor = vendedoresActualizados[0];
+                asesorSeleccionadoActual = mejorAsesor;
+                actualizarAsesorSeleccionadoPaso(mejorAsesor, 'auto');
+                
+                const asesorInfo = document.getElementById('asesor-info-paso');
+                if (asesorInfo) {
+                    asesorInfo.innerHTML = `
+                        <div class="asesor-info-result success">
+                            <i class="fas fa-user-check"></i> Asesor asignado automáticamente: ${escapeHtml(mejorAsesor.nombre)}
+                        </div>
+                    `;
+                    asesorInfo.classList.remove('hidden');
+                }
+            } else {
+                mostrarModal('Error', 'No hay asesores disponibles', 'error');
+            }
+        } catch (error) {
+            console.error('Error en asignación automática:', error);
+        }
+    }
+    
+    function actualizarAsesorSeleccionadoPaso(asesor, origen) {
+        const container = document.getElementById('asesor-seleccionado-paso');
+        const nombreEl = document.getElementById('asesor-nombre-paso');
+        const contactoEl = document.getElementById('asesor-contacto-paso');
+        const idInput = document.getElementById('asesor-seleccionado-id');
+        
+        if (container && nombreEl && contactoEl && idInput) {
+            container.classList.remove('hidden');
+            
+            let badgeTexto = '';
+            if (origen === 'auto') badgeTexto = 'Asignado automáticamente';
+            else if (origen === 'manual') badgeTexto = 'Seleccionado por ti';
+            else if (origen === 'email') badgeTexto = 'Asociado a tu correo';
+            
+            nombreEl.innerHTML = `
+                ${escapeHtml(asesor.nombre || 'Asesor')}
+                <span class="asesor-badge ${origen}">${badgeTexto}</span>
+            `;
+            
+            contactoEl.innerHTML = `
+                ${asesor.email ? `<span><i class="fas fa-envelope"></i> ${escapeHtml(asesor.email)}</span>` : ''}
+                ${asesor.telefono ? `<span><i class="fas fa-phone"></i> ${escapeHtml(asesor.telefono)}</span>` : ''}
+            `;
+            
+            idInput.value = asesor.id;
+            asesorSeleccionadoActual = asesor;
+        }
+    }
+    
+    window.actualizarPlaceholderTelefono = function() {
+        const prefijoSelect = document.getElementById('prefijo-pais');
+        const telefonoInput = document.getElementById('cliente-telefono-modal');
+        if (!prefijoSelect || !telefonoInput) return;
+        
+        const placeholders = {
+            '51': '987654321',
+            '1': '2125551234',
+            '34': '612345678',
+            '52': '5512345678'
+        };
+        telefonoInput.placeholder = placeholders[prefijoSelect.value] || '123456789';
+    };
+    
+    window.eliminarProductoCotizacion = function(productoId, productoNombre) {
         mostrarModal(
             '¿Eliminar producto?',
             `¿Estás seguro de que deseas eliminar "<strong>${productoNombre || 'este producto'}</strong>" de tu cotización?`,
@@ -4968,8 +5726,13 @@ ${productosLista}
             if (result.isConfirmed) {
                 cotizacionSeleccionados = cotizacionSeleccionados.filter(p => p.id !== productoId);
                 localStorage.setItem(CONFIG.COTIZACION_STORAGE_KEY, JSON.stringify(cotizacionSeleccionados));
+                
+                // ✅ ACTUALIZAR TODOS LOS BOTONES
+                actualizarTodosLosBotonesCotizar();
+                
+                // ✅ ACTUALIZAR BARRA Y BADGE
                 actualizarBarraFlotante();
-                actualizarBotonCard(productoId, true);
+                actualizarBadgeHeader();
                 
                 if (cotizacionSeleccionados.length === 0) {
                     window.cerrarModalCotizacion();
@@ -4979,16 +5742,19 @@ ${productosLista}
                 }
             }
         });
-    }
-    
-    window.eliminarProductoCotizacion = eliminarProductoCotizacion;
+    };
     
     window.cerrarModalCotizacion = function() {
         const modal = document.getElementById('modalCotizacion');
-        if (modal) modal.classList.remove('active');
-        document.body.style.overflow = '';
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     };
     
+    // ============================================
+    // COUNTDOWN
+    // ============================================
     function initCountdown() {
         const fechaInicio = new Date(2026, 5, 24);
         const fechaFin = new Date(2026, 6, 18);
@@ -5002,7 +5768,7 @@ ${productosLista}
             mensaje = "OFERTA PRÓXIMAMENTE";
         } else if (hoy >= fechaInicio && hoy <= fechaFin) {
             targetDate = fechaFin;
-            mensaje = "OFERTA POR TIEMPO LIMITADO";
+            mensaje = "⏰ OFERTA POR TIEMPO LIMITADO";
         } else {
             targetDate = null;
             mensaje = "OFERTA FINALIZADA";
@@ -5044,7 +5810,7 @@ ${productosLista}
     const heroBackgroundImage = '../FOTO/foto_03.webp';
     
     const modalConfirmacionHtml = `
-    <div id="modalConfirmacion" class="modal-personalizado">
+    <div id="modalConfirmacion" class="modal-personalizado" style="display:none;">
         <div class="modal-personalizado-contenido">
             <div class="modal-personalizado-header"><i class="fas fa-question-circle"></i> Confirmar acción</div>
             <div class="modal-personalizado-body">
@@ -5063,29 +5829,38 @@ ${productosLista}
     <div id="modalCotizacion" class="modal-cotizacion">
         <div class="modal-cotizacion-contenido">
             <div class="modal-cotizacion-header">
-                <h3><i class="fas fa-file-invoice"></i> Nueva Cotización</h3>
-                <button class="modal-cotizacion-close" onclick="window.cerrarModalCotizacion()"><i class="fas fa-times"></i></button>
+                <h3>Nueva Cotización</h3>
+                <button class="modal-cotizacion-close" onclick="window.cerrarModalCotizacion()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="modal-cotizacion-body" id="modalCotizacionBody"><div style="text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i><p>Cargando...</p></div></div>
-            <div class="modal-cotizacion-footer">
-                <button class="btn-modal-cancelar" onclick="window.cerrarModalCotizacion()">Cancelar</button>
-                <button class="btn-modal-confirmar" id="btnEnviarCotizacion" style="background:#25D366;"><i class="fab fa-whatsapp"></i> Enviar</button>
+            <div class="modal-cotizacion-body" id="modalCotizacionBody">
+                <!-- El contenido se renderiza dinámicamente -->
             </div>
+            <div class="modal-cotizacion-footer" id="modalCotizacionFooter" style="display: none;"></div>
         </div>
     </div>`;
     
     const modalQRHtml = `
-    <div id="modalQR" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; flex-direction: column; align-items: center; justify-content: center;">
-        <div style="background: white; border-radius: 20px; width: 90%; max-width: 500px; overflow: hidden;">
-            <div style="background: #39080a; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0;"><i class="fas fa-qrcode"></i> Escanear Código QR</h3>
-                <button id="btnCerrarQR" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
+    <div id="modalQR" class="modal-qr" style="display:none;">
+        <div class="modal-qr-contenido">
+            <div class="modal-qr-header">
+                <h3><i class="fas fa-qrcode"></i> Escanear Código QR</h3>
+                <!-- Botón cerrar (X) - SIN onclick -->
+                <button id="btnCerrarQR" class="modal-qr-close" type="button">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div style="padding: 20px;">
-                <div id="qr-reader" style="width: 100%;"></div>
-                <div id="qr-mensaje" style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
-                    <i class="fas fa-info-circle"></i> Apunte la cámara al código QR del producto
+            <div class="modal-qr-body">
+                <div id="qr-reader" style="width:100%; max-width:400px; margin:0 auto;"></div>
+                <div class="qr-instrucciones">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Apunte la cámara al código QR del producto</span>
                 </div>
+                <!-- Botón cancelar - SIN onclick -->
+                <button id="btnCancelarQR" class="btn-cancelar-qr" type="button">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
             </div>
         </div>
     </div>`;
@@ -5100,116 +5875,926 @@ ${productosLista}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
         <style>
+            /* ============================================ */
+            /* RESET Y VARIABLES */
+            /* ============================================ */
             *{margin:0;padding:0;box-sizing:border-box}
-            :root{--primary:#39080a;--primary-dark:#2a0607;--secondary:#d4d4ae;--white:#fff;--gray-50:#fafafa;--gray-100:#f5f5f5;--gray-200:#eee;--gray-300:#e0e0e0;--gray-400:#cbd5e1;--gray-500:#94a3b8;--gray-600:#666;--gray-700:#444;--gray-800:#222;--red-500:#ef4444;--red-600:#dc2626;--orange-400:#fb923c}
-            body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.5;overflow-x:hidden}
+            :root{--primary:#39080a;--primary-dark:#2a0607;--secondary:#d4d4ae;--white:#fff;--gray-50:#fafafa;--gray-100:#f5f5f5;--gray-200:#eee;--gray-300:#e0e0e0;--gray-400:#cbd5e1;--gray-500:#94a3b8;--gray-600:#666;--gray-700:#444;--gray-800:#222;--red-500:#ef4444;--red-600:#dc2626;--orange-400:#fb923c;--green-500:#10b981;--green-600:#059669}
             
-            /* Protección de imágenes */
-            body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+            body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.5;overflow-x:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;padding-bottom:0}
+            
             img{-webkit-user-drag:none;-khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;user-drag:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:auto}
             
-            .container{width:100%;max-width:1280px;margin:0 auto;padding:0 24px}
+            .container{width:100%;max-width:1280px;margin:0 auto;padding:0 16px}
             h1,h2,h3{font-weight:700}
             
-            /* Header */
-            header{position:fixed;top:0;left:0;right:0;background:var(--primary);z-index:1000;padding:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-            .navbar{display:flex;justify-content:center;align-items:center}
-            .logo img{width:290px;height:auto}
+            /* ============================================ */
+            /* HEADER COMPACTO MOBILE */
+            /* ============================================ */
+            header{position:fixed;top:0;left:0;right:0;background:var(--primary);z-index:1000;padding:8px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+            .navbar {
+                display: flex;
+                justify-content: center; /* ← Centra todo horizontalmente */
+                align-items: center;
+                padding: 8px 16px;
+                position: relative;
+            }
+            .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+            }
+
+            .logo a {
+                display: inline-block;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .logo a:hover {
+                transform: scale(1.02);
+                opacity: 0.9;
+            }
+
+            .logo a:active {
+                transform: scale(0.98);
+            }
+
+            .logo img {
+                width: 200px;
+                height: auto;
+                display: block;
+            }
+            /* El badge de cotización se posiciona a la derecha con absolute */
+            .header-cotizacion-badge {
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: var(--secondary);
+                color: var(--primary);
+                border-radius: 40px;
+                padding: 4px 12px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                display: none; /* Oculto por defecto, se muestra con JS */
+                align-items: center;
+                gap: 6px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                white-space: nowrap;
+            }
+
+            .header-cotizacion-badge:hover {
+                transform: translateY(-50%) scale(1.05);
+            }
+
+            .header-cotizacion-badge i {
+                font-size: 0.8rem;
+            }
             
-            /* Hero Section */
-            .hero-outlet{min-height:85vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(0,0,0,0.5)),url('${heroBackgroundImage}');background-size:cover;background-position:center;padding:120px 0 80px}
-            .hero-content{max-width:700px}
-            .hero-title{font-size:3.5rem;font-weight:800;color:white;margin-bottom:16px}
+            /* ============================================ */
+            /* HERO SECTION - MOBILE OPTIMIZED */
+            /* ============================================ */
+            .hero-outlet{min-height:70vh;display:flex;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,0.75),rgba(0,0,0,0.5)),url('${heroBackgroundImage}');background-size:cover;background-position:center;padding:80px 0 40px}
+            .hero-content{max-width:100%;text-align:center}
+            .hero-title{font-size:2rem;font-weight:800;color:white;margin-bottom:8px}
             .hero-title span{color:var(--secondary)}
-            .hero-description{font-size:1.1rem;color:rgba(255,255,255,0.9);margin-bottom:32px}
+            .hero-description{font-size:0.85rem;color:rgba(255,255,255,0.85);margin-bottom:20px;line-height:1.5}
             
-            /* Countdown */
-            .countdown-container{background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:20px;padding:20px 30px;margin-bottom:32px;display:inline-block}
-            .countdown{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
-            .countdown-item{text-align:center;background:rgba(0,0,0,0.6);border-radius:16px;padding:12px 16px;min-width:80px}
-            .countdown-number{font-size:2.2rem;font-weight:800;color:white;font-family:monospace}
-            .countdown-label{font-size:0.7rem;color:rgba(255,255,255,0.7)}
-            .hero-buttons{display:flex;gap:16px;flex-wrap:wrap}
-            .btn-primary-custom{background:var(--secondary);color:var(--primary);padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
-            .btn-primary-custom:hover{background:var(--secondary);transform:translateY(-3px)}
+            .badge-urgencia{display:inline-block;background:var(--red-600);color:white;padding:4px 14px;border-radius:40px;font-size:0.7rem;font-weight:700;margin-bottom:12px;animation:pulse 2s infinite}
+            @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
             
-            /* Search Section - Mobile First */
-            .search-filters-section{background:white;border-radius:24px;margin:-30px auto 30px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
-            .search-wrapper{margin-bottom:16px}
-            .search-box-enhanced{position:relative;display:flex;flex-direction:column;gap:12px}
-            .search-box-enhanced i.fa-search{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--gray-400);z-index:1;pointer-events:none}
-            .search-box-enhanced input{width:100%;padding:14px 18px 14px 48px;border:2px solid var(--gray-200);border-radius:50px;font-size:0.95rem;background:var(--gray-50);transition:all 0.3s ease}
-            .search-box-enhanced input:focus{outline:none;border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(57,8,10,0.1)}
-            .search-box-enhanced input::placeholder{color:var(--gray-400);font-size:0.9rem}
+            .countdown-container{background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);border-radius:16px;padding:12px 16px;margin-bottom:20px;display:inline-block;width:100%;max-width:380px}
+            .countdown-title{font-size:0.7rem;color:rgba(255,255,255,0.8);margin-bottom:8px;font-weight:600}
+            .countdown{display:flex;gap:10px;justify-content:center}
+            .countdown-item{text-align:center;background:rgba(0,0,0,0.5);border-radius:12px;padding:6px 10px;min-width:50px}
+            .countdown-number{font-size:1.2rem;font-weight:800;color:white;font-family:monospace}
+            .countdown-label{font-size:0.5rem;color:rgba(255,255,255,0.6);text-transform:uppercase}
             
-            .btn-escaneo-qr{background:var(--primary);color:white;border:none;border-radius:50px;padding:14px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:0.9rem;transition:all 0.3s ease;width:100%}
-            .btn-escaneo-qr:hover{background:var(--primary-dark);transform:translateY(-2px)}
-            .btn-escaneo-qr:active{transform:translateY(0)}
+            .btn-primary-custom{background:var(--secondary);color:var(--primary);padding:16px 32px;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;display:inline-flex;align-items:center;gap:10px;width:100%;justify-content:center;border:none;cursor:pointer}
+            .btn-primary-custom:hover{transform:translateY(-2px)}
+            
+            .hero-beneficios{display:flex;gap:16px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+            .hero-beneficio{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.7);font-size:0.7rem}
+            .hero-beneficio i{color:var(--secondary);font-size:0.9rem}
+            
+            /* ============================================ */
+            /* SEARCH SECTION - MOBILE FIRST */
+            /* ============================================ */
+            .search-filters-section{background:white;border-radius:20px;margin:-20px 0 20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+            
+            .search-wrapper{margin-bottom:12px}
+            .search-box-enhanced{display:flex;flex-direction:column;gap:10px}
+            .search-input-wrapper{position:relative;flex:1}
+            .search-input-wrapper i.fa-search{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:0.9rem;color:var(--gray-400)}
+            .search-input-wrapper input{width:100%;padding:14px 16px 14px 44px;border:2px solid var(--gray-200);border-radius:50px;font-size:0.9rem;background:var(--gray-50);transition:all 0.3s ease;min-height:52px}
+            .search-input-wrapper input:focus{outline:none;border-color:var(--primary);background:white}
+            
+            .btn-clear-search {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: var(--gray-400);
+                cursor: pointer;
+                padding: 8px;
+                display: none;  /* Oculto por defecto */
+                font-size: 1rem;
+                min-width: 44px;
+                min-height: 44px;
+                z-index: 2;
+            }
+
+            .btn-clear-search:hover {
+                color: var(--primary);
+            }
+
+            .btn-clear-search:active {
+                transform: translateY(-50%) scale(0.9);
+            }
+            
+            .btn-escaneo-qr{background:var(--primary);color:white;border:none;border-radius:50px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:0.9rem;min-height:52px;width:100%}
+            .btn-escaneo-qr:hover{background:var(--primary-dark)}
             .btn-escaneo-qr i{font-size:1.1rem}
             
-            .search-hint{display:flex;justify-content:flex-start;margin-top:8px;font-size:0.7rem;color:var(--gray-400)}
-            .search-hint i{margin-right:4px}
+            .search-hint{font-size:0.65rem;color:var(--gray-400);margin-top:6px;display:flex;align-items:center;gap:6px}
             
-            /* Filtros Desktop */
-            .filters-desktop-container{margin-bottom:16px}
-            .filtros-grid-enhanced{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
-            .filtro-group{flex:1;min-width:150px}
-            .filtro-group label{display:block;font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:8px}
-            .filtro-group select{width:100%;padding:14px 16px;border:1px solid var(--gray-200);border-radius:16px;font-size:0.9rem;background:var(--gray-50);cursor:pointer}
-            .filtros-actions{display:flex;gap:12px;margin-top:16px}
-            .btn-filter,.btn-clear{padding:12px 28px;border-radius:40px;font-weight:600;cursor:pointer;border:none}
+            /* Filtros chips horizontales */
+            .filtros-chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none;-ms-overflow-style:none}
+            .filtros-chips::-webkit-scrollbar{display:none}
+            .chip-filtro{background:var(--gray-100);padding:6px 12px;border-radius:40px;font-size:0.7rem;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--gray-200)}
+            .chip-eliminar{background:none;border:none;color:var(--gray-500);cursor:pointer;padding:2px;font-size:0.6rem}
+            .chip-eliminar:hover{color:var(--red-500)}
+            
+            /* Filtros desktop */
+            .filters-desktop-container{display:none;margin-top:12px}
+            .filtros-grid-enhanced{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+            .filtro-group{flex:1;min-width:120px}
+            .filtro-group label{display:block;font-size:0.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:4px}
+            .filtro-group select{width:100%;padding:12px 14px;border:1px solid var(--gray-200);border-radius:16px;font-size:0.85rem;background:var(--gray-50);min-height:48px}
+            .filtros-actions{display:flex;gap:10px}
+            .btn-filter,.btn-clear{padding:12px 20px;border-radius:40px;font-weight:600;font-size:0.8rem;border:none;min-height:48px;min-width:80px;cursor:pointer}
             .btn-filter{background:var(--primary);color:white}
             .btn-clear{background:var(--gray-100);color:var(--gray-700)}
             
-            /* Filtros Mobile FAB */
-            .filtros-fab{position:fixed;bottom:80px;right:20px;background:var(--primary);color:white;width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.2);cursor:pointer;z-index:90;border:none}
+            /* ============================================ */
+            /* FAB FILTROS - POSICIONADO A LA IZQUIERDA */
+            /* ============================================ */
+            .filtros-fab{position:fixed;bottom:100px;right:16px;background:var(--primary);color:white;width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.25);cursor:pointer;z-index:90;border:none;font-size:1.2rem}
             .filtros-fab:hover{transform:scale(1.05)}
+            /* ============================================ */
+            /* BOTÓN SCROLL - A LA DERECHA */
+            /* ============================================ */
+            .scroll-top-btn{position:fixed;bottom:100px;right:16px;width:56px;height:56px;border-radius:50%;background:var(--primary);color:white;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.25);z-index:80;font-size:1.2rem}
+            .scroll-top-btn.show{display:flex}
+            .scroll-top-btn:hover{transform:scale(1.05)}
             
-            .filtros-modal{position:fixed;top:0;right:-100%;width:85%;max-width:320px;height:100%;background:white;z-index:1000;transition:right 0.3s ease;box-shadow:-5px 0 25px rgba(0,0,0,0.1);display:flex;flex-direction:column}
-            .filtros-modal.show{right:0}
-            /* ============================================
-            MODAL DE FILTROS - MOBILE MEJORADO
-            ============================================ */
+            /* ============================================ */
+            /* COMPENSAR HEADER FIJO EN ANCHOR LINKS */
+            /* ============================================ */
 
-            /* Overlay del modal */
-            .filtros-modal-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                z-index: 10000;  /* Mayor que la barra de cotización (z-index:1000) */
-                display: none;
+            #productos {
+                scroll-margin-top: 100px; /* Altura del header + margen */
             }
 
-            .filtros-modal-overlay.show {
-                display: block;
+            /* Para móvil, el header es más pequeño */
+            @media (max-width: 768px) {
+                #productos {
+                    scroll-margin-top: 100px;
+                }
             }
 
-            /* Modal de filtros */
-            .filtros-modal {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 85%;
-                max-width: 320px;
-                height: 100%;
-                background: white;
-                z-index: 10001;  /* Mayor que el overlay */
-                transition: right 0.3s ease;
-                box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            /* También aplicar a otros anchors si los hay */
+            section[id] {
+                scroll-margin-top: 70px;
+            }
+
+            @media (max-width: 768px) {
+                section[id] {
+                    scroll-margin-top: 60px;
+                }
+            }
+
+            /* ============================================ */
+            /* ESTILOS PARA ASESOR - PROPUESTA 1 */
+            /* ============================================ */
+
+            /* Opciones de asesor */
+            .opciones-asesor {
                 display: flex;
                 flex-direction: column;
+                gap: 16px;
+                margin: 16px 0;
             }
 
-            .filtros-modal.show {
+            .opcion-asesor {
+                background: var(--gray-50);
+                border: 2px solid var(--gray-200);
+                border-radius: 16px;
+                padding: 16px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .opcion-asesor:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .opcion-asesor.activa {
+                border-color: var(--primary);
+                background: white;
+                box-shadow: 0 4px 16px rgba(57, 8, 10, 0.12);
+            }
+
+            /* Header de opción */
+            .opcion-header {
+                display: flex;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .opcion-icono {
+                width: 40px;
+                height: 40px;
+                background: rgba(57, 8, 10, 0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .opcion-icono i {
+                font-size: 1.2rem;
+                color: var(--primary);
+            }
+
+            .opcion-texto {
+                flex: 1;
+            }
+
+            .opcion-texto strong {
+                display: block;
+                font-size: 0.95rem;
+                color: var(--gray-800);
+            }
+
+            .opcion-texto span {
+                font-size: 0.75rem;
+                color: var(--gray-500);
+            }
+
+            .opcion-header .check {
+                color: var(--green-500);
+                font-size: 1.3rem;
+                margin-left: auto;
+                flex-shrink: 0;
+            }
+
+            /* Asesor asignado */
+            .asesor-asignado {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin-top: 14px;
+                padding: 14px;
+                background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+                border-radius: 14px;
+                border: 1px solid #bbf7d0;
+            }
+
+            .asesor-avatar {
+                width: 50px;
+                height: 50px;
+                background: var(--primary);
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+
+            .asesor-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .asesor-nombre {
+                font-weight: 700;
+                font-size: 0.9rem;
+                color: var(--gray-800);
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .badge-auto {
+                font-size: 0.55rem;
+                background: #dbeafe;
+                color: #1e40af;
+                padding: 2px 10px;
+                border-radius: 20px;
+                font-weight: 500;
+            }
+
+            .asesor-detalles {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                font-size: 0.7rem;
+                color: var(--gray-500);
+                margin-top: 4px;
+            }
+
+            .asesor-detalles i {
+                margin-right: 3px;
+                width: 14px;
+            }
+
+            .btn-cambiar-asesor-mini {
+                background: white;
+                border: 1px solid var(--gray-200);
+                padding: 6px 14px;
+                border-radius: 40px;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: var(--gray-700);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+
+            .btn-cambiar-asesor-mini:hover {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+            }
+
+            /* Botones de acción */
+            .btn-usar-auto,
+            .btn-usar-manual {
+                margin-top: 12px;
+                padding: 10px 16px;
+                border-radius: 40px;
+                border: 2px dashed var(--primary);
+                background: transparent;
+                color: var(--primary);
+                font-weight: 600;
+                font-size: 0.8rem;
+                cursor: pointer;
+                width: 100%;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn-usar-auto:hover,
+            .btn-usar-manual:hover {
+                background: var(--primary);
+                color: white;
+                border-style: solid;
+            }
+
+            /* Lista de asesores */
+            .asesores-lista {
+                margin-top: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                max-height: 220px;
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+
+            .asesores-lista::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .asesores-lista::-webkit-scrollbar-thumb {
+                background: var(--gray-300);
+                border-radius: 10px;
+            }
+
+            .asesor-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 10px 14px;
+                border-radius: 12px;
+                border: 1px solid var(--gray-200);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: white;
+            }
+
+            .asesor-item:hover {
+                border-color: var(--primary);
+                background: var(--gray-50);
+                transform: translateX(4px);
+            }
+
+            .asesor-item.selected {
+                border-color: var(--green-500);
+                background: #f0fdf4;
+            }
+
+            .asesor-avatar-small {
+                position: relative;
+                width: 42px;
+                height: 42px;
+                background: var(--primary);
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+
+            .status-dot {
+                position: absolute;
+                bottom: 0;
                 right: 0;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 2px solid white;
             }
 
-            /* Header del modal */
+            .status-dot.online {
+                background: var(--green-500);
+            }
+
+            .status-dot.busy {
+                background: var(--orange-400);
+            }
+
+            .btn-seleccionar {
+                margin-left: auto;
+                padding: 4px 14px;
+                border-radius: 40px;
+                border: none;
+                background: var(--primary);
+                color: white;
+                font-size: 0.7rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                flex-shrink: 0;
+            }
+
+            .btn-seleccionar:hover {
+                background: var(--primary-dark);
+                transform: scale(1.05);
+            }
+
+            .seleccionado-badge {
+                margin-left: auto;
+                color: var(--green-500);
+                font-size: 0.7rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
+            /* Mensaje de email (próximamente) */
+            .email-future {
+                display: flex;
+                gap: 14px;
+                padding: 14px 16px;
+                background: #fffbeb;
+                border-radius: 12px;
+                border: 1px solid #fcd34d;
+                margin-top: 16px;
+            }
+
+            .email-future i {
+                color: #d97706;
+                font-size: 1.2rem;
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+
+            .email-future strong {
+                display: block;
+                font-size: 0.8rem;
+                color: #78350f;
+            }
+
+            .email-future span {
+                font-size: 0.7rem;
+                color: #92400e;
+            }
+
+            /* Alerta de error */
+            .alert-error {
+                background: #fee2e2;
+                border: 1px solid #fca5a5;
+                border-radius: 12px;
+                padding: 16px;
+                text-align: center;
+                color: #991b1b;
+            }
+
+            .alert-error i {
+                font-size: 2rem;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .alert-error .text-sm {
+                font-size: 0.75rem;
+                opacity: 0.8;
+            }
+
+            /* Responsive */
+            @media (max-width: 480px) {
+
+                .logo img {
+                    width: 150px;
+                }
+                
+                .header-cotizacion-badge {
+                    font-size: 0.6rem;
+                    padding: 3px 10px;
+                }
+
+                .opcion-asesor {
+                    padding: 14px;
+                }
+                
+                .opcion-header {
+                    flex-wrap: wrap;
+                }
+                
+                .opcion-icono {
+                    width: 36px;
+                    height: 36px;
+                }
+                
+                .opcion-icono i {
+                    font-size: 1rem;
+                }
+                
+                .asesor-asignado {
+                    flex-wrap: wrap;
+                }
+                
+                .btn-cambiar-asesor-mini {
+                    width: 100%;
+                    justify-content: center;
+                    margin-top: 4px;
+                }
+                
+                .asesor-item {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .btn-seleccionar {
+                    width: 100%;
+                    justify-content: center;
+                    padding: 8px;
+                }
+                
+                .seleccionado-badge {
+                    width: 100%;
+                    justify-content: center;
+                }
+                
+                .email-future {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
+
+            /* ============================================ */
+            /* PRODUCTOS GRID - MOBILE FIRST */
+            /* ============================================ */
+            .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+            .contador-enhanced{font-size:0.8rem;color:var(--gray-600);background:var(--gray-100);padding:6px 14px;border-radius:40px}
+            .contador-enhanced span{font-weight:700;color:var(--primary)}
+            
+            .productos-grid-enhanced{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+            
+            .producto-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid var(--gray-200);transition:all 0.3s ease;cursor:pointer}
+            .producto-card:active{transform:scale(0.97)}
+            
+            .card-image{position:relative;height:160px;overflow:hidden;background:var(--gray-100);cursor:pointer}
+            .card-image img{width:100%;height:100%;object-fit:contain;transition:transform 0.4s ease}
+            .producto-card:hover .card-image img{transform:scale(1.05)}
+            
+            .badge-outlet{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--red-600),var(--orange-400));color:white;padding:3px 10px;border-radius:20px;font-size:0.6rem;font-weight:700;z-index:2}
+            
+            .btn-cotizar-top{position:absolute;top:8px;right:8px;background:var(--primary);color:white;border:none;padding:6px 12px;border-radius:40px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:0.65rem;font-weight:600;z-index:3;transition:all 0.3s ease;min-height:36px}
+            .btn-cotizar-top.seleccionado{background:var(--green-500)}
+            .btn-cotizar-top i{font-size:0.7rem}
+            .btn-cotizar-top:active{transform:scale(0.95)}
+            
+            .card-info{padding:10px 12px}
+            .card-info h3{font-size:0.8rem;font-weight:700;color:var(--primary);margin-bottom:2px;line-height:1.2;cursor:pointer}
+            .card-info h3:hover{text-decoration:underline}
+            .card-info .codigo{font-size:0.55rem;color:var(--gray-500);font-family:monospace;margin-bottom:4px}
+            .specs-badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+            .spec-badge{background:var(--gray-100);padding:2px 8px;border-radius:20px;font-size:0.55rem;color:var(--gray-600);display:inline-flex;align-items:center;gap:3px}
+            .btn-detalle-enhanced{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--primary);color:white;padding:10px 12px;border-radius:40px;text-decoration:none;font-size:0.7rem;font-weight:600;width:100%;min-height:44px}
+            .btn-detalle-enhanced:active{transform:scale(0.97)}
+            
+            .no-results{text-align:center;padding:40px 20px;background:white;border-radius:20px;grid-column:1/-1}
+            .no-results i{font-size:3rem;color:var(--gray-300);margin-bottom:12px}
+            .no-results p{color:var(--gray-500)}
+            
+            /* ============================================ */
+            /* CONTENEDOR DE BÚSQUEDA - MOBILE FIRST */
+            /* ============================================ */
+
+            .search-box-enhanced {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            /* ============================================ */
+            /* CAMPO DE BÚSQUEDA */
+            /* ============================================ */
+
+            .search-input-wrapper {
+                position: relative;
+                flex: 1;
+                width: 100%;
+            }
+
+            .search-input-wrapper i.fa-search {
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 0.9rem;
+                color: var(--gray-400);
+                pointer-events: none;
+                z-index: 1;
+            }
+
+            .search-input-wrapper input {
+                width: 100%;
+                padding: 14px 16px 14px 44px;
+                border: 2px solid var(--gray-200);
+                border-radius: 50px;
+                font-size: 0.9rem;
+                background: var(--gray-50);
+                transition: all 0.3s ease;
+                min-height: 52px;
+            }
+
+            .search-input-wrapper input:focus {
+                outline: none;
+                border-color: var(--primary);
+                background: white;
+                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
+            }
+
+            /* ============================================ */
+            /* BOTÓN DE LIMPIAR INTERNO (solo móvil) */
+            /* ============================================ */
+
+            .btn-clear-search {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: var(--gray-400);
+                cursor: pointer;
+                padding: 8px;
+                display: none;
+                font-size: 1rem;
+                min-width: 44px;
+                min-height: 44px;
+                z-index: 2;
+                border-radius: 50%;
+                transition: all 0.2s ease;
+            }
+
+            .btn-clear-search:hover {
+                color: var(--primary);
+                background: rgba(0,0,0,0.05);
+            }
+
+            .btn-clear-search:active {
+                transform: translateY(-50%) scale(0.9);
+            }
+
+            /* ============================================ */
+            /* BOTÓN DE LIMPIAR EXTERNO (NUEVO) */
+            /* ============================================ */
+
+            .btn-clear-externo {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: var(--gray-100);
+                color: var(--gray-700);
+                border: 1px solid var(--gray-200);
+                border-radius: 50px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-height: 44px;
+                width: 100%;
+                white-space: nowrap;
+            }
+
+            .btn-clear-externo:hover {
+                background: var(--gray-200);
+                transform: translateY(-2px);
+            }
+
+            .btn-clear-externo:active {
+                transform: scale(0.97);
+            }
+
+            .btn-clear-externo i {
+                font-size: 0.9rem;
+            }
+
+            .btn-clear-externo.visible {
+                display: flex !important;
+            }
+
+            .btn-clear-externo.hidden {
+                display: none !important;
+            }
+
+            /* En móvil: el botón externo ocupa todo el ancho */
+            .btn-clear-externo {
+                width: 100%;
+            }
+
+            .btn-clear-externo .btn-text {
+                display: inline;
+            }
+
+            /* En móvil, el botón interno se muestra (más pequeño) */
+            @media (max-width: 768px) {
+                .btn-clear-search {
+                    display: none !important; /* Ocultamos el interno en móvil */
+                }
+                
+                .btn-clear-externo {
+                    display: none;
+                    width: 100%;
+                }
+                
+                .btn-clear-externo.visible {
+                    display: flex !important;
+                }
+            }
+
+            /* ============================================ */
+            /* RESPONSIVE - TABLET */
+            /* ============================================ */
+
+            @media (min-width: 481px) and (max-width: 768px) {
+                .search-box-enhanced {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .btn-clear-externo {
+                    padding: 12px 20px;
+                    font-size: 0.85rem;
+                }
+                
+                .btn-clear-externo .btn-text {
+                    display: inline;
+                }
+            }
+
+            /* ============================================ */
+            /* RESPONSIVE - DESKTOP */
+            /* ============================================ */
+
+            @media (min-width: 769px) {
+                .search-box-enhanced {
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .search-input-wrapper {
+                    flex: 1;
+                }
+                
+                /* En desktop, el botón interno NO se muestra */
+                .btn-clear-search {
+                    display: none !important;
+                }
+                
+                /* En desktop, el botón externo se muestra a la derecha del input */
+                .btn-clear-externo {
+                    width: auto;
+                    padding: 12px 20px;
+                    display: none;
+                }
+                
+                .btn-clear-externo.visible {
+                    display: flex !important;
+                }
+                
+                .btn-clear-externo .btn-text {
+                    display: inline;
+                }
+                
+                .btn-escaneo-qr {
+                    width: auto;
+                    padding: 14px 24px;
+                    min-height: 52px;
+                }
+            }
+
+            /* ============================================ */
+            /* FAB FILTROS - SOLO MÓVIL */
+            /* ============================================ */
+
+            .filtros-fab {
+                position: fixed;
+                bottom: 100px;
+                right: 16px;
+                background: var(--primary);
+                color: white;
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+                cursor: pointer;
+                z-index: 90;
+                border: none;
+                font-size: 1.2rem;
+            }
+
+            /* Mostrar FAB solo en móvil */
+            @media (max-width: 768px) {
+                .filtros-fab {
+                    display: flex;
+                }
+            }
+
+            /* Ocultar FAB en desktop */
+            @media (min-width: 769px) {
+                .filtros-fab {
+                    display: none !important;
+                }
+            }
+
+            .filtros-fab .badge-filtros {
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                background: var(--red-500);
+                color: white;
+                border-radius: 50%;
+                font-size: 0.6rem;
+                font-weight: 700;
+                width: 22px;
+                height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* ============================================ */
+            /* HEADER DEL MODAL DE FILTROS */
+            /* ============================================ */
+
             .filtros-modal-header {
-                padding: 20px;
+                padding: 16px 20px;
                 background: #39080a;
                 color: white;
                 display: flex;
@@ -5219,7 +6804,7 @@ ${productosLista}
             }
 
             .filtros-modal-header h3 {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 margin: 0;
                 display: flex;
                 align-items: center;
@@ -5238,22 +6823,28 @@ ${productosLista}
                 align-items: center;
                 justify-content: center;
                 transition: all 0.2s ease;
+                font-size: 1.2rem;
+            }
+
+            .close-modal-btn:hover {
+                background: rgba(255,255,255,0.3);
             }
 
             .close-modal-btn:active {
-                background: rgba(255,255,255,0.3);
                 transform: scale(0.95);
             }
 
-            /* Body del modal - con scroll */
+            /* ============================================ */
+            /* BODY DEL MODAL DE FILTROS */
+            /* ============================================ */
+
             .filtros-modal-body {
                 flex: 1;
                 padding: 20px;
                 overflow-y: auto;
-                padding-bottom: 80px; /* Espacio para los botones fijos */
+                padding-bottom: 80px;
             }
 
-            /* Grupo de filtros */
             .filtro-group {
                 margin-bottom: 20px;
             }
@@ -5284,7 +6875,10 @@ ${productosLista}
                 box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
             }
 
-            /* Footer con botones fijos */
+            /* ============================================ */
+            /* FOOTER DEL MODAL DE FILTROS */
+            /* ============================================ */
+
             .filtros-modal-footer {
                 position: sticky;
                 bottom: 0;
@@ -5315,1233 +6909,931 @@ ${productosLista}
                 transform: scale(0.98);
             }
 
-            .btn-filter {
+            .filtros-modal-footer .btn-filter {
                 background: #39080a;
                 color: white;
             }
 
-            .btn-clear {
+            .filtros-modal-footer .btn-clear {
                 background: #f3f4f6;
                 color: #4b5563;
                 border: 1px solid #e5e7eb;
             }
 
-            /* Ajustes para móvil pequeño */
-            @media (max-width: 480px) {
-                .filtros-modal {
-                    width: 100%;
-                    max-width: none;
-                    right: -100%;
-                }
-                
-                .filtros-modal-header {
-                    padding: 16px;
-                }
-                
-                .filtros-modal-body {
-                    padding: 16px;
-                    padding-bottom: 80px;
-                }
-                
-                .filtros-modal-footer {
-                    padding: 12px 16px;
-                }
-                
-                .filtros-modal-footer button {
-                    padding: 12px;
-                    font-size: 0.85rem;
-                }
-            }
+            /* ============================================ */
+            /* BARRA DE COTIZACIÓN - MOBILE FIRST */
+            /* ============================================ */
+            .barra-cotizacion{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#39080a 0%,#2a0607 100%);color:white;padding:12px 16px;z-index:1000;box-shadow:0 -4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(10px);transition:all 0.3s ease;min-height:70px}
+            .barra-cotizacion.mini{padding:12px 16px}
+            .barra-cotizacion.expanded{padding:16px}
             
-            .scroll-top-btn {
-                position: fixed;
-                bottom: 90px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background: var(--primary);
-                color: white;
-                border: none;
+            .barra-cotizacion-mini{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+            .barra-info-mini{display:flex;align-items:center;gap:10px;flex:1}
+            .barra-icono{position:relative}
+            .barra-icono i{font-size:1.4rem;color:var(--secondary)}
+            .badge-cantidad{position:absolute;top:-10px;right:-14px;background:#d4d4ae;color:#39080a;border-radius:50%;width:22px;height:22px;font-size:0.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease}
+            .badge-cantidad.animado{animation:badgePulse 0.4s ease}
+            @keyframes badgePulse{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+            
+            .barra-texto-mini{font-size:0.8rem;font-weight:500}
+            .barra-texto-mini span{font-weight:800;color:var(--secondary)}
+            
+            .barra-acciones-mini{display:flex;gap:8px;align-items:center}
+            .btn-cotizar-principal{background:#25D366;border:none;padding:10px 18px;border-radius:40px;color:white;font-weight:700;font-size:0.8rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.3s ease;min-height:48px}
+            .btn-cotizar-principal:active{transform:scale(0.95)}
+            .btn-cotizar-principal i{font-size:1rem}
+            
+            /* ============================================ */
+            /* BOTÓN COTIZAR EN LA CARD - NUEVA POSICIÓN */
+            /* ============================================ */
+
+            .btn-cotizar-bottom {
+                width: 100%;
+                padding: 12px 16px;
+                border-radius: 40px;
+                border: 2px solid var(--primary);
+                background: transparent;
+                color: var(--primary);
+                font-weight: 600;
+                font-size: 0.85rem;
                 cursor: pointer;
-                display: none;  /* Oculto por defecto */
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                z-index: 80;
-                transition: all 0.3s ease;
+                gap: 10px;
+                min-height: 48px;
+                position: relative;
+                overflow: hidden;
             }
 
-            .scroll-top-btn:hover {
-                transform: scale(1.05);
-                background: var(--primary-dark);
+            /* Efecto hover */
+            .btn-cotizar-bottom:hover {
+                background: var(--primary);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(57, 8, 10, 0.25);
             }
 
-            /* Mostrar el botón después de hacer scroll */
-            .scroll-top-btn.show {
-                display: flex;
+            /* Efecto activo (click) */
+            .btn-cotizar-bottom:active {
+                transform: scale(0.95);
             }
 
-            /* Productos Grid */
-            .productos-grid-enhanced{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px}
-            .producto-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid var(--gray-200);transition:all 0.3s ease}
-            .producto-card:hover{transform:translateY(-5px);box-shadow:0 12px 25px -10px rgba(0,0,0,0.15)}
-            .card-image{position:relative;height:180px;overflow:hidden;background:var(--gray-100)}
-            .card-image img{width:100%;height:100%;object-fit:contain;transition:transform 0.4s ease}
-            .producto-card:hover .card-image img{transform:scale(1.05)}
-            .badge-outlet{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,var(--red-600),var(--orange-400));color:white;padding:4px 10px;border-radius:20px;font-size:0.65rem;font-weight:600;z-index:2}
-            .card-info{padding:12px}
-            .card-info h3{font-size:0.9rem;font-weight:700;color:var(--primary);margin-bottom:4px}
-            .card-info .codigo{font-size:0.6rem;color:var(--gray-500);font-family:monospace;margin-bottom:6px}
-            .specs-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-            .spec-badge{background:var(--gray-100);padding:3px 8px;border-radius:20px;font-size:0.6rem;color:var(--gray-600);display:inline-flex;align-items:center;gap:4px}
-            .btn-detalle-enhanced{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:white;padding:10px 12px;border-radius:40px;text-decoration:none;font-size:0.75rem;font-weight:600;flex:1}
-            .btn-cotizar{background:#39080a;color:white;border:none;padding:8px 12px;border-radius:40px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px}
-            .contador-enhanced{background:var(--gray-100);padding:8px 16px;border-radius:40px;font-size:0.8rem;color:var(--gray-600);display:inline-block}
-            .contador-enhanced span{font-weight:700;color:var(--primary)}
-            .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-            .no-results{text-align:center;padding:40px;background:white;border-radius:20px}
-            
-            /* Modales */
-            .modal-personalizado{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;justify-content:center;align-items:center}
-            .modal-personalizado.active{display:flex}
-            .modal-personalizado-contenido{background:white;border-radius:16px;width:90%;max-width:400px;overflow:hidden}
-            .modal-personalizado-header{background:#39080a;color:white;padding:16px 20px;font-weight:600}
-            .modal-personalizado-body{padding:24px 20px;text-align:center;color:#374151}
-            .modal-personalizado-footer{padding:16px 20px;display:flex;gap:12px;justify-content:flex-end;border-top:1px solid #e5e7eb}
-            .btn-modal-confirmar{background:#dc3545;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
-            .btn-modal-cancelar{background:#e5e7eb;color:#374151;border:none;padding:8px 20px;border-radius:8px;cursor:pointer}
-            
-            .modal-cotizacion {
-                display: none;
+            /* Estado seleccionado (agregado) */
+            .btn-cotizar-bottom.seleccionado {
+                background: var(--green-500);
+                border-color: var(--green-500);
+                color: white;
+            }
+
+            .btn-cotizar-bottom.seleccionado:hover {
+                background: var(--green-600);
+                border-color: var(--green-600);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+            }
+
+            /* Animación al agregar */
+            @keyframes btnAgregadoPulse {
+                0% { transform: scale(1); }
+                30% { transform: scale(1.08); }
+                60% { transform: scale(0.95); }
+                100% { transform: scale(1); }
+            }
+
+            .btn-cotizar-bottom.seleccionado {
+                animation: btnAgregadoPulse 0.5s ease;
+            }
+
+            /* Icono rotación */
+            .btn-cotizar-bottom i {
+                transition: transform 0.3s ease;
+            }
+
+            .btn-cotizar-bottom.seleccionado i {
+                transform: scale(1.2);
+            }
+
+            /* ============================================ */
+            /* MODAL DE CONFIRMACIÓN - AGREGADO */
+            /* ============================================ */
+
+            .modal-confirmacion-agregado {
                 position: fixed;
                 top: 0;
                 left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.8);
-                z-index: 10001;
-                justify-content: center;
-                align-items: center;
-                padding: 16px;
-            }
-
-            .modal-cotizacion.active {
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(8px);
+                z-index: 10002;
                 display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
             }
 
-            .modal-cotizacion-contenido {
+            .modal-confirmacion-agregado.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .modal-confirmacion-contenido {
                 background: white;
                 border-radius: 24px;
+                padding: 32px 28px;
+                max-width: 420px;
                 width: 100%;
-                max-width: 750px;
-                max-height: 90vh;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                text-align: center;
+                transform: scale(0.9) translateY(20px);
+                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             }
 
-            /* Header fijo */
-            .modal-cotizacion-header {
-                background: #39080a;
-                color: white;
-                padding: 16px 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-                flex-shrink: 0;
+            .modal-confirmacion-agregado.show .modal-confirmacion-contenido {
+                transform: scale(1) translateY(0);
             }
 
-            .modal-cotizacion-header h3 {
-                font-size: 1.1rem;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .modal-cotizacion-header h3 i {
-                font-size: 1rem;
-            }
-
-            .modal-cotizacion-close {
-                background: rgba(255,255,255,0.2);
-                border: none;
-                color: white;
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.2s ease;
-            }
-
-            .modal-cotizacion-close:hover {
-                background: rgba(255,255,255,0.3);
-            }
-
-            /* Body con scroll */
-            .modal-cotizacion-body {
-                padding: 20px;
-                overflow-y: auto;
-                flex: 1;
-            }
-
-            /* Footer fijo */
-            .modal-cotizacion-footer {
-                padding: 16px 20px;
-                display: flex;
-                gap: 12px;
-                justify-content: flex-end;
-                border-top: 1px solid #e5e7eb;
-                background: #f9fafb;
-                flex-shrink: 0;
-                flex-wrap: wrap;
-            }
-
-/* ============================================
-   SECCIÓN DE ASIGNACIÓN DE ASESOR - MOBILE FIRST
-   ============================================ */
-
-            .asignacion-info-card {
-                background: #eef2ff;
-                border-radius: 16px;
-                padding: 12px;
-                margin-bottom: 16px;
-                border-left: 4px solid #39080a;
-            }
-
-            .asignacion-info-card i {
-                color: #39080a;
-                font-size: 0.9rem;
-            }
-
-            .asignacion-info-card p {
-                font-size: 0.7rem;
-                line-height: 1.4;
-                margin: 0;
-            }
-
-            /* Opciones de asignación */
-            .asignacion-opciones {
-                background: #f9fafb;
-                border-radius: 16px;
-                padding: 12px;
-                margin-bottom: 16px;
-            }
-
-            .asignacion-radio-group {
-                display: flex;
-                gap: 16px;
-                margin-bottom: 12px;
-                flex-wrap: wrap;
-            }
-
-            .asignacion-radio-group label {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 0.85rem;
-                cursor: pointer;
-                padding: 6px 0;
-            }
-
-            .asignacion-radio-group input[type="radio"] {
-                width: 16px;
-                height: 16px;
-                cursor: pointer;
-                accent-color: #39080a;
-            }
-
-            /* Selector manual */
-            .selector-manual {
-                margin-top: 12px;
-            }
-
-            .selector-manual label {
-                display: block;
-                font-size: 0.7rem;
-                font-weight: 600;
-                color: #6b7280;
-                margin-bottom: 6px;
-                text-transform: uppercase;
-            }
-
-            .selector-manual select {
-                width: 100%;
-                padding: 12px;
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                font-size: 0.85rem;
-                background: white;
-                cursor: pointer;
-            }
-
-            /* Campo de búsqueda por email (Mobile First) */
-            .campo-email-container {
-                margin-top: 12px;
-            }
-
-            .campo-email-container label {
-                display: block;
-                font-size: 0.7rem;
-                font-weight: 600;
-                color: #6b7280;
-                margin-bottom: 6px;
-                text-transform: uppercase;
-            }
-
-            .email-search-wrapper {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .email-search-wrapper input {
-                flex: 1;
-                padding: 12px;
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                font-size: 0.85rem;
-                background: white;
-            }
-
-            .email-search-wrapper button {
-                background: #39080a;
-                color: white;
-                border: none;
-                padding: 12px;
-                border-radius: 12px;
-                cursor: pointer;
-                font-size: 0.85rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                transition: all 0.2s ease;
-            }
-
-            .email-search-wrapper button:active {
-                transform: scale(0.98);
-            }
-
-            .email-search-wrapper button i {
-                font-size: 0.8rem;
-            }
-
-            /* Resultado de búsqueda */
-            .asesor-info-result {
-                margin-top: 12px;
-                padding: 12px;
-                border-radius: 12px;
-                font-size: 0.8rem;
-            }
-
-            .asesor-info-result.success {
-                background: #ecfdf5;
-                border: 1px solid #10b981;
-                color: #065f46;
-            }
-
-            .asesor-info-result.warning {
-                background: #fffbeb;
-                border: 1px solid #f59e0b;
-                color: #92400e;
-            }
-
-            /* Asesor asignado card */
-            .asesor-asignado-card {
-                background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-                border-radius: 16px;
-                padding: 16px;
-                border: 1px solid #e5e7eb;
-                margin-top: 16px;
-            }
-
-            .asesor-asignado-content {
-                display: flex;
-                gap: 12px;
-                align-items: flex-start;
-            }
-
-            .asesor-avatar {
-                width: 48px;
-                height: 48px;
-                background: rgba(57,8,10,0.1);
+            .modal-confirmacion-icono {
+                width: 72px;
+                height: 72px;
+                background: linear-gradient(135deg, #10b981, #059669);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                flex-shrink: 0;
+                margin: 0 auto 16px;
+                animation: iconoCheck 0.6s ease;
             }
 
-            .asesor-avatar i {
-                font-size: 1.5rem;
-                color: #39080a;
+            @keyframes iconoCheck {
+                0% { transform: scale(0) rotate(-30deg); }
+                60% { transform: scale(1.2) rotate(5deg); }
+                100% { transform: scale(1) rotate(0); }
             }
 
-            .asesor-info {
-                flex: 1;
+            .modal-confirmacion-icono i {
+                font-size: 2.5rem;
+                color: white;
             }
 
-            .asesor-nombre {
+            .modal-confirmacion-contenido h3 {
+                font-size: 1.3rem;
                 font-weight: 700;
-                color: #1f2937;
-                margin-bottom: 4px;
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 8px;
+                color: var(--gray-800);
+                margin-bottom: 8px;
             }
 
-            .asesor-badge {
-                font-size: 0.6rem;
-                padding: 2px 8px;
-                border-radius: 20px;
-                font-weight: 500;
+            .modal-confirmacion-contenido p {
+                font-size: 0.9rem;
+                color: var(--gray-600);
+                margin-bottom: 20px;
+                line-height: 1.5;
             }
 
-            .asesor-badge.auto { background: #dbeafe; color: #1e40af; }
-            .asesor-badge.manual { background: #dcfce7; color: #166534; }
-            .asesor-badge.email { background: #f3e8ff; color: #6b21a5; }
-            .asesor-badge.reasignado { background: #ffedd5; color: #9a3412; }
-
-            .asesor-contacto {
-                font-size: 0.7rem;
-                color: #6b7280;
+            .modal-confirmacion-acciones {
                 display: flex;
-                flex-wrap: wrap;
                 gap: 12px;
-                margin-top: 4px;
-            }
-
-            .asesor-contacto span {
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .btn-reasignar {
-                background: none;
-                border: none;
-                color: #39080a;
-                font-size: 0.7rem;
-                cursor: pointer;
-                padding: 4px 8px;
-                border-radius: 20px;
-                transition: all 0.2s ease;
-            }
-
-            .btn-reasignar:hover {
-                background: rgba(57,8,10,0.1);
-            }
-
-            /* ============================================
-            SECCIÓN DE PRODUCTOS
-            ============================================ */
-
-            .productos-lista {
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                padding: 8px;
-                max-height: 200px;
-                overflow-y: auto;
-                background: #f9fafb;
-            }
-
-            .producto-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px;
-                border-bottom: 1px solid #e5e7eb;
-                transition: all 0.2s ease;
-            }
-
-            .producto-item:last-child {
-                border-bottom: none;
-            }
-
-            .producto-info {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .producto-nombre {
-                font-weight: 600;
-                font-size: 0.85rem;
-                color: #1f2937;
-                margin-bottom: 2px;
-                word-break: break-word;
-            }
-
-            .producto-codigo {
-                font-size: 0.7rem;
-                color: #9ca3af;
-                font-family: monospace;
-            }
-
-            .producto-especificaciones {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 4px;
-            }
-
-            .producto-especificacion {
-                font-size: 0.65rem;
-                background: #f3f4f6;
-                padding: 2px 8px;
-                border-radius: 20px;
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-                color: #4b5563;
-            }
-
-            .btn-eliminar-producto {
-                background: none;
-                border: none;
-                color: #ef4444;
-                cursor: pointer;
-                padding: 8px;
-                border-radius: 50%;
-                transition: all 0.2s ease;
-                flex-shrink: 0;
-            }
-
-            .btn-eliminar-producto:active {
-                background: rgba(239,68,68,0.1);
-            }
-
-            /* ============================================
-            SECCIÓN DE DATOS DE CONTACTO
-            ============================================ */
-
-            .form-group {
                 margin-bottom: 16px;
             }
 
-            .form-group label {
-                display: block;
-                font-size: 0.7rem;
-                font-weight: 600;
-                color: #6b7280;
-                margin-bottom: 6px;
-                text-transform: uppercase;
-            }
-
-            .form-group label .required {
-                color: #ef4444;
-            }
-
-            .form-group label .optional {
-                color: #9ca3af;
-                font-weight: normal;
-            }
-
-            .form-group input,
-            .form-group select,
-            .form-group textarea {
-                width: 100%;
-                padding: 12px;
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                font-size: 0.85rem;
-                background: white;
-                transition: all 0.2s ease;
-            }
-
-            .form-group input:focus,
-            .form-group select:focus,
-            .form-group textarea:focus {
-                outline: none;
-                border-color: #39080a;
-                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
-            }
-
-            /* Teléfono con prefijo */
-            .telefono-wrapper {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-
-            .telefono-wrapper select {
-                width: auto;
-                min-width: 100px;
-            }
-
-            .telefono-wrapper input {
+            .modal-confirmacion-acciones button {
                 flex: 1;
-            }
-
-            /* Mensajes de error */
-            .mensaje-error {
-                font-size: 0.65rem;
-                margin-top: 4px;
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            /* ============================================
-            DESKTOP (pantallas mayores a 768px)
-            ============================================ */
-            @media (min-width: 768px) {
-                .modal-cotizacion {
-                    padding: 20px;
-                }
-                
-                .modal-cotizacion-header h3 {
-                    font-size: 1.25rem;
-                }
-                
-                .modal-cotizacion-body {
-                    padding: 24px;
-                }
-                
-                .modal-cotizacion-footer {
-                    padding: 16px 24px;
-                }
-                
-                /* Email search en desktop */
-                .email-search-wrapper {
-                    flex-direction: row;
-                }
-                
-                .email-search-wrapper input {
-                    padding: 12px 16px;
-                }
-                
-                .email-search-wrapper button {
-                    width: auto;
-                    padding: 12px 24px;
-                }
-                
-                /* Asignación radio group */
-                .asignacion-radio-group {
-                    gap: 24px;
-                }
-                
-                /* Teléfono wrapper */
-                .telefono-wrapper {
-                    flex-wrap: nowrap;
-                }
-                
-                /* Productos */
-                .producto-nombre {
-                    font-size: 0.9rem;
-                }
-            }
-
-            /* ============================================
-            PANTALLAS MUY PEQUEÑAS (menos de 480px)
-            ============================================ */
-            @media (max-width: 480px) {
-                .modal-cotizacion {
-                    padding: 8px;
-                }
-                
-                .modal-cotizacion-body {
-                    padding: 16px;
-                }
-                
-                .modal-cotizacion-header {
-                    padding: 12px 16px;
-                }
-                
-                .modal-cotizacion-header h3 {
-                    font-size: 1rem;
-                }
-                
-                .modal-cotizacion-footer {
-                    padding: 12px 16px;
-                    flex-direction: column;
-                }
-                
-                .modal-cotizacion-footer button {
-                    width: 100%;
-                    justify-content: center;
-                }
-                
-                /* Asignación */
-                .asignacion-radio-group {
-                    flex-direction: column;
-                    gap: 8px;
-                }
-                
-                .asesor-asignado-content {
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                }
-                
-                .asesor-contacto {
-                    justify-content: center;
-                }
-                
-                /* Teléfono */
-                .telefono-wrapper {
-                    flex-direction: column;
-                }
-                
-                .telefono-wrapper select {
-                    width: 100%;
-                }
-            }
-
-            .btn-buscar-email {
-                background: #39080a;
-                color: white;
-                border: none;
                 padding: 12px 16px;
-                border-radius: 12px;
-                cursor: pointer;
-                font-size: 0.85rem;
+                border-radius: 40px;
                 font-weight: 600;
-                transition: all 0.2s ease;
+                font-size: 0.85rem;
+                cursor: pointer;
+                border: none;
+                transition: all 0.3s ease;
+                min-height: 48px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
             }
 
-            .btn-buscar-email:active {
-                transform: scale(0.98);
-            }
-
-            .btn-buscar-email i {
-                font-size: 0.8rem;
-            }
-
-            /* Mobile small */
-            @media (max-width: 480px) {
-                .btn-buscar-email {
-                    padding: 10px 12px;
-                    font-size: 0.8rem;
-                }
-            }
-
-            .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:20000;justify-content:center;align-items:center}
-            .modal-overlay.active{display:flex}
-            .modal-custom{background:white;border-radius:20px;width:90%;max-width:450px;overflow:hidden}
-            .modal-custom-header{padding:20px 24px;text-align:center;border-bottom:1px solid #e5e7eb}
-            .modal-custom-header i{font-size:48px;margin-bottom:12px;display:inline-block}
-            .modal-custom-header h3{font-size:1.25rem;font-weight:700}
-            .modal-custom-body{padding:24px;text-align:center;color:#374151}
-            .modal-custom-footer{padding:16px 24px;display:flex;gap:12px;justify-content:center;border-top:1px solid #e5e7eb;background:#f9fafb}
-            .modal-custom-footer button{padding:10px 24px;border-radius:40px;font-weight:600;cursor:pointer;border:none}
-            .btn-modal-primary{background:#39080a;color:white}
-            .btn-modal-success{background:#10b981;color:white}
-            .btn-modal-danger{background:#dc3545;color:white}
-            .btn-modal-warning{background:#f59e0b;color:white}
-            .btn-modal-secondary{background:#e5e7eb;color:#374151}
-            
-            /* QR Reader */
-            #qr-reader{width:100%;border-radius:12px;overflow:hidden}
-            #qr-reader video{width:100%;border-radius:12px}
-            #qr-reader__scan_region{background:#f0f0f0;border-radius:12px}
-      
-            /* Mejoras para la lista de productos en el modal */
-            .modal-cotizacion-body .border {
-                border-color: #e5e7eb;
-            }
-
-            .modal-cotizacion-body .hover\:bg-gray-100:hover {
-                background-color: #f9fafb;
-            }
-
-            /* Estilos para los badges de medida y espesor */
-            .modal-cotizacion-body .bg-gray-100 {
-                background-color: #f3f4f6;
-            }
-
-            .modal-cotizacion-body .rounded-full {
-                border-radius: 9999px;
-            }
-
-            /* Animación suave al eliminar */
-            .preview-item,
-            .producto-cotizacion-item {
-                transition: all 0.2s ease;
-            }
-
-            .preview-item:hover,
-            .producto-cotizacion-item:hover {
-                background-color: #f9fafb;
-            }            
-
-            /* Estilos para el buscador con botón de limpiar */
-            .search-input-wrapper {
-                position: relative;
-                flex: 1;
-            }
-
-            .search-input-wrapper i.fa-search {
-                position: absolute;
-                left: 18px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 1rem;
-                color: var(--gray-400);
-                z-index: 1;
-                pointer-events: none;
-            }
-
-            .search-input-wrapper input {
-                width: 100%;
-                padding: 14px 18px 14px 48px;
-                border: 2px solid var(--gray-200);
-                border-radius: 50px;
-                font-size: 0.95rem;
-                background: var(--gray-50);
-                transition: all 0.3s ease;
-            }
-
-            .search-input-wrapper input:focus {
-                outline: none;
-                border-color: var(--primary);
-                background: white;
-                box-shadow: 0 0 0 3px rgba(57,8,10,0.1);
-            }
-
-            .search-input-wrapper input:focus + .btn-clear-search {
-                display: flex !important;
-            }
-
-            .btn-clear-search {
-                position: absolute;
-                right: 12px;
-                top: 50%;
-                transform: translateY(-50%);
-                background: none;
-                border: none;
-                color: var(--gray-400);
-                cursor: pointer;
-                padding: 4px;
-                border-radius: 50%;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.2s ease;
-                z-index: 2;
-            }
-
-            .btn-clear-search:hover {
-                color: var(--primary);
-                background: rgba(0,0,0,0.05);
-            }
-
-            .btn-clear-search i {
-                font-size: 1rem;
-            }
-
-            /* Desktop styles */
-            @media (min-width: 769px) {
-                .search-input-wrapper input {
-                    padding: 16px 20px 16px 55px;
-                    font-size: 1rem;
-                }
-                
-                .search-input-wrapper i.fa-search {
-                    left: 22px;
-                    font-size: 1.1rem;
-                }
-                
-                .btn-clear-search {
-                    right: 16px;
-                }
-                
-                .btn-clear-search i {
-                    font-size: 1.1rem;
-                }
-            }
-
-            /* Mobile styles */
-            @media (max-width: 768px) {
-                .search-input-wrapper input {
-                    padding: 12px 14px 12px 42px;
-                    font-size: 0.85rem;
-                }
-                
-                .btn-clear-search {
-                    right: 10px;
-                }
-                
-                .btn-clear-search i {
-                    font-size: 0.9rem;
-                }
-            }
-
-            .btn-clear-all {
+            .btn-seguir-comprando {
                 background: var(--gray-100);
                 color: var(--gray-700);
-                border: 1px solid var(--gray-200);
-                padding: 8px 16px;
-                border-radius: 40px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.3s ease;
             }
 
-            .btn-clear-all:hover {
+            .btn-seguir-comprando:hover {
                 background: var(--gray-200);
                 transform: translateY(-2px);
             }
 
-            .btn-clear-all:active {
-                transform: translateY(0);
-            }
-
-            .btn-clear-all i {
-                font-size: 0.7rem;
-            }
-
-            /* Responsive para móvil */
-            @media (max-width: 768px) {
-                .btn-clear-all {
-                    padding: 6px 12px;
-                    font-size: 0.7rem;
-                }
-                
-                .btn-clear-all i {
-                    font-size: 0.65rem;
-                }
-            }
-
-            /* Barra de cotización mejorada - Mobile First */
-            .barra-cotizacion {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #39080a 0%, #2a0607 100%);
+            .btn-ir-cotizacion {
+                background: var(--primary);
                 color: white;
-                padding: 10px 16px;
-                z-index: 1000;
-                box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
-                backdrop-filter: blur(10px);
-                transition: all 0.3s ease;
             }
 
-            /* Modo expandido */
-            .barra-cotizacion.expanded {
+            .btn-ir-cotizacion:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(57, 8, 10, 0.3);
+            }
+
+            .modal-confirmacion-acciones button:active {
+                transform: scale(0.95);
+            }
+
+            .modal-confirmacion-barra {
+                background: linear-gradient(135deg, #fef3c7, #fde68a);
+                border-radius: 12px;
+                padding: 12px 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 0.8rem;
+                color: #78350f;
+                border: 1px solid #fcd34d;
+            }
+
+            .modal-confirmacion-barra i {
+                font-size: 1.2rem;
+                color: #d97706;
+                flex-shrink: 0;
+            }
+
+            .modal-confirmacion-barra strong {
+                color: #78350f;
+            }
+
+            .btn-expandir{background:rgba(255,255,255,0.12);border:none;width:40px;height:40px;border-radius:50%;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;min-height:40px}
+            .btn-expandir:active{transform:scale(0.95)}
+            
+            .barra-cotizacion-expanded{display:flex;flex-direction:column;gap:12px;margin-top:8px;max-height:200px;overflow-y:auto}
+            .barra-productos-preview{max-height:120px;overflow-y:auto}
+            .preview-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.08);gap:8px}
+            .preview-info{flex:1;min-width:0}
+            .preview-nombre{font-size:0.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+            .preview-detalles{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
+            .preview-detalles span{font-size:0.55rem;opacity:0.7;display:flex;align-items:center;gap:3px}
+            .preview-eliminar{background:rgba(255,255,255,0.1);border:none;color:#ff6b6b;cursor:pointer;padding:4px 8px;border-radius:20px;font-size:0.7rem;min-height:32px}
+            .preview-eliminar:active{transform:scale(0.95)}
+            
+            .barra-acciones-expanded{display:flex;gap:10px}
+            .btn-limpiar{background:rgba(255,255,255,0.15);border:none;padding:10px 16px;border-radius:40px;color:white;cursor:pointer;font-size:0.7rem;font-weight:500;flex:1;min-height:44px}
+            .btn-ver-cotizacion{background:#d4d4ae;border:none;padding:10px 16px;border-radius:40px;color:#39080a;cursor:pointer;font-size:0.7rem;font-weight:700;flex:1;min-height:44px}
+            
+            /* ============================================ */
+            /* MODAL DE COTIZACIÓN - PANTALLA COMPLETA MOBILE */
+            /* ============================================ */
+            .modal-cotizacion{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:10001;justify-content:center;align-items:center;padding:0}
+            .modal-cotizacion.active{display:flex}
+            .modal-cotizacion-contenido{background:white;border-radius:0;width:100%;height:100%;max-height:100vh;overflow:hidden;display:flex;flex-direction:column}
+            
+            .modal-cotizacion-header{background:#39080a;color:white;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+            .modal-cotizacion-header h3{font-size:1rem;margin:0;display:flex;align-items:center;gap:8px}
+            .modal-cotizacion-close{background:rgba(255,255,255,0.2);border:none;color:white;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+            .modal-cotizacion-close:active{transform:scale(0.95)}
+            
+            .modal-cotizacion-body{flex:1;overflow-y:auto;padding:16px}
+            
+            /* Stepper */
+            .stepper-container{position:relative;margin-bottom:20px;padding:0 8px}
+            .stepper{display:flex;justify-content:space-between;position:relative;z-index:2}
+            .stepper-step{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px;cursor:pointer}
+            .stepper-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;transition:all 0.3s ease;border:2px solid var(--gray-300);background:white;color:var(--gray-500)}
+            .stepper-step.activo .stepper-circle{background:var(--primary);color:white;border-color:var(--primary)}
+            .stepper-step.completado .stepper-circle{background:var(--green-500);color:white;border-color:var(--green-500)}
+            .stepper-step.completado .stepper-circle i{font-size:0.7rem}
+            .stepper-label{font-size:0.55rem;color:var(--gray-500);text-align:center;font-weight:600}
+            .stepper-step.activo .stepper-label{color:var(--primary)}
+            .stepper-step.completado .stepper-label{color:var(--green-500)}
+            
+            .stepper-line{position:absolute;top:16px;left:16px;right:16px;height:2px;background:var(--gray-300);z-index:1}
+            
+            /* Paso contenido */
+            .paso-contenido{margin-bottom:16px}
+            .paso-subtitulo{font-size:0.8rem;color:var(--gray-500);margin-bottom:12px}
+            
+            /* Paso acciones fijas en la parte inferior */
+            .paso-acciones{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--gray-200);position:sticky;bottom:0;background:white;flex-wrap:wrap}
+            .paso-acciones button{flex:1;padding:12px 16px;border-radius:40px;font-weight:600;font-size:0.85rem;border:none;cursor:pointer;min-height:48px}
+            .btn-paso-anterior{background:var(--gray-100);color:var(--gray-700)}
+            .btn-paso-siguiente{background:var(--primary);color:white}
+            .btn-paso-enviar{background:#25D366;color:white;flex:2}
+            .btn-paso-anterior:active,.btn-paso-siguiente:active,.btn-paso-enviar:active{transform:scale(0.97)}
+            
+            /* Productos en paso 1 */
+            .productos-lista{border:1px solid var(--gray-200);border-radius:12px;padding:8px;max-height:200px;overflow-y:auto;background:var(--gray-50);margin-bottom:12px}
+            .producto-item{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;border-bottom:1px solid var(--gray-200);gap:8px}
+            .producto-item:last-child{border-bottom:none}
+            .producto-info{flex:1;min-width:0}
+            .producto-nombre{font-size:0.8rem;font-weight:600;color:var(--gray-800)}
+            .producto-codigo{font-size:0.6rem;color:var(--gray-400);font-family:monospace}
+            .producto-especificaciones{display:flex;gap:6px;margin-top:2px;flex-wrap:wrap}
+            .producto-especificacion{font-size:0.55rem;background:var(--gray-200);padding:1px 8px;border-radius:20px;display:flex;align-items:center;gap:3px;color:var(--gray-600)}
+            .btn-eliminar-producto{background:none;border:none;color:var(--red-500);cursor:pointer;padding:8px;min-height:36px;min-width:36px}
+            .btn-eliminar-producto:active{transform:scale(0.95)}
+            .btn-agregar-mas{background:none;border:1px dashed var(--primary);color:var(--primary);padding:10px;border-radius:40px;cursor:pointer;width:100%;font-size:0.8rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+            
+            /* Asesor paso 2 */
+            .asignacion-opciones{background:var(--gray-50);border-radius:16px;padding:12px;margin-bottom:12px}
+            .asignacion-radio-group{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+            .asignacion-radio-group label{display:flex;align-items:center;gap:8px;font-size:0.8rem;cursor:pointer;padding:6px 0}
+            .asignacion-radio-group input[type="radio"]{width:18px;height:18px;accent-color:#39080a}
+            
+            .selector-manual{margin-top:8px}
+            .selector-manual select{width:100%;padding:12px;border:1px solid var(--gray-200);border-radius:12px;font-size:0.85rem;min-height:48px}
+            
+            .email-search-wrapper{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+            .email-search-wrapper input{flex:1;padding:12px;border:1px solid var(--gray-200);border-radius:12px;font-size:0.85rem;min-height:48px}
+            .btn-buscar-email{background:#39080a;color:white;border:none;padding:12px;border-radius:12px;cursor:pointer;font-size:0.85rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px}
+            
+            .asesor-info-result{padding:10px 14px;border-radius:12px;font-size:0.8rem;margin-top:8px}
+            .asesor-info-result.success{background:#ecfdf5;border:1px solid #10b981;color:#065f46}
+            .asesor-info-result.warning{background:#fffbeb;border:1px solid #f59e0b;color:#92400e}
+            .asesor-info-result.hidden{display:none}
+            .asesor-error{background:#fee2e2;color:#dc2626;padding:12px;border-radius:12px;font-size:0.8rem}
+            
+            .asesor-asignado-card{background:linear-gradient(135deg,#f9fafb 0%,#fff 100%);border-radius:16px;padding:12px;border:1px solid var(--gray-200);margin-top:12px}
+            .asesor-asignado-card.hidden{display:none}
+            .asesor-asignado-content{display:flex;gap:12px;align-items:center}
+            .asesor-avatar{width:44px;height:44px;background:rgba(57,8,10,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+            .asesor-avatar i{font-size:1.2rem;color:#39080a}
+            .asesor-info{flex:1}
+            .asesor-nombre{font-weight:700;font-size:0.85rem;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+            .asesor-badge{font-size:0.55rem;padding:2px 8px;border-radius:20px;font-weight:500}
+            .asesor-badge.auto{background:#dbeafe;color:#1e40af}
+            .asesor-badge.manual{background:#dcfce7;color:#166534}
+            .asesor-badge.email{background:#f3e8ff;color:#6b21a5}
+            .asesor-contacto{font-size:0.65rem;color:var(--gray-500);display:flex;flex-wrap:wrap;gap:10px;margin-top:2px}
+            
+            /* Datos paso 3 */
+            .form-group{margin-bottom:14px}
+            .form-group label{display:block;font-size:0.7rem;font-weight:600;color:var(--gray-600);margin-bottom:4px;text-transform:uppercase}
+            .form-group label .required{color:var(--red-500)}
+            .form-group label .optional{color:var(--gray-400);font-weight:400}
+            .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1px solid var(--gray-200);border-radius:12px;font-size:0.85rem;background:white;min-height:48px}
+            .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#39080a;box-shadow:0 0 0 3px rgba(57,8,10,0.1)}
+            .form-group textarea{min-height:80px;resize:vertical}
+            .telefono-wrapper{display:flex;gap:8px;flex-wrap:wrap}
+            .telefono-wrapper select{width:auto;min-width:100px;flex-shrink:0}
+            .telefono-wrapper input{flex:1}
+            
+            .mensaje-error{font-size:0.65rem;margin-top:4px;display:flex;align-items:center;gap:4px}
+            .mensaje-error.hidden{display:none}
+            
+            /* Resumen paso 4 */
+            .resumen-envio{text-align:center;padding:12px 0}
+            .resumen-icono i{font-size:3rem;color:var(--green-500);margin-bottom:8px}
+            .resumen-envio h4{font-size:1.2rem;color:var(--gray-800);margin-bottom:4px}
+            .resumen-datos{background:var(--gray-50);border-radius:16px;padding:12px;margin-top:12px;text-align:left}
+            .resumen-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray-200);font-size:0.8rem}
+            .resumen-item:last-child{border-bottom:none}
+            .resumen-label{color:var(--gray-500)}
+            .resumen-valor{font-weight:600;color:var(--gray-800)}
+            
+            /* ============================================ */
+            /* MODAL QR - PANTALLA COMPLETA */
+            /* ============================================ */
+            .modal-qr {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.92);
+                z-index: 10000;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 padding: 16px;
             }
 
-            /* Modo mini (colapsado) */
-            .barra-cotizacion.mini {
-                padding: 25px 16px;
-            }
-
-            .barra-cotizacion-mini {
+            .modal-qr.active {
                 display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
             }
 
-            .barra-info-mini {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                flex: 1;
+            .modal-qr-contenido {
+                background: white;
+                border-radius: 20px;
+                width: 100%;
+                max-width: 450px;
+                max-height: 90vh;
+                overflow: hidden;
+                animation: modalFadeIn 0.3s ease;
             }
 
-            .barra-icono {
-                position: relative;
-            }
-
-            .barra-icono i {
-                font-size: 1.2rem;
-                color: var(--secondary);
-            }
-
-            .badge-cantidad {
-                position: absolute;
-                top: -8px;
-                right: -12px;
-                background: #d4d4ae;
-                color: #39080a;
-                border-radius: 50%;
-                width: 18px;
-                height: 18px;
-                font-size: 0.6rem;
-                font-weight: bold;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .barra-texto-mini {
-                font-size: 0.8rem;
-                font-weight: 500;
-            }
-
-            .barra-texto-mini span {
-                font-weight: 800;
-                font-size: 1rem;
-                color: var(--secondary);
-            }
-
-            .barra-acciones-mini {
-                display: flex;
-                gap: 8px;
-            }
-
-            .btn-cotizar-mini {
-                background: #d4d4ae;
-                border: none;
-                padding: 6px 12px;
-                border-radius: 40px;
-                color: #39080a;
-                font-weight: 600;
-                font-size: 0.7rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-
-            .btn-expandir {
-                background: rgba(255,255,255,0.1);
-                border: none;
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
+            .modal-qr-header {
+                background: #39080a;
                 color: white;
+                padding: 14px 18px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-qr-header h3 {
+                font-size: 1rem;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .modal-qr-close {
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
                 cursor: pointer;
+                font-size: 1.2rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: all 0.2s ease;
             }
 
-            /* Modo expandido (detalles) */
-            .barra-cotizacion-expanded {
+            .modal-qr-close:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+            }
+
+            .modal-qr-close:active {
+                transform: scale(0.95);
+            }
+
+            .modal-qr-body {
+                padding: 20px;
+            }
+
+            #qr-reader {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                border-radius: 12px;
+                overflow: hidden;
+                background: #f0f0f0;
+                min-height: 200px;
+            }
+
+            #qr-reader video {
+                width: 100%;
+                border-radius: 12px;
+            }
+
+            #qr-reader canvas {
+                display: none !important;
+            }
+
+            .qr-instrucciones {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                justify-content: center;
+                margin-top: 12px;
+                font-size: 0.75rem;
+                color: var(--gray-500);
+            }
+
+            .qr-instrucciones i {
+                color: var(--primary);
+            }
+
+            .btn-cancelar-qr {
+                margin-top: 16px;
+                width: 100%;
+                padding: 12px;
+                border-radius: 40px;
+                border: 1px solid #e5e7eb;
+                background: white;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.2s ease;
+            }
+
+            .btn-cancelar-qr:hover {
+                background: #f3f4f6;
+            }
+
+            .btn-cancelar-qr:active {
+                transform: scale(0.98);
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.95) translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+            
+        /* ============================================ */
+        /* TOAST NOTIFICACIONES MEJORADAS */
+        /* ============================================ */
+
+        .toast-notificacion {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 14px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-notificacion.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-notificacion.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .toast-notificacion.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .toast-notificacion i {
+            font-size: 1.1rem;
+        }
+
+        /* ============================================ */
+        /* BARRA DE COTIZACIÓN - ANIMACIONES */
+        /* ============================================ */
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes barraUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .barra-cotizacion {
+            animation: slideUp 0.5s ease;
+        }
+
+        .barra-cotizacion .badge-cantidad.animado {
+            animation: badgePulse 0.4s ease;
+        }
+
+        @keyframes badgePulse {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.4); }
+            60% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE AJUSTES */
+        /* ============================================ */
+
+        @media (max-width: 480px) {
+            .btn-cotizar-bottom {
+                font-size: 0.75rem;
+                padding: 10px 12px;
+                min-height: 44px;
+            }
+            
+            .modal-confirmacion-contenido {
+                padding: 24px 20px;
+                margin: 16px;
+            }
+            
+            .modal-confirmacion-acciones {
+                flex-direction: column;
+            }
+            
+            .modal-confirmacion-acciones button {
+                width: 100%;
+            }
+            
+            .modal-confirmacion-barra {
+                font-size: 0.7rem;
+                padding: 10px 12px;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .btn-cotizar-bottom {
+                font-size: 0.9rem;
+                padding: 14px 20px;
+                min-height: 52px;
+            }
+        }
+                      
+            /* ============================================ */
+            /* MODAL DE FILTROS - SOLO MÓVIL */
+            /* ============================================ */
+
+            /* Ocultar el modal por defecto en desktop */
+            .filtros-modal {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100%;
+                background: white;
+                z-index: 10001;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 25px rgba(0,0,0,0.2);
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
             }
 
-            .barra-productos-preview {
-                max-height: 120px;
-                overflow-y: auto;
-                margin-bottom: 8px;
+            /* Mostrar el modal cuando tiene la clase "show" */
+            .filtros-modal.show {
+                right: 0;
             }
 
-            .preview-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 6px 0;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                font-size: 0.7rem;
+            /* Overlay para el modal */
+            .filtros-modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                z-index: 10000;
+                display: none;
             }
 
-            .preview-nombre {
-                flex: 1;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+            .filtros-modal-overlay.show {
+                display: block;
             }
 
-            .preview-eliminar {
-                background: none;
-                border: none;
-                color: #ff6b6b;
-                cursor: pointer;
-                padding: 4px;
-                margin-left: 8px;
-            }
-
-            .barra-acciones-expanded {
-                display: flex;
-                gap: 10px;
-            }
-
-            .btn-limpiar {
-                background: rgba(255,255,255,0.2);
-                border: none;
-                padding: 10px 16px;
-                border-radius: 40px;
-                color: white;
-                cursor: pointer;
-                font-size: 0.75rem;
-                font-weight: 500;
-                flex: 1;
-            }
-
-            .btn-ver-cotizacion {
-                background: #d4d4ae;
-                border: none;
-                padding: 10px 16px;
-                border-radius: 40px;
-                color: #39080a;
-                cursor: pointer;
-                font-size: 0.75rem;
-                font-weight: 700;
-                flex: 1;
-            }
-
-            /* Animaciones */
-            @keyframes slideUp {
-                from {
-                    transform: translateY(100%);
-                }
-                to {
-                    transform: translateY(0);
-                }
-            }
-
-            .barra-cotizacion {
-                animation: slideUp 0.3s ease;
-            }
-
-            /* Desktop */
+            /* EN DESKTOP: ocultar completamente el modal */
             @media (min-width: 769px) {
-                .barra-cotizacion {
-                    padding: 12px 24px;
+                .filtros-modal {
+                    display: none !important;
                 }
-                
-                .btn-expandir {
+                .filtros-modal-overlay {
+                    display: none !important;
+                }
+            }
+
+            /* EN MÓVIL: mostrar el modal correctamente */
+            @media (max-width: 768px) {
+                .filtros-modal {
+                    display: flex !important;
+                    right: -100%;
+                }
+                .filtros-modal.show {
+                    right: 0;
+                }
+                .filtros-modal-overlay {
                     display: none;
                 }
-                
-                .barra-cotizacion.mini .barra-cotizacion-mini {
-                    max-width: 1200px;
-                    margin: 0 auto;
+                .filtros-modal-overlay.show {
+                    display: block;
                 }
-            }
+            }           
 
-            /* Animación de feedback al agregar producto */
-            @keyframes pulse {
-                0%, 100% {
-                    transform: scale(1);
-                }
-                50% {
-                    transform: scale(1.2);
-                }
-            }
-
-            .badge-cantidad.animado {
-                animation: pulse 0.3s ease;
-            }
-
-            .toast-notificacion {
-                position: fixed;
-                bottom: 80px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #10b981;
-                color: white;
-                padding: 8px 16px;
-                border-radius: 40px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                z-index: 1001;
-                animation: slideUp 0.3s ease, fadeOut 2s ease 1.5s forwards;
-                white-space: nowrap;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            }
-
-            @keyframes fadeOut {
-                to {
-                    opacity: 0;
-                    visibility: hidden;
-                }
-            }
-
-            /* Footer */
-            footer{background:var(--primary-dark);color:white;padding:40px 20px 25px;margin-top:50px}
-            .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1200px;margin:0 auto}
-            .footer-logo img{width:150px;margin-bottom:12px}
-            .footer-logo p{font-size:0.75rem;opacity:0.7;line-height:1.5}
-            .footer-social h4,.footer-links h4{font-size:0.9rem;margin-bottom:15px;color:var(--secondary)}
-            .footer-social a,.footer-links a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7);text-decoration:none;margin-bottom:10px;transition:0.3s;font-size:0.8rem}
-            .footer-social a:hover,.footer-links a:hover{color:var(--secondary);transform:translateX(5px)}
-            .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.65rem;opacity:0.6}
+            /* ============================================ */
+            /* MODAL PERSONALIZADO */
+            /* ============================================ */
+            .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:20000;justify-content:center;align-items:center;padding:20px}
+            .modal-overlay.active{display:flex}
+            .modal-custom{background:white;border-radius:20px;width:100%;max-width:400px;overflow:hidden;animation:modalFadeIn 0.3s ease}
+            @keyframes modalFadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+            .modal-custom-header{padding:16px 20px;text-align:center;border-bottom:1px solid var(--gray-200)}
+            .modal-custom-header i{font-size:2.5rem;margin-bottom:8px;display:inline-block}
+            .modal-custom-header h3{font-size:1.1rem;font-weight:700}
+            .modal-custom-body{padding:20px;text-align:center;color:var(--gray-600);font-size:0.9rem;line-height:1.5}
+            .modal-custom-footer{padding:12px 20px;display:flex;gap:10px;justify-content:center;border-top:1px solid var(--gray-200);background:var(--gray-50);flex-wrap:wrap}
+            .modal-custom-footer button{padding:10px 24px;border-radius:40px;font-weight:600;font-size:0.85rem;cursor:pointer;border:none;min-height:44px;min-width:80px}
+            .modal-custom-footer button:active{transform:scale(0.97)}
+            .btn-modal-primary{background:#39080a;color:white}
+            .btn-modal-success{background:#10b981;color:white}
+            .btn-modal-danger{background:#dc3545;color:white}
+            .btn-modal-warning{background:#f59e0b;color:white}
+            .btn-modal-secondary{background:var(--gray-200);color:var(--gray-700)}
             
-            /* Animaciones */
-            @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+            /* ============================================ */
+            /* FOOTER */
+            /* ============================================ */
+            footer{background:var(--primary-dark);color:white;padding:30px 16px 20px;margin-top:30px}
+            .footer-grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:1200px;margin:0 auto;text-align:center}
+            .footer-logo img{width:130px;margin-bottom:10px}
+            .footer-logo p{font-size:0.7rem;opacity:0.7;line-height:1.5}
+            .footer-social h4,.footer-links h4{font-size:0.85rem;margin-bottom:12px;color:var(--secondary)}
+            .footer-social a,.footer-links a{display:flex;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,0.7);text-decoration:none;margin-bottom:8px;transition:0.3s;font-size:0.75rem}
+            .footer-social a:hover,.footer-links a:hover{color:var(--secondary);transform:translateX(3px)}
+            .footer-bottom{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.6rem;opacity:0.6}
+            
+            /* ============================================ */
+            /* RESPONSIVE - TABLET */
+            /* ============================================ */
+            @media (min-width: 480px) {
+                .productos-grid-enhanced{grid-template-columns:repeat(2,1fr);gap:16px}
+                .card-image{height:180px}
+                .hero-title{font-size:2.2rem}
+                .countdown-item{min-width:60px;padding:8px 12px}
+                .countdown-number{font-size:1.4rem}
+            }
+            
+            @media (min-width: 768px) {
+                .container{padding:0 24px}
+                .logo img{width:200px}
+                .hero-outlet{min-height:60vh;padding:100px 0 60px;text-align:left}
+                .hero-content{max-width:600px;text-align:left}
+                .hero-title{font-size:3rem}
+                .hero-description{font-size:1rem}
+                .countdown-container{display:inline-block;width:auto}
+                .btn-primary-custom{width:auto;padding:16px 36px}
+                .hero-beneficios{justify-content:flex-start}
+                
+                .search-filters-section{padding:20px 24px;margin:-30px 0 30px}
+                .search-box-enhanced{flex-direction:row;align-items:center}
+                .search-input-wrapper input{min-height:56px;font-size:1rem}
+                .btn-escaneo-qr{width:auto;padding:14px 24px;min-height:56px}
+                
+                .filters-desktop-container{display:block}
+                .filtros-fab{display:none!important}
+                .filtros-chips{display:none}
+                
+                .productos-grid-enhanced{grid-template-columns:repeat(3,1fr);gap:20px}
+                .card-image{height:200px}
+                .card-info h3{font-size:0.9rem}
+                .btn-detalle-enhanced{font-size:0.8rem;min-height:48px}
+                
+                .barra-cotizacion{min-height:auto;padding:12px 24px}
+                .btn-expandir{display:none}
+                .barra-cotizacion.expanded .btn-expandir{display:flex}
+                
+                .modal-cotizacion-contenido{border-radius:24px;width:95%;height:auto;max-height:90vh;max-width:750px}
+                .modal-cotizacion-header{padding:16px 24px}
+                .modal-cotizacion-body{padding:24px}
+                
+                .stepper-circle{width:36px;height:36px;font-size:0.9rem}
+                .stepper-label{font-size:0.65rem}
+                
+                .footer-grid{grid-template-columns:repeat(3,1fr);text-align:left}
+                .footer-social a,.footer-links a{justify-content:flex-start}
+                
+                .btn-paso-enviar{flex:1}
+                .paso-acciones{flex-wrap:nowrap}
+                
+                .email-search-wrapper{flex-direction:row}
+                .email-search-wrapper input{min-height:48px}
+                .btn-buscar-email{width:auto;padding:12px 24px}
+                
+                .telefono-wrapper{flex-wrap:nowrap}
+            }
+            
+            @media (min-width: 1024px) {
+                .hero-title{font-size:3.5rem}
+                .hero-outlet{min-height:70vh}
+                .productos-grid-enhanced{grid-template-columns:repeat(4,1fr);gap:24px}
+                .card-image{height:220px}
+            }
+            
+            /* ============================================ */
+            /* UTILIDADES */
+            /* ============================================ */
+            .hidden{display:none!important}
+            .text-center{text-align:center}
+            .text-sm{font-size:0.8rem}
+            .text-xs{font-size:0.65rem}
+            .text-gray-400{color:var(--gray-400)}
+            .text-gray-500{color:var(--gray-500)}
+            .text-gray-600{color:var(--gray-600)}
+            .text-red-500{color:var(--red-500)}
+            .mt-1{margin-top:4px}
+            .mt-2{margin-top:8px}
+            .mt-3{margin-top:12px}
+            .mb-1{margin-bottom:4px}
+            .mb-2{margin-bottom:8px}
+            .mb-3{margin-bottom:12px}
+            .gap-1{gap:4px}
+            .gap-2{gap:8px}
+            .gap-3{gap:12px}
+            .flex{display:flex}
+            .flex-col{flex-direction:column}
+            .items-center{align-items:center}
+            .justify-between{justify-content:space-between}
+            .flex-wrap{flex-wrap:wrap}
+            .w-full{width:100%}
             .animate-pulse{animation:pulse 1.5s cubic-bezier(0.4,0,0.6,1) infinite}
             
-            .hidden{display:none}
-            .text-red-500{color:#ef4444}
-            .text-green-500{color:#10b981}
-            .border-red-500{border-color:#ef4444}
-            .border-green-500{border-color:#10b981}
-            
-            /* Desktop Styles */
-            @media (min-width: 769px) {
-                .search-filters-section{padding:20px 24px;margin:-40px auto 40px}
-                .search-box-enhanced{flex-direction:row;align-items:center}
-                .search-box-enhanced input{flex:1;padding:16px 20px 16px 55px;font-size:1rem}
-                .btn-escaneo-qr{width:auto;padding:16px 28px;font-size:1rem}
-                .search-box-enhanced i.fa-search{left:22px;font-size:1.1rem}
-                .productos-grid-enhanced{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
-                .card-image{height:240px}
-                .card-info h3{font-size:1rem}
-                .btn-detalle-enhanced{padding:12px 16px;font-size:0.8rem}
-                .filtros-fab{display:none!important}
-                .filtros-modal,.filtros-modal-overlay{display:none!important}
-                .filters-desktop-container{display:block}
-            }
-            
-            /* Mobile Styles */
-            @media (max-width: 768px) {
-                .container{padding:0 16px}
-                .hero-title{font-size:2rem}
-                .countdown-item{min-width:60px;padding:8px 10px}
-                .countdown-number{font-size:1.3rem}
-                .search-filters-section{padding:16px;margin:-30px auto 30px}
-                .filters-desktop-container{display:none}
-                .filtros-fab{display:flex}
-                .productos-grid-enhanced{gap:12px}
-                .card-image{height:140px}
-                .card-info h3{font-size:0.75rem}
-                .btn-detalle-enhanced{padding:8px 10px}
-                .scroll-top-btn{width:50px;height:50px;bottom:90px;right:15px}
-                .filtros-fab{width:50px;height:50px;bottom:150px;right:15px}
-                .footer-grid{text-align:center}
-                .footer-social a,.footer-links a{justify-content:center}
-            }
-            
-            @media (max-width: 480px) {
-                .search-filters-section{margin:-20px auto 20px;padding:12px}
-                .search-box-enhanced input{padding:12px 14px 12px 42px;font-size:0.85rem}
-                .btn-escaneo-qr{padding:12px 16px;font-size:0.85rem}
-                .btn-escaneo-qr i{font-size:0.9rem}
-                .search-hint{font-size:0.65rem}
-            }
+            /* Scrollbar personalizada */
+            .productos-lista::-webkit-scrollbar,
+            .barra-productos-preview::-webkit-scrollbar,
+            .modal-cotizacion-body::-webkit-scrollbar{width:4px}
+            .productos-lista::-webkit-scrollbar-track,
+            .barra-productos-preview::-webkit-scrollbar-track,
+            .modal-cotizacion-body::-webkit-scrollbar-track{background:var(--gray-100);border-radius:10px}
+            .productos-lista::-webkit-scrollbar-thumb,
+            .barra-productos-preview::-webkit-scrollbar-thumb,
+            .modal-cotizacion-body::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
         </style>
     </head>
     <body>
-        <header><div class="container navbar"><div class="logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"></div></div></header>
-        
-        <div class="filtros-modal-overlay" id="filtrosModalOverlay" onclick="closeFiltrosModal()"></div>
-        <div class="filtros-modal" id="filtrosModal">
-            <div class="filtros-modal-header"><h3><i class="fas fa-filter"></i> Filtros</h3><button class="close-modal-btn" onclick="closeFiltrosModal()"><i class="fas fa-times"></i></button></div>
-            <div class="filtros-modal-body">
-                <div class="filtro-group"><label>Familia</label><select id="filtroFamiliaModal"><option value="">Todas</option>${familiasOptions}</select></div>
-                <div class="filtro-group"><label>Acabado</label><select id="filtroAcabadoModal"><option value="">Todos</option>${acabadosOptions}</select></div>
-                <div class="filtro-group"><label>Material</label><select id="filtroMaterialModal"><option value="">Todos</option>${materialesOptions}</select></div>
+        <header>
+            <div class="navbar">
+                <div class="logo">
+                    <a href="https://gallosmarmol.github.io/?seccion=outlet" title="Ir a Outlet">
+                        <img src="FOTO/foto_01.webp" alt="Gallos Mármol">
+                    </a>
+                </div>
+                <div class="header-cotizacion-badge" id="headerCotizacionBadge" style="display:none;" onclick="window.abrirModalCotizacion()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="headerContador">0</span> productos
+                </div>
             </div>
-            <div class="filtros-modal-footer"><button class="btn-filter" onclick="aplicarFiltrosDesdeModal()">Aplicar</button><button class="btn-clear" onclick="limpiarFiltrosDesdeModal()">Limpiar</button></div>
+        </header>
+        
+        <!-- Overlay del modal (fondo oscuro) -->
+        <div class="filtros-modal-overlay" id="filtrosModalOverlay" onclick="closeFiltrosModal()"></div>
+
+        <!-- Modal de filtros -->
+        <div class="filtros-modal" id="filtrosModal">
+            <div class="filtros-modal-header">
+                <h3><i class="fas fa-filter"></i> Filtros</h3>
+                <button class="close-modal-btn" onclick="closeFiltrosModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="filtros-modal-body">
+                <div class="filtro-group">
+                    <label>Familia</label>
+                    <select id="filtroFamiliaModal">
+                        <option value="">Todas</option>
+                        ${familiasOptions}
+                    </select>
+                </div>
+                <div class="filtro-group">
+                    <label>Acabado</label>
+                    <select id="filtroAcabadoModal">
+                        <option value="">Todos</option>
+                        ${acabadosOptions}
+                    </select>
+                </div>
+                <div class="filtro-group">
+                    <label>Material</label>
+                    <select id="filtroMaterialModal">
+                        <option value="">Todos</option>
+                        ${materialesOptions}
+                    </select>
+                </div>
+            </div>
+            <div class="filtros-modal-footer">
+                <button class="btn-filter" onclick="aplicarFiltrosDesdeModal()">Aplicar</button>
+                <button class="btn-clear" onclick="limpiarFiltrosDesdeModal()">Limpiar</button>
+            </div>
         </div>
         
-        <button class="filtros-fab" onclick="openFiltrosModal()"><i class="fas fa-filter"></i></button>
-        <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+        <!-- FAB Filtros (Izquierda) y Scroll Top (Derecha) -->
+        <button class="filtros-fab" id="filtrosFab" onclick="openFiltrosModal()">
+            <i class="fas fa-sliders-h"></i>
+            <span class="badge-filtros" id="filtrosBadgeMobile" style="display:none;">0</span>
+        </button>
+        <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i>
+        </button>
         
         ${modalConfirmacionHtml}
         ${modalCotizacionHtml}
@@ -6550,10 +7842,12 @@ ${productosLista}
         <section class="hero-outlet">
             <div class="container">
                 <div class="hero-content">
+                    <div class="badge-urgencia">Oferta por tiempo limitado</div>
                     <h1 class="hero-title">Outlet</h1>
-                    <p class="hero-description">Aprovecha nuestra selección exclusiva de productos.</p>
+                    <p class="hero-description">Aprovecha nuestra selección exclusiva de productos con precios especiales.</p>
+                    
                     <div class="countdown-container">
-                        <div class="countdown-title" id="countdownTitle">⏰ OFERTA POR TIEMPO LIMITADO</div>
+                        <div class="countdown-title" id="countdownTitle">OFERTA POR TIEMPO LIMITADO</div>
                         <div class="countdown">
                             <div class="countdown-item"><div class="countdown-number" id="countdown-days">00</div><div class="countdown-label">Días</div></div>
                             <div class="countdown-item"><div class="countdown-number" id="countdown-hours">00</div><div class="countdown-label">Horas</div></div>
@@ -6561,7 +7855,13 @@ ${productosLista}
                             <div class="countdown-item"><div class="countdown-number" id="countdown-seconds">00</div><div class="countdown-label">Segundos</div></div>
                         </div>
                     </div>
-                    <div class="hero-buttons"><a href="#productos" class="btn-primary-custom"><i class="fas fa-shopping-bag"></i> Ver Productos</a></div>
+                    
+                    <a href="#productos" class="btn-primary-custom"><i class="fas fa-shopping-bag"></i> Ver Productos</a>
+                    
+                    <div class="hero-beneficios">
+                        <span class="hero-beneficio"><i class="fas fa-check-circle"></i> Stock limitado</span>
+                        <span class="hero-beneficio"><i class="fas fa-tags"></i> Mejor precio</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -6569,34 +7869,71 @@ ${productosLista}
         <div class="container">
             <div class="search-filters-section">
                 <div class="search-wrapper">
+                    <!-- Fila 1: Búsqueda + Botón limpiar + QR -->
                     <div class="search-box-enhanced">
+                        <!-- Campo de búsqueda -->
                         <div class="search-input-wrapper">
                             <i class="fas fa-search"></i>
                             <input type="text" id="searchOutlet" 
                                 placeholder="Buscar producto..." 
                                 autocomplete="off"
                                 inputmode="search">
+                            <!-- Botón interno (oculto en desktop, visible en móvil) -->
                             <button id="btnLimpiarBusqueda" class="btn-clear-search" type="button" style="display: none;">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
+                        
+                        <button id="btnLimpiarBusquedaExterno" class="btn-clear-externo" type="button" style="display: none;">
+                            <i class="fas fa-eraser"></i>
+                            <span class="btn-text">Limpiar</span>
+                        </button>
+                        
+                        <!-- Botón Escanear QR -->
                         <button id="btnEscanearQR" class="btn-escaneo-qr">
                             <i class="fas fa-qrcode"></i>
-                            <span>Escanear</span>
+                            <span>Escanear QR</span>
                         </button>
                     </div>
+                    
+                    <!-- Hint -->
                     <div class="search-hint">
                         <i class="fas fa-info-circle"></i> 
                         <span>Busca por nombre, código o escanea QR</span>
                     </div>
                 </div>
                 
+                <!-- Chips de filtros activos -->
+                <div id="filtrosActivosChips" class="filtros-chips" style="display:none;"></div>
+                
+                <!-- Filtros desktop -->
                 <div class="filters-desktop-container">
                     <div class="filtros-grid-enhanced">
-                        <div class="filtro-group"><label>Familia</label><select id="filtroFamilia"><option value="">Todas</option>${familiasOptions}</select></div>
-                        <div class="filtro-group"><label>Acabado</label><select id="filtroAcabado"><option value="">Todos</option>${acabadosOptions}</select></div>
-                        <div class="filtro-group"><label>Material</label><select id="filtroMaterial"><option value="">Todos</option>${materialesOptions}</select></div>
-                        <div class="filtros-actions"><button onclick="aplicarFiltrosOutlet()" class="btn-filter">Aplicar</button><button onclick="limpiarFiltrosOutlet()" class="btn-clear">Limpiar</button></div>
+                        <div class="filtro-group">
+                            <label>Familia</label>
+                            <select id="filtroFamilia">
+                                <option value="">Todas</option>
+                                ${familiasOptions}
+                            </select>
+                        </div>
+                        <div class="filtro-group">
+                            <label>Acabado</label>
+                            <select id="filtroAcabado">
+                                <option value="">Todos</option>
+                                ${acabadosOptions}
+                            </select>
+                        </div>
+                        <div class="filtro-group">
+                            <label>Material</label>
+                            <select id="filtroMaterial">
+                                <option value="">Todos</option>
+                                ${materialesOptions}
+                            </select>
+                        </div>
+                        <div class="filtros-actions">
+                            <button onclick="aplicarFiltrosOutlet()" class="btn-filter">Aplicar</button>
+                            <button onclick="limpiarFiltrosOutlet()" class="btn-clear">Limpiar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -6607,12 +7944,12 @@ ${productosLista}
                 <div class="contador-enhanced">
                     <i class="fas fa-box-open"></i> 
                     <span id="contadorProductos">${productosDataParaHTML.length}</span> producto(s)
-                </div> 
+                </div>
                 <button id="btnLimpiarTodoOutlet" class="btn-clear-all" style="display: none;">
                     <i class="fas fa-eraser"></i> Limpiar todo
-                </button>  
-            </div> 
-
+                </button>
+            </div>
+            
             <div id="productosGrid" class="productos-grid-enhanced">${window.generarCardsOutlet(productosDataParaHTML)}</div>
         </section>
         
@@ -6626,7 +7963,9 @@ ${productosLista}
         </footer>
         
         <script>
-            // Exponer funciones globales
+            // ============================================
+            // EXPONER FUNCIONES GLOBALES
+            // ============================================
             window.openFiltrosModal = openFiltrosModal;
             window.closeFiltrosModal = closeFiltrosModal;
             window.syncModalSelects = syncModalSelects;
@@ -6637,11 +7976,26 @@ ${productosLista}
             window.limpiarFiltrosOutlet = limpiarFiltrosOutlet;
             window.limpiarCotizacion = limpiarCotizacion;
             window.abrirModalCotizacion = abrirModalCotizacion;
+            window.abrirModalCotizacion = abrirModalCotizacion;
             window.cerrarModalCotizacion = cerrarModalCotizacion;
             window.eliminarProductoCotizacion = eliminarProductoCotizacion;
             window.toggleSeleccionCotizacion = toggleSeleccionCotizacion;
+            window.irPasoCotizacion = irPasoCotizacion;
+            window.agregarMasProductos = agregarMasProductos;
+            window.cambiarModoAsignacionPaso = cambiarModoAsignacionPaso;
+            window.buscarAsesorPorEmailPaso = buscarAsesorPorEmailPaso;
+            window.actualizarPlaceholderTelefono = actualizarPlaceholderTelefono;
+            window.actualizarChipsFiltrosActivos = actualizarChipsFiltrosActivos;
+            window.validarCampoPaso = validarCampoPaso;
+            window.seleccionarAsesorManualPaso = seleccionarAsesorManualPaso;
+            window.toggleClearButton = toggleClearButton;
+            window.limpiarCampoBusqueda = limpiarCampoBusqueda;
+            window.configurarBusqueda = configurarBusqueda; 
+
             
-            // Funciones de filtros
+            // ============================================
+            // FUNCIONES DE FILTROS
+            // ============================================
             function syncModalSelects(){
                 const fd=document.getElementById('filtroFamilia'),ad=document.getElementById('filtroAcabado'),md=document.getElementById('filtroMaterial');
                 const fm=document.getElementById('filtroFamiliaModal'),am=document.getElementById('filtroAcabadoModal'),mm=document.getElementById('filtroMaterialModal');
@@ -6669,227 +8023,481 @@ ${productosLista}
                 if(window.innerWidth<=768){const m=document.getElementById('filtrosModal');if(m){m.classList.remove('show');document.body.style.overflow='';}}
             }
             
-            // Protección de imágenes y contenido
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            document.addEventListener('dragstart', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12') { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); return false; }
-            });
-            
-            document.body.style.userSelect = 'none';
-            document.body.style.webkitUserSelect = 'none';
-            document.body.style.msUserSelect = 'none';
-            
-            function protegerImagenes() {
-                document.querySelectorAll('img').forEach(img => {
-                    img.setAttribute('draggable', 'false');
-                    img.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
-                    img.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
-                });
-            }
-            
-            protegerImagenes();
-            const observerImagenesProt = new MutationObserver(() => protegerImagenes());
-            observerImagenesProt.observe(document.body, { childList: true, subtree: true });
-            
-            // Escaneo QR con cámara trasera
-            let html5QrCode = null;
-            let escaneoActivo = false;
-            
-            function detenerEscaneoQR() {
-                if (html5QrCode && escaneoActivo) {
-                    html5QrCode.stop().then(() => {
-                        escaneoActivo = false;
-                        html5QrCode = null;
-                    }).catch(err => console.error(err));
-                }
-            }
-            
-            function iniciarEscaneoQR() {
-                const modalQR = document.getElementById('modalQR');
-                const readerElement = document.getElementById('qr-reader');
-                if (!modalQR || !readerElement) return;
-                readerElement.innerHTML = '';
-                modalQR.style.display = 'flex';
-                
-                if (typeof Html5Qrcode === 'undefined') {
-                    modalQR.style.display = 'none';
-                    mostrarModal('Error', 'Biblioteca QR no cargada', 'error');
-                    return;
-                }
-                
-                html5QrCode = new Html5Qrcode("qr-reader");
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
-                    (decodedText) => {
-                        detenerEscaneoQR();
-                        if (modalQR) modalQR.style.display = 'none';
-                        const searchInput = document.getElementById('searchOutlet');
-                        if (searchInput) {
-                            searchInput.value = decodedText;
-                            if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
-                        }
-                        mostrarModal('Código encontrado', decodedText, 'success');
-                    },
-                    (errorMessage) => {}
-                ).catch(err => {
-                    console.error('Error al iniciar cámara:', err);
-                    modalQR.style.display = 'none';
-                    escaneoActivo = false;
-                    mostrarModal('Error de cámara', 'No se pudo acceder a la cámara trasera', 'error');
-                });
-                escaneoActivo = true;
-            }
-            
-            function cerrarModalQR() {
-                detenerEscaneoQR();
-                const modalQR = document.getElementById('modalQR');
-                if (modalQR) modalQR.style.display = 'none';
-            }
-            
-            // Inicializar eventos
-            document.addEventListener('DOMContentLoaded', function() {
-                const btnEscanear = document.getElementById('btnEscanearQR');
-                const btnCerrarQR = document.getElementById('btnCerrarQR');
-                const modalQR = document.getElementById('modalQR');
-                
-                if (btnEscanear) btnEscanear.onclick = iniciarEscaneoQR;
-                if (btnCerrarQR) btnCerrarQR.onclick = cerrarModalQR;
-                if (modalQR) modalQR.onclick = (e) => { if (e.target === modalQR) cerrarModalQR(); };
-                
-                const btnLimpiarTodo = document.getElementById('btnLimpiarTodoOutlet');
-                const searchInput = document.getElementById('searchOutlet');
-                const familiaSelect = document.getElementById('filtroFamilia');
-                const acabadoSelect = document.getElementById('filtroAcabado');
-                const materialSelect = document.getElementById('filtroMaterial');
-
-                const actualizarBotonLimpiarTodo = () => {
-                    if (btnLimpiarTodo) {
-                        const hayFiltrosActivos = (familiaSelect && familiaSelect.value !== '') ||
-                                                (acabadoSelect && acabadoSelect.value !== '') ||
-                                                (materialSelect && materialSelect.value !== '') ||
-                                                (searchInput && searchInput.value !== '');
-                        
-                        btnLimpiarTodo.style.display = hayFiltrosActivos ? 'inline-flex' : 'none';
-                    }
-                };
-
-                if (btnLimpiarTodo) {
-                    btnLimpiarTodo.addEventListener('click', function() {
-                        // Limpiar búsqueda
-                        if (searchInput) {
-                            searchInput.value = '';
-                            if (btnLimpiarBusqueda) btnLimpiarBusqueda.style.display = 'none';
-                        }
-                        
-                        // Limpiar selects
-                        if (familiaSelect) familiaSelect.value = '';
-                        if (acabadoSelect) acabadoSelect.value = '';
-                        if (materialSelect) materialSelect.value = '';
-                        
-                        // Aplicar filtros
-                        if (typeof window.limpiarFiltrosOutlet === 'function') {
-                            window.limpiarFiltrosOutlet();
-                        } else if (typeof window.aplicarFiltrosOutlet === 'function') {
-                            window.aplicarFiltrosOutlet();
-                        }
-                        
-                        // Ocultar el botón
-                        btnLimpiarTodo.style.display = 'none';
-                    });
-                }                
-
-                let timeoutBusqueda = null;
-                if (searchInput) {
-                    searchInput.addEventListener('input', function() {
-                        clearTimeout(timeoutBusqueda);
-                        timeoutBusqueda = setTimeout(() => {
-                            if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
-                        }, 400);
-                    });
-                }
-                
-                const aplicarFiltros = () => {
-                    syncModalSelects();
-                    if (typeof aplicarFiltrosOutlet === 'function') aplicarFiltrosOutlet();
-                };
-                
-                if (familiaSelect) familiaSelect.addEventListener('change', aplicarFiltros);
-                if (acabadoSelect) acabadoSelect.addEventListener('change', aplicarFiltros);
-                if (materialSelect) materialSelect.addEventListener('change', aplicarFiltros);
-                
+            function openFiltrosModal(){
                 syncModalSelects();
-                
-                // Lazy loading de imágenes
-                if ('IntersectionObserver' in window) {
-                    const imageObserver = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                const img = entry.target;
-                                const dataSrc = img.getAttribute('data-src');
-                                if (dataSrc) {
-                                    img.src = dataSrc;
-                                    img.removeAttribute('data-src');
-                                    imageObserver.unobserve(img);
-                                }
-                            }
-                        });
-                    }, { rootMargin: '50px' });
-                    
-                    document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
-                } else {
-                    document.querySelectorAll('img[data-src]').forEach(img => {
-                        img.src = img.getAttribute('data-src');
-                        img.removeAttribute('data-src');
-                    });
-                }
-                
-                // Scroll Top Button
-                const scrollBtn = document.getElementById('scrollTopBtn');
-                window.addEventListener('scroll', () => {
-                    if (scrollBtn) {
-                        if (window.scrollY > 300) {
-                            scrollBtn.style.display = 'flex';
-                        } else {
-                            scrollBtn.style.display = 'none';
-                        }
-                    }
-                });
+                const modal=document.getElementById('filtrosModal');
+                if(modal){modal.classList.add('show');document.body.style.overflow='hidden';}
+            }
+            
+            function closeFiltrosModal(){
+                const modal=document.getElementById('filtrosModal');
+                if(modal){modal.classList.remove('show');document.body.style.overflow='';}
+            }
+            
+            // ============================================
+            // PROTECCIÓN DE IMÁGENES Y CONTENIDO
+            // ============================================
+            document.addEventListener('contextmenu', function(e){e.preventDefault();return false;});
+            document.addEventListener('dragstart', function(e){e.preventDefault();return false;});
+            document.addEventListener('keydown', function(e){
+                if(e.key==='F12'){e.preventDefault();return false;}
+                if(e.ctrlKey&&e.shiftKey&&e.key==='I'){e.preventDefault();return false;}
+                if(e.ctrlKey&&e.key==='u'){e.preventDefault();return false;}
+                if(e.ctrlKey&&e.key==='s'){e.preventDefault();return false;}
+                if(e.ctrlKey&&e.shiftKey&&e.key==='J'){e.preventDefault();return false;}
             });
             
-            // Countdown
-            (function initCountdown(){
-                const fi=new Date(2026,5,24),ff=new Date(2026,6,18),h=new Date();
-                h.setHours(0,0,0,0);fi.setHours(0,0,0,0);ff.setHours(0,0,0,0);
-                let td,mp="";
-                if(h<fi){td=fi;mp="OFERTA PRÓXIMAMENTE";}
-                else if(h>=fi&&h<=ff){td=ff;mp="OFERTA POR TIEMPO LIMITADO";}
-                else{td=null;mp="OFERTA FINALIZADA";}
-                const te=document.getElementById('countdownTitle');if(te)te.textContent=mp;
-                if(!td) return;
-                function u(){
-                    const n=new Date(),d=td-n;
-                    if(d<=0) return;
-                    document.getElementById('countdown-days').textContent = Math.floor(d/86400000).toString().padStart(2,'0');
-                    document.getElementById('countdown-hours').textContent = Math.floor((d%86400000)/3600000).toString().padStart(2,'0');
-                    document.getElementById('countdown-minutes').textContent = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
-                    document.getElementById('countdown-seconds').textContent = Math.floor((d%60000)/1000).toString().padStart(2,'0');
+            // ============================================
+            // INICIALIZACIÓN
+            // ============================================
+// ============================================
+// INICIALIZACIÓN COMPLETA - ACTUALIZADA
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando página Outlet...');
+    
+    // ============================================
+    // PASO 1: CARGAR COTIZACIÓN DE LOCALSTORAGE
+    // ============================================
+    if (typeof cargarSeleccionCotizacion === 'function') {
+        cargarSeleccionCotizacion();
+        console.log('📦 Productos en cotización:', cotizacionSeleccionados?.length || 0);
+    }
+    
+    // ============================================
+    // PASO 2: CONFIGURAR BÚSQUEDA
+    // ============================================
+    const searchInput = document.getElementById('searchOutlet');
+    const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
+    const btnLimpiarBusquedaExterno = document.getElementById('btnLimpiarBusquedaExterno');
+    let timeoutBusqueda = null;
+    
+    function toggleClearButton() {
+        const input = document.getElementById('searchOutlet');
+        const btnInterno = document.getElementById('btnLimpiarBusqueda');
+        const btnExterno = document.getElementById('btnLimpiarBusquedaExterno');
+        
+        if (!input) return;
+        
+        const tieneTexto = input.value && input.value.trim().length > 0;
+        
+        // Botón interno (solo en móvil, dentro del input)
+        if (btnInterno) {
+            if (tieneTexto && window.innerWidth <= 768) {
+                btnInterno.style.display = 'flex';
+                btnInterno.style.opacity = '1';
+                btnInterno.style.visibility = 'visible';
+            } else {
+                btnInterno.style.display = 'none';
+            }
+        }
+        
+        // Botón externo (visible en todos los dispositivos cuando hay texto)
+        if (btnExterno) {
+            if (tieneTexto) {
+                btnExterno.style.display = 'flex';
+                btnExterno.classList.add('visible');
+                btnExterno.classList.remove('hidden');
+            } else {
+                btnExterno.style.display = 'none';
+                btnExterno.classList.remove('visible');
+                btnExterno.classList.add('hidden');
+            }
+        }
+    }
+    
+    function limpiarCampoBusqueda() {
+        console.log('🧹 Limpiando campo de búsqueda...');
+        
+        const input = document.getElementById('searchOutlet');
+        const btnInterno = document.getElementById('btnLimpiarBusqueda');
+        const btnExterno = document.getElementById('btnLimpiarBusquedaExterno');
+        
+        // Limpiar input
+        if (input) {
+            input.value = '';
+        }
+        
+        // Ocultar botón interno
+        if (btnInterno) {
+            btnInterno.style.display = 'none';
+        }
+        
+        // Ocultar botón externo
+        if (btnExterno) {
+            btnExterno.style.display = 'none';
+            btnExterno.classList.remove('visible');
+            btnExterno.classList.add('hidden');
+        }
+        
+        // Disparar evento input
+        if (input) {
+            const event = new Event('input', { bubbles: true });
+            input.dispatchEvent(event);
+        }
+        
+        // Aplicar filtros
+        if (typeof window.aplicarFiltrosOutlet === 'function') {
+            window.aplicarFiltrosOutlet();
+            
+            // Después de aplicar filtros, actualizar botones
+            setTimeout(() => {
+                if (typeof window.actualizarTodosLosBotonesCotizar === 'function') {
+                    window.actualizarTodosLosBotonesCotizar();
                 }
-                u();setInterval(u,1000);
-            })();
+            }, 50);
+        }
+        
+        // Dar foco
+        if (input) {
+            input.focus();
+        }
+    }
+    
+    function configurarBusqueda() {
+        console.log('🔧 Configurando búsqueda...');
+        
+        const searchInput = document.getElementById('searchOutlet');
+        const btnInterno = document.getElementById('btnLimpiarBusqueda');
+        const btnExterno = document.getElementById('btnLimpiarBusquedaExterno');
+        
+        if (!searchInput) {
+            console.warn('⚠️ Input de búsqueda no encontrado');
+            return;
+        }
+        
+        // EVENTO INPUT
+        searchInput.addEventListener('input', function(e) {
+            toggleClearButton();
+            
+            clearTimeout(timeoutBusqueda);
+            timeoutBusqueda = setTimeout(() => {
+                if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                    
+                    setTimeout(() => {
+                        if (typeof window.actualizarTodosLosBotonesCotizar === 'function') {
+                            window.actualizarTodosLosBotonesCotizar();
+                        }
+                    }, 50);
+                }
+            }, 300);
+        });
+        
+        // EVENTO KEYDOWN - Escape limpia
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                limpiarCampoBusqueda();
+            }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(timeoutBusqueda);
+                if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                    
+                    setTimeout(() => {
+                        if (typeof window.actualizarTodosLosBotonesCotizar === 'function') {
+                            window.actualizarTodosLosBotonesCotizar();
+                        }
+                    }, 50);
+                }
+            }
+        });
+        
+        // EVENTO FOCUS
+        searchInput.addEventListener('focus', function() {
+            toggleClearButton();
+        });
+        
+        // EVENTO BLUR
+        searchInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (!this.value || this.value.trim().length === 0) {
+                    const btnExterno = document.getElementById('btnLimpiarBusquedaExterno');
+                    if (btnExterno) {
+                        btnExterno.classList.remove('visible');
+                        btnExterno.classList.add('hidden');
+                        btnExterno.style.display = 'none';
+                    }
+                }
+            }, 200);
+        });
+        
+        // CONFIGURAR BOTÓN INTERNO
+        if (btnInterno) {
+            const nuevoBtn = btnInterno.cloneNode(true);
+            btnInterno.parentNode.replaceChild(nuevoBtn, btnInterno);
+            
+            nuevoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                limpiarCampoBusqueda();
+            });
+        }
+        
+        // CONFIGURAR BOTÓN EXTERNO
+        if (btnExterno) {
+            const nuevoBtnExterno = btnExterno.cloneNode(true);
+            btnExterno.parentNode.replaceChild(nuevoBtnExterno, btnExterno);
+            
+            nuevoBtnExterno.addEventListener('click', function(e) {
+                e.preventDefault();
+                limpiarCampoBusqueda();
+            });
+        }
+        
+        // Estado inicial
+        toggleClearButton();
+        
+        console.log('✅ Búsqueda configurada correctamente');
+    }
+    
+    // Ejecutar configuración de búsqueda
+    configurarBusqueda();
+    
+    // ============================================
+    // PASO 3: CONFIGURAR ESCÁNER QR
+    // ============================================
+    const btnEscanear = document.getElementById('btnEscanearQR');
+    const btnCerrarQR = document.getElementById('btnCerrarQR');
+    const modalQR = document.getElementById('modalQR');
+    
+    if (btnEscanear) {
+        const nuevoBtnEscanear = btnEscanear.cloneNode(true);
+        btnEscanear.parentNode.replaceChild(nuevoBtnEscanear, btnEscanear);
+        
+        nuevoBtnEscanear.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (typeof window.iniciarEscaneoQR === 'function') {
+                window.iniciarEscaneoQR();
+            }
+        });
+        console.log('✅ Botón escanear QR configurado');
+    }
+    
+    if (btnCerrarQR) {
+        const nuevoBtnCerrar = btnCerrarQR.cloneNode(true);
+        btnCerrarQR.parentNode.replaceChild(nuevoBtnCerrar, btnCerrarQR);
+        
+        nuevoBtnCerrar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (typeof window.cerrarModalQR === 'function') {
+                window.cerrarModalQR();
+            }
+        });
+        console.log('✅ Botón cerrar QR configurado');
+    }
+    
+    if (modalQR) {
+        const nuevoModal = modalQR.cloneNode(true);
+        modalQR.parentNode.replaceChild(nuevoModal, modalQR);
+        
+        nuevoModal.addEventListener('click', function(e) {
+            if (e.target === nuevoModal) {
+                if (typeof window.cerrarModalQR === 'function') {
+                    window.cerrarModalQR();
+                }
+            }
+        });
+        console.log('✅ Modal QR overlay configurado');
+    }
+    
+    // ============================================
+    // PASO 4: CONFIGURAR EVENTOS QR ADICIONALES
+    // ============================================
+    if (typeof configurarEventosQR === 'function') {
+        configurarEventosQR();
+        console.log('✅ Eventos QR adicionales configurados');
+    }
+    
+    // ============================================
+    // PASO 5: CONFIGURAR FILTROS
+    // ============================================
+    const familiaSelect = document.getElementById('filtroFamilia');
+    const acabadoSelect = document.getElementById('filtroAcabado');
+    const materialSelect = document.getElementById('filtroMaterial');
+    
+    const aplicarFiltros = () => {
+        if (typeof window.syncModalSelects === 'function') {
+            window.syncModalSelects();
+        }
+        if (typeof window.aplicarFiltrosOutlet === 'function') {
+            window.aplicarFiltrosOutlet();
+            
+            setTimeout(() => {
+                if (typeof window.actualizarTodosLosBotonesCotizar === 'function') {
+                    window.actualizarTodosLosBotonesCotizar();
+                }
+            }, 50);
+        }
+    };
+    
+    if (familiaSelect) {
+        familiaSelect.addEventListener('change', aplicarFiltros);
+    }
+    if (acabadoSelect) {
+        acabadoSelect.addEventListener('change', aplicarFiltros);
+    }
+    if (materialSelect) {
+        materialSelect.addEventListener('change', aplicarFiltros);
+    }
+    console.log('✅ Filtros configurados');
+    
+    // ============================================
+    // PASO 6: ACTUALIZAR BOTONES SEGÚN LOCALSTORAGE
+    // ============================================
+    setTimeout(() => {
+        if (typeof window.actualizarTodosLosBotonesCotizar === 'function') {
+            window.actualizarTodosLosBotonesCotizar();
+            console.log('✅ Botones actualizados según localStorage');
+        }
+    }, 100);
+    
+    // ============================================
+    // PASO 7: INICIALIZAR LAZY LOADING
+    // ============================================
+    if (typeof inicializarLazyLoading === 'function') {
+        inicializarLazyLoading();
+        console.log('✅ Lazy loading inicializado');
+    }
+    
+    // ============================================
+    // PASO 8: INICIALIZAR COUNTDOWN
+    // ============================================
+    if (typeof initCountdown === 'function') {
+        initCountdown();
+        console.log('✅ Countdown inicializado');
+    }
+    
+    // ============================================
+    // PASO 9: CONFIGURAR BOTÓN SCROLL TOP
+    // ============================================
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    if (scrollBtn) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+        console.log('✅ Scroll button configurado');
+    }
+    
+    // ============================================
+    // PASO 10: PRECARGAR ASESORES (NUEVO - PROPUESTA 1)
+    // ============================================
+    if (typeof precargarAsesoresOutlet === 'function') {
+        console.log('🔄 Precargando asesores...');
+        
+        const cargarAsesores = async () => {
+            try {
+                const vendedores = await precargarAsesoresOutlet();
+                asesoresPrecargados = vendedores;
+                
+                // Si hay vendedores, asignar el mejor automáticamente
+                if (vendedores && vendedores.length > 0) {
+                    if (typeof obtenerMejorAsesor === 'function') {
+                        asesorSeleccionadoActual = obtenerMejorAsesor(vendedores);
+                        modoAsignacionActual = 'auto';
+                        console.log('🎯 Asesor automático asignado:', asesorSeleccionadoActual?.nombre);
+                    }
+                } else {
+                    console.warn('⚠️ No hay asesores disponibles');
+                }
+            } catch (error) {
+                console.error('❌ Error precargando asesores:', error);
+            }
+        };
+        
+        if (window.requestIdleCallback) {
+            requestIdleCallback(() => { cargarAsesores(); });
+        } else {
+            setTimeout(() => { cargarAsesores(); }, 1000);
+        }
+    }
+    
+    // ============================================
+    // PASO 11: CONFIGURAR CIERRE CON ESCAPE
+    // ============================================
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modalQR = document.getElementById('modalQR');
+            if (modalQR && modalQR.style.display === 'flex') {
+                if (typeof window.cerrarModalQR === 'function') {
+                    window.cerrarModalQR();
+                }
+            }
+            
+            const modalCotizacion = document.getElementById('modalCotizacion');
+            if (modalCotizacion && modalCotizacion.classList.contains('active')) {
+                if (typeof window.cerrarModalCotizacion === 'function') {
+                    window.cerrarModalCotizacion();
+                }
+            }
+        }
+    });
+    console.log('✅ Tecla Escape configurada');
+    
+    // ============================================
+    // PASO 12: RECARGAR BARRA DE COTIZACIÓN SI HAY PRODUCTOS
+    // ============================================
+    setTimeout(() => {
+        if (cotizacionSeleccionados && cotizacionSeleccionados.length > 0) {
+            if (typeof window.actualizarBarraFlotante === 'function') {
+                window.actualizarBarraFlotante();
+                console.log('✅ Barra de cotización actualizada');
+            }
+            if (typeof window.actualizarBadgeHeader === 'function') {
+                window.actualizarBadgeHeader();
+                console.log('✅ Badge header actualizado');
+            }
+        }
+    }, 150);
+    
+    // ============================================
+    // PASO 13: CONFIGURAR BOTÓN DE FILTROS MÓVIL
+    // ============================================
+    const filtrosFab = document.getElementById('filtrosFab');
+    if (filtrosFab) {
+        filtrosFab.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (typeof window.openFiltrosModal === 'function') {
+                window.openFiltrosModal();
+            }
+        });
+        console.log('✅ FAB filtros configurado');
+    }
+    
+    // ============================================
+    // PASO 14: CONFIGURAR BOTÓN LIMPIAR FILTROS
+    // ============================================
+    const btnLimpiarTodoOutlet = document.getElementById('btnLimpiarTodoOutlet');
+    if (btnLimpiarTodoOutlet) {
+        btnLimpiarTodoOutlet.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (typeof window.limpiarFiltrosOutlet === 'function') {
+                window.limpiarFiltrosOutlet();
+            }
+        });
+        console.log('✅ Botón limpiar filtros configurado');
+    }
+    
+    // ============================================
+    // FINALIZAR INICIALIZACIÓN
+    // ============================================
+    console.log('✅ Outlet renderizado correctamente con todas las mejoras mobile first');
+    console.log('📊 Estado final:', {
+        productosEnCotizacion: cotizacionSeleccionados?.length || 0,
+        productosTotales: window.outletProductosCache?.length || 0,
+        asesoresDisponibles: asesoresPrecargados?.length || 0,
+        asesorSeleccionado: asesorSeleccionadoActual?.nombre || 'Ninguno',
+        modoAsignacion: modoAsignacionActual || 'auto'
+    });
+});
         </script>
     </body>
     </html>`;
@@ -6898,247 +8506,75 @@ ${productosLista}
     
     setTimeout(() => {
         cargarSeleccionCotizacion();
+
+        // Configurar eventos QR
+        if (typeof configurarEventosQR === 'function') {
+            configurarEventosQR();
+        }
+
+        // Configurar botón de escaneo QR
+        const btnEscanear = document.getElementById('btnEscanearQR');
+        if (btnEscanear) {
+            // IMPORTANTE: Remover event listeners anteriores
+            const nuevoBtn = btnEscanear.cloneNode(true);
+            btnEscanear.parentNode.replaceChild(nuevoBtn, btnEscanear);
+            
+            nuevoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('📷 Click en escanear QR');
+                if (typeof window.iniciarEscaneoQR === 'function') {
+                    window.iniciarEscaneoQR();
+                } else {
+                    console.error('❌ iniciarEscaneoQR no está definida');
+                }
+            });
+        }
+        
+        // CONFIGURAR CIERRE CON ESCAPE
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modalQR = document.getElementById('modalQR');
+                if (modalQR && modalQR.style.display === 'flex') {
+                    cerrarModalQR();
+                }
+            }
+        });
+
+        if (typeof configurarBusquedaOutlet === 'function') {
+            console.log('✅ Configurando búsqueda...');
+            configurarBusquedaOutlet();
+        } else {
+            console.warn('⚠️ configurarBusquedaOutlet no está definida');
+        }
+
         if (cotizacionSeleccionados && cotizacionSeleccionados.length > 0) {
             actualizarBarraFlotante();
             actualizarTodosLosBotonesCotizar();
+            actualizarBadgeHeader();
         }
         
         if (typeof initCountdown === 'function') initCountdown();
         inicializarLazyLoading();
         
-        // Precarga de asesores
         if (window.requestIdleCallback) {
             requestIdleCallback(() => { precargarAsesoresOutlet(); });
         } else {
             setTimeout(() => precargarAsesoresOutlet(), 2000);
         }
-               
-        // ============================================
-        // CONFIGURACIÓN DEL ESCÁNER QR (AGREGAR ESTO)
-        // ============================================
-        const btnEscanear = document.getElementById('btnEscanearQR');
-        const btnCerrarQR = document.getElementById('btnCerrarQR');
-        const modalQR = document.getElementById('modalQR');
         
-        if (btnEscanear) {
-            const nuevoBtn = btnEscanear.cloneNode(true);
-            btnEscanear.parentNode.replaceChild(nuevoBtn, btnEscanear);
-            nuevoBtn.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('🖱️ Click en botón escanear');
-                iniciarEscaneoQR();  // Esta función debe estar definida arriba
-            };
-            console.log('✅ Botón escanear configurado');
-        }
-        
-        if (btnCerrarQR) {
-            const nuevoCerrar = btnCerrarQR.cloneNode(true);
-            btnCerrarQR.parentNode.replaceChild(nuevoCerrar, btnCerrarQR);
-            nuevoCerrar.onclick = function(e) {
-                e.preventDefault();
-                cerrarModalQR();
-            };
-        }
-        
-        if (modalQR) {
-            modalQR.onclick = function(e) {
-                if (e.target === modalQR) cerrarModalQR();
-            };
-        }
-        
-        window.iniciarEscaneoQR = iniciarEscaneoQR;
-        window.cerrarModalQR = cerrarModalQR;
-        
-        // ============================================
-        // BÚSQUEDA EN TIEMPO REAL CON BOTÓN DE LIMPIAR
-        // ============================================
-        const searchInputOutlet = document.getElementById('searchOutlet');
-        const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda');
-        let timeoutBusqueda = null;
-
-        function toggleClearButton() {
-            const inputActual = document.getElementById('searchOutlet');
-            const btnActual = document.getElementById('btnLimpiarBusqueda');
-            
-            if (btnActual && inputActual) {
-                if (inputActual.value.length > 0) {
-                    btnActual.style.display = 'flex';
-                } else {
-                    btnActual.style.display = 'none';
-                }
-            }
-        }
-
-        function limpiarCampoBusqueda() {
-            const inputActual = document.getElementById('searchOutlet');
-            const btnActual = document.getElementById('btnLimpiarBusqueda');
-            
-            if (inputActual) {
-                inputActual.value = '';
-                if (btnActual) {
-                    btnActual.style.display = 'none';
-                }
-                
-                // Aplicar filtros para mostrar todos los productos
-                if (typeof window.aplicarFiltrosOutlet === 'function') {
-                    window.aplicarFiltrosOutlet();
-                }
-                
-                // Dar foco al input
-                inputActual.focus();
-                
-                console.log('🧹 Búsqueda limpiada');
-            }
-        }
-
-        function ejecutarFiltroBusqueda() {
-            const inputActual = document.getElementById('searchOutlet');
-            console.log('🔍 Ejecutando filtro de búsqueda:', inputActual?.value);
-            if (typeof window.aplicarFiltrosOutlet === 'function') {
-                window.aplicarFiltrosOutlet();
-            }
-            if (typeof window.actualizarBotonLimpiarTodo === 'function') {
-                window.actualizarBotonLimpiarTodo();
-            }
-        }
-
-        // ============================================
-        // CONFIGURAR INPUT (sin clonar para no romper referencias)
-        // ============================================
-        if (searchInputOutlet) {
-            // Remover event listeners anteriores
-            const nuevoInput = searchInputOutlet.cloneNode(true);
-            searchInputOutlet.parentNode.replaceChild(nuevoInput, searchInputOutlet);
-            
-            // Asignar nuevos eventos al input
-            nuevoInput.addEventListener('input', function(e) {
-                console.log('✍️ Usuario escribió:', e.target.value);
-                toggleClearButton();
-                
-                clearTimeout(timeoutBusqueda);
-                timeoutBusqueda = setTimeout(() => {
-                    ejecutarFiltroBusqueda();
-                }, 300);
-            });
-            
-            nuevoInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    limpiarCampoBusqueda();
-                }
-                if (e.key === 'Enter') {
-                    clearTimeout(timeoutBusqueda);
-                    ejecutarFiltroBusqueda();
-                }
-            });
-            
-            console.log('✅ Input de búsqueda configurado');
-        }
-
-        // ============================================
-        // CONFIGURAR BOTÓN DE LIMPIAR (después del input)
-        // ============================================
+        // Asegurar que el botón de escáner QR funcione después de cargar el DOM
         setTimeout(() => {
-            const btnActual = document.getElementById('btnLimpiarBusqueda');
-            
-            if (btnActual) {
-                // Clonar para eliminar eventos anteriores
-                const nuevoBtn = btnActual.cloneNode(true);
-                btnActual.parentNode.replaceChild(nuevoBtn, btnActual);
-                
-                // Agregar evento al nuevo botón
-                nuevoBtn.addEventListener('click', function(e) {
+            const btnEscanear = document.getElementById('btnEscanearQR');
+            if (btnEscanear) {
+                btnEscanear.onclick = function(e) {
                     e.preventDefault();
-                    e.stopPropagation();
-                    console.log('🖱️ Click en botón limpiar');
-                    limpiarCampoBusqueda();
-                });
-                
-                console.log('✅ Botón limpiar configurado');
+                    iniciarEscaneoQR();
+                };
             }
-        }, 50);
-
-        // Inicializar estado del botón
-        setTimeout(() => {
-            toggleClearButton();
-        }, 100);
-
-        // ============================================
-        // BOTÓN PARA SUBIR AL INICIO (SCROLL TOP)
-        // ============================================
-        const scrollBtn = document.getElementById('scrollTopBtn');
-
-        function toggleScrollButton() {
-            if (scrollBtn) {
-                if (window.scrollY > 300) {
-                    scrollBtn.style.display = 'flex';
-                    scrollBtn.classList.add('show');
-                } else {
-                    scrollBtn.style.display = 'none';
-                    scrollBtn.classList.remove('show');
-                }
-            }
-        }
-
-        // Escuchar evento scroll
-        window.addEventListener('scroll', toggleScrollButton);
-
-        // Verificar al cargar
-        toggleScrollButton();
-
-        // Detectar scroll para mostrar/ocultar barra
-        let ultimoScroll = 0;
-        let temporizadorOcultar;
+        }, 500);
         
-        window.addEventListener('scroll', () => {
-            const barra = document.getElementById('barra-cotizacion');
-            if (!barra) return;
-            
-            const scrollActual = window.scrollY;
-            const alturaTotal = document.body.scrollHeight;
-            const ventanaAltura = window.innerHeight;
-            const estaAlFinal = scrollActual + ventanaAltura >= alturaTotal - 100;
-            
-            if (estaAlFinal) {
-                barra.style.transform = 'translateY(0)';
-                return;
-            }
-            
-            if (scrollActual > ultimoScroll && scrollActual > 100) {
-                clearTimeout(temporizadorOcultar);
-                barra.style.transform = 'translateY(100%)';
-                barra.style.transition = 'transform 0.3s ease';
-            } else if (scrollActual < ultimoScroll) {
-                clearTimeout(temporizadorOcultar);
-                barra.style.transform = 'translateY(0)';
-            } else {
-                clearTimeout(temporizadorOcultar);
-                temporizadorOcultar = setTimeout(() => {
-                    if (barra.style.transform !== 'translateY(0)') {
-                        barra.style.transform = 'translateY(0)';
-                    }
-                }, 2000);
-            }
-            
-            ultimoScroll = scrollActual;
-        });
-        
-        // Mostrar barra al hacer hover en desktop
-        if (window.innerWidth > 768) {
-            const barra = document.getElementById('barra-cotizacion');
-            if (barra) {
-                barra.addEventListener('mouseenter', () => {
-                    barra.style.transform = 'translateY(0)';
-                });
-                barra.addEventListener('mouseleave', () => {
-                    if (window.scrollY > 100) {
-                        barra.style.transform = 'translateY(100%)';
-                    }
-                });
-            }
-        }
-
-        console.log('✅ Outlet renderizado correctamente con todas las mejoras');
+        console.log('✅ Outlet renderizado correctamente con todas las mejoras mobile first');
         
     }, 100);
 }
@@ -7336,7 +8772,304 @@ function renderizarPaginaSaldosExportacion(productos) {
     
     document.documentElement.innerHTML = html;
     cargarSeleccionCotizacion();
-    setTimeout(() => { if (typeof initCountdown === 'function') initCountdown(); }, 100);
+    // ============================================
+    // INICIALIZACIÓN COMPLETA
+    // ============================================
+    setTimeout(() => {
+    console.log('🚀 Iniciando configuración de Outlet...');
+    
+    // ============================================
+    // 1. CARGAR COTIZACIÓN DESDE LOCALSTORAGE
+    // ============================================
+    if (typeof cargarSeleccionCotizacion === 'function') {
+        cargarSeleccionCotizacion();
+        console.log('✅ Cotización cargada');
+    }
+    
+    if (cotizacionSeleccionados && cotizacionSeleccionados.length > 0) {
+        console.log('📦 Productos en cotización:', cotizacionSeleccionados.length);
+        if (typeof actualizarBarraFlotante === 'function') {
+            actualizarBarraFlotante();
+        }
+        if (typeof actualizarTodosLosBotonesCotizar === 'function') {
+            actualizarTodosLosBotonesCotizar();
+        }
+        if (typeof actualizarBadgeHeader === 'function') {
+            actualizarBadgeHeader();
+        }
+    }
+    
+    // ============================================
+    // 2. INICIALIZAR COUNTDOWN
+    // ============================================
+    if (typeof initCountdown === 'function') {
+        initCountdown();
+        console.log('✅ Countdown iniciado');
+    }
+    
+    // ============================================
+    // 3. INICIALIZAR LAZY LOADING DE IMÁGENES
+    // ============================================
+    if (typeof inicializarLazyLoading === 'function') {
+        inicializarLazyLoading();
+        console.log('✅ Lazy loading iniciado');
+    }
+    
+    // ============================================
+    // 4. PRECARGAR ASESORES
+    // ============================================
+    if (window.requestIdleCallback) {
+        requestIdleCallback(() => {
+            if (typeof precargarAsesoresOutlet === 'function') {
+                precargarAsesoresOutlet();
+                console.log('✅ Asesores precargados (idle)');
+            }
+        });
+    } else {
+        setTimeout(() => {
+            if (typeof precargarAsesoresOutlet === 'function') {
+                precargarAsesoresOutlet();
+                console.log('✅ Asesores precargados (timeout)');
+            }
+        }, 2000);
+    }
+    
+    // ============================================
+    // 5. CONFIGURAR BOTÓN DE ESCÁNER QR
+    // ============================================
+    setTimeout(() => {
+        const btnEscanear = document.getElementById('btnEscanearQR');
+        if (btnEscanear) {
+            btnEscanear.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Click en botón QR');
+                if (typeof iniciarEscaneoQR === 'function') {
+                    iniciarEscaneoQR();
+                }
+            };
+            console.log('✅ Botón QR configurado');
+        } else {
+            console.warn('⚠️ Botón QR no encontrado');
+        }
+        
+        const btnCerrarQR = document.getElementById('btnCerrarQR');
+        if (btnCerrarQR) {
+            btnCerrarQR.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Click en cerrar QR');
+                if (typeof cerrarModalQR === 'function') {
+                    cerrarModalQR();
+                }
+            };
+            console.log('✅ Botón cerrar QR configurado');
+        }
+    }, 500);
+    
+    // ============================================
+    // 6. CONFIGURAR BÚSQUEDA (PASO 5)
+    // ============================================
+    setTimeout(() => {
+        console.log('🔧 Configurando búsqueda...');
+        
+        // Configurar eventos del input de búsqueda
+        if (typeof configurarBusqueda === 'function') {
+            configurarBusqueda();
+            console.log('✅ Búsqueda configurada');
+        } else {
+            console.warn('⚠️ configurarBusqueda no está definida');
+        }
+        
+        // Verificar si ya hay texto en el input
+        const searchInput = document.getElementById('searchOutlet');
+        if (searchInput && searchInput.value && searchInput.value.trim().length > 0) {
+            console.log('📝 Hay texto en el input:', searchInput.value);
+            
+            // Mostrar botón de limpiar
+            if (typeof toggleClearButton === 'function') {
+                toggleClearButton();
+            }
+            
+            // Aplicar filtros automáticamente
+            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                window.aplicarFiltrosOutlet();
+            }
+        }
+        
+        console.log('✅ Búsqueda inicializada correctamente');
+    }, 200);
+    
+    // ============================================
+    // 7. CONFIGURAR FILTROS
+    // ============================================
+    setTimeout(() => {
+        const familiaSelect = document.getElementById('filtroFamilia');
+        const acabadoSelect = document.getElementById('filtroAcabado');
+        const materialSelect = document.getElementById('filtroMaterial');
+        const searchInput = document.getElementById('searchOutlet');
+        
+        const aplicarFiltros = () => {
+            console.log('🔄 Aplicando filtros desde selects');
+            if (typeof syncModalSelects === 'function') {
+                syncModalSelects();
+            }
+            if (typeof window.aplicarFiltrosOutlet === 'function') {
+                window.aplicarFiltrosOutlet();
+            }
+        };
+        
+        if (familiaSelect) {
+            familiaSelect.addEventListener('change', aplicarFiltros);
+            console.log('✅ Select Familia configurado');
+        }
+        if (acabadoSelect) {
+            acabadoSelect.addEventListener('change', aplicarFiltros);
+            console.log('✅ Select Acabado configurado');
+        }
+        if (materialSelect) {
+            materialSelect.addEventListener('change', aplicarFiltros);
+            console.log('✅ Select Material configurado');
+        }
+        
+        // Sincronizar selects con el modal
+        if (typeof syncModalSelects === 'function') {
+            syncModalSelects();
+        }
+    }, 200);
+    
+    // ============================================
+    // 8. CONFIGURAR SCROLL TOP BUTTON
+    // ============================================
+    setTimeout(() => {
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        if (scrollBtn) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('show');
+                    scrollBtn.style.display = 'flex';
+                } else {
+                    scrollBtn.classList.remove('show');
+                    scrollBtn.style.display = 'none';
+                }
+            });
+            console.log('✅ Scroll top button configurado');
+        }
+    }, 200);
+    
+    // ============================================
+    // 9. CONFIGURAR MODAL DE FILTROS
+    // ============================================
+    setTimeout(() => {
+        const filtrosFab = document.getElementById('filtrosFab');
+        if (filtrosFab) {
+            if (window.innerWidth <= 768) {
+                filtrosFab.style.display = 'flex';
+            } else {
+                filtrosFab.style.display = 'none';
+            }
+            console.log('✅ FAB filtros configurado');
+        }
+        
+        // Asegurar que el modal de filtros esté cerrado
+        const modalFiltros = document.getElementById('filtrosModal');
+        if (modalFiltros) {
+            modalFiltros.classList.remove('show');
+            modalFiltros.style.right = '-100%';
+        }
+        
+        const overlayFiltros = document.getElementById('filtrosModalOverlay');
+        if (overlayFiltros) {
+            overlayFiltros.classList.remove('show');
+            overlayFiltros.style.display = 'none';
+        }
+        
+        console.log('✅ Modal de filtros configurado');
+    }, 300);
+    
+    // ============================================
+    // 10. CONFIGURAR BOTÓN "LIMPIAR TODO"
+    // ============================================
+    setTimeout(() => {
+        const btnLimpiarTodo = document.getElementById('btnLimpiarTodoOutlet');
+        if (btnLimpiarTodo) {
+            // Remover eventos anteriores clonando
+            const nuevoBtn = btnLimpiarTodo.cloneNode(true);
+            btnLimpiarTodo.parentNode.replaceChild(nuevoBtn, btnLimpiarTodo);
+            
+            nuevoBtn.addEventListener('click', function() {
+                console.log('🧹 Limpiando todo...');
+                
+                // Limpiar búsqueda
+                const searchInput = document.getElementById('searchOutlet');
+                if (searchInput) {
+                    searchInput.value = '';
+                    const btnClear = document.getElementById('btnLimpiarBusqueda');
+                    if (btnClear) btnClear.style.display = 'none';
+                    
+                    const btnExterno = document.getElementById('btnLimpiarBusquedaExterno');
+                    if (btnExterno) {
+                        btnExterno.classList.remove('visible');
+                        btnExterno.classList.add('hidden');
+                        btnExterno.style.display = 'none';
+                    }
+                }
+                
+                // Limpiar selects
+                const familiaSelect = document.getElementById('filtroFamilia');
+                const acabadoSelect = document.getElementById('filtroAcabado');
+                const materialSelect = document.getElementById('filtroMaterial');
+                if (familiaSelect) familiaSelect.value = '';
+                if (acabadoSelect) acabadoSelect.value = '';
+                if (materialSelect) materialSelect.value = '';
+                
+                // Aplicar filtros
+                if (typeof window.limpiarFiltrosOutlet === 'function') {
+                    window.limpiarFiltrosOutlet();
+                } else if (typeof window.aplicarFiltrosOutlet === 'function') {
+                    window.aplicarFiltrosOutlet();
+                }
+                
+                // Ocultar el botón
+                nuevoBtn.style.display = 'none';
+                console.log('✅ Todo limpiado correctamente');
+            });
+            console.log('✅ Botón "Limpiar todo" configurado');
+        }
+    }, 200);
+    
+    // ============================================
+    // 11. CONFIGURAR CHIPS DE FILTROS ACTIVOS
+    // ============================================
+    setTimeout(() => {
+        if (typeof actualizarChipsFiltrosActivos === 'function') {
+            actualizarChipsFiltrosActivos();
+            console.log('✅ Chips de filtros actualizados');
+        }
+    }, 300);
+    
+    // ============================================
+    // 12. EVENTO RESIZE PARA AJUSTAR FAB
+    // ============================================
+    window.addEventListener('resize', function() {
+        const filtrosFab = document.getElementById('filtrosFab');
+        if (filtrosFab) {
+            if (window.innerWidth <= 768) {
+                filtrosFab.style.display = 'flex';
+            } else {
+                filtrosFab.style.display = 'none';
+            }
+        }
+        
+        // Actualizar botones de limpiar según el tamaño
+        if (typeof toggleClearButton === 'function') {
+            toggleClearButton();
+        }
+    });
+    
+    console.log('✅ Outlet renderizado correctamente con todas las mejoras mobile first');
+    
+}, 100);
 }
 
 function toggleSeleccionCotizacion(producto) {
@@ -7362,22 +9095,47 @@ function toggleSeleccionCotizacion(producto) {
 }
 
 function actualizarTodosLosBotonesCotizar() {
-    const botones = document.querySelectorAll('.btn-cotizar');
+    console.log('🔄 Actualizando todos los botones de cotizar...');
+    
+    // Asegurarnos de que cotizacionSeleccionados esté cargado
+    if (!cotizacionSeleccionados || cotizacionSeleccionados.length === 0) {
+        // Intentar cargar desde localStorage
+        const guardado = localStorage.getItem(CONFIG.COTIZACION_STORAGE_KEY);
+        if (guardado) {
+            try {
+                cotizacionSeleccionados = JSON.parse(guardado);
+                console.log('📦 Cotización cargada para actualizar botones:', cotizacionSeleccionados.length);
+            } catch(e) {
+                cotizacionSeleccionados = [];
+            }
+        }
+    }
+    
+    const botones = document.querySelectorAll('.btn-cotizar-bottom');
+    console.log(`🔍 Encontrados ${botones.length} botones para actualizar`);
+    
     botones.forEach(btn => {
         const productoId = btn.getAttribute('data-id');
-        const estaSeleccionado = cotizacionSeleccionados.some(item => item.id === productoId);
+        const estaSeleccionado = cotizacionSeleccionados.some(item => item && item.id === productoId);
         
         if (estaSeleccionado) {
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado';
-            btn.style.background = '#10b981';
-            btn.style.color = 'white';
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Agregado ✓';
+            btn.classList.add('seleccionado');
         } else {
             btn.innerHTML = '<i class="fas fa-plus-circle"></i> Cotizar';
-            btn.style.background = '#39080a';
-            btn.style.color = 'white';
+            btn.classList.remove('seleccionado');
         }
     });
+    
+    // Actualizar también la barra y el badge
+    actualizarBarraFlotante();
+    actualizarBadgeHeader();
+    
+    console.log('✅ Botones actualizados correctamente');
 }
+
+// EXPONER FUNCIÓN GLOBAL
+window.actualizarTodosLosBotonesCotizar = actualizarTodosLosBotonesCotizar;
 
 // ==================== CARGAR PRODUCTO LANDING ====================
 async function cargarProductoLanding() {
@@ -7893,4 +9651,5 @@ window.mostrarModalOpcionesProducto = mostrarModalOpcionesProducto;
         window.esLandingPage = false;
     }
 })();
+
 
