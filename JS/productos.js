@@ -1040,8 +1040,8 @@ function generarVistaTablaProductos(productos) {
                                     
                                     <!-- Producto / Slug -->
                                     <td class="px-3 py-3">
-                                        <div class="font-medium text-primary">${p.nombre || 'N/A'}</div>
-                                        <div class="text-xs text-gray-400 font-mono">/${p.slug || 'N/A'}</div>
+                                        <div class="font-medium text-primary">${p.nombre || ''}</div>
+                                        <div class="text-xs text-gray-400 font-mono">/${p.slug || ''}</div>
                                      </div>
                                     
                                     <!-- Familia -->
@@ -1190,8 +1190,8 @@ function generarVistaCardsProductos(productos) {
                         
                         <!-- Información del producto -->
                         <div class="p-4">
-                            <h3 class="font-bold text-primary text-lg line-clamp-1" title="${p.nombre}">${p.nombre || 'N/A'}</h3>
-                            <p class="text-xs text-gray-400 font-mono mt-0.5">/${p.slug || 'N/A'}</p>
+                            <h3 class="font-bold text-primary text-lg line-clamp-1" title="${p.nombre}">${p.nombre || ''}</h3>
+                            <p class="text-xs text-gray-400 font-mono mt-0.5">/${p.slug || ''}</p>
                             
                             <!-- Especificaciones técnicas en grid -->
                             <div class="grid grid-cols-2 gap-2 mt-3">
@@ -3083,19 +3083,54 @@ function previsualizarImagen(inputId, previewId) {
         return;
     }
     
-    // Función para optimizar URL de Google Drive
-    function optimizarGoogleDriveUrl(url) {
-        if (!url) return 'FOTO/foto_01.webp';
+    // ========== FUNCIÓN PARA OPTIMIZAR URLs DE GOOGLE DRIVE ==========
+    function optimizarGoogleDriveUrl(url, size = '') {
+        if (!url || url === '') return 'FOTO/foto_04.webp';
         
-        // Si ya es una URL de imagen directa de Google Drive
-        if (url.includes('googleusercontent.com')) return url;
-        if (url.includes('drive.google.com')) {
-            const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-            if (match) {
-                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+        try {
+            if (url.includes('lh3.googleusercontent.com')) {
+                // Si ya tiene parámetros, devolverla tal cual
+                if (url.includes('=') || url.includes('?')) {
+                    return url;
+                }
+                // Agregar tamaño si no tiene
+                return url + size;
             }
+            
+            let fileId = null;
+            
+            // Formato 1: /file/d/ID
+            let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                fileId = match[1];
+            }
+            
+            // Formato 2: id=ID
+            if (!fileId) {
+                match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            }
+            
+            // Formato 3: /d/ID/
+            if (!fileId) {
+                match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            }
+            
+            if (fileId) {
+                return `https://lh3.googleusercontent.com/d/${fileId}${size}`;
+            }
+            
+            return url;
+            
+        } catch(e) {
+            console.warn('Error al procesar URL:', url, e);
+            return 'FOTO/foto_04.webp';
         }
-        return url;
     }
     
     const urlOptimizada = optimizarGoogleDriveUrl(url);
@@ -4742,46 +4777,42 @@ async function generarPDFProducto(productoId) {
         const aplicaciones = aplicacionesRel?.map(rel => rel.aplicacion?.nombre).filter(n => n) || [];
         
         // ============================================
-        // GENERAR PRIMER QR: Landing page del producto
+        // GENERAR QR - PRINCIPAL + SECUNDARIO
         // ============================================
         const urlBase = window.location.origin;
         const urlLanding = `${urlBase}/?producto=${producto.slug}`;
-        
-        // ============================================
-        // GENERAR SEGUNDO QR: Código del producto
-        // ============================================
         const codigoProducto = producto.codigo || `PROD-${producto.id.substring(0, 8)}`;
-        const urlCodigo = codigoProducto; // Texto plano, no es URL
+        const urlCodigo = codigoProducto;
         
-        // Crear elementos temporales para generar QR - TAMAÑO 100x100
+        // Crear elementos temporales para generar QR
         const qrContainer = document.createElement('div');
         qrContainer.style.position = 'absolute';
         qrContainer.style.left = '-9999px';
         qrContainer.style.top = '-9999px';
         qrContainer.style.display = 'flex';
         qrContainer.style.flexDirection = 'column';
-        qrContainer.style.gap = '15px';
+        qrContainer.style.gap = '8px';
         document.body.appendChild(qrContainer);
         
-        // Crear primer QR (Landing page)
+        // QR Principal: Landing page - 250x250
         const qrDiv1 = document.createElement('div');
-        qrDiv1.style.width = '110px';
-        qrDiv1.style.height = '110px';
+        qrDiv1.style.width = '250px';
+        qrDiv1.style.height = '250px';
         qrContainer.appendChild(qrDiv1);
         
         const qrCode1 = new QRCode(qrDiv1, {
             text: urlLanding,
-            width: 150,
-            height: 150,
+            width: 300,
+            height: 300,
             colorDark: '#000000',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
         });
         
-        // Crear segundo QR (Código del producto)
+        // QR Secundario: Código del producto - 120x120
         const qrDiv2 = document.createElement('div');
-        qrDiv2.style.width = '110px';
-        qrDiv2.style.height = '110px';
+        qrDiv2.style.width = '120px';
+        qrDiv2.style.height = '120px';
         qrContainer.appendChild(qrDiv2);
         
         const qrCode2 = new QRCode(qrDiv2, {
@@ -4794,7 +4825,7 @@ async function generarPDFProducto(productoId) {
         });
         
         // Esperar a que se generen los QR
-        await new Promise(resolve => setTimeout(resolve, 600));
+        await new Promise(resolve => setTimeout(resolve, 800));
         
         // Capturar los QR como imágenes
         const qrCanvas1 = qrDiv1.querySelector('canvas');
@@ -4802,7 +4833,6 @@ async function generarPDFProducto(productoId) {
         const qrImageData1 = qrCanvas1 ? qrCanvas1.toDataURL('image/png') : null;
         const qrImageData2 = qrCanvas2 ? qrCanvas2.toDataURL('image/png') : null;
         
-        // Limpiar elemento temporal
         document.body.removeChild(qrContainer);
         
         // Función para optimizar URL de imagen
@@ -4815,7 +4845,7 @@ async function generarPDFProducto(productoId) {
             return url;
         }
         
-        // Generar código de trazabilidad único
+        // Generar código de trazabilidad
         const fechaActual = new Date();
         const codigoTrazabilidad = `PDF-GM-${fechaActual.getFullYear()}${(fechaActual.getMonth()+1).toString().padStart(2,'0')}${fechaActual.getDate().toString().padStart(2,'0')}-${Math.floor(Math.random() * 10000).toString().padStart(4,'0')}`;
         
@@ -4826,305 +4856,538 @@ async function generarPDFProducto(productoId) {
             year: 'numeric'
         });
         
-        // Determinar si hay aplicaciones
         const tieneAplicaciones = aplicaciones.length > 0;
+        const tieneDescripcion = producto.descripcion_corta && producto.descripcion_corta.trim() !== '';
         
-        // Generar HTML del PDF - CON DOS QR EN COLUMNA IZQUIERDA
-        const html = `
+        ocultarLoading();
+        
+        // ============================================
+        // ABRIR MODAL CON IFRAME
+        // ============================================
+        const modalId = 'modalFichaTecnica';
+        
+        const modalExistente = document.getElementById(modalId);
+        if (modalExistente) {
+            modalExistente.remove();
+        }
+        
+        const modalHtml = `
+            <div id="${modalId}" class="fixed inset-0 bg-black bg-opacity-75 z-[9999] flex items-center justify-center p-4" style="display: flex;">
+                <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+                    <div class="flex-shrink-0 bg-[#6B0000] text-white px-6 py-4 flex justify-between items-center">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fas fa-file-pdf"></i> Ficha Técnica - ${producto.nombre}
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="imprimirFichaTecnica()" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-sm flex items-center gap-2 transition-colors">
+                                <i class="fas fa-print"></i> Imprimir
+                            </button>
+                            <button onclick="cerrarModalFichaTecnica()" class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-hidden bg-gray-100">
+                        <iframe id="iframeFichaTecnica" class="w-full h-full border-0" style="min-height: 500px;"></iframe>
+                    </div>
+                    <div class="flex-shrink-0 bg-gray-50 px-6 py-3 border-t border-gray-200 text-xs text-gray-500 flex justify-between">
+                        <span><i class="fas fa-info-circle"></i> Use el botón "Imprimir" para guardar como PDF</span>
+                        <span>Código: ${codigoTrazabilidad}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // ============================================
+        // GENERAR CONTENIDO HTML DEL PDF - PROPUESTA C
+        // ============================================
+        const contenidoHtml = `
             <!DOCTYPE html>
             <html lang="es">
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>FICHA TÉCNICA - ${producto.nombre}</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
                 <style>
-                    * {
-                        margin: 0;
-                        padding: 0;
-                        box-sizing: border-box;
-                    }
-                    
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
                     body {
                         font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-                        background: #e5e7eb;
-                        padding: 15px;
+                        background: #f0f0f0;
+                        padding: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        min-height: 100vh;
                     }
                     
+                    /* ========================================== */
+                    /* CONTENEDOR PRINCIPAL - A4 EXACTO */
+                    /* ========================================== */
                     .pdf-container {
-                        max-width: 210mm;
                         width: 210mm;
-                        min-height: 277mm;
-                        margin: 0 auto;
+                        height: 297mm;
+                        min-height: 297mm;
+                        max-height: 297mm;
                         background: white;
-                        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-                        position: relative;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
                         display: flex;
+                        margin: 0 auto;
+                        overflow: hidden;
                         page-break-after: avoid;
                         break-inside: avoid;
                     }
                     
-                    /* Banda lateral corporativa */
+                    /* ========================================== */
+                    /* BANDA LATERAL CORPORATIVA */
+                    /* ========================================== */
                     .sidebar-band {
                         width: 8px;
-                        background: linear-gradient(180deg, #39080a 0%, #5a1a1d 50%, #d4d4ae 100%);
+                        background: linear-gradient(180deg, #6B0000 0%, #8A1A1A 50%, #d4d4ae 100%);
                         flex-shrink: 0;
                     }
                     
-                    /* Contenido principal */
+                    /* ========================================== */
+                    /* CONTENIDO PRINCIPAL */
+                    /* ========================================== */
                     .main-content {
                         flex: 1;
-                        padding: 15px 20px;
+                        padding: 10px 18px 10px 18px;
                         display: flex;
                         flex-direction: column;
+                        height: 100%;
                     }
                     
-                    /* Header compacto */
+                    /* ========================================== */
+                    /* HEADER */
+                    /* ========================================== */
                     .pdf-header {
                         text-align: center;
-                        margin-bottom: 12px;
-                        padding-bottom: 8px;
+                        padding-bottom: 6px;
                         border-bottom: 2px solid #d4d4ae;
+                        flex-shrink: 0;
                     }
-                    
                     .pdf-header h1 {
-                        font-size: 22px;
-                        letter-spacing: 2px;
-                        color: #39080a;
-                        margin-bottom: 3px;
-                        font-weight: 700;
+                        font-size: 24px;
+                        letter-spacing: 4px;
+                        color: #6B0000;
+                        font-weight: 800;
                     }
-                    
                     .pdf-header .subtitle {
-                        font-size: 9px;
+                        font-size: 10px;
                         color: #6b7280;
-                        letter-spacing: 1px;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
                     }
-                    
                     .pdf-header .family-badge {
                         display: inline-block;
-                        margin-top: 4px;
-                        font-size: 9px;
-                        color: #d4d4ae;
+                        margin-top: 3px;
+                        font-size: 10px;
+                        color: #6B0000;
                         font-weight: 600;
+                        background: #f5f0f0;
+                        padding: 2px 16px;
+                        border-radius: 12px;
                     }
                     
-                    /* Layout de dos columnas */
-                    .two-columns {
+                    /* ========================================== */
+                    /* CUERPO - OCUPA TODO EL ESPACIO */
+                    /* ========================================== */
+                    .pdf-body {
                         display: flex;
-                        gap: 20px;
                         flex: 1;
+                        gap: 16px;
+                        padding: 6px 0 4px 0;
+                        min-height: 0;
                     }
                     
-                    /* Columna Izquierda: Imagen + QR (con indicaciones) */
+                    /* ========================================== */
+                    /* COLUMNA IZQUIERDA (55%) - IMAGEN + MEDIDAS + QR */
+                    /* ========================================== */
                     .left-column {
-                        flex: 0.9;
+                        flex: 0.55;
                         display: flex;
                         flex-direction: column;
-                        gap: 12px;
+                        gap: 10px;
+                        height: 100%;
                     }
                     
-                    /* Columna Derecha: Toda la información */
+                    /* ========================================== */
+                    /* COLUMNA DERECHA (45%) - INFORMACIÓN COMPLETA */
+                    /* ========================================== */
                     .right-column {
-                        flex: 1.1;
+                        flex: 0.45;
                         display: flex;
                         flex-direction: column;
-                        gap: 12px;
+                        gap: 5px;
+                        height: 100%;
                     }
                     
-                    /* Tarjetas compactas */
+                    /* ========================================== */
+                    /* TARJETAS */
+                    /* ========================================== */
                     .card {
                         background: #ffffff;
-                        border-radius: 10px;
-                        padding: 10px 12px;
-                        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+                        border-radius: 8px;
+                        padding: 8px 12px;
                         border: 1px solid #f0f0f0;
+                        margin-top: 15px;
                     }
-                    
                     .card-title {
                         font-size: 11px;
                         font-weight: 700;
-                        color: #39080a;
-                        margin-bottom: 8px;
-                        padding-bottom: 4px;
-                        border-bottom: 1px solid #e5e7eb;
+                        color: #6B0000;
+                        margin-bottom: 5px;
+                        padding-bottom: 3px;
+                        border-bottom: 1.5px solid #e5e7eb;
                         letter-spacing: 0.5px;
+                        text-transform: uppercase;
                     }
                     
-                    /* Tarjeta de imagen */
+                    /* ========================================== */
+                    /* IMAGEN DEL PRODUCTO */
+                    /* ========================================== */
                     .product-image {
                         text-align: center;
-                        padding: 5px;
+                        padding: 30px;
                     }
-                    
                     .product-image img {
                         max-width: 100%;
-                        max-height: 180px;
+                        max-height: 150px;
                         object-fit: contain;
-                        border-radius: 10px;
+                        border-radius: 8px;
                     }
                     
-                    /* Tarjeta de códigos QR - CON INDICACIONES */
-                    .qr-card {
+                    /* ========================================== */
+                    /* MEDIDAS DESTACADAS */
+                    /* ========================================== */
+                    .medidas-destacadas {
+                        display: flex;
+                        gap: 20px;
+                        justify-content: center;
+                        margin-top: 4px;
+                        padding: 6px 10px;
+                        background: #f5f0f0;
+                        border-radius: 8px;
+                        flex-wrap: wrap;
+                    }
+                    .medida-item {
                         text-align: center;
-                        background: #fafafa;
+                    }
+                    .medida-label {
+                        font-size: 8px;
+                        color: #6b7280;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                    .medida-value {
+                        font-size: 13px;
+                        font-weight: 700;
+                        color: #6B0000;
                     }
                     
-                    .qr-container {
+                    /* ========================================== */
+                    /* QR - PROPUESTA C: PRINCIPAL + TARJETA INDEPENDIENTE */
+                    /* ========================================== */
+                    .qr-card {
+                        background: #fafafa;
+                        flex: 1;
                         display: flex;
                         flex-direction: column;
-                        gap: 12px;
+                        padding: 30px 12px;
+                        border-radius: 8px;
+                        border: 1px solid #f0f0f0;
+                        min-height: 0;
+                        gap: 8px;
                     }
                     
-                    .qr-item {
+                    /* QR PRINCIPAL */
+                    .qr-principal-section {
+                        flex: 1;
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        gap: 6px;
+                        gap: 4px;
                     }
-                    
-                    .qr-wrapper {
+                    .qr-principal-badge {
+                        font-size: 9px;
+                        font-weight: 700;
+                        color: #6B0000;
+                        background: #f5f0f0;
+                        padding: 2px 14px;
+                        border-radius: 12px;
+                        letter-spacing: 0.5px;
                         display: inline-block;
-                        padding: 6px;
-                        background: white;
-                        border-radius: 10px;
-                        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
                     }
-                    
-                    .qr-wrapper img {
-                        width: 100px;
-                        height: 100px;
+                    .qr-principal-badge i {
+                        color: #f59e0b;
+                        margin-right: 4px;
+                    }
+                    .qr-principal-wrapper {
+                        display: inline-block;
+                        padding: 4px;
+                        background: white;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+                    .qr-principal-wrapper img {
+                        width: 230px;
+                        height: 230px;
                         display: block;
                     }
-                    
-                    .qr-info {
-                        width: 100%;
-                        text-align: center;
-                    }
-                    
-                    .qr-label {
+                    .qr-principal-label {
                         font-size: 10px;
-                        font-weight: 700;
-                        color: #39080a;
+                        color: #6b7280;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         gap: 4px;
-                        margin-bottom: 3px;
                     }
                     
-                    .qr-description {
+                    /* SEPARADOR */
+                    .qr-separator {
+                        width: 100%;
+                        height: 1px;
+                        background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+                        margin: 2px 0;
+                        flex-shrink: 0;
+                    }
+                    
+                    /* QR SECUNDARIO - TARJETA INDEPENDIENTE */
+                    .qr-secundario-card {
+                        background: #f5f8fa;
+                        border: 1px solid #e5e7eb;
+                        border-radius: 8px;
+                        padding: 8px 12px;
+                        flex-shrink: 0;
+                    }
+                    .qr-secundario-header {
+                        font-size: 9px;
+                        font-weight: 700;
+                        color: #6B0000;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        margin-bottom: 6px;
+                        text-align: center;
+                        gap: 6px;
+                    }
+                    .qr-secundario-header i {
+                        font-size: 11px;
+                    }
+                    .qr-secundario-body {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                    }
+                    .qr-secundario-wrapper {
+                        display: inline-block;
+                        padding: 3px;
+                        background: white;
+                        border-radius: 8px;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                        flex-shrink: 0;
+                    }
+                    .qr-secundario-wrapper img {
+                        width: 110px;
+                        height: 110px;
+                        display: block;
+                    }
+                    .qr-secundario-info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                    }
+                    .qr-secundario-codigo {
+                        font-size: 16px;
+                        font-weight: 800;
+                        color: #6B0000;
+                        font-family: 'Courier New', monospace;
+                        letter-spacing: 0.5px;
+                        background: white;
+                        padding: 4px 12px;
+                        border-radius: 6px;
+                        border: 1px solid #e5e7eb;
+                        display: inline-block;
+                        word-break: break-all;
+                    }
+                    .qr-secundario-desc {
                         font-size: 8px;
                         color: #6b7280;
-                        line-height: 1.3;
                     }
                     
-                    .qr-divider {
-                        width: 80%;
-                        height: 1px;
-                        background: #e5e7eb;
-                        margin: 5px auto;
-                    }
-                    
-                    /* Información general compacta */
+                    /* ========================================== */
+                    /* INFORMACIÓN GENERAL - UNA SOLA COLUMNA */
+                    /* ========================================== */
                     .info-grid {
                         display: grid;
                         grid-template-columns: 1fr;
-                        gap: 6px;
+                        gap: 2px;
                     }
-                    
                     .info-row {
                         display: flex;
                         justify-content: space-between;
                         align-items: baseline;
-                        padding: 4px 0;
+                        padding: 3px 0;
                         border-bottom: 1px dashed #f0f0f0;
                     }
-                    
                     .info-label {
                         font-size: 9px;
                         font-weight: 600;
                         color: #6b7280;
                         text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        min-width: 90px;
                     }
-                    
                     .info-value {
                         font-size: 10px;
                         font-weight: 500;
                         color: #1e293b;
                         text-align: right;
                     }
-                    
                     .info-value strong {
-                        color: #39080a;
+                        color: #6B0000;
                         font-weight: 700;
                     }
                     
-                    /* Datos de comercialización compactos */
+                    /* ========================================== */
+                    /* COMERCIALIZACIÓN - UNA SOLA COLUMNA */
+                    /* ========================================== */
                     .comercializacion-grid {
                         display: grid;
-                        grid-template-columns: 1fr 1fr;
-                        gap: 8px;
+                        grid-template-columns: 1fr;
+                        gap: 2px;
                     }
-                    
                     .comercializacion-item {
                         display: flex;
-                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: baseline;
+                        padding: 3px 0;
+                        border-bottom: 1px dashed #f0f0f0;
                     }
-                    
                     .comercializacion-label {
-                        font-size: 8px;
+                        font-size: 9px;
                         font-weight: 600;
                         color: #6b7280;
                         text-transform: uppercase;
-                        margin-bottom: 2px;
+                        letter-spacing: 0.5px;
+                        min-width: 90px;
                     }
-                    
                     .comercializacion-value {
                         font-size: 10px;
                         font-weight: 500;
                         color: #1e293b;
+                        text-align: right;
+                    }
+                    .comercializacion-value strong {
+                        color: #6B0000;
+                        font-weight: 700;
                     }
                     
-                    /* Aplicaciones compactas */
-                    .apps-list {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 6px;
-                        margin-top: 3px;
-                    }
-                    
-                    .app-tag {
-                        background: #f3f4f6;
-                        padding: 3px 8px;
-                        border-radius: 16px;
-                        font-size: 9px;
-                        color: #39080a;
-                        font-weight: 500;
-                    }
-                    
-                    /* Descripción compacta */
+                    /* ========================================== */
+                    /* DESCRIPCIÓN */
+                    /* ========================================== */
                     .descripcion-text {
                         font-size: 9px;
                         color: #4b5563;
                         line-height: 1.4;
                         text-align: justify;
+                        padding: 2px 0;
                     }
                     
-                    /* Footer compacto */
+                    /* ========================================== */
+                    /* APLICACIONES */
+                    /* ========================================== */
+                    .apps-list {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 4px;
+                        padding: 2px 0;
+                    }
+                    .app-tag {
+                        background: #f5f0f0;
+                        padding: 3px 10px;
+                        border-radius: 12px;
+                        font-size: 9px;
+                        color: #6B0000;
+                        font-weight: 500;
+                    }
+                    
+                    /* ========================================== */
+                    /* FOOTER CON INFORMACIÓN LEGAL */
+                    /* ========================================== */
                     .pdf-footer {
-                        margin-top: 12px;
-                        padding-top: 8px;
+                        padding-top: 5px;
                         border-top: 1px solid #e5e7eb;
+                        flex-shrink: 0;
+                        text-align: center;
+                    }
+                    .footer-line1 {
+                        font-size: 7px;
+                        color: #9ca3af;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        font-size: 7px;
-                        color: #9ca3af;
                     }
-                    
+                    .footer-line2 {
+                        font-size: 6.5px;
+                        color: #b0b0b0;
+                        margin-top: 2px;
+                        font-style: italic;
+                    }
                     .footer-right {
                         font-family: monospace;
                     }
                     
+                    /* ========================================== */
+                    /* RESPONSIVE */
+                    /* ========================================== */
+                    @media screen and (max-width: 800px) {
+                        .pdf-container {
+                            width: 100%;
+                            height: auto;
+                            min-height: auto;
+                            max-height: none;
+                            flex-direction: column;
+                        }
+                        .sidebar-band {
+                            width: 100%;
+                            height: 4px;
+                            background: linear-gradient(90deg, #6B0000, #8A1A1A, #d4d4ae);
+                        }
+                        .pdf-body {
+                            flex-direction: column;
+                        }
+                        .left-column, .right-column {
+                            flex: 1;
+                        }
+                        .qr-principal-wrapper img {
+                            width: 180px;
+                            height: 180px;
+                        }
+                        .qr-secundario-wrapper img {
+                            width: 90px;
+                            height: 90px;
+                        }
+                        .qr-secundario-body {
+                            flex-direction: column;
+                            text-align: center;
+                        }
+                        .qr-secundario-codigo {
+                            font-size: 14px;
+                        }
+                        .medidas-destacadas {
+                            gap: 12px;
+                        }
+                        .medida-value {
+                            font-size: 11px;
+                        }
+                    }
+                    
+                    /* ========================================== */
+                    /* IMPRESIÓN */
+                    /* ========================================== */
                     @media print {
                         body {
                             background: white;
@@ -5135,205 +5398,261 @@ async function generarPDFProducto(productoId) {
                             box-shadow: none;
                             margin: 0;
                             width: 100%;
-                            min-height: auto;
-                        }
-                        .no-print {
-                            display: none;
+                            height: 100vh;
+                            min-height: 100vh;
+                            max-height: 100vh;
                         }
                         .card {
                             box-shadow: none;
                             border: 1px solid #e5e7eb;
+                        }
+                        .no-print {
+                            display: none !important;
                         }
                     }
                 </style>
             </head>
             <body>
                 <div class="pdf-container">
-                    <!-- Banda lateral corporativa -->
                     <div class="sidebar-band"></div>
-                    
-                    <!-- Contenido principal -->
                     <div class="main-content">
-                        <!-- Header compacto -->
+                        <!-- HEADER -->
                         <div class="pdf-header">
                             <h1>GALLOS MÁRMOL</h1>
                             <div class="subtitle">FICHA TÉCNICA DEL PRODUCTO</div>
                             <div class="family-badge">${producto.familia?.nombre?.toUpperCase() || 'MATERIAL SELECCIONADO'}</div>
                         </div>
                         
-                        <!-- Layout de dos columnas -->
-                        <div class="two-columns">
-                            
-                            <!-- COLUMNA IZQUIERDA: Imagen + DOS Códigos QR -->
+                        <!-- CUERPO -->
+                        <div class="pdf-body">
+                            <!-- COLUMNA IZQUIERDA: IMAGEN + MEDIDAS + QR -->
                             <div class="left-column">
-                                <!-- Tarjeta de imagen del producto -->
-                                <div class="card">
+                                <!-- IMAGEN DEL PRODUCTO -->
+                                <div class="card" style="flex-shrink: 0;">
                                     <div class="card-title">PRODUCTO</div>
                                     <div class="product-image">
                                         ${imagenPrincipal ? 
                                             `<img src="${imagenPrincipal}" alt="${producto.nombre}" onerror="this.src='FOTO/foto_04.webp'">` : 
-                                            '<div style="background: #f3f4f6; height: 160px; display: flex; align-items: center; justify-content: center; border-radius: 10px;"><p style="color: #9ca3af; font-size: 11px;">Sin imagen disponible</p></div>'
+                                            '<div style="background: #f3f4f6; height: 130px; display: flex; align-items: center; justify-content: center; border-radius: 8px;"><p style="color: #9ca3af; font-size: 12px;">Sin imagen disponible</p></div>'
                                         }
                                     </div>
                                 </div>
                                 
-                                <!-- Tarjeta de códigos QR con indicaciones -->
+                                <!-- MEDIDAS DESTACADAS -->
+                                ${(producto.medida || producto.espesor || producto.unidad_medida?.nombre) ? `
+                                <div class="medidas-destacadas">
+                                    ${producto.medida ? `
+                                        <div class="medida-item">
+                                            <div class="medida-label">Medida</div>
+                                            <div class="medida-value">${producto.medida}</div>
+                                        </div>
+                                    ` : ''}
+                                    ${producto.espesor ? `
+                                        <div class="medida-item">
+                                            <div class="medida-label">Espesor</div>
+                                            <div class="medida-value">${producto.espesor}</div>
+                                        </div>
+                                    ` : ''}
+                                    ${producto.unidad_medida?.nombre ? `
+                                        <div class="medida-item">
+                                            <div class="medida-label">Unidad</div>
+                                            <div class="medida-value">${producto.unidad_medida.nombre}${producto.unidad_medida?.abreviatura ? ` (${producto.unidad_medida.abreviatura})` : ''}</div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                ` : ''}
+                                
+                                <!-- QR - PROPUESTA C: PRINCIPAL + TARJETA INDEPENDIENTE -->
                                 <div class="card qr-card">
-                                    <div class="card-title">CÓDIGOS QR</div>
-                                    <div class="qr-container">
-                                        
-                                        <!-- PRIMER QR: Landing page del producto -->
-                                        <div class="qr-item">
-                                            <div class="qr-wrapper">
-                                                ${qrImageData1 ? `<img src="${qrImageData1}" alt="QR Landing Page">` : '<div style="width: 100px; height: 100px; background: #f3f4f6;"></div>'}
+                                    <!-- QR PRINCIPAL -->
+                                    <div class="qr-principal-section">
+                                        <div class="qr-principal-badge">
+                                            ESCANEAR PARA VER EL PRODUCTO
+                                        </div>
+                                        <div class="qr-principal-wrapper">
+                                            ${qrImageData1 ? 
+                                                `<img src="${qrImageData1}" alt="QR Landing Page">` : 
+                                                '<div style="width: 230px; height: 230px; background: #f3f4f6; border-radius: 8px;"></div>'
+                                            }
+                                        </div>
+                                        <div class="qr-principal-label">
+                                            <i class="fas fa-camera"></i> Escanea para ver toda la información del producto
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SEPARADOR -->
+                                    <div class="qr-separator"></div>
+                                    
+                                    <!-- QR SECUNDARIO - TARJETA INDEPENDIENTE -->
+                                    <div class="qr-secundario-card">
+                                        <div class="qr-secundario-header">
+                                            <i class="fas fa-barcode"></i> CÓDIGO DEL PRODUCTO
+                                        </div>
+                                        <div class="qr-secundario-body">
+                                            <div class="qr-secundario-wrapper">
+                                                ${qrImageData2 ? 
+                                                    `<img src="${qrImageData2}" alt="QR Código Producto">` : 
+                                                    '<div style="width: 110px; height: 110px; background: #f3f4f6; border-radius: 8px;"></div>'
+                                                }
                                             </div>
-                                            <div class="qr-info">
-                                                <div class="qr-label">
-                                                    <i class="fas fa-globe"></i>VER PRODUCTO
-                                                </div>
-                                                <div class="qr-description">
-                                                    Escanea para ver toda la información<br>
-                                                    del producto en nuestra página web
-                                                </div>
+                                            <div class="qr-secundario-info">
+                                                <div class="qr-secundario-codigo">${producto.codigo || ''}</div>
+                                                <div class="qr-secundario-desc">Escanea para filtrar en el outlet</div>
                                             </div>
                                         </div>
-                                        
-                                        <div class="qr-divider"></div>
-                                        
-                                        <!-- SEGUNDO QR: Código del producto -->
-                                        <div class="qr-item">
-                                            <div class="qr-wrapper">
-                                                ${qrImageData2 ? `<img src="${qrImageData2}" alt="QR Código Producto">` : '<div style="width: 100px; height: 100px; background: #f3f4f6;"></div>'}
-                                            </div>
-                                            <div class="qr-info">
-                                                <div class="qr-label">
-                                                    <i class="fas fa-barcode"></i>CÓDIGO: ${producto.codigo || 'N/A'}
-                                                </div>
-                                                <div class="qr-description">
-                                                    Escanea para obtener el código<br>
-                                                    del producto y facilitar su identificación
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- COLUMNA DERECHA: Toda la información -->
+                            <!-- COLUMNA DERECHA: INFORMACIÓN COMPLETA -->
                             <div class="right-column">
-                                <!-- Tarjeta de Información General -->
-                                <div class="card">
+                                <!-- INFORMACIÓN GENERAL -->
+                                <div class="card" style="flex-shrink: 0;">
                                     <div class="card-title">INFORMACIÓN GENERAL</div>
                                     <div class="info-grid">
                                         <div class="info-row">
-                                            <span class="info-label">Nombre</span>
+                                            <span class="info-label">NOMBRE</span>
                                             <span class="info-value"><strong>${producto.nombre || ''}</strong></span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Código</span>
+                                            <span class="info-label">CÓDIGO</span>
                                             <span class="info-value">${producto.codigo || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Familia</span>
+                                            <span class="info-label">FAMILIA</span>
                                             <span class="info-value">${producto.familia?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Acabado</span>
+                                            <span class="info-label">ACABADO</span>
                                             <span class="info-value">${producto.acabado?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Material</span>
+                                            <span class="info-label">MATERIAL</span>
                                             <span class="info-value">${producto.material?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Modelo</span>
+                                            <span class="info-label">MODELO</span>
                                             <span class="info-value">${producto.modelo || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Borde</span>
+                                            <span class="info-label">BORDE</span>
                                             <span class="info-value">${producto.borde?.nombre || ''}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Calidad</span>
+                                            <span class="info-label">CALIDAD</span>
                                             <span class="info-value">${producto.calidad?.nombre || ''}</span>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Tarjeta de Datos de Comercialización -->
-                                <div class="card">
+                                <!-- COMERCIALIZACIÓN -->
+                                <div class="card" style="flex-shrink: 0;">
                                     <div class="card-title">COMERCIALIZACIÓN</div>
                                     <div class="comercializacion-grid">
                                         <div class="comercializacion-item">
-                                            <div class="comercializacion-label">Medida</div>
-                                            <div class="comercializacion-value"><strong>${producto.medida || ''}</strong></div>
+                                            <span class="comercializacion-label">MEDIDA</span>
+                                            <span class="comercializacion-value"><strong>${producto.medida || ''}</strong></span>
                                         </div>
                                         <div class="comercializacion-item">
-                                            <div class="comercializacion-label">Espesor</div>
-                                            <div class="comercializacion-value"><strong>${producto.espesor || ''}</strong></div>
+                                            <span class="comercializacion-label">ESPESOR</span>
+                                            <span class="comercializacion-value"><strong>${producto.espesor || ''}</strong></span>
                                         </div>
                                         <div class="comercializacion-item">
-                                            <div class="comercializacion-label">Unidad de medida</div>
-                                            <div class="comercializacion-value">${producto.unidad_medida?.nombre || ''} ${producto.unidad_medida?.abreviatura ? `(${producto.unidad_medida.abreviatura})` : ''}</div>
+                                            <span class="comercializacion-label">UNIDAD</span>
+                                            <span class="comercializacion-value">${producto.unidad_medida?.nombre || ''} ${producto.unidad_medida?.abreviatura ? `(${producto.unidad_medida.abreviatura})` : ''}</span>
                                         </div>
                                         <div class="comercializacion-item">
-                                            <div class="comercializacion-label">Stock</div>
-                                            <div class="comercializacion-value">CONSULTAR</div>
+                                            <span class="comercializacion-label">STOCK</span>
+                                            <span class="comercializacion-value">CONSULTAR</span>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Tarjeta de Descripción (si existe) -->
-                                ${producto.descripcion_corta ? `
-                                <div class="card">
-                                    <div class="card-title">DESCRIPCIÓN</div>
-                                    <div class="descripcion-text">${producto.descripcion_corta}</div>
+                                <!-- DESCRIPCIÓN -->
+                                ${tieneDescripcion ? `
+                                <div class="card" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+                                    <div class="card-title" style="flex-shrink: 0;">DESCRIPCIÓN</div>
+                                    <div class="descripcion-text" style="flex: 1; overflow: hidden;">${producto.descripcion_corta}</div>
                                 </div>
                                 ` : ''}
                                 
-                                <!-- Tarjeta de Aplicaciones (si existen) -->
+                                <!-- APLICACIONES -->
                                 ${tieneAplicaciones ? `
-                                <div class="card">
+                                <div class="card" style="flex-shrink: 0;">
                                     <div class="card-title">APLICACIONES</div>
-                                    <div class="apps-list">
-                                        ${aplicaciones.map(app => `<span class="app-tag">${app}</span>`).join('')}
-                                    </div>
+                                    <div class="apps-list">${aplicaciones.map(app => `<span class="app-tag">${app}</span>`).join('')}</div>
                                 </div>
                                 ` : ''}
                             </div>
                         </div>
                         
-                        <!-- Footer compacto -->
+                        <!-- FOOTER CON INFORMACIÓN LEGAL -->
                         <div class="pdf-footer">
-                            <div class="footer-left">
-                                Gallos Mármol | ${fechaGeneracion}
+                            <div class="footer-line1">
+                                <span>Gallos Mármol | ${fechaGeneracion}</span>
+                                <span class="footer-right">Página 1 de 1 | ${codigoTrazabilidad}</span>
                             </div>
-                            <div class="footer-right">
-                                Página 1 de 1 | ${codigoTrazabilidad}
+                            <div class="footer-line2">
+                                © 2026 Gallos Mármol - Todos los derechos reservados. Las imágenes son referenciales. Los colores pueden variar según lote.
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="no-print" style="text-align: center; margin-top: 15px;">
-                    <button onclick="window.print()" style="background: #39080a; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin: 0 5px; font-size: 12px;">
-                        <i class="fas fa-print"></i> Imprimir / Guardar PDF
-                    </button>
-                    <button onclick="window.close()" style="background: #666; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin: 0 5px; font-size: 12px;">
-                        <i class="fas fa-times"></i> Cerrar
-                    </button>
                 </div>
             </body>
             </html>
         `;
         
-        // Abrir ventana para impresión/PDF
-        const ventana = window.open('', '_blank');
-        ventana.document.write(html);
-        ventana.document.close();
+        // ============================================
+        // CARGAR CONTENIDO EN EL IFRAME
+        // ============================================
+        const iframe = document.getElementById('iframeFichaTecnica');
+        if (iframe) {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(contenidoHtml);
+            iframeDoc.close();
+            console.log('✅ Contenido cargado en el iframe');
+        }
         
-        ocultarLoading();
+        // ============================================
+        // FUNCIONES GLOBALES PARA EL MODAL
+        // ============================================
+        window.cerrarModalFichaTecnica = function() {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                modal.remove();
+            }
+        };
+        
+        window.imprimirFichaTecnica = function() {
+            const iframe = document.getElementById('iframeFichaTecnica');
+            if (iframe) {
+                try {
+                    iframe.contentWindow.print();
+                } catch(e) {
+                    window.print();
+                }
+            }
+        };
+        
+        // Cerrar con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById(modalId);
+                if (modal && modal.style.display !== 'none') {
+                    window.cerrarModalFichaTecnica();
+                }
+            }
+        });
+        
+        // Cerrar haciendo clic fuera
+        document.getElementById(modalId).addEventListener('click', function(e) {
+            if (e.target === this) {
+                window.cerrarModalFichaTecnica();
+            }
+        });
+        
         mostrarAlerta('Éxito', 'Ficha técnica generada correctamente', 'success');
         
     } catch (error) {
@@ -5360,3 +5679,4 @@ window.aplicarFiltrosSaldos = aplicarFiltrosSaldos;
 window.limpiarFiltrosSaldos = limpiarFiltrosSaldos;
 window.filtrarProductosSaldos = filtrarProductosSaldos;
 window.toggleFiltrosSaldosPanel = toggleFiltrosSaldosPanel;
+
