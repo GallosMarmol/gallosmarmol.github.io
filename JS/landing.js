@@ -7361,7 +7361,6 @@ function renderizarPaginaOutlet(productos) {
             barra.className = 'barra-cotizacion mini';
             barra.style.animation = 'slideUp 0.5s ease';
             const isMobile = window.innerWidth <= 768;
-            barra.style.bottom = isMobile ? '70px' : '0px';
             barra.innerHTML = `
                 <div class="barra-cotizacion-mini">
                     <div class="barra-info-mini">
