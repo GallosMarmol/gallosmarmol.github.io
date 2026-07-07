@@ -984,9 +984,7 @@ window.obtenerFechaPeruFormateada = obtenerFechaPeruFormateada;
                     if (typeof window.mostrarAdvertenciaIntentos === 'function') {
                         window.mostrarAdvertenciaIntentos(intento.intentosRestantes);
                     }
-                    if (typeof window.actualizarBadgeSeguridad === 'function') {
-                        window.actualizarBadgeSeguridad(intento.intentosRestantes);
-                    }
+
                 }
             }
             
@@ -2561,13 +2559,20 @@ function renderizarLandingProducto(producto) {
             * { margin: 0; padding: 0; box-sizing: border-box; }
             :root {
                 --primary: #6b0000;
-                --primary-dark: #2a0607;
+                --primary-dark: #4a0000;
+                --primary-light: #8a1a1a;
+                --primary-rgb: 107, 0, 0;
                 --secondary: #d4d4ae;
                 --white: #ffffff;
                 --gray-100: #f5f5f5;
-                --gray-600: #666666;
-                --gray-700: #444444;
-                --gray-800: #222222;
+                --gray-200: #e5e7eb;
+                --gray-300: #d1d5db;
+                --gray-400: #9ca3af;
+                --gray-500: #6b7280;
+                --gray-600: #4b5563;
+                --gray-700: #374151;
+                --gray-800: #1f2937;
+                --gray-900: #111827;
                 --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
                 --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
                 --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
@@ -2580,7 +2585,16 @@ function renderizarLandingProducto(producto) {
             .section-title { text-align: center; margin-bottom: 32px; }
             .section-title h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
             .section-title p { font-size: 0.85rem; color: var(--gray-600); max-width: 600px; margin: 0 auto; }
-            header { position: fixed; top: 0; left: 0; right: 0; background: var(--primary); z-index: 1000; padding: 10px 0; box-shadow: var(--shadow-sm); }
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: var(--primary);
+                z-index: 1000;
+                padding: 10px 0;
+                box-shadow: var(--shadow-sm);
+            }
             .navbar {
                 display: flex;
                 justify-content: center; /* Centra el logo */
@@ -2615,10 +2629,20 @@ function renderizarLandingProducto(producto) {
                 display: block;
             }
 
-            .aviso-sticky { background: #fff3cd; border-bottom: 1px solid #ffeeba; padding: 10px 0; position: sticky; top: 110px; z-index: 99; }
+            .aviso-sticky {
+                background: #fff3cd;
+                border-bottom: 1px solid #ffeeba;
+                padding: 10px 0;
+                position: sticky;
+                top: 110px;
+                z-index: 99;
+            }
             .aviso-flex-center { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 0.75rem; color: #856404; }
-            .aviso-flex-center a { color: #856404; text-decoration: underline; }
-            
+            .aviso-flex-center a {
+                color: var(--primary);
+                text-decoration: underline;
+            }
+
             /* ============================================ */
             /* HERO CON INDICADOR DE SCROLL */
             /* ============================================ */
@@ -2627,7 +2651,7 @@ function renderizarLandingProducto(producto) {
                 min-height: 85vh;
                 display: flex;
                 align-items: center;
-                background: linear-gradient(135deg, rgba(57,8,10,0.92), rgba(57,8,10,0.88));
+                background: linear-gradient(135deg, rgba(107,0,0,0.92), rgba(107,0,0,0.85));
                 padding: 100px 0 80px;
                 position: relative;
                 overflow: hidden;
@@ -2708,19 +2732,16 @@ function renderizarLandingProducto(producto) {
                 background: var(--secondary);
                 color: var(--primary);
             }
-            
             .btn-primary:hover {
                 background: var(--secondary);
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(212, 212, 174, 0.3);
             }
-            
             .btn-secondary {
                 border: 2px solid var(--secondary);
                 color: var(--secondary);
                 background: transparent;
             }
-            
             .btn-secondary:hover {
                 background: var(--secondary);
                 color: var(--primary);
@@ -2806,7 +2827,6 @@ function renderizarLandingProducto(producto) {
                 z-index: 10;
                 backdrop-filter: blur(5px);
             }
-            
             .hero-image .zoom-btn-hero:hover {
                 background: var(--primary);
                 transform: scale(1.1);
@@ -3015,15 +3035,28 @@ function renderizarLandingProducto(producto) {
             .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .spec-card { background: var(--white); padding: 16px; border-radius: var(--border-radius-sm); text-align: center; box-shadow: var(--shadow-sm); position: relative; cursor: help; }
             .spec-card h3 { font-size: 0.7rem; color: var(--gray-600); margin-bottom: 5px; text-transform: uppercase; }
-            .spec-card p { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+            .spec-card p {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: var(--primary);
+            }
             .tooltip-text { visibility: hidden; width: 180px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 5px 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.7rem; }
             .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
             .spec-card:hover .tooltip-text { visibility: visible; opacity: 1; }
             .caracteristicas-section { background: #f8f9fa; }
             .caracteristicas-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
             .caracteristica-card { background: var(--white); padding: 20px; border-radius: var(--border-radius-sm); text-align: center; }
-            .caracteristica-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; display: block; }
-            .caracteristica-card h3 { font-size: 0.9rem; margin-bottom: 8px; color: var(--primary); }
+            .caracteristica-card i {
+                font-size: 1.8rem;
+                color: var(--primary);
+                margin-bottom: 10px;
+                display: block;
+            }
+            .caracteristica-card h3 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+                color: var(--primary);
+            }
             .caracteristica-card p { font-size: 0.8rem; color: var(--gray-600); }
             
             /* Galería */
@@ -3032,18 +3065,67 @@ function renderizarLandingProducto(producto) {
             .galeria-item, .rango-item, .variacion-item, .patron-item { position: relative; overflow: hidden; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); aspect-ratio: 4 / 3; cursor: pointer; }
             .galeria-item img, .rango-item img, .variacion-item img, .patron-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; display: block; }
             .galeria-item:hover img, .rango-item:hover img, .variacion-item:hover img, .patron-item:hover img { transform: scale(1.03); }
-            .zoom-btn-galeria-inicial, .zoom-btn-rango-inicial, .zoom-btn-variacion-inicial, .zoom-btn-patron-inicial, .zoom-btn-hero { 
-                position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; 
+            .zoom-btn-galeria-inicial,
+            .zoom-btn-rango-inicial,
+            .zoom-btn-variacion-inicial,
+            .zoom-btn-patron-inicial {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                background: rgba(0,0,0,0.7);
+                color: white;
+                border: none;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                z-index: 10;
             }
-            .zoom-btn-galeria-inicial:hover, .zoom-btn-rango-inicial:hover, .zoom-btn-variacion-inicial:hover, .zoom-btn-patron-inicial:hover, .zoom-btn-hero:hover { background: var(--primary); transform: scale(1.05); }
+            .zoom-btn-galeria-inicial:hover,
+            .zoom-btn-rango-inicial:hover,
+            .zoom-btn-variacion-inicial:hover,
+            .zoom-btn-patron-inicial:hover {
+                background: var(--primary);
+                transform: scale(1.05);
+            }
             
             .ver-mas-container { margin-top: 25px; }
-            .btn-ver-mas { background: var(--primary); color: var(--white); border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
-            .btn-ver-mas:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            .btn-ver-mas {
+                background: var(--primary);
+                color: var(--white);
+                border: none;
+                padding: 12px 24px;
+                border-radius: 40px;
+                font-weight: 600;
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn-ver-mas:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+            }
             
             .apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .app-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 20px 12px; border-radius: var(--border-radius-sm); text-align: center; }
-            .app-card i { font-size: 1.8rem; color: var(--secondary); margin-bottom: 8px; }
+            .app-card {
+                background: var(--primary);
+                color: var(--white);
+                padding: 20px 12px;
+                border-radius: var(--border-radius-sm);
+                text-align: center;
+            }
+            .app-card i {
+                font-size: 1.8rem;
+                color: var(--secondary);
+                margin-bottom: 8px;
+            }
             .app-card h3 { font-size: 0.8rem; font-weight: 500; }
             
             .aviso-variabilidad { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; margin-bottom: 25px; border-radius: 8px; }
@@ -3064,17 +3146,61 @@ function renderizarLandingProducto(producto) {
             .trust-card p { font-size: 0.8rem; color: var(--gray-600); }
             
             .ficha-section { background: var(--gray-100); padding: 30px 0; text-align: center; }
-            .btn-ficha { background: var(--primary); color: var(--white); padding: 12px 28px; border-radius: 40px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease; }
-            .btn-ficha:hover { background: var(--primary-dark); transform: translateY(-2px); }
+            .btn-ficha {
+                background: var(--primary);
+                color: var(--white);
+                padding: 12px 28px;
+                border-radius: 40px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 600;
+                font-size: 0.85rem;
+                transition: all 0.3s ease;
+            }
+            .btn-ficha:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+            }
             
             .nota-section { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 40px 0; }
-            .nota-card { background: var(--white); border-radius: 20px; padding: 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); border-left: 5px solid var(--primary); }
-            .nota-icon { flex-shrink: 0; width: 40px; height: 40px; background: rgba(57,8,10,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-            .nota-icon i { font-size: 1.2rem; color: var(--primary); }
-            .nota-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+            .nota-card {
+                background: var(--white);
+                border-radius: 20px;
+                padding: 20px;
+                display: flex;
+                gap: 15px;
+                box-shadow: var(--shadow-sm);
+                border-left: 5px solid var(--primary);
+            }
+            .nota-icon {
+                flex-shrink: 0;
+                width: 40px;
+                height: 40px;
+                background: rgba(107, 0, 0, 0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .nota-icon i {
+                font-size: 1.2rem;
+                color: var(--primary);
+            }
+            .nota-content h3 {
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: var(--primary);
+                margin-bottom: 6px;
+            }
             .nota-content p { font-size: 0.8rem; color: var(--gray-700); line-height: 1.5; margin-bottom: 8px; }
             
-            footer { background: var(--primary-dark); color: var(--white); padding: 35px 20px 25px; }
+            footer {
+                background: var(--primary);
+                color: var(--white);
+                padding: 35px 20px 25px;
+            }
             .footer-grid { display: grid; grid-template-columns: 1fr; gap: 25px; text-align: center; }
             .footer-logo img { width: 120px; margin-bottom: 10px; pointer-events: none; }
             .footer-logo p { font-size: 0.75rem; opacity: 0.7; }
@@ -3088,7 +3214,17 @@ function renderizarLandingProducto(producto) {
             .modal-galeria.active { display: block; }
             .modal-galeria-content { position: relative; background: var(--white); max-width: 1200px; margin: 40px auto; border-radius: 20px; overflow: hidden; animation: modalFadeIn 0.3s ease; }
             @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-            .modal-galeria-header { background: var(--primary); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+            .modal-galeria-header {
+                background: var(--primary);
+                color: var(--white);
+                padding: 15px 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
             .modal-galeria-header h3 { font-size: 1rem; margin: 0; }
             .modal-galeria-header h3 i { margin-right: 8px; }
             .modal-galeria-close, .modal-rangos-close, .modal-variaciones-close, .modal-patrones-close { background: none; border: none; color: var(--white); font-size: 28px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
@@ -3104,7 +3240,23 @@ function renderizarLandingProducto(producto) {
             .image-modal.active { display: flex !important; }
             .modal-content { position: relative; max-width: 95%; max-height: 95%; display: flex; justify-content: center; align-items: center; }
             .modal-content img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
-            .modal-close { position: absolute; top: -45px; right: -5px; width: 38px; height: 38px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: var(--primary); cursor: pointer; z-index: 30001; }
+            .modal-close {
+                position: absolute;
+                top: -45px;
+                right: -5px;
+                width: 38px;
+                height: 38px;
+                background: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                font-weight: bold;
+                color: var(--primary);
+                cursor: pointer;
+                z-index: 30001;
+            }
             .modal-prev, .modal-next { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; cursor: pointer; z-index: 30001; backdrop-filter: blur(5px); }
             .modal-prev { left: 10px; }
             .modal-next { right: 10px; }
@@ -3113,8 +3265,13 @@ function renderizarLandingProducto(producto) {
             /* Botón flotante */
             .floating-buttons { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
             .floating-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; border: none; box-shadow: var(--shadow-lg); position: relative; }
-            .floating-top { background: var(--primary); color: white; }
-            .floating-btn:hover { transform: scale(1.1); }
+            .floating-top {
+                background: var(--primary);
+                color: white;
+            }
+            .floating-top:hover {
+                background: var(--primary-dark);
+            }
             .floating-tooltip { position: absolute; right: 60px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.3s ease; pointer-events: none; }
             .floating-btn:hover .floating-tooltip { opacity: 1; visibility: visible; right: 65px; }
             
@@ -5125,22 +5282,45 @@ function renderizarPaginaOutlet(productos) {
 
     function actualizarBadgeSeguridad(intentosRestantes) {
         let badge = document.getElementById('securityBadge');
-        if (!badge) {
-            badge = document.createElement('div');
-            badge.id = 'securityBadge';
-            badge.style.cssText = 'position:fixed;top:80px;right:16px;background:white;padding:8px 14px;border-radius:40px;box-shadow:0 2px 10px rgba(0,0,0,0.1);font-size:0.7rem;font-weight:600;z-index:999;display:flex;align-items:center;gap:8px;border:1px solid #e5e7eb;transition:all 0.3s ease;';
-            document.body.appendChild(badge);
+        
+        // ✅ Solo mostrar si está bloqueado (0 intentos)
+        if (intentosRestantes === 0) {
+            if (!badge) {
+                badge = document.createElement('div');
+                badge.id = 'securityBadge';
+                badge.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 16px;
+                    background: #fef2f2;
+                    color: #dc2626;
+                    padding: 8px 14px;
+                    border-radius: 40px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    z-index: 999;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    border: 1px solid #fca5a5;
+                    animation: slideInRight 0.3s ease;
+                `;
+                document.body.appendChild(badge);
+            }
+            badge.innerHTML = `
+                <span>🔒</span>
+                <span>Cuenta bloqueada temporalmente</span>
+            `;
+            badge.style.display = 'flex';
+        } else {
+            // ✅ Ocultar si hay intentos disponibles
+            if (badge) {
+                badge.style.display = 'none';
+            }
         }
-        let icono = '🟢', color = '#10b981', texto = 'Seguro';
-        if (intentosRestantes === 0) { icono = '🔴'; color = '#dc2626'; texto = 'Sin intentos'; }
-        else if (intentosRestantes === 1) { icono = '🟡'; color = '#f59e0b'; texto = 'Último intento'; }
-        else if (intentosRestantes <= 2) { icono = '🟡'; color = '#f59e0b'; texto = `${intentosRestantes} intentos`; }
-        else { icono = '🟢'; color = '#10b981'; texto = `${intentosRestantes} intentos`; }
-        badge.innerHTML = `<span>${icono}</span><span style="color:${color};">${texto}</span>`;
-        badge.style.borderColor = color;
-        badge.style.display = 'flex';
-        badge.style.animation = intentosRestantes < 3 ? 'badgePulse 1s ease infinite' : 'none';
     }
+
     window.actualizarBadgeSeguridad = actualizarBadgeSeguridad;
 
     function mostrarProgreso(mensaje, porcentaje) {
@@ -5527,24 +5707,36 @@ function renderizarPaginaOutlet(productos) {
     // FUNCIONES DE CONTACTO - GLOBALES
     // ============================================
     window.validarCampoContacto = function(campo) {
+        let valido = false;
+        
         if (campo === 'nombre') {
             const input = document.getElementById('contacto-nombre');
             const error = document.getElementById('contacto-error-nombre');
             const valor = input?.value || '';
+            
+            // ✅ Si está vacío y no ha sido tocado, no mostrar error
+            if (valor.length === 0) {
+                error.className = 'mensaje-error hidden';
+                input.style.borderColor = '#e5e7eb';
+                input.style.backgroundColor = '#fafafa';
+                return false; // No válido pero sin error visual
+            }
+            
             const resultado = validarNombreCompleto(valor);
             
             if (resultado.valido) {
                 error.className = 'mensaje-error hidden';
                 input.style.borderColor = '#10b981';
                 input.style.backgroundColor = '#f0fdf4';
-                return true;
+                valido = true;
             } else {
                 error.className = 'mensaje-error';
                 error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
                 input.style.borderColor = '#dc2626';
                 input.style.backgroundColor = '#fef2f2';
-                return false;
+                valido = false;
             }
+            return valido;
         }
         
         if (campo === 'telefono') {
@@ -5554,44 +5746,62 @@ function renderizarPaginaOutlet(productos) {
             const pais = prefijoSelect?.value || '51';
             const valor = input?.value || '';
             
-            // ✅ USA validarTelefonoAvanzado() - BLOQUEA si hay errores
+            // ✅ Si está vacío y no ha sido tocado, no mostrar error
+            if (valor.length === 0) {
+                error.className = 'mensaje-error hidden';
+                input.style.borderColor = '#e5e7eb';
+                input.style.backgroundColor = '#fafafa';
+                return false; // No válido pero sin error visual
+            }
+            
             const resultado = validarTelefonoAvanzado(valor, pais);
             
             if (resultado.valido) {
                 error.className = 'mensaje-error hidden';
                 input.style.borderColor = '#10b981';
                 input.style.backgroundColor = '#f0fdf4';
-                return true;
+                valido = true;
             } else {
                 error.className = 'mensaje-error';
                 error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
                 input.style.borderColor = '#dc2626';
                 input.style.backgroundColor = '#fef2f2';
-                return false;
+                valido = false;
             }
+            return valido;
         }
         
         if (campo === 'mensaje') {
             const input = document.getElementById('contacto-mensaje');
             const error = document.getElementById('contacto-error-mensaje');
             const valor = input?.value || '';
+            
+            // ✅ Si está vacío y no ha sido tocado, no mostrar error
+            if (valor.length === 0) {
+                error.className = 'mensaje-error hidden';
+                input.style.borderColor = '#e5e7eb';
+                input.style.backgroundColor = '#fafafa';
+                return false; // No válido pero sin error visual
+            }
+            
             const resultado = validarMensajeContacto(valor);
             
             if (resultado.valido) {
                 error.className = 'mensaje-error hidden';
                 input.style.borderColor = '#10b981';
                 input.style.backgroundColor = '#f0fdf4';
-                return true;
+                valido = true;
             } else {
                 error.className = 'mensaje-error';
                 error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
                 input.style.borderColor = '#dc2626';
                 input.style.backgroundColor = '#fef2f2';
-                return false;
+                valido = false;
             }
+            return valido;
         }
         
-        return false;
+        return valido;
     };
 
     window.cerrarModalContactoRapido = function() {
@@ -5602,53 +5812,22 @@ function renderizarPaginaOutlet(productos) {
         }
     };
 
+    // ============================================
+    // MOSTRAR MODAL DE CONTACTO RÁPIDO - USANDO generarOpcionesPaises()
+    // ============================================
+
     window.mostrarModalContactoRapido = function(origen) {
         return new Promise((resolve) => {
             console.log('📱 Abriendo modal de contacto rápido');
             
-            // ==========================================
-            // PAÍSES DISPONIBLES
-            // ==========================================
-            const paises = [
-                { codigo: '51', nombre: 'Perú', bandera: '🇵🇪' },
-                { codigo: '1', nombre: 'USA/Canadá', bandera: '🇺🇸' },
-                { codigo: '52', nombre: 'México', bandera: '🇲🇽' },
-                { codigo: '54', nombre: 'Argentina', bandera: '🇦🇷' },
-                { codigo: '56', nombre: 'Chile', bandera: '🇨🇱' },
-                { codigo: '57', nombre: 'Colombia', bandera: '🇨🇴' },
-                { codigo: '58', nombre: 'Venezuela', bandera: '🇻🇪' },
-                { codigo: '591', nombre: 'Bolivia', bandera: '🇧🇴' },
-                { codigo: '593', nombre: 'Ecuador', bandera: '🇪🇨' },
-                { codigo: '595', nombre: 'Paraguay', bandera: '🇵🇾' },
-                { codigo: '598', nombre: 'Uruguay', bandera: '🇺🇾' },
-                { codigo: '55', nombre: 'Brasil', bandera: '🇧🇷' },
-                { codigo: '34', nombre: 'España', bandera: '🇪🇸' },
-                { codigo: '44', nombre: 'Reino Unido', bandera: '🇬🇧' },
-                { codigo: '33', nombre: 'Francia', bandera: '🇫🇷' },
-                { codigo: '49', nombre: 'Alemania', bandera: '🇩🇪' },
-                { codigo: '39', nombre: 'Italia', bandera: '🇮🇹' },
-                { codigo: '81', nombre: 'Japón', bandera: '🇯🇵' },
-                { codigo: '61', nombre: 'Australia', bandera: '🇦🇺' },
-                { codigo: '27', nombre: 'Sudáfrica', bandera: '🇿🇦' }
-            ];
+            // ✅ USAR LA FUNCIÓN EXISTENTE generarOpcionesPaises()
+            const opcionesPaises = window.generarOpcionesPaises('51');
             
-            // ==========================================
-            // GENERAR OPCIONES DE PAÍSES
-            // ==========================================
-            const opcionesPaises = paises.map(p => `
-                <option value="${p.codigo}" ${p.codigo === '51' ? 'selected' : ''}>
-                    ${p.bandera} +${p.codigo} (${p.nombre})
-                </option>
-            `).join('');
-            
-            // ==========================================
-            // HTML DEL MODAL
-            // ==========================================
             const modalHtml = `
                 <div id="modalContactoRapido" class="modal-contacto-rapido show">
                     <div class="modal-contacto-rapido-contenido">
                         
-                        <!-- HEADER COMPACTO -->
+                        <!-- HEADER -->
                         <div class="modal-contacto-rapido-header">
                             <i class="fas fa-address-card"></i>
                             <div class="header-text">
@@ -5714,9 +5893,11 @@ function renderizarPaginaOutlet(productos) {
                                 </div>
                             </div>
                             
-                            <!-- Email oculto -->
-                            <input type="hidden" id="contacto-email" value="">
-                            
+                            <!-- Seguridad -->
+                            <div class="texto-seguridad">
+                                <i class="fas fa-lock"></i>
+                                Tus datos están seguros y serán usados solo para atender tu consulta.
+                            </div>
                         </div>
                         
                         <!-- FOOTER -->
@@ -5733,91 +5914,174 @@ function renderizarPaginaOutlet(productos) {
                 </div>
             `;
             
-            // ==========================================
-            // ELIMINAR MODAL ANTERIOR
-            // ==========================================
+            // Eliminar modal anterior
             const modalExistente = document.getElementById('modalContactoRapido');
             if (modalExistente) modalExistente.remove();
             
-            // ==========================================
-            // INSERTAR MODAL
-            // ==========================================
+            // Insertar modal
             document.body.insertAdjacentHTML('beforeend', modalHtml);
             
             // ==========================================
-            // FOCUS EN EL PRIMER CAMPO
+            // INICIALIZAR VALIDACIONES
             // ==========================================
+            
+            // Inicializar ayuda del país seleccionado
             setTimeout(() => {
+                const prefijoSelect = document.getElementById('contacto-prefijo-pais');
+                if (prefijoSelect) {
+                    const paisInicial = prefijoSelect.value || '51';
+                    if (typeof window.actualizarAyudaTelefonoContacto === 'function') {
+                        window.actualizarAyudaTelefonoContacto(paisInicial);
+                    }
+                }
                 document.getElementById('contacto-nombre')?.focus();
             }, 200);
             
             // ==========================================
-            // VALIDAR TODOS LOS CAMPOS
+            // EVENTOS DE VALIDACIÓN
             // ==========================================
-            function validarTodosCamposContacto() {
-                const nombreValido = window.validarCampoContacto('nombre');
-                const telefonoValido = window.validarCampoContacto('telefono');
-                const mensajeValido = window.validarCampoContacto('mensaje');
-                
-                const btnEnviar = document.getElementById('btnEnviarContacto');
-                if (btnEnviar) {
-                    const todosValidos = nombreValido && telefonoValido && mensajeValido;
-                    btnEnviar.disabled = !todosValidos;
-                    btnEnviar.style.opacity = todosValidos ? '1' : '0.5';
-                    btnEnviar.style.cursor = todosValidos ? 'pointer' : 'not-allowed';
-                }
-                
-                return nombreValido && telefonoValido && mensajeValido;
-            }
             
-            // ==========================================
-            // EVENTOS DE VALIDACIÓN EN TIEMPO REAL
-            // ==========================================
             const inputs = ['contacto-nombre', 'contacto-telefono', 'contacto-mensaje'];
             inputs.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', function() {
                         const campo = id.replace('contacto-', '');
-                        window.validarCampoContacto(campo);
-                        validarTodosCamposContacto();
+                        if (typeof window.validarCampoContacto === 'function') {
+                            window.validarCampoContacto(campo);
+                        }
+                        if (typeof validarTodosCamposContacto === 'function') {
+                            validarTodosCamposContacto();
+                        }
                     });
                     element.addEventListener('blur', function() {
                         const campo = id.replace('contacto-', '');
-                        window.validarCampoContacto(campo);
-                        validarTodosCamposContacto();
+                        if (typeof window.validarCampoContacto === 'function') {
+                            window.validarCampoContacto(campo);
+                        }
+                        if (typeof validarTodosCamposContacto === 'function') {
+                            validarTodosCamposContacto();
+                        }
                     });
                 }
             });
             
-            // ==========================================
-            // ACTUALIZAR AYUDA DE TELÉFONO
-            // ==========================================
-            window.actualizarAyudaTelefonoContacto = function(pais) {
-                const config = window.PAISES_CONFIG ? window.PAISES_CONFIG[pais] : null;
-                const ayuda = document.getElementById('contacto-telefono-ayuda');
-                
-                if (ayuda && config) {
-                    ayuda.innerHTML = `
-                        <span class="ayuda-formato">
-                            <i class="fas fa-info-circle"></i>
-                            Formato ${config.nombre}: ${config.descripcion}
-                            ${config.codigosValidos ? `<br><small style="color: #6b7280;">📌 Debe comenzar con: ${config.codigosValidos.join(', ')}</small>` : ''}
-                        </span>
-                    `;
+            // Cambio de país
+            document.getElementById('contacto-prefijo-pais')?.addEventListener('change', function() {
+                const pais = this.value;
+                if (typeof window.actualizarAyudaTelefonoContacto === 'function') {
+                    window.actualizarAyudaTelefonoContacto(pais);
                 }
-                
-                // Re-validar teléfono
                 const telefonoInput = document.getElementById('contacto-telefono');
                 if (telefonoInput && telefonoInput.value) {
-                    window.validarCampoContacto('telefono');
-                    validarTodosCamposContacto();
+                    if (typeof window.validarCampoContacto === 'function') {
+                        window.validarCampoContacto('telefono');
+                    }
+                    if (typeof validarTodosCamposContacto === 'function') {
+                        validarTodosCamposContacto();
+                    }
                 }
-            };
+            });
+            
+            // ==========================================
+            // VALIDAR TODOS LOS CAMPOS
+            // ==========================================
+            
+            function validarTodosCamposContacto() {
+                const nombreInput = document.getElementById('contacto-nombre');
+                const telefonoInput = document.getElementById('contacto-telefono');
+                const mensajeInput = document.getElementById('contacto-mensaje');
+                const prefijoSelect = document.getElementById('contacto-prefijo-pais');
+                
+                const nombre = nombreInput?.value || '';
+                const telefono = telefonoInput?.value || '';
+                const mensaje = mensajeInput?.value || '';
+                const pais = prefijoSelect?.value || '51';
+                
+                let nombreValido = false;
+                let telefonoValido = false;
+                let mensajeValido = false;
+                
+                // Validar nombre
+                if (nombre.length > 0) {
+                    const resultado = validarNombreCompleto(nombre);
+                    nombreValido = resultado.valido;
+                    const error = document.getElementById('contacto-error-nombre');
+                    if (!nombreValido) {
+                        error.className = 'mensaje-error';
+                        error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
+                        nombreInput.style.borderColor = '#dc2626';
+                        nombreInput.style.backgroundColor = '#fef2f2';
+                    } else {
+                        error.className = 'mensaje-error hidden';
+                        nombreInput.style.borderColor = '#10b981';
+                        nombreInput.style.backgroundColor = '#f0fdf4';
+                    }
+                } else {
+                    document.getElementById('contacto-error-nombre').className = 'mensaje-error hidden';
+                    nombreInput.style.borderColor = '#e5e7eb';
+                    nombreInput.style.backgroundColor = '#fafafa';
+                }
+                
+                // Validar teléfono
+                if (telefono.length > 0) {
+                    const resultado = validarTelefonoAvanzado(telefono, pais);
+                    telefonoValido = resultado.valido;
+                    const error = document.getElementById('contacto-error-telefono');
+                    if (!telefonoValido) {
+                        error.className = 'mensaje-error';
+                        error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
+                        telefonoInput.style.borderColor = '#dc2626';
+                        telefonoInput.style.backgroundColor = '#fef2f2';
+                    } else {
+                        error.className = 'mensaje-error hidden';
+                        telefonoInput.style.borderColor = '#10b981';
+                        telefonoInput.style.backgroundColor = '#f0fdf4';
+                    }
+                } else {
+                    document.getElementById('contacto-error-telefono').className = 'mensaje-error hidden';
+                    telefonoInput.style.borderColor = '#e5e7eb';
+                    telefonoInput.style.backgroundColor = '#fafafa';
+                }
+                
+                // Validar mensaje
+                if (mensaje.length > 0) {
+                    const resultado = validarMensajeContacto(mensaje);
+                    mensajeValido = resultado.valido;
+                    const error = document.getElementById('contacto-error-mensaje');
+                    if (!mensajeValido) {
+                        error.className = 'mensaje-error';
+                        error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${resultado.errores[0]}`;
+                        mensajeInput.style.borderColor = '#dc2626';
+                        mensajeInput.style.backgroundColor = '#fef2f2';
+                    } else {
+                        error.className = 'mensaje-error hidden';
+                        mensajeInput.style.borderColor = '#10b981';
+                        mensajeInput.style.backgroundColor = '#f0fdf4';
+                    }
+                } else {
+                    document.getElementById('contacto-error-mensaje').className = 'mensaje-error hidden';
+                    mensajeInput.style.borderColor = '#e5e7eb';
+                    mensajeInput.style.backgroundColor = '#fafafa';
+                }
+                
+                const todosLlenos = nombre.length > 0 && telefono.length > 0 && mensaje.length > 0;
+                const todosValidos = nombreValido && telefonoValido && mensajeValido;
+                
+                const btnEnviar = document.getElementById('btnEnviarContacto');
+                if (btnEnviar) {
+                    btnEnviar.disabled = !(todosLlenos && todosValidos);
+                    btnEnviar.style.opacity = (todosLlenos && todosValidos) ? '1' : '0.5';
+                    btnEnviar.style.cursor = (todosLlenos && todosValidos) ? 'pointer' : 'not-allowed';
+                }
+                
+                return todosLlenos && todosValidos;
+            }
             
             // ==========================================
             // BOTÓN ENVIAR
             // ==========================================
+            
             document.getElementById('btnEnviarContacto')?.addEventListener('click', function() {
                 const nombre = document.getElementById('contacto-nombre')?.value.trim() || '';
                 const telefono = document.getElementById('contacto-telefono')?.value.trim() || '';
@@ -5827,29 +6091,40 @@ function renderizarPaginaOutlet(productos) {
                 // Validar nombre
                 const nombreValidado = validarNombreCompleto(nombre);
                 if (!nombreValidado.valido) {
-                    window.mostrarErrorContacto('nombre', nombreValidado.errores[0]);
+                    const error = document.getElementById('contacto-error-nombre');
+                    error.className = 'mensaje-error';
+                    error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${nombreValidado.errores[0]}`;
+                    document.getElementById('contacto-nombre').style.borderColor = '#dc2626';
+                    document.getElementById('contacto-nombre').style.backgroundColor = '#fef2f2';
+                    document.getElementById('contacto-nombre').focus();
                     return;
                 }
                 
                 // Validar teléfono
                 const telefonoValidado = validarTelefonoAvanzado(telefono, pais);
                 if (!telefonoValidado.valido) {
-                    window.mostrarErrorContacto('telefono', telefonoValidado.errores[0]);
+                    const error = document.getElementById('contacto-error-telefono');
+                    error.className = 'mensaje-error';
+                    error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${telefonoValidado.errores[0]}`;
+                    document.getElementById('contacto-telefono').style.borderColor = '#dc2626';
+                    document.getElementById('contacto-telefono').style.backgroundColor = '#fef2f2';
+                    document.getElementById('contacto-telefono').focus();
                     return;
                 }
                 
                 // Validar mensaje
                 const mensajeValidado = validarMensajeContacto(mensaje);
                 if (!mensajeValidado.valido) {
-                    window.mostrarErrorContacto('mensaje', mensajeValidado.errores[0]);
+                    const error = document.getElementById('contacto-error-mensaje');
+                    error.className = 'mensaje-error';
+                    error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensajeValidado.errores[0]}`;
+                    document.getElementById('contacto-mensaje').style.borderColor = '#dc2626';
+                    document.getElementById('contacto-mensaje').style.backgroundColor = '#fef2f2';
+                    document.getElementById('contacto-mensaje').focus();
                     return;
                 }
                 
-                // ==========================================
-                // TODOS LOS CAMPOS SON VÁLIDOS
-                // ==========================================
-                
-                // Cerrar modal
+                // ✅ TODOS LOS CAMPOS SON VÁLIDOS
                 const modal = document.getElementById('modalContactoRapido');
                 if (modal) {
                     modal.classList.remove('show');
@@ -5858,20 +6133,20 @@ function renderizarPaginaOutlet(productos) {
                     }, 300);
                 }
                 
-                // ✅ RESOLVER CON PAÍS INCLUIDO
                 resolve({
                     nombre: nombreValidado.valorSanitizado,
                     telefono: telefonoValidado.telefonoLimpio,
                     telefonoFormateado: telefonoValidado.telefonoFormateado,
-                    pais: pais,  // ✅ CÓDIGO DEL PAÍS
+                    pais: pais,
                     mensaje: mensajeValidado.valorSanitizado,
-                    email: '' // Email oculto
+                    email: ''
                 });
             });
             
             // ==========================================
-            // CERRAR AL HACER CLIC FUERA
+            // CERRAR MODAL
             // ==========================================
+            
             document.getElementById('modalContactoRapido')?.addEventListener('click', function(e) {
                 if (e.target === this) {
                     window.cerrarModalContactoRapido();
@@ -5879,9 +6154,6 @@ function renderizarPaginaOutlet(productos) {
                 }
             });
             
-            // ==========================================
-            // TECLA ESCAPE
-            // ==========================================
             document.addEventListener('keydown', function handler(e) {
                 if (e.key === 'Escape') {
                     const modal = document.getElementById('modalContactoRapido');
@@ -5893,11 +6165,49 @@ function renderizarPaginaOutlet(productos) {
                 }
             });
             
-            // ==========================================
-            // INICIALIZAR VALIDACIÓN
-            // ==========================================
+            // Inicializar validación
             setTimeout(validarTodosCamposContacto, 100);
         });
+    };
+
+    // ============================================
+    // ACTUALIZAR AYUDA DE TELÉFONO SEGÚN PAÍS
+    // ============================================
+
+    window.actualizarAyudaTelefonoContacto = function(pais) {
+        console.log('🔄 Actualizando ayuda para país:', pais);
+        
+        const config = PAISES_CONFIG[pais];
+        const ayuda = document.getElementById('contacto-telefono-ayuda');
+        
+        if (ayuda && config) {
+            let ayudaHTML = `<span class="ayuda-formato">`;
+            ayudaHTML += `<i class="fas fa-info-circle"></i>`;
+            ayudaHTML += ` Formato ${config.nombre}: ${config.descripcion}`;
+            
+            if (config.codigosValidos && config.codigosValidos.length > 0) {
+                ayudaHTML += `<br><small style="color: #6b7280;">📌 Debe comenzar con: ${config.codigosValidos.join(', ')}</small>`;
+            }
+            
+            ayudaHTML += `</span>`;
+            ayuda.innerHTML = ayudaHTML;
+            ayuda.style.display = 'block';
+        } else if (ayuda) {
+            ayuda.innerHTML = `
+                <span class="ayuda-formato">
+                    <i class="fas fa-info-circle"></i>
+                    Ingresa el número sin espacios ni guiones
+                </span>
+            `;
+            ayuda.style.display = 'block';
+        }
+        
+        // Re-validar teléfono si tiene valor
+        const telefonoInput = document.getElementById('contacto-telefono');
+        if (telefonoInput && telefonoInput.value) {
+            window.validarCampoContacto('telefono');
+            validarTodosCamposContacto();
+        }
     };
 
     // ============================================
@@ -6219,10 +6529,7 @@ function renderizarPaginaOutlet(productos) {
 
     window.abrirWhatsAppAsesor = async function() {
         console.log('📱 Abriendo WhatsApp con asesor');
-        
-        // ✅ 1. Mostrar indicador de carga
-        mostrarToast('⏳ Registrando tu consulta...', 'info');
-        
+                
         // ✅ 2. Obtener datos del contacto
         const datosContacto = await window.mostrarModalContactoRapido('WhatsApp');
         
@@ -6803,44 +7110,6 @@ function renderizarPaginaOutlet(productos) {
     }
     window.configurarEventosQR = configurarEventosQR;
 
-    // ============================================
-    // FUNCIONES DE FILTROS Y CARDS
-    // ============================================
-    function actualizarChipsFiltrosActivos() {
-        const container = document.getElementById('filtrosActivosChips');
-        if (!container) return;
-        const filtros = [];
-        const familiaSelect = document.getElementById('filtroFamilia');
-        const acabadoSelect = document.getElementById('filtroAcabado');
-        const materialSelect = document.getElementById('filtroMaterial');
-        const searchInput = document.getElementById('searchOutlet');
-        if (familiaSelect && familiaSelect.value && familiaSelect.value !== '') {
-            const text = familiaSelect.options[familiaSelect.selectedIndex]?.text || familiaSelect.value;
-            filtros.push({ key: 'familia', value: familiaSelect.value, label: text, type: 'familia' });
-        }
-        if (acabadoSelect && acabadoSelect.value && acabadoSelect.value !== '') {
-            const text = acabadoSelect.options[acabadoSelect.selectedIndex]?.text || acabadoSelect.value;
-            filtros.push({ key: 'acabado', value: acabadoSelect.value, label: text, type: 'acabado' });
-        }
-        if (materialSelect && materialSelect.value && materialSelect.value !== '') {
-            const text = materialSelect.options[materialSelect.selectedIndex]?.text || materialSelect.value;
-            filtros.push({ key: 'material', value: materialSelect.value, label: text, type: 'material' });
-        }
-        if (searchInput && searchInput.value && searchInput.value.trim() !== '') {
-            filtros.push({ key: 'busqueda', value: searchInput.value, label: `"${searchInput.value}"`, type: 'busqueda' });
-        }
-        if (filtros.length === 0) {
-            container.innerHTML = '';
-            container.style.display = 'none';
-            return;
-        }
-        container.style.display = 'flex';
-        container.innerHTML = filtros.map(f => `
-            <span class="chip-filtro">${f.label}<button onclick="window.eliminarFiltro('${f.type}')" class="chip-eliminar"><i class="fas fa-times"></i></button></span>
-        `).join('');
-    }
-    window.actualizarChipsFiltrosActivos = actualizarChipsFiltrosActivos;
-
     function actualizarBadgesFiltros(activos) {
         const badge = document.getElementById('filtrosBadge');
         if (badge) {
@@ -6939,85 +7208,384 @@ function renderizarPaginaOutlet(productos) {
     };
 
     window.aplicarFiltrosOutlet = function() {
+        console.log('🔍 Aplicando filtros...');
+        
         const busqueda = document.getElementById('searchOutlet')?.value.toLowerCase().trim() || '';
         const familiaId = document.getElementById('filtroFamilia')?.value;
         const acabadoId = document.getElementById('filtroAcabado')?.value;
         const materialId = document.getElementById('filtroMaterial')?.value;
-        let productosData = window.outletProductosCache.map(p => ({ ...p, imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE), slug: p.slug || p.id }));
+        
+        let productosData = window.outletProductosCache.map(p => ({
+            ...p,
+            imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE),
+            slug: p.slug || p.id
+        }));
+        
         let filtrados = [...productosData];
-        if (familiaId && familiaId !== '') filtrados = filtrados.filter(p => p.familia_id === familiaId);
-        if (acabadoId && acabadoId !== '') filtrados = filtrados.filter(p => p.acabado_id === acabadoId);
-        if (materialId && materialId !== '') filtrados = filtrados.filter(p => p.material_id === materialId);
-        if (busqueda) filtrados = filtrados.filter(p => (p.nombre || '').toLowerCase().includes(busqueda) || (p.codigo || '').toLowerCase().includes(busqueda) || (p.slug || '').toLowerCase().includes(busqueda));
+        let filtrosActivos = false;
+        
+        // ✅ CONTAR FILTROS ACTIVOS
+        if (familiaId && familiaId !== '') {
+            filtrados = filtrados.filter(p => p.familia_id === familiaId);
+            filtrosActivos = true;
+        }
+        if (acabadoId && acabadoId !== '') {
+            filtrados = filtrados.filter(p => p.acabado_id === acabadoId);
+            filtrosActivos = true;
+        }
+        if (materialId && materialId !== '') {
+            filtrados = filtrados.filter(p => p.material_id === materialId);
+            filtrosActivos = true;
+        }
+        if (busqueda) {
+            filtrados = filtrados.filter(p => 
+                (p.nombre || '').toLowerCase().includes(busqueda) || 
+                (p.codigo || '').toLowerCase().includes(busqueda) || 
+                (p.slug || '').toLowerCase().includes(busqueda)
+            );
+            filtrosActivos = true;
+        }
+        
         const grid = document.getElementById('productosGrid');
         const contador = document.getElementById('contadorProductos');
-        if (grid) { grid.innerHTML = window.generarCardsOutlet(filtrados); inicializarLazyLoading(); }
-        if (contador) contador.textContent = filtrados.length;
+        const sinResultados = document.getElementById('sinResultadosFiltros');
+        const contadorFiltros = document.getElementById('contadorProductosFiltrados');
+        
+        // ✅ SI NO HAY FILTROS ACTIVOS, MOSTRAR 0 EN EL CONTADOR DE FILTROS
+        if (contadorFiltros) {
+            if (filtrosActivos) {
+                contadorFiltros.textContent = filtrados.length;
+            } else {
+                contadorFiltros.textContent = 0;
+            }
+        }
+        
+        if (grid) {
+            if (filtrados.length === 0) {
+                grid.innerHTML = '';
+                if (sinResultados) {
+                    sinResultados.style.display = 'flex';
+                }
+            } else {
+                if (sinResultados) {
+                    sinResultados.style.display = 'none';
+                }
+                grid.innerHTML = window.generarCardsOutlet(filtrados);
+                inicializarLazyLoading();
+            }
+        }
+        
+        if (contador) {
+            contador.textContent = filtrados.length;
+        }
+        
+        // ✅ CONTAR FILTROS ACTIVOS PARA EL BADGE (SOLO SELECTORES CON VALOR)
         let activos = 0;
         if (familiaId && familiaId !== '') activos++;
         if (acabadoId && acabadoId !== '') activos++;
         if (materialId && materialId !== '') activos++;
         if (busqueda) activos++;
-        actualizarChipsFiltrosActivos();
+        
         actualizarBadgesFiltros(activos);
+        
+        // Actualizar chips en desktop
+        actualizarChipsFiltrosDesktop();
+        
+        // ✅ ACTUALIZAR BADGE DEL HEADER
         const badge = document.getElementById('filtrosBadge');
         if (badge) {
-            if (activos > 0) { badge.textContent = activos; badge.style.display = 'inline-block'; }
-            else { badge.style.display = 'none'; }
+            if (activos > 0) {
+                badge.textContent = activos;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
         }
+        
+        // ✅ ACTUALIZAR BADGE MÓVIL
         const badgeMobile = document.getElementById('filtrosBadgeMobile');
         if (badgeMobile) {
-            if (activos > 0) { badgeMobile.textContent = activos; badgeMobile.style.display = 'flex'; }
-            else { badgeMobile.style.display = 'none'; }
+            if (activos > 0) {
+                badgeMobile.textContent = activos;
+                badgeMobile.style.display = 'flex';
+            } else {
+                badgeMobile.style.display = 'none';
+            }
         }
+        
+        // Cerrar modal de filtros en móvil
         if (window.innerWidth <= 768) {
             const modal = document.getElementById('filtrosModal');
-            if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
         }
+        
+        console.log(`✅ ${filtrados.length} productos encontrados (${activos} filtros activos)`);
     };
+
+
     window.aplicarFiltrosOutlet = window.aplicarFiltrosOutlet;
 
+    function actualizarChipsFiltrosDesktop() {
+        const container = document.getElementById('filtrosActivosChipsDesktop');
+        if (!container) return;
+        
+        const filtros = [];
+        const familiaSelect = document.getElementById('filtroFamilia');
+        const acabadoSelect = document.getElementById('filtroAcabado');
+        const materialSelect = document.getElementById('filtroMaterial');
+        const searchInput = document.getElementById('searchOutlet');
+        
+        // ✅ OBTENER FILTROS ACTIVOS
+        if (familiaSelect && familiaSelect.value && familiaSelect.value !== '') {
+            const text = familiaSelect.options[familiaSelect.selectedIndex]?.text || familiaSelect.value;
+            // Limpiar el texto del contador (ej: "Mármol (5)" → "Mármol")
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ 
+                key: 'familia', 
+                value: familiaSelect.value, 
+                label: cleanText, 
+                type: 'familia' 
+            });
+        }
+        if (acabadoSelect && acabadoSelect.value && acabadoSelect.value !== '') {
+            const text = acabadoSelect.options[acabadoSelect.selectedIndex]?.text || acabadoSelect.value;
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ 
+                key: 'acabado', 
+                value: acabadoSelect.value, 
+                label: cleanText, 
+                type: 'acabado' 
+            });
+        }
+        if (materialSelect && materialSelect.value && materialSelect.value !== '') {
+            const text = materialSelect.options[materialSelect.selectedIndex]?.text || materialSelect.value;
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ 
+                key: 'material', 
+                value: materialSelect.value, 
+                label: cleanText, 
+                type: 'material' 
+            });
+        }
+        if (searchInput && searchInput.value && searchInput.value.trim() !== '') {
+            filtros.push({ 
+                key: 'busqueda', 
+                value: searchInput.value, 
+                label: `"${searchInput.value}"`, 
+                type: 'busqueda' 
+            });
+        }
+        
+        if (filtros.length === 0) {
+            container.innerHTML = '';
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'flex';
+        container.innerHTML = filtros.map(f => `
+            <span class="chip-filtro-desktop">
+                ${f.label}
+                <button onclick="window.eliminarFiltro('${f.type}')" class="chip-eliminar" title="Eliminar filtro">
+                    <i class="fas fa-times"></i>
+                </button>
+            </span>
+        `).join('');
+    }
+
+    // ============================================
+    // LIMPIAR FILTROS - CON MENSAJE DE SIN RESULTADOS
+    // ============================================
+
     window.limpiarFiltrosOutlet = function() {
+        console.log('🧹 Limpiando todos los filtros...');
+        
+        // 1. ✅ RESETEAR SELECTORES
         const searchInput = document.getElementById('searchOutlet');
         const familiaSelect = document.getElementById('filtroFamilia');
         const acabadoSelect = document.getElementById('filtroAcabado');
         const materialSelect = document.getElementById('filtroMaterial');
+        
         if (searchInput) searchInput.value = '';
         if (familiaSelect) familiaSelect.value = '';
         if (acabadoSelect) acabadoSelect.value = '';
         if (materialSelect) materialSelect.value = '';
+        
+        // 2. ✅ OCULTAR BOTÓN DE LIMPIAR BÚSQUEDA
         const btnClear = document.getElementById('btnLimpiarBusqueda');
         if (btnClear) btnClear.style.display = 'none';
-        const productosData = window.outletProductosCache.map(p => ({ ...p, imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE), slug: p.slug || p.id }));
+        
+        // 3. ✅ RESTAURAR TODOS LOS PRODUCTOS
+        const productosData = window.outletProductosCache.map(p => ({ 
+            ...p, 
+            imagen_principal: optimizarGoogleDriveUrl(p.imagen_principal || CONFIG.DEFAULT_IMAGE), 
+            slug: p.slug || p.id 
+        }));
+        
         const grid = document.getElementById('productosGrid');
         const contador = document.getElementById('contadorProductos');
-        if (grid) { grid.innerHTML = window.generarCardsOutlet(productosData); inicializarLazyLoading(); }
-        if (contador) contador.textContent = productosData.length;
+        const sinResultados = document.getElementById('sinResultadosFiltros');
+        const contadorFiltros = document.getElementById('contadorProductosFiltrados');
+        
+        if (grid) {
+            grid.innerHTML = window.generarCardsOutlet(productosData);
+            if (typeof inicializarLazyLoading === 'function') {
+                inicializarLazyLoading();
+            }
+        }
+        
+        if (contador) {
+            contador.textContent = productosData.length;
+        }
+        
+        // 4. ✅ OCULTAR MENSAJE DE SIN RESULTADOS
+        if (sinResultados) {
+            sinResultados.style.display = 'none';
+        }
+        
+        // 5. ✅ MOSTRAR 0 EN CONTADOR DE FILTROS
+        if (contadorFiltros) {
+            contadorFiltros.textContent = 0;
+        }
+        
+        // 6. ✅ ACTUALIZAR OPCIONES DE FILTROS
+        if (typeof window.actualizarOpcionesFiltros === 'function') {
+            window.actualizarOpcionesFiltros();
+        }
+        
+        // 7. ✅ OCULTAR BADGES
         const badge = document.getElementById('filtrosBadge');
         if (badge) badge.style.display = 'none';
+        
         const badgeMobile = document.getElementById('filtrosBadgeMobile');
         if (badgeMobile) badgeMobile.style.display = 'none';
-        actualizarChipsFiltrosActivos();
-        actualizarBadgesFiltros(0);
+        
+        // 8. ✅ LIMPIAR CHIPS EN DESKTOP
+        const chipsContainer = document.getElementById('filtrosActivosChipsDesktop');
+        if (chipsContainer) {
+            chipsContainer.innerHTML = '';
+            chipsContainer.style.display = 'none';
+        }
+                
+        // 10. ✅ ACTUALIZAR BADGES
+        if (typeof actualizarBadgesFiltros === 'function') {
+            actualizarBadgesFiltros(0);
+        }
+        
+        // 11. ✅ CERRAR MODAL DE FILTROS EN MÓVIL
         if (window.innerWidth <= 768) {
             const modal = document.getElementById('filtrosModal');
-            if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
         }
+        
+        console.log('✅ Todos los filtros limpiados y selectores reseteados');
     };
+
     window.limpiarFiltrosOutlet = window.limpiarFiltrosOutlet;
 
     window.eliminarFiltro = function(tipo) {
+        console.log(`🗑️ Eliminando filtro: ${tipo}`);
+        
+        // 1. Limpiar el filtro específico
         if (tipo === 'busqueda') {
             const searchInput = document.getElementById('searchOutlet');
-            if (searchInput) searchInput.value = '';
+            if (searchInput) {
+                searchInput.value = '';
+                // Disparar evento input para actualizar búsqueda
+                const event = new Event('input', { bubbles: true });
+                searchInput.dispatchEvent(event);
+            }
             const btnClear = document.getElementById('btnLimpiarBusqueda');
             if (btnClear) btnClear.style.display = 'none';
         } else {
-            const select = document.getElementById(`filtro${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
-            if (select) select.value = '';
+            // Mapeo de tipos a IDs de selectores
+            const selectMap = {
+                'familia': 'filtroFamilia',
+                'acabado': 'filtroAcabado',
+                'material': 'filtroMaterial'
+            };
+            
+            const selectId = selectMap[tipo];
+            if (selectId) {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.value = ''; // Resetear a "Todas"
+                }
+            }
         }
-        window.aplicarFiltrosOutlet();
+        
+        // 2. ✅ ACTUALIZAR OPCIONES DE FILTROS (para que los contadores se actualicen)
+        if (typeof window.actualizarOpcionesFiltros === 'function') {
+            window.actualizarOpcionesFiltros();
+        }
+        
+        // 3. ✅ APLICAR FILTROS CON LOS VALORES ACTUALES
+        if (typeof window.aplicarFiltrosOutlet === 'function') {
+            window.aplicarFiltrosOutlet();
+        }
+        
+        // 4. ✅ ACTUALIZAR CHIPS EN DESKTOP
+        if (typeof actualizarChipsFiltrosDesktop === 'function') {
+            actualizarChipsFiltrosDesktop();
+        }
+        
+        console.log('✅ Filtro eliminado y selectores actualizados');
     };
+
+    // ============================================
+    // INICIALIZAR FILTROS INTELIGENTES
+    // ============================================
+
+    function inicializarFiltrosInteligentes() {
+        console.log('🔧 Inicializando filtros inteligentes...');
+        
+        // Actualizar opciones iniciales
+        if (typeof window.actualizarOpcionesFiltros === 'function') {
+            window.actualizarOpcionesFiltros();
+        }
+        
+        // Agregar event listeners a los selects
+        const familiaSelect = document.getElementById('filtroFamilia');
+        const acabadoSelect = document.getElementById('filtroAcabado');
+        const materialSelect = document.getElementById('filtroMaterial');
+        
+        if (familiaSelect) {
+            familiaSelect.addEventListener('change', function() {
+                if (typeof window.actualizarOpcionesFiltros === 'function') {
+                    window.actualizarOpcionesFiltros();
+                }
+            });
+        }
+        
+        if (acabadoSelect) {
+            acabadoSelect.addEventListener('change', function() {
+                if (typeof window.actualizarOpcionesFiltros === 'function') {
+                    window.actualizarOpcionesFiltros();
+                }
+            });
+        }
+        
+        if (materialSelect) {
+            materialSelect.addEventListener('change', function() {
+                if (typeof window.actualizarOpcionesFiltros === 'function') {
+                    window.actualizarOpcionesFiltros();
+                }
+            });
+        }
+        
+        console.log('✅ Filtros inteligentes inicializados');
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(inicializarFiltrosInteligentes, 500);
+    });
 
     // ============================================
     // FUNCIONES DE MODALES DE FILTROS
@@ -7046,9 +7614,404 @@ function renderizarPaginaOutlet(productos) {
         const familiaModal = document.getElementById('filtroFamiliaModal');
         const acabadoModal = document.getElementById('filtroAcabadoModal');
         const materialModal = document.getElementById('filtroMaterialModal');
-        if (familiaDesktop && familiaModal) familiaModal.value = familiaDesktop.value;
-        if (acabadoDesktop && acabadoModal) acabadoModal.value = acabadoDesktop.value;
-        if (materialDesktop && materialModal) materialModal.value = materialDesktop.value;
+        
+        if (familiaDesktop && familiaModal) {
+            familiaModal.value = familiaDesktop.value;
+        }
+        if (acabadoDesktop && acabadoModal) {
+            acabadoModal.value = acabadoDesktop.value;
+        }
+        if (materialDesktop && materialModal) {
+            materialModal.value = materialDesktop.value;
+        }
+        
+        // Actualizar opciones en móvil
+        if (typeof window.actualizarOpcionesFiltrosMobile === 'function') {
+            window.actualizarOpcionesFiltrosMobile();
+        }
+    };
+
+    window.actualizarOpcionesFiltrosMobile = function() {
+        console.log('🔄 Actualizando opciones de filtros (móvil)...');
+        
+        const familiaSelect = document.getElementById('filtroFamiliaModal');
+        const acabadoSelect = document.getElementById('filtroAcabadoModal');
+        const materialSelect = document.getElementById('filtroMaterialModal');
+        
+        if (!familiaSelect || !acabadoSelect || !materialSelect) {
+            console.warn('⚠️ Selectores de filtros móviles no encontrados');
+            return;
+        }
+        
+        // Obtener valores seleccionados
+        const familiaSeleccionada = familiaSelect.value || '';
+        const acabadoSeleccionado = acabadoSelect.value || '';
+        const materialSeleccionado = materialSelect.value || '';
+        
+        console.log('📊 Selecciones móviles:', {
+            familia: familiaSeleccionada || 'Todas',
+            acabado: acabadoSeleccionado || 'Todos',
+            material: materialSeleccionado || 'Todos'
+        });
+        
+        let productos = window.outletProductosCache || [];
+        
+        // Obtener opciones disponibles
+        let productosParaOpciones = [...productos];
+        
+        if (familiaSeleccionada) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.familia_id === familiaSeleccionada);
+        }
+        if (acabadoSeleccionado) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.acabado_id === acabadoSeleccionado);
+        }
+        if (materialSeleccionado) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.material_id === materialSeleccionado);
+        }
+        
+        const familiasDisponibles = new Map();
+        const acabadosDisponibles = new Map();
+        const materialesDisponibles = new Map();
+        
+        productosParaOpciones.forEach(p => {
+            // Familia
+            if (p.familia_id && p.familia?.nombre) {
+                if (!familiasDisponibles.has(p.familia_id)) {
+                    familiasDisponibles.set(p.familia_id, {
+                        id: p.familia_id,
+                        nombre: p.familia.nombre,
+                        count: 0
+                    });
+                }
+                familiasDisponibles.get(p.familia_id).count++;
+            } else if (p.familia_nombre) {
+                const id = p.familia_nombre;
+                if (!familiasDisponibles.has(id)) {
+                    familiasDisponibles.set(id, {
+                        id: id,
+                        nombre: p.familia_nombre,
+                        count: 0
+                    });
+                }
+                familiasDisponibles.get(id).count++;
+            }
+            
+            // Acabado
+            if (p.acabado_id && p.acabado?.nombre) {
+                if (!acabadosDisponibles.has(p.acabado_id)) {
+                    acabadosDisponibles.set(p.acabado_id, {
+                        id: p.acabado_id,
+                        nombre: p.acabado.nombre,
+                        count: 0
+                    });
+                }
+                acabadosDisponibles.get(p.acabado_id).count++;
+            } else if (p.acabado_nombre) {
+                const id = p.acabado_nombre;
+                if (!acabadosDisponibles.has(id)) {
+                    acabadosDisponibles.set(id, {
+                        id: id,
+                        nombre: p.acabado_nombre,
+                        count: 0
+                    });
+                }
+                acabadosDisponibles.get(id).count++;
+            }
+            
+            // Material
+            if (p.material_id && p.material?.nombre) {
+                if (!materialesDisponibles.has(p.material_id)) {
+                    materialesDisponibles.set(p.material_id, {
+                        id: p.material_id,
+                        nombre: p.material.nombre,
+                        count: 0
+                    });
+                }
+                materialesDisponibles.get(p.material_id).count++;
+            } else if (p.material_nombre) {
+                const id = p.material_nombre;
+                if (!materialesDisponibles.has(id)) {
+                    materialesDisponibles.set(id, {
+                        id: id,
+                        nombre: p.material_nombre,
+                        count: 0
+                    });
+                }
+                materialesDisponibles.get(id).count++;
+            }
+        });
+        
+        const familiasOrdenadas = Array.from(familiasDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const acabadosOrdenados = Array.from(acabadosDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const materialesOrdenados = Array.from(materialesDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        
+        const filtrosActivos = (familiaSeleccionada || acabadoSeleccionado || materialSeleccionado) ? true : false;
+        const totalProductos = productos.length;
+        
+        // Generar HTML para familia
+        let familiaHTML = `<option value="">Todas${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && familiasOrdenadas.length > 0) {
+            familiaHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        familiasOrdenadas.forEach(f => {
+            const selected = f.id === familiaSeleccionada ? 'selected' : '';
+            familiaHTML += `<option value="${f.id}" ${selected}>${escapeHtml(f.nombre)} (${f.count})</option>`;
+        });
+        familiaSelect.innerHTML = familiaHTML;
+        if (familiaSeleccionada) {
+            familiaSelect.value = familiaSeleccionada;
+        }
+        
+        // Generar HTML para acabado
+        let acabadoHTML = `<option value="">Todos${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && acabadosOrdenados.length > 0) {
+            acabadoHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        acabadosOrdenados.forEach(a => {
+            const selected = a.id === acabadoSeleccionado ? 'selected' : '';
+            acabadoHTML += `<option value="${a.id}" ${selected}>${escapeHtml(a.nombre)} (${a.count})</option>`;
+        });
+        acabadoSelect.innerHTML = acabadoHTML;
+        if (acabadoSeleccionado) {
+            acabadoSelect.value = acabadoSeleccionado;
+        }
+        
+        // Generar HTML para material
+        let materialHTML = `<option value="">Todos${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && materialesOrdenados.length > 0) {
+            materialHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        materialesOrdenados.forEach(m => {
+            const selected = m.id === materialSeleccionado ? 'selected' : '';
+            materialHTML += `<option value="${m.id}" ${selected}>${escapeHtml(m.nombre)} (${m.count})</option>`;
+        });
+        materialSelect.innerHTML = materialHTML;
+        if (materialSeleccionado) {
+            materialSelect.value = materialSeleccionado;
+        }
+        
+        // Actualizar contador en móvil
+        const contadorMobile = document.getElementById('filtrosModalContador');
+        if (contadorMobile) {
+            let filtrados = [...productos];
+            if (familiaSeleccionada) filtrados = filtrados.filter(p => p.familia_id === familiaSeleccionada);
+            if (acabadoSeleccionado) filtrados = filtrados.filter(p => p.acabado_id === acabadoSeleccionado);
+            if (materialSeleccionado) filtrados = filtrados.filter(p => p.material_id === materialSeleccionado);
+            
+            if (familiaSeleccionada || acabadoSeleccionado || materialSeleccionado) {
+                contadorMobile.textContent = filtrados.length;
+            } else {
+                contadorMobile.textContent = 0;
+            }
+        }
+        
+        // Actualizar chips en móvil
+        if (typeof actualizarChipsFiltrosMobile === 'function') {
+            actualizarChipsFiltrosMobile();
+        }
+        
+        console.log('✅ Filtros móviles actualizados');
+    };
+
+    function actualizarChipsFiltrosMobile() {
+        const container = document.getElementById('filtrosActivosChipsMobile');
+        if (!container) return;
+        
+        const filtros = [];
+        const familiaSelect = document.getElementById('filtroFamiliaModal');
+        const acabadoSelect = document.getElementById('filtroAcabadoModal');
+        const materialSelect = document.getElementById('filtroMaterialModal');
+        const searchInput = document.getElementById('searchOutlet');
+        
+        if (familiaSelect && familiaSelect.value && familiaSelect.value !== '') {
+            const text = familiaSelect.options[familiaSelect.selectedIndex]?.text || familiaSelect.value;
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ key: 'familia', value: familiaSelect.value, label: cleanText, type: 'familia' });
+        }
+        if (acabadoSelect && acabadoSelect.value && acabadoSelect.value !== '') {
+            const text = acabadoSelect.options[acabadoSelect.selectedIndex]?.text || acabadoSelect.value;
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ key: 'acabado', value: acabadoSelect.value, label: cleanText, type: 'acabado' });
+        }
+        if (materialSelect && materialSelect.value && materialSelect.value !== '') {
+            const text = materialSelect.options[materialSelect.selectedIndex]?.text || materialSelect.value;
+            const cleanText = text.replace(/\s*\(\d+\)\s*$/, '');
+            filtros.push({ key: 'material', value: materialSelect.value, label: cleanText, type: 'material' });
+        }
+        if (searchInput && searchInput.value && searchInput.value.trim() !== '') {
+            filtros.push({ key: 'busqueda', value: searchInput.value, label: `"${searchInput.value}"`, type: 'busqueda' });
+        }
+        
+        if (filtros.length === 0) {
+            container.innerHTML = '';
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'flex';
+        container.innerHTML = filtros.map(f => `
+            <span class="chip-filtro-mobile">
+                ${f.label}
+                <button onclick="window.eliminarFiltroMobile('${f.type}')" class="chip-eliminar-mobile">
+                    <i class="fas fa-times"></i>
+                </button>
+            </span>
+        `).join('');
+    }
+
+    // 4. Eliminar filtro individual en móvil
+    window.eliminarFiltroMobile = function(tipo) {
+        console.log(`🗑️ Eliminando filtro (móvil): ${tipo}`);
+        
+        const selectMap = {
+            'familia': 'filtroFamiliaModal',
+            'acabado': 'filtroAcabadoModal',
+            'material': 'filtroMaterialModal'
+        };
+        
+        const selectId = selectMap[tipo];
+        if (selectId) {
+            const select = document.getElementById(selectId);
+            if (select) {
+                select.value = '';
+            }
+        }
+        
+        // Actualizar opciones en móvil
+        if (typeof window.actualizarOpcionesFiltrosMobile === 'function') {
+            window.actualizarOpcionesFiltrosMobile();
+        }
+        
+        // Aplicar filtros
+        if (typeof window.aplicarFiltrosMobile === 'function') {
+            window.aplicarFiltrosMobile();
+        }
+    };
+
+    // 5. Aplicar filtros desde móvil
+    window.aplicarFiltrosMobile = function() {
+        console.log('📱 Aplicando filtros desde móvil...');
+        
+        // Sincronizar selects de móvil a desktop
+        const familiaModal = document.getElementById('filtroFamiliaModal');
+        const acabadoModal = document.getElementById('filtroAcabadoModal');
+        const materialModal = document.getElementById('filtroMaterialModal');
+        const familiaDesktop = document.getElementById('filtroFamilia');
+        const acabadoDesktop = document.getElementById('filtroAcabado');
+        const materialDesktop = document.getElementById('filtroMaterial');
+        
+        if (familiaDesktop && familiaModal) {
+            familiaDesktop.value = familiaModal.value;
+        }
+        if (acabadoDesktop && acabadoModal) {
+            acabadoDesktop.value = acabadoModal.value;
+        }
+        if (materialDesktop && materialModal) {
+            materialDesktop.value = materialModal.value;
+        }
+        
+        // Aplicar filtros en desktop
+        if (typeof window.aplicarFiltrosOutlet === 'function') {
+            window.aplicarFiltrosOutlet();
+        }
+        
+        // Cerrar modal
+        if (typeof window.closeFiltrosModal === 'function') {
+            window.closeFiltrosModal();
+        }
+        
+        console.log('✅ Filtros aplicados desde móvil');
+    };
+
+    // 6. Limpiar filtros desde móvil
+    window.limpiarFiltrosMobile = function() {
+        console.log('🧹 Limpiando filtros desde móvil...');
+        
+        const familiaModal = document.getElementById('filtroFamiliaModal');
+        const acabadoModal = document.getElementById('filtroAcabadoModal');
+        const materialModal = document.getElementById('filtroMaterialModal');
+        
+        if (familiaModal) familiaModal.value = '';
+        if (acabadoModal) acabadoModal.value = '';
+        if (materialModal) materialModal.value = '';
+        
+        // Actualizar opciones en móvil
+        if (typeof window.actualizarOpcionesFiltrosMobile === 'function') {
+            window.actualizarOpcionesFiltrosMobile();
+        }
+        
+        // Limpiar filtros en desktop
+        if (typeof window.limpiarFiltrosOutlet === 'function') {
+            window.limpiarFiltrosOutlet();
+        }
+        
+        // Cerrar modal
+        if (typeof window.closeFiltrosModal === 'function') {
+            window.closeFiltrosModal();
+        }
+        
+        console.log('✅ Filtros limpiados desde móvil');
+    };
+
+    // 7. Abrir modal de filtros (con sincronización)
+    window.openFiltrosModal = function() {
+        console.log('📱 Abriendo modal de filtros...');
+        
+        if (window.innerWidth > 768) {
+            console.log('📱 Los filtros móviles solo están disponibles en dispositivos móviles');
+            return;
+        }
+        
+        const modal = document.getElementById('filtrosModal');
+        const overlay = document.getElementById('filtrosModalOverlay');
+        
+        // Sincronizar selects de desktop a móvil
+        syncModalSelects();
+        
+        // Actualizar opciones en móvil
+        if (typeof window.actualizarOpcionesFiltrosMobile === 'function') {
+            window.actualizarOpcionesFiltrosMobile();
+        }
+        
+        if (overlay) {
+            overlay.style.display = 'block';
+            void overlay.offsetWidth;
+            overlay.classList.add('show');
+        }
+        
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.right = '0';
+        }
+        
+        document.body.style.overflow = 'hidden';
+        
+        console.log('✅ Modal de filtros abierto');
+    };
+
+    // 8. Cerrar modal de filtros
+    window.closeFiltrosModal = function() {
+        console.log('🔒 Cerrando modal de filtros...');
+        
+        const modal = document.getElementById('filtrosModal');
+        const overlay = document.getElementById('filtrosModalOverlay');
+        
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.right = '-100%';
+        }
+        
+        if (overlay) {
+            overlay.classList.remove('show');
+            overlay.style.display = 'none';
+        }
+        
+        document.body.style.overflow = '';
+        
+        console.log('✅ Modal de filtros cerrado correctamente');
     };
 
     window.aplicarFiltrosDesdeModal = function() {
@@ -7185,8 +8148,26 @@ function renderizarPaginaOutlet(productos) {
     function inicializarHelpBar() {
         const helpBar = document.getElementById('helpBar');
         if (!helpBar) return;
-        setTimeout(() => { helpBar.classList.add('show'); }, 5000);
+        
+        // Mostrar después de 5 segundos
+        setTimeout(() => {
+            helpBar.classList.add('show');
+        }, 5000);
+        
+        // También mostrar si el usuario hace scroll
+        let helpBarMostrado = false;
+        window.addEventListener('scroll', function() {
+            if (!helpBarMostrado && window.scrollY > 300) {
+                helpBar.classList.add('show');
+                helpBarMostrado = true;
+            }
+        });
     }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(inicializarHelpBar, 100);
+    });
 
     function inicializarAyudaOutlet() {
         inicializarSeccionSugerencias();
@@ -7362,20 +8343,46 @@ function renderizarPaginaOutlet(productos) {
             barra.style.animation = 'slideUp 0.5s ease';
             const isMobile = window.innerWidth <= 768;
             barra.innerHTML = `
-                <div class="barra-cotizacion-mini">
-                    <div class="barra-info-mini">
-                        <div class="barra-icono"><i class="fas fa-shopping-cart"></i><span class="badge-cantidad" id="badge-cantidad">${total}</span></div>
+                <!-- ============================================ -->
+                <!-- BARRA DE COTIZACIÓN - ESTRUCTURA CORRECTA -->
+                <!-- ============================================ -->
+                <div class="barra-cotizacion mini" id="barra-cotizacion">
+                    
+                    <!-- SECCIÓN MINI (SIEMPRE VISIBLE) -->
+                    <div class="barra-cotizacion-mini">
+                        <div class="barra-info-mini">
+                            <div class="barra-icono">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="badge-cantidad" id="badge-cantidad">${total}</span>
+                            </div>
+                            <div class="barra-texto-mini">
+                                <span id="contador-cotizacion-mini">${total}</span> producto(s)
+                            </div>
+                        </div>
+                        <div class="barra-acciones-mini">
+                            <button class="btn-cotizar-principal" id="btn-cotizar-principal">
+                                <i class="fab fa-whatsapp"></i> Cotizar ahora
+                            </button>
+                            <!-- ✅ BOTÓN EXPANDIR (SIEMPRE VISIBLE) -->
+                            <button class="btn-expandir" id="btn-expandir-barra">
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="barra-acciones-mini">
-                        <button class="btn-cotizar-principal" id="btn-cotizar-principal"><i class="fab fa-whatsapp"></i> Cotizar ahora</button>
-                        <button class="btn-expandir" id="btn-expandir-barra"><i class="fas fa-chevron-up"></i></button>
-                    </div>
-                </div>
-                <div class="barra-cotizacion-expanded" style="display:none;">
-                    <div class="barra-productos-preview" id="preview-productos">${generarPreviewProductos()}</div>
-                    <div class="barra-acciones-expanded">
-                        <button class="btn-limpiar" id="btn-limpiar-barra"><i class="fas fa-trash-alt"></i> Limpiar todo</button>
-                        <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded"><i class="fas fa-file-invoice"></i> Ver cotización</button>
+                    
+                    <!-- SECCIÓN EXPANDIDA -->
+                    <div class="barra-cotizacion-expanded" style="display: none;">
+                        <div class="barra-productos-preview" id="preview-productos">
+                            ${generarPreviewProductos()}
+                        </div>
+                        <div class="barra-acciones-expanded">
+                            <button class="btn-limpiar" id="btn-limpiar-barra">
+                                <i class="fas fa-trash-alt"></i> Limpiar todo
+                            </button>
+                            <button class="btn-ver-cotizacion" id="btn-ver-cotizacion-expanded">
+                                <i class="fas fa-file-invoice"></i> Ver cotización
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -7413,36 +8420,111 @@ function renderizarPaginaOutlet(productos) {
         const btnExpandir = document.getElementById('btn-expandir-barra');
         const expandedSection = barra.querySelector('.barra-cotizacion-expanded');
         const miniSection = barra.querySelector('.barra-cotizacion-mini');
-        if (btnCotizarPrincipal) btnCotizarPrincipal.onclick = () => window.abrirModalCotizacion();
+        
+        // Botón Cotizar ahora
+        if (btnCotizarPrincipal) {
+            btnCotizarPrincipal.onclick = () => window.abrirModalCotizacion();
+        }
+        
+        // ✅ Botón Expandir/Contraer - CORREGIDO
         if (btnExpandir) {
-            btnExpandir.onclick = (e) => {
+            // Remover event listeners anteriores (si los hay)
+            const nuevoBtn = btnExpandir.cloneNode(true);
+            btnExpandir.parentNode.replaceChild(nuevoBtn, btnExpandir);
+            
+            nuevoBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if (expandedSection.style.display === 'none' || expandedSection.style.display === '') {
+                
+                console.log('🔄 Click en expandir/contraer');
+                
+                // Verificar el estado actual
+                const isExpanded = barra.classList.contains('expanded');
+                console.log('📊 Estado actual:', isExpanded ? 'expandido' : 'contraído');
+                
+                if (!isExpanded) {
+                    // ✅ EXPANDIR
+                    console.log('📤 Expandiendo barra...');
                     expandedSection.style.display = 'flex';
                     miniSection.style.display = 'none';
                     barra.classList.add('expanded');
                     barra.classList.remove('mini');
-                    btnExpandir.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    this.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    
+                    // Actualizar preview de productos
                     const previewContainer = document.getElementById('preview-productos');
-                    if (previewContainer) previewContainer.innerHTML = generarPreviewProductos();
-                    const nuevaAltura = barra.offsetHeight;
-                    document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
+                    if (previewContainer) {
+                        previewContainer.innerHTML = generarPreviewProductos();
+                    }
                 } else {
+                    // ✅ CONTRAER
+                    console.log('📥 Contrayendo barra...');
                     expandedSection.style.display = 'none';
                     miniSection.style.display = 'flex';
                     barra.classList.remove('expanded');
                     barra.classList.add('mini');
-                    btnExpandir.innerHTML = '<i class="fas fa-chevron-up"></i>';
-                    const nuevaAltura = barra.offsetHeight;
-                    document.body.style.paddingBottom = `${nuevaAltura + 10}px`;
+                    this.innerHTML = '<i class="fas fa-chevron-up"></i>';
                 }
-            };
+                
+                // Actualizar padding bottom del body
+                setTimeout(() => {
+                    const alturaBarra = barra.offsetHeight;
+                    document.body.style.paddingBottom = `${alturaBarra + 10}px`;
+                    console.log('📐 Nueva altura:', alturaBarra);
+                }, 100);
+            });
+            
+            console.log('✅ Botón expandir/contraer configurado');
         }
+        
+        // Gestos de arrastre para móvil
+        let startY = 0;
+        let isDragging = false;
+        
+        barra.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        }, { passive: true });
+        
+        barra.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const currentY = e.touches[0].clientY;
+            const diff = startY - currentY;
+            
+            if (diff > 50) {
+                // Deslizar hacia arriba - Expandir
+                const isExpanded = barra.classList.contains('expanded');
+                if (!isExpanded) {
+                    const btn = document.getElementById('btn-expandir-barra');
+                    if (btn) btn.click();
+                }
+                isDragging = false;
+            } else if (diff < -50) {
+                // Deslizar hacia abajo - Contraer
+                const isExpanded = barra.classList.contains('expanded');
+                if (isExpanded) {
+                    const btn = document.getElementById('btn-expandir-barra');
+                    if (btn) btn.click();
+                }
+                isDragging = false;
+            }
+        }, { passive: true });
+        
+        barra.addEventListener('touchend', () => {
+            isDragging = false;
+        }, { passive: true });
+        
+        // Botón Limpiar
         const btnLimpiar = document.getElementById('btn-limpiar-barra');
+        if (btnLimpiar) {
+            btnLimpiar.onclick = () => window.limpiarCotizacion();
+        }
+        
+        // Botón Ver cotización
         const btnVerCotizacion = document.getElementById('btn-ver-cotizacion-expanded');
-        if (btnLimpiar) btnLimpiar.onclick = () => window.limpiarCotizacion();
-        if (btnVerCotizacion) btnVerCotizacion.onclick = () => window.abrirModalCotizacion();
+        if (btnVerCotizacion) {
+            btnVerCotizacion.onclick = () => window.abrirModalCotizacion();
+        }
     }
 
     window.limpiarCotizacion = function() {
@@ -8091,6 +9173,232 @@ function renderizarPaginaOutlet(productos) {
     };
 
     // ============================================
+    // FILTROS INTELIGENTES - ACTUALIZACIÓN DINÁMICA
+    // ============================================
+
+    window.actualizarOpcionesFiltros = function() {
+        console.log('🔄 Actualizando opciones de filtros...');
+        
+        const familiaSelect = document.getElementById('filtroFamilia');
+        const acabadoSelect = document.getElementById('filtroAcabado');
+        const materialSelect = document.getElementById('filtroMaterial');
+        
+        if (!familiaSelect || !acabadoSelect || !materialSelect) {
+            console.warn('⚠️ Selectores de filtros no encontrados');
+            return;
+        }
+        
+        // ✅ OBTENER VALORES ACTUALES (PUEDEN ESTAR VACIOS)
+        const familiaSeleccionada = familiaSelect.value || '';
+        const acabadoSeleccionado = acabadoSelect.value || '';
+        const materialSeleccionado = materialSelect.value || '';
+        
+        console.log('📊 Selecciones actuales:', {
+            familia: familiaSeleccionada || 'Todas',
+            acabado: acabadoSeleccionado || 'Todos',
+            material: materialSeleccionado || 'Todos'
+        });
+        
+        let productos = window.outletProductosCache || [];
+        
+        // ✅ OBTENER OPCIONES DISPONIBLES
+        let productosParaOpciones = [...productos];
+        
+        // Filtrar por selecciones para obtener opciones válidas
+        if (familiaSeleccionada) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.familia_id === familiaSeleccionada);
+        }
+        if (acabadoSeleccionado) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.acabado_id === acabadoSeleccionado);
+        }
+        if (materialSeleccionado) {
+            productosParaOpciones = productosParaOpciones.filter(p => p.material_id === materialSeleccionado);
+        }
+        
+        const familiasDisponibles = new Map();
+        const acabadosDisponibles = new Map();
+        const materialesDisponibles = new Map();
+        
+        productosParaOpciones.forEach(p => {
+            // Familia
+            if (p.familia_id && p.familia?.nombre) {
+                if (!familiasDisponibles.has(p.familia_id)) {
+                    familiasDisponibles.set(p.familia_id, {
+                        id: p.familia_id,
+                        nombre: p.familia.nombre,
+                        count: 0
+                    });
+                }
+                familiasDisponibles.get(p.familia_id).count++;
+            } else if (p.familia_nombre) {
+                const id = p.familia_nombre;
+                if (!familiasDisponibles.has(id)) {
+                    familiasDisponibles.set(id, {
+                        id: id,
+                        nombre: p.familia_nombre,
+                        count: 0
+                    });
+                }
+                familiasDisponibles.get(id).count++;
+            }
+            
+            // Acabado
+            if (p.acabado_id && p.acabado?.nombre) {
+                if (!acabadosDisponibles.has(p.acabado_id)) {
+                    acabadosDisponibles.set(p.acabado_id, {
+                        id: p.acabado_id,
+                        nombre: p.acabado.nombre,
+                        count: 0
+                    });
+                }
+                acabadosDisponibles.get(p.acabado_id).count++;
+            } else if (p.acabado_nombre) {
+                const id = p.acabado_nombre;
+                if (!acabadosDisponibles.has(id)) {
+                    acabadosDisponibles.set(id, {
+                        id: id,
+                        nombre: p.acabado_nombre,
+                        count: 0
+                    });
+                }
+                acabadosDisponibles.get(id).count++;
+            }
+            
+            // Material
+            if (p.material_id && p.material?.nombre) {
+                if (!materialesDisponibles.has(p.material_id)) {
+                    materialesDisponibles.set(p.material_id, {
+                        id: p.material_id,
+                        nombre: p.material.nombre,
+                        count: 0
+                    });
+                }
+                materialesDisponibles.get(p.material_id).count++;
+            } else if (p.material_nombre) {
+                const id = p.material_nombre;
+                if (!materialesDisponibles.has(id)) {
+                    materialesDisponibles.set(id, {
+                        id: id,
+                        nombre: p.material_nombre,
+                        count: 0
+                    });
+                }
+                materialesDisponibles.get(id).count++;
+            }
+        });
+        
+        // ✅ ORDENAR OPCIONES
+        const familiasOrdenadas = Array.from(familiasDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const acabadosOrdenados = Array.from(acabadosDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const materialesOrdenados = Array.from(materialesDisponibles.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        
+        const filtrosActivos = (familiaSeleccionada || acabadoSeleccionado || materialSeleccionado) ? true : false;
+        const totalProductos = productos.length;
+        
+        // ✅ GENERAR HTML PARA FAMILIA
+        let familiaHTML = `<option value="">Todas${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && familiasOrdenadas.length > 0) {
+            familiaHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        familiasOrdenadas.forEach(f => {
+            const selected = f.id === familiaSeleccionada ? 'selected' : '';
+            familiaHTML += `<option value="${f.id}" ${selected}>${escapeHtml(f.nombre)} (${f.count})</option>`;
+        });
+        familiaSelect.innerHTML = familiaHTML;
+        // ✅ RESTAURAR SELECCIÓN
+        if (familiaSeleccionada) {
+            familiaSelect.value = familiaSeleccionada;
+        }
+        
+        // ✅ GENERAR HTML PARA ACABADO
+        let acabadoHTML = `<option value="">Todos${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && acabadosOrdenados.length > 0) {
+            acabadoHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        acabadosOrdenados.forEach(a => {
+            const selected = a.id === acabadoSeleccionado ? 'selected' : '';
+            acabadoHTML += `<option value="${a.id}" ${selected}>${escapeHtml(a.nombre)} (${a.count})</option>`;
+        });
+        acabadoSelect.innerHTML = acabadoHTML;
+        // ✅ RESTAURAR SELECCIÓN
+        if (acabadoSeleccionado) {
+            acabadoSelect.value = acabadoSeleccionado;
+        }
+        
+        // ✅ GENERAR HTML PARA MATERIAL
+        let materialHTML = `<option value="">Todos${!filtrosActivos ? ` (${totalProductos})` : ''}</option>`;
+        if (filtrosActivos && materialesOrdenados.length > 0) {
+            materialHTML += `<option value="" disabled style="color:#9ca3af;">── Mostrando opciones disponibles ──</option>`;
+        }
+        materialesOrdenados.forEach(m => {
+            const selected = m.id === materialSeleccionado ? 'selected' : '';
+            materialHTML += `<option value="${m.id}" ${selected}>${escapeHtml(m.nombre)} (${m.count})</option>`;
+        });
+        materialSelect.innerHTML = materialHTML;
+        // ✅ RESTAURAR SELECCIÓN
+        if (materialSeleccionado) {
+            materialSelect.value = materialSeleccionado;
+        }
+        
+        // ✅ ACTUALIZAR CONTADOR
+        const contadorFiltros = document.getElementById('contadorProductosFiltrados');
+        if (contadorFiltros) {
+            let filtrados = [...productos];
+            if (familiaSeleccionada) filtrados = filtrados.filter(p => p.familia_id === familiaSeleccionada);
+            if (acabadoSeleccionado) filtrados = filtrados.filter(p => p.acabado_id === acabadoSeleccionado);
+            if (materialSeleccionado) filtrados = filtrados.filter(p => p.material_id === materialSeleccionado);
+            
+            if (familiaSeleccionada || acabadoSeleccionado || materialSeleccionado) {
+                contadorFiltros.textContent = filtrados.length;
+            } else {
+                contadorFiltros.textContent = 0;
+            }
+        }
+        
+        console.log('✅ Filtros actualizados');
+    };
+
+    // ============================================
+    // GENERAR OPCIONES CON CONTADORES (INICIAL)
+    // ============================================
+
+    function generarOpcionesConContador(categoria, productos) {
+        const grupos = new Map();
+        
+        productos.forEach(p => {
+            let id, nombre;
+            
+            if (categoria === 'familia') {
+                id = p.familia_id || p.familia_nombre;
+                nombre = p.familia?.nombre || p.familia_nombre || 'Sin categoría';
+            } else if (categoria === 'acabado') {
+                id = p.acabado_id || p.acabado_nombre;
+                nombre = p.acabado?.nombre || p.acabado_nombre || 'Sin categoría';
+            } else if (categoria === 'material') {
+                id = p.material_id || p.material_nombre;
+                nombre = p.material?.nombre || p.material_nombre || 'Sin categoría';
+            }
+            
+            if (id && id !== '') {
+                if (!grupos.has(id)) {
+                    grupos.set(id, { id, nombre, count: 0 });
+                }
+                grupos.get(id).count++;
+            }
+        });
+        
+        const opciones = Array.from(grupos.values())
+            .sort((a, b) => a.nombre.localeCompare(b.nombre))
+            .map(g => `<option value="${g.id}">${escapeHtml(g.nombre)} (${g.count})</option>`)
+            .join('');
+        
+        return opciones;
+    }
+
+    // ============================================
     // COUNTDOWN
     // ============================================
     function initCountdown() {
@@ -8246,8 +9554,6 @@ function renderizarPaginaOutlet(productos) {
         .search-hint{font-size:0.65rem;color:var(--gray-400);margin-top:6px;display:flex;align-items:center;gap:6px}
         
         /* FILTROS */
-        .filtros-chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none;-ms-overflow-style:none}
-        .filtros-chips::-webkit-scrollbar{display:none}
         .chip-filtro{background:var(--gray-100);padding:6px 12px;border-radius:40px;font-size:0.7rem;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--gray-200)}
         .chip-eliminar{background:none;border:none;color:var(--gray-500);cursor:pointer;padding:2px;font-size:0.6rem}
         .chip-eliminar:hover{color:var(--red-500)}
@@ -8265,7 +9571,489 @@ function renderizarPaginaOutlet(productos) {
         .scroll-top-btn{position:fixed;bottom:100px;right:16px;width:56px;height:56px;border-radius:50%;background:var(--primary);color:white;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.25);z-index:80;font-size:1.2rem}
         .scroll-top-btn.show{display:flex}
         .scroll-top-btn:hover{transform:scale(1.05)}
-    
+
+        /* ============================================ */
+        /* FILTROS MODAL - VERSIÓN MÓVIL MEJORADA */
+        /* ============================================ */
+
+        /* Contador de productos */
+        .filtros-modal-contador {
+            font-size: 0.8rem;
+            color: #6b7280;
+            padding: 8px 0 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .filtros-modal-contador span {
+            font-weight: 700;
+            color: #6b0000;
+        }
+
+        /* Selectores móviles */
+        .filtro-select-mobile {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .filtro-select-mobile:focus {
+            outline: none;
+            border-color: #6b0000;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(107, 0, 0, 0.08);
+        }
+
+        /* Chips móviles */
+        .filtros-chips-mobile {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .chip-filtro-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px 10px 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+        }
+
+        .chip-filtro-mobile .chip-eliminar-mobile {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .chip-filtro-mobile .chip-eliminar-mobile:hover {
+            color: #dc2626;
+            transform: scale(1.2);
+        }
+
+        /* Mensaje sin resultados móvil */
+        .sin-resultados-filtros-mobile {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #fef2f2;
+            border-radius: 12px;
+            border: 1px solid #fca5a5;
+            margin: 12px 0;
+        }
+
+        .sin-resultados-filtros-mobile .sin-resultados-icono i {
+            font-size: 1.3rem;
+            color: #dc2626;
+        }
+
+        .sin-resultados-filtros-mobile .sin-resultados-texto p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+
+        .sin-resultados-filtros-mobile .sin-resultados-texto p:first-child {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .sin-resultados-filtros-mobile .sin-resultados-texto a {
+            color: #6b0000;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Botones móviles */
+        .filtros-modal-footer {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 2;
+        }
+
+        .btn-filter-mobile,
+        .btn-clear-mobile {
+            flex: 1;
+            padding: 14px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-filter-mobile {
+            background: #6b0000;
+            color: white;
+            box-shadow: 0 4px 12px rgba(107, 0, 0, 0.25);
+        }
+
+        .btn-filter-mobile:hover {
+            background: #4a0000;
+            transform: translateY(-2px);
+        }
+
+        .btn-clear-mobile {
+            background: #f1f5f9;
+            color: #4b5563;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-clear-mobile:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .btn-filter-mobile:active,
+        .btn-clear-mobile:active {
+            transform: scale(0.97);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .filtros-modal-contador {
+                font-size: 0.7rem;
+                padding: 6px 0 10px 0;
+            }
+            
+            .filtro-select-mobile {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .btn-filter-mobile,
+            .btn-clear-mobile {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+                min-height: 44px;
+            }
+            
+            .sin-resultados-filtros-mobile {
+                flex-direction: column;
+                text-align: center;
+                padding: 14px;
+            }
+        }        
+
+        /* ============================================ */
+        /* FILTROS DESKTOP MEJORADOS */
+        /* ============================================ */
+
+        .filters-desktop-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            margin-top: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .filtros-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filtros-titulo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .filtros-titulo i {
+            color: #6b0000;
+        }
+
+        .filtros-contador {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .filtros-contador span {
+            font-weight: 700;
+            color: #6b0000;
+        }
+
+        .filtros-grid-enhanced {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .filtro-group {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .filtro-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .filtro-group label i {
+            margin-right: 4px;
+            font-size: 0.65rem;
+        }
+
+        .filtro-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .filtro-select:hover {
+            border-color: #cbd5e1;
+            background: white;
+        }
+
+        .filtro-select:focus {
+            outline: none;
+            border-color: #6b0000;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(107, 0, 0, 0.08);
+        }
+
+        .filtro-select option {
+            padding: 6px 8px;
+        }
+
+        /* ============================================ */
+        /* FILTROS ACTIONS */
+        /* ============================================ */
+
+        .filtros-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-filter,
+        .btn-clear {
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-filter {
+            background: #6b0000;
+            color: white;
+        }
+
+        .btn-filter:hover {
+            background: #4a0000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 0, 0, 0.25);
+        }
+
+        .btn-clear {
+            background: #f1f5f9;
+            color: #4b5563;
+        }
+
+        .btn-clear:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        /* ============================================ */
+        /* CHIPS DE FILTROS ACTIVOS - DESKTOP */
+        /* ============================================ */
+
+        .filtros-chips-desktop {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .chip-filtro-desktop {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px 10px 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .chip-filtro-desktop:hover {
+            background: #e5e7eb;
+        }
+
+        .chip-filtro-desktop .chip-eliminar {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .chip-filtro-desktop .chip-eliminar:hover {
+            color: #dc2626;
+            transform: scale(1.2);
+        }
+
+        /* ============================================ */
+        /* MENSAJE DE SIN RESULTADOS */
+        /* ============================================ */
+
+        .sin-resultados-filtros {
+            display: none;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: #fef2f2;
+            border-radius: 12px;
+            border: 1px solid #fca5a5;
+            margin-top: 12px;
+        }
+
+        .sin-resultados-icono i {
+            font-size: 1.5rem;
+            color: #dc2626;
+        }
+
+        .sin-resultados-texto p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        .sin-resultados-texto p:first-child {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .sin-resultados-texto a {
+            color: #6b0000;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .sin-resultados-texto a:hover {
+            color: #4a0000;
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
+
+        @media (max-width: 768px) {
+            .filters-desktop-container {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            
+            .filtros-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .filtros-grid-enhanced {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .filtro-group {
+                min-width: 100%;
+            }
+            
+            .filtros-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .btn-filter,
+            .btn-clear {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .sin-resultados-filtros {
+                flex-direction: column;
+                text-align: center;
+                padding: 16px;
+            }
+        }
+
         /* ============================================ */
         /* MODAL DE CONFIRMACIÓN - PRODUCTO AGREGADO */
         /* ============================================ */
@@ -8460,26 +10248,58 @@ function renderizarPaginaOutlet(productos) {
             font-size: 0.65rem;
         }
 
-        /* Inputs y textarea */
         .form-group input,
         .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            background: #fafafa;
+            border-color: #e5e7eb;
+            background-color: #fafafa;
             transition: all 0.3s ease;
-            font-family: inherit;
-            color: #1f2937;
         }
 
+        /* Estado focus (usuario escribiendo) */
         .form-group input:focus,
         .form-group textarea:focus {
-            outline: none;
             border-color: #6b0000;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(107, 0, 0, 0.08);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(107, 0, 0, 0.08);
+        }
+
+        /* Estado válido (después de validar) */
+        .form-group input.valid,
+        .form-group textarea.valid {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+
+        /* Estado inválido (solo después de interacción) */
+        .form-group input.invalid,
+        .form-group textarea.invalid {
+            border-color: #dc2626;
+            background-color: #fef2f2;
+        }
+
+        /* ============================================ */
+        /* MENSAJES DE ERROR - OCULTOS INICIALMENTE */
+        /* ============================================ */
+
+        .mensaje-error {
+            font-size: 0.7rem;
+            color: #dc2626;
+            margin-top: 4px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mensaje-error i {
+            font-size: 0.7rem;
+        }
+
+        .mensaje-error:not(.hidden) {
+            display: flex !important;
+        }
+
+        .mensaje-error.hidden {
+            display: none !important;
         }
 
         .form-group textarea {
@@ -8767,38 +10587,289 @@ function renderizarPaginaOutlet(productos) {
         .filtros-modal-footer .btn-filter{background:var(--primary);color:white}
         .filtros-modal-footer .btn-clear{background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb}
         
-        /* BARRA DE COTIZACIÓN */
-        .barra-cotizacion{position:fixed;bottom:0;left:0;right:0;background:var(--primary);color:white;padding:12px 16px;z-index:1000;box-shadow:0 -4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(10px);transition:all 0.3s ease;min-height:70px}
-        .barra-cotizacion.mini{padding:12px 16px}
-        .barra-cotizacion.expanded{padding:16px}
-        .barra-cotizacion-mini{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-        .barra-info-mini{display:flex;align-items:center;gap:10px;flex:1}
-        .barra-icono{position:relative}
-        .barra-icono i{font-size:1.4rem;color:var(--secondary)}
-        .badge-cantidad{position:absolute;top:-10px;right:-14px;background:#d4d4ae;color:var(--primary);border-radius:50%;width:22px;height:22px;font-size:0.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease}
-        .badge-cantidad.animado{animation:badgePulse 0.4s ease}
-        @keyframes badgePulse{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
-        .barra-texto-mini{font-size:0.8rem;font-weight:500}
-        .barra-texto-mini span{font-weight:800;color:var(--secondary)}
-        .barra-acciones-mini{display:flex;gap:8px;align-items:center}
-        .btn-cotizar-principal{background:#25D366;border:none;padding:10px 18px;border-radius:40px;color:white;font-weight:700;font-size:0.8rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.3s ease;min-height:48px}
-        .btn-cotizar-principal:active{transform:scale(0.95)}
-        .btn-cotizar-principal i{font-size:1rem}
-        .btn-expandir{background:rgba(255,255,255,0.12);border:none;width:40px;height:40px;border-radius:50%;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;min-height:40px}
-        .btn-expandir:active{transform:scale(0.95)}
-        .barra-cotizacion-expanded{display:flex;flex-direction:column;gap:12px;margin-top:8px;max-height:200px;overflow-y:auto}
-        .barra-productos-preview{max-height:120px;overflow-y:auto}
-        .preview-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.08);gap:8px}
-        .preview-info{flex:1;min-width:0}
-        .preview-nombre{font-size:0.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .preview-detalles{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
-        .preview-detalles span{font-size:0.55rem;opacity:0.7;display:flex;align-items:center;gap:3px}
-        .preview-eliminar{background:rgba(255,255,255,0.1);border:none;color:#ff6b6b;cursor:pointer;padding:4px 8px;border-radius:20px;font-size:0.7rem;min-height:32px}
-        .preview-eliminar:active{transform:scale(0.95)}
-        .barra-acciones-expanded{display:flex;gap:10px}
-        .btn-limpiar{background:rgba(255,255,255,0.15);border:none;padding:10px 16px;border-radius:40px;color:white;cursor:pointer;font-size:0.7rem;font-weight:500;flex:1;min-height:44px}
-        .btn-ver-cotizacion{background:#d4d4ae;border:none;padding:10px 16px;border-radius:40px;color:var(--primary);cursor:pointer;font-size:0.7rem;font-weight:700;flex:1;min-height:44px}
-        
+        /* ============================================ */
+        /* BARRA DE COTIZACIÓN
+        /* ============================================ */
+
+        .barra-cotizacion {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            min-height: 70px;
+        }
+
+        .barra-cotizacion.mini {
+            padding: 12px 16px;
+        }
+
+        .barra-cotizacion.expanded {
+            padding: 16px;
+        }
+
+        /* ============================================ */
+        /* SECCIÓN MINI - SIEMPRE VISIBLE */
+        /* ============================================ */
+
+        .barra-cotizacion-mini {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ✅ Cuando está expandido, la sección mini sigue visible */
+        .barra-cotizacion.expanded .barra-cotizacion-mini {
+            display: flex !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .barra-info-mini {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .barra-icono {
+            position: relative;
+        }
+
+        .barra-icono i {
+            font-size: 1.4rem;
+            color: var(--secondary);
+        }
+
+        .badge-cantidad {
+            position: absolute;
+            top: -10px;
+            right: -14px;
+            background: #d4d4ae;
+            color: #39080a;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .badge-cantidad.animado {
+            animation: badgePulse 0.4s ease;
+        }
+
+        @keyframes badgePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        .barra-texto-mini {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .barra-texto-mini span {
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        /* ============================================ */
+        /* ACCIONES MINI */
+        /* ============================================ */
+
+        .barra-acciones-mini {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-cotizar-principal {
+            background: #25D366;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .btn-cotizar-principal:active {
+            transform: scale(0.95);
+        }
+
+        .btn-cotizar-principal i {
+            font-size: 1rem;
+        }
+
+        /* ============================================ */
+        /* BOTÓN EXPANDIR/CONTRAER - SIEMPRE VISIBLE */
+        /* ============================================ */
+
+        .btn-expandir {
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            min-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-expandir:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-expandir:active {
+            transform: scale(0.95);
+        }
+
+        /* ============================================ */
+        /* SECCIÓN EXPANDIDA */
+        /* ============================================ */
+
+        .barra-cotizacion-expanded {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .barra-cotizacion.expanded .barra-cotizacion-expanded {
+            display: flex !important;
+            animation: expandSlideDown 0.3s ease;
+        }
+
+        @keyframes expandSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .barra-productos-preview {
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .preview-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 8px;
+        }
+
+        .preview-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .preview-nombre {
+            font-size: 0.7rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preview-detalles {
+            display: flex;
+            gap: 10px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+
+        .preview-detalles span {
+            font-size: 0.55rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .preview-eliminar {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            min-height: 32px;
+        }
+
+        .preview-eliminar:active {
+            transform: scale(0.95);
+        }
+
+        /* ============================================ */
+        /* ACCIONES EXPANDIDAS */
+        /* ============================================ */
+
+        .barra-acciones-expanded {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-limpiar {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex: 1;
+            min-height: 44px;
+        }
+
+        .btn-ver-cotizacion {
+            background: #d4d4ae;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 40px;
+            color: #39080a;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex: 1;
+            min-height: 44px;
+        }
+
+
         /* TOAST */
         .toast-notificacion{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);padding:14px 24px;border-radius:40px;font-weight:600;font-size:0.85rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.15);opacity:0;visibility:hidden;transition:all 0.3s ease;max-width:90%;text-align:center;display:flex;align-items:center;gap:10px}
         .toast-notificacion.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
@@ -8996,228 +11067,425 @@ function renderizarPaginaOutlet(productos) {
         .footer-bottom{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.6rem;opacity:0.6}
         
         /* SECURITY BADGE */
-        #securityBadge{animation:slideInRight 0.3s ease}
-        @keyframes slideInRight{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+        #securityBadge {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 8px 14px;
+            border-radius: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #fca5a5;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
         @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
         #contadorBloqueo{font-family:monospace;font-size:2rem}
         #barraBloqueo{transition:width 1s linear}
         .btn-paso-enviar:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
         .btn-paso-enviar:disabled:hover{transform:none!important;box-shadow:none!important}
         
-/* ============================================ */
-/* WHATSAPP FLOTANTE CON TEXTO FUERA */
-/* ============================================ */
+        /* ============================================ */
+        /* WHATSAPP FLOTANTE CON TEXTO FUERA */
+        /* ============================================ */
 
-.whatsapp-float-wrapper {
-    position: fixed;
-    bottom: 180px;
-    right: 16px;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    animation: slideInRight 0.5s ease;
-}
+        .whatsapp-float-wrapper {
+            position: fixed;
+            bottom: 180px;
+            right: 16px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.5s ease;
+        }
 
-/* ============================================ */
-/* ETIQUETA DE TEXTO (FUERA DEL BOTÓN) */
-/* ============================================ */
+        /* ============================================ */
+        /* ETIQUETA DE TEXTO (FUERA DEL BOTÓN) */
+        /* ============================================ */
 
-.whatsapp-label {
-    background: white;
-    color: #1f2937;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e7eb;
-    white-space: nowrap;
-    position: relative;
-    order: 0; /* El texto va primero (izquierda) */
-    transition: all 0.3s ease;
-}
+        .whatsapp-label {
+            background: white;
+            color: #1f2937;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            white-space: nowrap;
+            position: relative;
+            order: 0; /* El texto va primero (izquierda) */
+            transition: all 0.3s ease;
+        }
 
-/* Triángulo que apunta al botón */
-.whatsapp-label::after {
-    content: '';
-    position: absolute;
-    right: -8px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-left: 8px solid white;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-}
+        /* Triángulo que apunta al botón */
+        .whatsapp-label::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 8px solid white;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
 
-/* ============================================ */
-/* BOTÓN WHATSAPP (SIN TEXTO) */
-/* ============================================ */
+        /* ============================================ */
+        /* BOTÓN WHATSAPP (SIN TEXTO) */
+        /* ============================================ */
 
-.whatsapp-float {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #25D366;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-    transition: all 0.3s ease;
-    position: relative;
-    animation: whatsappPulse 2s infinite;
-    flex-shrink: 0;
-    order: 1; /* El botón va después del texto (derecha) */
-}
+        .whatsapp-float {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: whatsappPulse 2s infinite;
+            flex-shrink: 0;
+            order: 1; /* El botón va después del texto (derecha) */
+        }
 
-.whatsapp-float:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
-}
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
 
-.whatsapp-float:active {
-    transform: scale(0.95);
-}
+        .whatsapp-float:active {
+            transform: scale(0.95);
+        }
 
-.whatsapp-float i {
-    font-size: 2rem;
-    color: white;
-}
+        .whatsapp-float i {
+            font-size: 2rem;
+            color: white;
+        }
 
-.whatsapp-float .whatsapp-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #ff6b6b;
-    color: white;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    font-size: 0.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: badgePulse 1.5s infinite;
-}
+        .whatsapp-float .whatsapp-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: badgePulse 1.5s infinite;
+        }
 
-/* ============================================ */
-/* ANIMACIONES */
-/* ============================================ */
+        /* ============================================ */
+        /* ANIMACIONES */
+        /* ============================================ */
 
-@keyframes slideInRight {
-    from {
-        transform: translateX(100px);
-        opacity: 0;
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes whatsappPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+            }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            .whatsapp-float-wrapper {
+                bottom: 160px;
+                right: 12px;
+                gap: 10px;
+            }
+            
+            .whatsapp-label {
+                font-size: 0.7rem;
+                padding: 8px 14px;
+            }
+            
+            .whatsapp-float {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .whatsapp-float i {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Móvil */
+        @media (max-width: 480px) {
+            .whatsapp-float-wrapper {
+                bottom: 170px;
+                right: 15px;
+                gap: 8px;
+            }
+            
+            .whatsapp-label {
+                font-size: 0.6rem;
+                padding: 6px 12px;
+            }
+            
+            .whatsapp-label::after {
+                right: -6px;
+                border-left-width: 6px;
+                border-top-width: 6px;
+                border-bottom-width: 6px;
+            }
+            
+            .whatsapp-float {
+                width: 48px;
+                height: 48px;
+            }
+            
+            .whatsapp-float i {
+                font-size: 1.4rem;
+            }
+            
+            .whatsapp-float .whatsapp-badge {
+                width: 18px;
+                height: 18px;
+                font-size: 0.5rem;
+                top: -3px;
+                right: -3px;
+            }
+        }
+
+        /* Móvil muy pequeño - ocultar texto */
+        @media (max-width: 380px) {
+            .whatsapp-label {
+                display: none;
+            }
+            
+            .whatsapp-float-wrapper {
+                right: 10px;
+            }
+        }
+
+        /* ============================================ */
+        /* BARRA DE AYUDA - CON FAQ */
+        /* ============================================ */
+
+        .help-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 8px 12px;
+            z-index: 99;
+            display: none;
+            border-top: 2px solid #25D366;
+        }
+
+        .help-bar.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        .help-bar-contenido {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .help-bar-texto {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .help-bar-texto i {
+            font-size: 1rem;
+            color: #25D366;
+        }
+
+        .help-bar-botones {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .help-bar-btn {
+            padding: 6px 14px;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .help-bar-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .help-bar-btn.whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .help-bar-btn.faq {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .help-bar-btn.faq:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .help-bar-btn i {
+            font-size: 0.9rem;
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE - MÓVIL */
+        /* ============================================ */
+
+        @media (max-width: 768px) {
+            .help-bar {
+                padding: 6px 10px;
+            }
+            
+            .help-bar-contenido {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            
+            .help-bar-texto {
+                font-size: 0.7rem;
+                gap: 4px;
+            }
+            
+            .help-bar-texto i {
+                font-size: 0.85rem;
+            }
+            
+            .help-bar-botones {
+                gap: 4px;
+            }
+            
+            .help-bar-btn {
+                padding: 5px 10px;
+                font-size: 0.65rem;
+                gap: 4px;
+            }
+            
+            .help-bar-btn i {
+                font-size: 0.75rem;
+            }
+        }
+
+    @media (max-width: 480px) {
+        .help-bar {
+            padding: 4px 8px;
+            border-top-width: 2px;
+        }
+        
+        .help-bar-texto {
+            font-size: 0.6rem;
+        }
+        
+        .help-bar-texto i {
+            font-size: 0.7rem;
+        }
+        
+        .help-bar-btn {
+            padding: 4px 8px;
+            font-size: 0.55rem;
+            border-radius: 30px;
+            gap: 3px;
+        }
+        
+        .help-bar-btn i {
+            font-size: 0.65rem;
+        }
     }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
 
-@keyframes whatsappPulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
-    }
-}
+    /* ============================================ */
+    /* MÓVIL MUY PEQUEÑO - Ocultar texto del botón */
+    /* ============================================ */
 
-@keyframes badgePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
+    @media (max-width: 380px) {
+        .help-bar-btn span {
+            display: none;
+        }
+        
+        .help-bar-btn {
+            padding: 4px 8px;
+            font-size: 0.6rem;
+        }
+        
+        .help-bar-btn i {
+            font-size: 0.8rem;
+            margin: 0;
+        }
+    }
 
-/* ============================================ */
-/* RESPONSIVE */
-/* ============================================ */
-
-/* Tablet */
-@media (max-width: 768px) {
-    .whatsapp-float-wrapper {
-        bottom: 160px;
-        right: 12px;
-        gap: 10px;
-    }
-    
-    .whatsapp-label {
-        font-size: 0.7rem;
-        padding: 8px 14px;
-    }
-    
-    .whatsapp-float {
-        width: 56px;
-        height: 56px;
-    }
-    
-    .whatsapp-float i {
-        font-size: 1.6rem;
-    }
-}
-
-/* Móvil */
-@media (max-width: 480px) {
-    .whatsapp-float-wrapper {
-        bottom: 170px;
-        right: 15px;
-        gap: 8px;
-    }
-    
-    .whatsapp-label {
-        font-size: 0.6rem;
-        padding: 6px 12px;
-    }
-    
-    .whatsapp-label::after {
-        right: -6px;
-        border-left-width: 6px;
-        border-top-width: 6px;
-        border-bottom-width: 6px;
-    }
-    
-    .whatsapp-float {
-        width: 48px;
-        height: 48px;
-    }
-    
-    .whatsapp-float i {
-        font-size: 1.4rem;
-    }
-    
-    .whatsapp-float .whatsapp-badge {
-        width: 18px;
-        height: 18px;
-        font-size: 0.5rem;
-        top: -3px;
-        right: -3px;
-    }
-}
-
-/* Móvil muy pequeño - ocultar texto */
-@media (max-width: 380px) {
-    .whatsapp-label {
-        display: none;
-    }
-    
-    .whatsapp-float-wrapper {
-        right: 10px;
-    }
-}
-
-        /* BARRA DE AYUDA */
-        .help-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1e293b,#0f172a);padding:12px 16px;z-index:99;display:none;}
-        .help-bar.show{display:block;animation:slideUp 0.5s ease}
-        .help-bar-btn{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:12px 16px;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all 0.3s ease;font-size:0.9rem}
-        .help-bar-btn:hover{background:rgba(255,255,255,0.1);border-color:#25D366}
-        .help-bar-btn i.fa-headset{font-size:1.3rem;color:#25D366}
-        .help-bar-btn strong{color:#25D366}
-        .help-bar-btn i.fa-chevron-right{margin-left:auto;color:#64748b}
         
         /* MODAL NO ENCUENTRAS LO QUE BUSCAS */
         .modal-sin-resultados{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);z-index:10002;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:all 0.3s ease}
@@ -9594,7 +11862,6 @@ function renderizarPaginaOutlet(productos) {
         @media (max-width: 768px) {
             .modal-contacto-rapido {
                 padding: 12px;
-                align-items: flex-end;
             }
             
             .modal-contacto-rapido-contenido {
@@ -9734,7 +12001,89 @@ function renderizarPaginaOutlet(productos) {
         .btn-enviar{background:#6b0000;color:white}
         .btn-enviar:hover{background:#4a0000;transform:translateY(-2px);box-shadow:0 4px 12px rgba(107,0,0,0.3)}
         .btn-enviar:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
-        
+   
+        /* ============================================ */
+        /* FAB FILTROS - BOTÓN FLOTANTE PARA MÓVIL */
+        /* ============================================ */
+
+        .filtros-fab {
+            position: fixed;
+            bottom: 100px;
+            right: 16px;
+            background: #6b0000;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: none; /* Oculto por defecto */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            z-index: 90;
+            border: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .filtros-fab:hover {
+            transform: scale(1.05);
+        }
+
+        .filtros-fab:active {
+            transform: scale(0.95);
+        }
+
+        .filtros-fab .badge-filtros {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ✅ MOSTRAR SOLO EN MÓVIL */
+        @media (max-width: 768px) {
+            .filtros-fab {
+                display: flex !important;
+            }
+        }
+
+        /* ✅ OCULTAR EN DESKTOP */
+        @media (min-width: 769px) {
+            .filtros-fab {
+                display: none !important;
+            }
+             
+        }
+
+        /* Ajustes para móviles pequeños */
+        @media (max-width: 480px) {
+            .filtros-fab {
+                right: 12px;
+                width: 56px;
+                height: 56px;
+                font-size: 1rem;
+            }
+
+            .scroll-top-btn{ 
+                left:16px;
+            }             
+        }
+
+        /* Ajuste para cuando la barra de cotización está visible */
+        .barra-cotizacion.active ~ .filtros-fab {
+            bottom: 170px;
+        }        
+
         /* MODAL ASESOR ASIGNADO */
 
         .modal-asesor-asignado {
@@ -9986,6 +12335,222 @@ function renderizarPaginaOutlet(productos) {
         }
 
         /* ============================================ */
+        /* MODAL DE PREGUNTAS FRECUENTES */
+        /* ============================================ */
+
+        .modal-faq {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10005;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-faq.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-faq-contenido {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-faq.show .modal-faq-contenido {
+            transform: scale(1) translateY(0);
+        }
+
+        /* ============================================ */
+        /* HEADER DEL MODAL */
+        /* ============================================ */
+
+        .modal-faq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: #6b0000;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .modal-faq-header h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-faq-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-faq-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* ============================================ */
+        /* BODY DEL MODAL */
+        /* ============================================ */
+
+        .modal-faq-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* ============================================ */
+        /* ITEMS DE FAQ */
+        /* ============================================ */
+
+        .faq-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 4px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-pregunta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1f2937;
+            transition: all 0.3s ease;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .faq-pregunta:hover {
+            color: #6b0000;
+        }
+
+        .faq-pregunta i {
+            transition: transform 0.3s ease;
+            color: #6b7280;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        .faq-respuesta {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            padding: 0 0 0 0;
+        }
+
+        .faq-item.abierto .faq-respuesta {
+            padding: 0 0 16px 0;
+        }
+
+        .faq-item.abierto .faq-pregunta i {
+            transform: rotate(180deg);
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
+
+        @media (max-width: 768px) {
+            .modal-faq-contenido {
+                max-width: 100%;
+                max-height: 90vh;
+                border-radius: 16px;
+                margin: 16px;
+            }
+            
+            .modal-faq-header {
+                padding: 14px 18px;
+            }
+            
+            .modal-faq-header h3 {
+                font-size: 1rem;
+            }
+            
+            .modal-faq-body {
+                padding: 16px 18px;
+            }
+            
+            .faq-pregunta {
+                font-size: 0.9rem;
+                padding: 10px 0;
+            }
+            
+            .faq-respuesta {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-faq-contenido {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .modal-faq-header {
+                padding: 12px 14px;
+            }
+            
+            .modal-faq-header h3 {
+                font-size: 0.9rem;
+            }
+            
+            .modal-faq-body {
+                padding: 12px 14px;
+            }
+            
+            .faq-pregunta {
+                font-size: 0.85rem;
+                padding: 8px 0;
+            }
+            
+            .faq-respuesta {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ============================================ */
         /* BARRA DE PROGRESO */
         /* ============================================ */
 
@@ -10100,7 +12665,7 @@ function renderizarPaginaOutlet(productos) {
             </div>
             <div class="header-cotizacion-badge" id="headerCotizacionBadge" style="display:none;" onclick="window.abrirModalCotizacion()">
                 <i class="fas fa-shopping-cart"></i>
-                <span id="headerContador">0</span> productos
+                <span id="headerContador">0</span>
             </div>
         </div>
     </header>
@@ -10110,16 +12675,66 @@ function renderizarPaginaOutlet(productos) {
     <div class="filtros-modal" id="filtrosModal">
         <div class="filtros-modal-header">
             <h3><i class="fas fa-filter"></i> Filtros</h3>
-            <button class="close-modal-btn" onclick="window.closeFiltrosModal()"><i class="fas fa-times"></i></button>
+            <button class="close-modal-btn" onclick="window.closeFiltrosModal()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <div class="filtros-modal-body">
-            <div class="filtro-group"><label>Familia</label><select id="filtroFamiliaModal"><option value="">Todas</option>${familiasOptions}</select></div>
-            <div class="filtro-group"><label>Acabado</label><select id="filtroAcabadoModal"><option value="">Todos</option>${acabadosOptions}</select></div>
-            <div class="filtro-group"><label>Material</label><select id="filtroMaterialModal"><option value="">Todos</option>${materialesOptions}</select></div>
-        </div>
-        <div class="filtros-modal-footer">
-            <button class="btn-filter" onclick="window.aplicarFiltrosDesdeModal()">Aplicar</button>
-            <button class="btn-clear" onclick="window.limpiarFiltrosDesdeModal()">Limpiar</button>
+            <!-- ✅ CONTADOR DE PRODUCTOS -->
+            <div class="filtros-modal-contador">
+                <span id="filtrosModalContador">0</span> productos encontrados
+            </div>
+            
+            <!-- Campo: Familia -->
+            <div class="filtro-group">
+                <label><i class="fas fa-tag"></i> Familia</label>
+                <select id="filtroFamiliaModal" class="filtro-select-mobile" onchange="window.actualizarOpcionesFiltrosMobile()">
+                    <option value="">Todas</option>
+                    ${familiasOptions}
+                </select>
+            </div>
+            
+            <!-- Campo: Acabado -->
+            <div class="filtro-group">
+                <label><i class="fas fa-paint-brush"></i> Acabado</label>
+                <select id="filtroAcabadoModal" class="filtro-select-mobile" onchange="window.actualizarOpcionesFiltrosMobile()">
+                    <option value="">Todos</option>
+                    ${acabadosOptions}
+                </select>
+            </div>
+            
+            <!-- Campo: Material -->
+            <div class="filtro-group">
+                <label><i class="fas fa-cube"></i> Material</label>
+                <select id="filtroMaterialModal" class="filtro-select-mobile" onchange="window.actualizarOpcionesFiltrosMobile()">
+                    <option value="">Todos</option>
+                    ${materialesOptions}
+                </select>
+            </div>
+            
+            <!-- ✅ CHIPS DE FILTROS ACTIVOS (MÓVIL) -->
+            <div id="filtrosActivosChipsMobile" class="filtros-chips-mobile" style="display:none;"></div>
+            
+            <!-- ✅ MENSAJE DE SIN RESULTADOS (MÓVIL) -->
+            <div id="sinResultadosFiltrosMobile" class="sin-resultados-filtros-mobile" style="display:none;">
+                <div class="sin-resultados-icono">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="sin-resultados-texto">
+                    <p><strong>No hay productos que coincidan con estos filtros</strong></p>
+                    <p>Intenta con otras combinaciones o <a href="#" onclick="window.limpiarFiltrosMobile(); return false;">limpia los filtros</a></p>
+                </div>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="filtros-modal-footer">
+                <button class="btn-filter-mobile" onclick="window.aplicarFiltrosMobile()">
+                    <i class="fas fa-search"></i> Aplicar
+                </button>
+                <button class="btn-clear-mobile" onclick="window.limpiarFiltrosMobile()">
+                    <i class="fas fa-undo"></i> Limpiar
+                </button>
+            </div>
         </div>
     </div>
     
@@ -10136,13 +12751,26 @@ function renderizarPaginaOutlet(productos) {
         </button>
     </div>
     
-    <!-- BARRA DE AYUDA -->
+    <!-- ============================================ -->
+    <!-- BARRA DE AYUDA - CON FAQ -->
+    <!-- ============================================ -->
     <div class="help-bar" id="helpBar">
-        <button class="help-bar-btn" onclick="window.abrirWhatsAppAsesor()">
-            <i class="fas fa-headset"></i>
-            <span>¿Necesitas ayuda? <strong>Chatea con un asesor</strong></span>
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <div class="help-bar-contenido">
+            <div class="help-bar-texto">
+                <i class="fas fa-headset"></i>
+                <span>¿Necesitas ayuda?</span>
+            </div>
+            <div class="help-bar-botones">
+                <button class="help-bar-btn whatsapp" onclick="window.abrirWhatsAppAsesor()">
+                    <i class="fab fa-whatsapp"></i> 
+                    <span>Asesor</span>
+                </button>
+                <button class="help-bar-btn faq" onclick="window.abrirModalFAQ()">
+                    <i class="fas fa-question-circle"></i> 
+                    <span>FAQ</span>
+                </button>
+            </div>
+        </div>
     </div>
     
     <!-- BANNER PRODUCTOS PRÓXIMAMENTE -->
@@ -10165,7 +12793,88 @@ function renderizarPaginaOutlet(productos) {
             <div class="modal-custom-footer" id="modalFooter"><button id="modalBtnConfirm" class="btn-modal-primary">Aceptar</button></div>
         </div>
     </div>
-    
+  
+    <!-- ============================================ -->
+    <!-- MODAL DE PREGUNTAS FRECUENTES -->
+    <!-- ============================================ -->
+    <div id="modalFAQ" class="modal-faq" style="display:none;">
+        <div class="modal-faq-contenido">
+            <div class="modal-faq-header">
+                <h3><i class="fas fa-question-circle"></i> Preguntas frecuentes</h3>
+                <button class="modal-faq-close" onclick="window.cerrarModalFAQ()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-faq-body">
+                <!-- Pregunta 1 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Qué productos encuentro en el Outlet?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        En el Outlet encontrarás productos seleccionados con precios especiales, incluyendo mármoles, granitos y otros acabados de alta calidad.
+                    </div>
+                </div>
+                
+                <!-- Pregunta 2 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Los precios del Outlet son fijos?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        Sí, los precios del Outlet son especiales y no acumulan otros descuentos. Los precios están sujetos a disponibilidad de stock.
+                    </div>
+                </div>
+                
+                <!-- Pregunta 3 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Puedo cotizar productos que no están en el Outlet?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        Sí, puedes contactar a un asesor para solicitar cotizaciones personalizadas de productos que no están en el Outlet. Usa el botón "Chatea con un asesor" para más información.
+                    </div>
+                </div>
+                
+                <!-- Pregunta 4 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Cómo sé si un producto tiene stock?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        Los productos en el Outlet tienen stock limitado. Puedes consultar la disponibilidad directamente con un asesor a través del chat de WhatsApp.
+                    </div>
+                </div>
+                
+                <!-- Pregunta 5 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Con qué frecuencia se actualiza el Outlet?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        Actualizamos el Outlet periódicamente con nuevos productos. Te recomendamos visitar la página regularmente para no perderte las novedades.
+                    </div>
+                </div>
+                
+                <!-- Pregunta 6 -->
+                <div class="faq-item">
+                    <div class="faq-pregunta" onclick="window.toggleFAQ(this)">
+                        <span>¿Puedo contactar a un asesor para más información?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-respuesta">
+                        Sí, puedes contactar a un asesor usando el botón "Chatea con un asesor" en la barra inferior.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
     <div id="modalCotizacion" class="modal-cotizacion">
         <div class="modal-cotizacion-contenido">
             <div class="modal-cotizacion-header">
@@ -10231,15 +12940,63 @@ function renderizarPaginaOutlet(productos) {
                 </div>
                 <div class="search-hint"><i class="fas fa-info-circle"></i><span>Busca por nombre, código o escanea QR</span></div>
             </div>
-            <div id="filtrosActivosChips" class="filtros-chips" style="display:none;"></div>
+            <!-- ============================================ -->
+            <!-- FILTROS DESKTOP MEJORADOS -->
+            <!-- ============================================ -->
             <div class="filters-desktop-container">
+                <div class="filtros-header">
+                    <div class="filtros-titulo">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Filtrar productos</span>
+                    </div>
+                    <div class="filtros-contador">
+                        <span id="contadorProductosFiltrados">${productosDataParaHTML.length}</span> productos encontrados
+                    </div>
+                </div>
+                
                 <div class="filtros-grid-enhanced">
-                    <div class="filtro-group"><label>Familia</label><select id="filtroFamilia"><option value="">Todas</option>${familiasOptions}</select></div>
-                    <div class="filtro-group"><label>Acabado</label><select id="filtroAcabado"><option value="">Todos</option>${acabadosOptions}</select></div>
-                    <div class="filtro-group"><label>Material</label><select id="filtroMaterial"><option value="">Todos</option>${materialesOptions}</select></div>
+                    <div class="filtro-group">
+                        <label><i class="fas fa-tag"></i> Familia</label>
+                        <select id="filtroFamilia" class="filtro-select" onchange="window.actualizarOpcionesFiltros()">
+                            <option value="">Todas (${productosDataParaHTML.length})</option>
+                            ${familiasOptions}
+                        </select>
+                    </div>
+                    <div class="filtro-group">
+                        <label><i class="fas fa-paint-brush"></i> Acabado</label>
+                        <select id="filtroAcabado" class="filtro-select" onchange="window.actualizarOpcionesFiltros()">
+                            <option value="">Todos (${productosDataParaHTML.length})</option>
+                            ${acabadosOptions}
+                        </select>
+                    </div>
+                    <div class="filtro-group">
+                        <label><i class="fas fa-cube"></i> Material</label>
+                        <select id="filtroMaterial" class="filtro-select" onchange="window.actualizarOpcionesFiltros()">
+                            <option value="">Todos (${productosDataParaHTML.length})</option>
+                            ${materialesOptions}
+                        </select>
+                    </div>
                     <div class="filtros-actions">
-                        <button onclick="window.aplicarFiltrosOutlet()" class="btn-filter">Aplicar</button>
-                        <button onclick="window.limpiarFiltrosOutlet()" class="btn-clear">Limpiar</button>
+                        <button onclick="window.aplicarFiltrosOutlet()" class="btn-filter">
+                            <i class="fas fa-search"></i> Aplicar
+                        </button>
+                        <button onclick="window.limpiarFiltrosOutlet()" class="btn-clear">
+                            <i class="fas fa-undo"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Chips de filtros activos -->
+                <div id="filtrosActivosChipsDesktop" class="filtros-chips-desktop" style="display:none;"></div>
+                
+                <!-- Mensaje de sin resultados -->
+                <div id="sinResultadosFiltros" class="sin-resultados-filtros" style="display:none;">
+                    <div class="sin-resultados-icono">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="sin-resultados-texto">
+                        <p><strong>No hay productos que coincidan con estos filtros</strong></p>
+                        <p>Intenta con otras combinaciones o <a href="#" onclick="window.limpiarFiltrosOutlet(); return false;">limpia los filtros</a></p>
                     </div>
                 </div>
             </div>
@@ -10258,7 +13015,7 @@ function renderizarPaginaOutlet(productos) {
     <!-- FOOTER -->
     <footer>
         <div class="footer-grid">
-            <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad.</p></div>
+            <div class="footer-logo"><img src="FOTO/foto_01.webp" alt="Gallos Mármol"><p>Desde 1870, transformamos espacios con mármol de alta calidad, combinando belleza, exclusividad y excelencia en cada proyecto.</p></div>
             <div class="footer-social"><h4>Redes Sociales</h4><a href="https://www.facebook.com/gallosmarmol/"><i class="fab fa-facebook-f"></i> Facebook</a><a href="https://www.instagram.com/gallosmarmol/"><i class="fab fa-instagram"></i> Instagram</a><a href="https://www.tiktok.com/@gallos.marmol.ofic"><i class="fab fa-tiktok"></i> TikTok</a></div>
             <div class="footer-links"><h4>Contacto</h4><a href="https://gallosmarmol.com.pe"><i class="fas fa-globe"></i> gallosmarmol.com.pe</a><a href="mailto:info@gallosmarmol.com.pe"><i class="fas fa-envelope"></i> info@gallosmarmol.com.pe</a></div>
         </div>
@@ -10940,17 +13697,7 @@ function renderizarPaginaSaldosExportacion(productos) {
             console.log('✅ Botón "Limpiar todo" configurado');
         }
     }, 200);
-    
-    // ============================================
-    // 11. CONFIGURAR CHIPS DE FILTROS ACTIVOS
-    // ============================================
-    setTimeout(() => {
-        if (typeof actualizarChipsFiltrosActivos === 'function') {
-            actualizarChipsFiltrosActivos();
-            console.log('✅ Chips de filtros actualizados');
-        }
-    }, 300);
-    
+       
     // ============================================
     // 12. EVENTO RESIZE PARA AJUSTAR FAB
     // ============================================
@@ -11077,6 +13824,84 @@ window.cerrarModalConfirmacion = cerrarModalConfirmacion;
 window.irACotizacion = irACotizacion;
 window.seguirAgregando = seguirAgregando;
 window.toggleSeleccionCotizacion = toggleSeleccionCotizacion;
+
+// ============================================
+// FUNCIONES PARA PREGUNTAS FRECUENTES
+// ============================================
+
+// Abrir modal de preguntas frecuentes
+window.abrirModalFAQ = function() {
+    console.log('📋 Abriendo modal de preguntas frecuentes');
+    
+    const modal = document.getElementById('modalFAQ');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Forzar reflow para animación
+        void modal.offsetWidth;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.error('❌ Modal FAQ no encontrado');
+    }
+};
+
+// Cerrar modal de preguntas frecuentes
+window.cerrarModalFAQ = function() {
+    console.log('🔒 Cerrando modal de preguntas frecuentes');
+    
+    const modal = document.getElementById('modalFAQ');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 300);
+    }
+};
+
+// Toggle de pregunta/respuesta en FAQ
+window.toggleFAQ = function(elemento) {
+    const item = elemento.closest('.faq-item');
+    if (!item) return;
+    
+    const respuesta = item.querySelector('.faq-respuesta');
+    const icono = elemento.querySelector('.fa-chevron-down');
+    
+    // Cerrar otros items abiertos (acordeón)
+    document.querySelectorAll('.faq-item.abierto').forEach(el => {
+        if (el !== item) {
+            el.classList.remove('abierto');
+            const resp = el.querySelector('.faq-respuesta');
+            if (resp) resp.style.maxHeight = '0';
+            const ico = el.querySelector('.fa-chevron-down');
+            if (ico) ico.style.transform = 'rotate(0deg)';
+        }
+    });
+    
+    // Toggle el item actual
+    item.classList.toggle('abierto');
+    
+    if (item.classList.contains('abierto')) {
+        respuesta.style.maxHeight = respuesta.scrollHeight + 'px';
+        icono.style.transform = 'rotate(180deg)';
+    } else {
+        respuesta.style.maxHeight = '0';
+        icono.style.transform = 'rotate(0deg)';
+    }
+};
+
+// ============================================
+// CERRAR MODAL FAQ CON ESCAPE
+// ============================================
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modalFAQ = document.getElementById('modalFAQ');
+        if (modalFAQ && modalFAQ.classList.contains('show')) {
+            window.cerrarModalFAQ();
+        }
+    }
+});
 
 // ==================== CARGAR PRODUCTO LANDING ====================
 async function cargarProductoLanding() {
@@ -11577,8 +14402,6 @@ async function mostrarModalOpcionesProducto(producto) {
 
 // Exponer función globalmente
 window.mostrarModalOpcionesProducto = mostrarModalOpcionesProducto;
-
-
 
 // ==================== INICIALIZAR ====================
 (async function() {
