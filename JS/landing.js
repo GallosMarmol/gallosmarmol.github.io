@@ -8057,16 +8057,6 @@ function renderizarPaginaOutlet(productos) {
                             <div class="opcion-texto"><strong>Chatea con un asesor</strong><span>Te ayudaremos a encontrar lo que necesitas</span></div>
                             <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="opcion-contacto" onclick="window.abrirEmailContacto()">
-                            <div class="opcion-icono"><i class="fas fa-envelope"></i></div>
-                            <div class="opcion-texto"><strong>Envíanos un correo</strong><span>Te responderemos en menos de 24 horas</span></div>
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                        <div class="opcion-contacto" onclick="window.verCatalogoCompleto()">
-                            <div class="opcion-icono"><i class="fas fa-th-large"></i></div>
-                            <div class="opcion-texto"><strong>Ver catálogo completo</strong><span>Explora todos nuestros productos disponibles</span></div>
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
                     </div>
                     <button class="btn-cerrar-modal" onclick="window.cerrarModalSinResultados()"><i class="fas fa-times"></i> Cerrar</button>
                 </div>
