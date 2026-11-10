@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · Gallos Mármol</title>
+  <link rel="stylesheet" href="../shared/css/shared.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg-app);
+      padding: 1rem;
+      margin: 0;
+    }
+    .login-card {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-panel);
+      width: 100%;
+      max-width: 420px;
+    }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--brand-primary);
+    }
+    .login-logo span { color: var(--vein-gold); }
+    .login-card h1 {
+      font-size: 1.25rem;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+    .login-card .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.875rem;
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(166, 61, 51, 0.08);
+      border-radius: 4px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+    .loading {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    .loading.visible { display: block; }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-logo">Gallos <span>Mármol</span></div>
+    <h1>Acceso al sistema</h1>
+    <p class="subtitle">Ingresa tus credenciales para continuar</p>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input class="input" type="email" id="email" required placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input class="input" type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" type="submit" id="btn-login" style="width:100%; margin-top: 1rem;">
+        Ingresar
+      </button>
+      <div id="error-msg" class="error-msg"></div>
+      <div id="loading" class="loading">Verificando credenciales...</div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { Auth } from '../shared/js/auth.js';
+
+    const form = document.getElementById('login-form');
+    const errorMsg = document.getElementById('error-msg');
+    const loading = document.getElementById('loading');
+    const btnLogin = document.getElementById('btn-login');
+
+    // Si ya hay sesión activa, redirigir
+    (async () => {
+      const usuario = await Auth.getUsuarioActual();
+      if (usuario) {
+        window.location.href = Auth.getDashboardUrl(usuario.perfil.rol);
+      }
+    })();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('visible');
+      loading.classList.add('visible');
+      btnLogin.disabled = true;
+      btnLogin.textContent = 'Ingresando...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        await Auth.login(email, password);
+        const usuario = await Auth.getUsuarioActual();
+
+        if (!usuario) {
+          errorMsg.textContent = 'Tu cuenta no está configurada en el sistema. Contacta al administrador.';
+          errorMsg.classList.add('visible');
+          await Auth.logout();
+          return;
+        }
+
+        if (usuario.perfil.rol === 'cliente') {
+          window.location.href = '/familia/index.html';
+          return;
+        }
+
+        window.location.href = Auth.getDashboardUrl(usuario.perfil.rol);
+
+      } catch (error) {
+        console.error('Error en login:', error);
+        if (error.message?.includes('Invalid login')) {
+          errorMsg.textContent = 'Correo o contraseña incorrectos.';
+        } else if (error.message?.includes('Email not confirmed')) {
+          errorMsg.textContent = 'Debes confirmar tu correo antes de ingresar.';
+        } else {
+          errorMsg.textContent = error.message || 'Error al iniciar sesión.';
+        }
+        errorMsg.classList.add('visible');
+      } finally {
+        loading.classList.remove('visible');
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Ingresar';
+      }
+    });
+  </script>
+</body>
+</html>
