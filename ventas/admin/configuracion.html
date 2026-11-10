@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Configuración · Admin · Gallos Mármol</title>
+  <meta name="description" content="Configuración del sistema">
+  <link rel="stylesheet" href="/shared/css/shared.css">
+  <link rel="stylesheet" href="/ventas/assets/css/ventas.css">
+</head>
+<body data-rol="admin">
+
+  <div class="ventas-layout">
+    <aside class="v-sidebar" id="v-sidebar"></aside>
+    <div class="v-main">
+      <header class="v-topbar">
+        <div class="v-topbar-left">
+          <div class="v-crumb" id="v-crumb">Administración / Configuración</div>
+          <h1 class="v-title" id="v-title">Configuración</h1>
+        </div>
+        <div class="v-topbar-right" id="v-topbar-right"></div>
+      </header>
+      <div class="v-content" id="v-content">
+        <div class="v-empty">
+          <div class="v-empty-icon">⋯</div>
+          <div class="v-empty-text">Cargando configuración…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    NOTA: Página exclusiva del admin.
+    Por ahora solo tiene el toggle de tracking de visitas.
+    Se pueden añadir más secciones:
+      - Configuración de líneas (catálogo/outlet/saldos)
+      - Configuración de la empresa
+      - Configuración de notificaciones
+      - Backup / exportación
+  -->
+
+  <script src="/shared/js/shared.js"></script>
+  <script type="module" src="/ventas/assets/js/configuracion.js"></script>
+</body>
+</html>
