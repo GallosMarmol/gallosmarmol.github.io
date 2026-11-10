@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title id="page-title">Producto · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" id="page-description" content="Detalle del producto · Gallos Mármol">
+<meta property="og:title" id="og-title" content="Producto · Gallos Mármol">
+<meta property="og:description" id="og-description" content="Detalle del producto · Gallos Mármol">
+<meta property="og:type" content="product">
+<meta property="og:image" id="og-image" content="">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+
+<script type="application/ld+json" id="product-schema">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Producto · Gallos Mármol",
+  "brand": { "@type": "Organization", "name": "Gallos Mármol S.A.C." }
+}
+</script>
+
+<style>
+  /* ============================================================
+     ESTILOS ESPECÍFICOS DE PRODUCTO.HTML
+     ============================================================ */
+
+  /* --- ANIMACIÓN DE ENTRADA --- */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .producto-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+    animation: fadeInUp .4s ease both;
+  }
+
+  /* --- LAYOUT PRINCIPAL --- */
+  .producto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .producto-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  /* --- INDICADOR DE ORIGEN --- */
+  .producto-origen-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(107, 0, 0, .08);
+    border: 1px solid rgba(107, 0, 0, .25);
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--p-primary, #6b0000);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+
+  /* --- IMAGEN PRINCIPAL --- */
+  .producto-imagen {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: zoom-in;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #6b0000;
+  }
+
+  .producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .producto-imagen-swatch {
+    width: 100%;
+    height: 100%;
+  }
+
+  .producto-imagen-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  /* --- INFO DEL PRODUCTO (STICKY en desktop) --- */
+  .producto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (min-width: 901px) {
+    .producto-info {
+      position: sticky;
+      top: calc(var(--pub-header-height, 68px) + 24px);
+      align-self: start;
+      max-height: calc(100vh - var(--pub-header-height, 68px) - 48px);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .producto-info::-webkit-scrollbar { width: 6px; }
+    .producto-info::-webkit-scrollbar-thumb {
+      background: var(--p-primary-15, rgba(107,0,0,.15));
+      border-radius: 3px;
+    }
+  }
+
+  .producto-familia {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--vein-gold-dark, #8f6f3e);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .producto-titulo {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3.5vw, 34px);
+    line-height: 1.15;
+    font-weight: 600;
+    color: var(--p-primary, #6b0000);
+    margin: 0;
+  }
+
+  .producto-sku {
+    font-size: 13px;
+    color: var(--text-muted, #584038);
+    font-family: monospace;
+  }
+
+  /* --- MEDIDAS con tooltip --- */
+  .producto-medidas {
+    list-style: none;
+    padding: 14px 16px;
+    margin: 0;
+    background: var(--marble-050, #faf8f4);
+    border: 1px solid var(--border-soft, #d4cdbc);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .producto-medidas li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+
+  .producto-medidas li[title] {
+    cursor: help;
+  }
+
+  .producto-medidas li[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: var(--p-primary, #6b0000);
+    color: var(--p-secondary, #e8e4d2);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    animation: fadeInUp .15s ease both;
+  }
+
+  .producto-medidas .k {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-muted, #584038);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .producto-medidas .v {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main, #1a1210);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- PRECIO --- */
+  .producto-precio {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+    border-top: 1px solid var(--border-soft, #d4cdbc);
+    border-bottom: 1px solid var(--border-soft, #d4cdbc);
+  }
+
+  .producto-precio .price-old {
+    font-size: 16px;
+    color: var(--stone-500, #8c8478);
+    text-decoration: line-through;
+  }
+
+  .producto-precio .price {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--p-primary, #6b0000);
+    line-height: 1;
+  }
+
+  .producto-precio .price-discount {
+    display: inline-block;
+    padding: 3px 8px;
+    background: rgba(77, 124, 83, 0.15);
+    color: var(--success, #4d7c53);
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 4px;
+  }
+
+  .producto-precio .unit {
+    font-size: 14px;
+    color: var(--text-muted, #584038);
+  }
+
+  .producto-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* --- ACCIONES --- */
+  .producto-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .producto-acciones .btn {
+    flex: 1 1 auto;
+    min-width: 140px;
+  }
+
+  .producto-acciones .btn-cotizar {
+    background: #6b0000;
+    color: #fff;
+    border-color: #6b0000;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .producto-acciones .btn-cotizar[aria-disabled="true"] {
+    opacity: .4;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  .producto-acciones .btn-favorito,
+  .producto-acciones .btn-compartir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    background: #fff;
+    border: 1px solid var(--border-soft, #d4cdbc);
+    color: var(--text-main, #1a1210);
+    border-radius: var(--radius-md, 4px);
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: inherit;
+  }
+
+  .producto-acciones .btn-favorito:hover,
+  .producto-acciones .btn-compartir:hover {
+    border-color: var(--p-primary, #6b0000);
+    color: var(--p-primary, #6b0000);
+  }
+
+  .producto-acciones .btn-favorito.active {
+    background: var(--p-primary, #6b0000);
+    color: #fff;
+    border-color: var(--p-primary, #6b0000);
+  }
+
+  /* --- GALERÍAS --- */
+  .galeria-container {
+    margin-top: 32px;
+  }
+
+  .galeria-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .galeria-head svg {
+    flex-shrink: 0;
+    color: var(--p-primary, #6b0000);
+  }
+
+  .galeria-titulo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--p-primary, #6b0000);
+    margin: 0;
+  }
+
+  .galeria-subtitulo {
+    font-size: 13px;
+    color: var(--text-muted, #584038);
+    margin: 4px 0 14px;
+  }
+
+  /* Grid + scroll horizontal en móvil */
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .galeria-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+      gap: 10px;
+      scrollbar-width: thin;
+    }
+    .galeria-grid::-webkit-scrollbar { height: 6px; }
+    .galeria-grid::-webkit-scrollbar-thumb {
+      background: var(--p-primary-15, rgba(107,0,0,.15));
+      border-radius: 3px;
+    }
+    .galeria-item {
+      min-width: 200px;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+  }
+
+  .galeria-item {
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--border-soft, #d4cdbc);
+    transition: transform .15s ease, border-color .15s ease;
+    background: var(--p-secondary, #e8e4d2);
+    position: relative;
+  }
+
+  .galeria-item:hover,
+  .galeria-item:focus-visible {
+    transform: scale(1.03);
+    border-color: var(--p-primary, #6b0000);
+    outline: none;
+  }
+
+  .galeria-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .galeria-item.ver-mas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--p-primary, #6b0000);
+    color: var(--p-secondary, #e8e4d2);
+    font-size: 20px;
+    font-weight: 700;
+    border-color: var(--p-primary, #6b0000);
+  }
+
+  /* --- SECCIONES INFORMATIVAS --- */
+  .info-seccion {
+    margin-top: 20px;
+    background: #fff;
+    border: 1px solid var(--border-soft, #d4cdbc);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .info-seccion-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .info-seccion-head svg {
+    flex-shrink: 0;
+    color: var(--p-primary, #6b0000);
+  }
+
+  .info-seccion h3 {
+    font-size: 17px;
+    margin: 0;
+    color: var(--p-primary, #6b0000);
+  }
+
+  .info-seccion p {
+    color: var(--text-muted, #584038);
+    font-size: 13.5px;
+    line-height: 1.7;
+    margin: 0 0 10px;
+  }
+
+  /* --- TABLA DE ESPECIFICACIONES --- */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+
+  .spec-table tr {
+    border-bottom: 1px solid var(--border-soft, #d4cdbc);
+  }
+
+  .spec-table tr:last-child { border-bottom: none; }
+
+  .spec-table th,
+  .spec-table td {
+    text-align: left;
+    padding: 8px 4px;
+    vertical-align: top;
+  }
+
+  .spec-table th {
+    width: 40%;
+    color: var(--text-muted, #584038);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .spec-table td {
+    color: var(--text-main, #1a1210);
+    font-weight: 500;
+  }
+
+  .info-seccion ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    font-size: 13px;
+  }
+
+  .info-seccion ul li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .info-seccion ul li .dot {
+    color: var(--p-primary, #6b0000);
+    font-size: 12px;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .info-seccion ul {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .variabilidad-natural {
+    background: #faf8f4;
+    border-left: 4px solid var(--p-primary, #6b0000);
+    margin-top: 20px;
+    padding: 18px 22px;
+    border-radius: 6px;
+  }
+
+  .variabilidad-natural h4 {
+    font-size: 15px;
+    margin: 0 0 8px;
+    color: var(--p-primary, #6b0000);
+  }
+
+  .variabilidad-natural .destacado {
+    font-style: italic;
+    background: rgba(107,0,0,0.05);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+
+  .caracteristicas-comerciales {
+    margin-top: 20px;
+    background: #f5f0ea;
+    border: 1px solid #e4ddd0;
+    padding: 18px 22px;
+    border-radius: 6px;
+  }
+
+  .caracteristicas-comerciales h4 {
+    font-size: 15px;
+    margin: 0 0 8px;
+    color: var(--p-primary, #6b0000);
+  }
+
+  .caracteristicas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .caracteristicas-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .caracteristicas-grid .item {
+    background: #fff;
+    padding: 12px 14px;
+    border-left: 3px solid var(--p-primary, #6b0000);
+    border-radius: 4px;
+  }
+
+  .caracteristicas-grid .item h6 {
+    font-size: 12.5px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--text-main, #1a1210);
+  }
+
+  .caracteristicas-grid .item p {
+    font-size: 11.5px;
+    color: var(--text-muted, #584038);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* --- SKELETON --- */
+  .skeleton-producto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    animation: fadeInUp .3s ease;
+  }
+
+  @media (max-width: 900px) {
+    .skeleton-producto {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  .skeleton-bloque {
+    background: linear-gradient(90deg, var(--p-secondary, #e8e4d2) 25%, #f4f1ea 50%, var(--p-secondary, #e8e4d2) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .skeleton-img {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+
+  .skeleton-linea {
+    height: 16px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+
+  .skeleton-linea.corta { width: 40%; }
+  .skeleton-linea.media { width: 70%; }
+  .skeleton-linea.larga { width: 90%; }
+  .skeleton-linea.precio { height: 36px; width: 55%; margin: 20px 0; }
+
+  /* --- MODAL DE IMÁGENES --- */
+  .modal-imagenes {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+
+  .modal-imagenes.open {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-img-wrapper {
+    width: 90vw;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .modal-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform .1s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+    position: relative;
+  }
+
+  .modal-top-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .modal-contador {
+    color: rgba(255,255,255,.85);
+    font-size: 13px;
+    background: rgba(0,0,0,.5);
+    padding: 6px 14px;
+    border-radius: 20px;
+    pointer-events: auto;
+  }
+
+  .modal-tools {
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+  }
+
+  .modal-tools button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 50%;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-tools button:hover {
+    background: rgba(255,255,255,.2);
+    transform: scale(1.1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease;
+  }
+
+  .modal-close:hover {
+    background: rgba(255,255,255,.2);
+    transform: scale(1.1);
+  }
+
+  .modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all .2s ease;
+  }
+
+  .modal-nav:hover {
+    background: rgba(255,255,255,.2);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .modal-prev { left: 20px; }
+  .modal-next { right: 20px; }
+
+  /* --- BOTÓN VOLVER ARRIBA --- */
+  #btn-top.saldos-btn-top {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--p-primary, #6b0000);
+    color: var(--p-secondary, #e8e4d2);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(107, 0, 0, .3);
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+  }
+
+  #btn-top.saldos-btn-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  #btn-top.saldos-btn-top:hover {
+    transform: scale(1.08);
+  }
+
+  @media (max-width: 640px) {
+    .modal-img-wrapper { width: 95vw; height: 70vh; }
+    .modal-nav { width: 36px; height: 36px; font-size: 18px; }
+    .modal-prev { left: 8px; }
+    .modal-next { right: 8px; }
+    .modal-tools button { width: 34px; height: 34px; font-size: 14px; }
+    .modal-close { top: 12px; right: 12px; width: 36px; height: 36px; font-size: 18px; }
+    .modal-top-controls { top: 12px; left: 12px; right: 12px; flex-wrap: wrap; gap: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .producto-page,
+    .skeleton-producto,
+    .producto-medidas li[title]:hover::after {
+      animation: none;
+    }
+  }
+</style>
+</head>
+<body class="page-saldos page-producto">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<main>
+  <div class="producto-page">
+    <div id="producto-contenido">
+      <!-- Se llena dinámicamente -->
+    </div>
+  </div>
+</main>
+
+<!-- ============================================================ -->
+<!-- MODAL DE IMÁGENES -->
+<!-- ============================================================ -->
+<div id="modal-imagenes" class="modal-imagenes" role="dialog" aria-modal="true" aria-label="Visor de imágenes" tabindex="-1">
+  <div class="modal-content">
+    <button class="modal-close" id="modal-close" aria-label="Cerrar visor">✕</button>
+
+    <div class="modal-top-controls">
+      <span id="modal-contador" class="modal-contador" aria-live="polite">1 / 1</span>
+      <div class="modal-tools">
+        <button type="button" id="modal-zoom-out" aria-label="Alejar imagen" title="Alejar">−</button>
+        <button type="button" id="modal-zoom-in" aria-label="Acercar imagen" title="Acercar">+</button>
+        <button type="button" id="modal-rotate" aria-label="Rotar imagen 90 grados" title="Rotar 90°">↻</button>
+        <button type="button" id="modal-fullscreen" aria-label="Pantalla completa" title="Pantalla completa">⛶</button>
+      </div>
+    </div>
+
+    <div class="modal-img-wrapper">
+      <img id="modal-img" class="modal-img" src="" alt="Imagen del producto">
+    </div>
+
+    <button id="modal-prev" class="modal-nav modal-prev" aria-label="Imagen anterior">◀</button>
+    <button id="modal-next" class="modal-nav modal-next" aria-label="Imagen siguiente">▶</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+
+<script type="module">
+  // ============================================================
+  // IMPORTACIONES
+  // ============================================================
+  import { CatalogoAPI } from '../shared/js/supabase-client.js';
+  import {
+    escapeHtml,
+    escapeAttr,
+    esFavorito,
+    guardarFavorito,
+    convertirUrlGoogleDrive
+  } from './assets/js/public.js';
+
+  // ============================================================
+  // ORIGEN Y PARAMS
+  // ============================================================
+  const params = new URLSearchParams(location.search);
+  const origenActual = params.get('origen') || 'catalogo';
+  const skuParam = params.get('sku');
+
+  const ORIGEN_LABELS = {
+    'catalogo': 'Catálogo',
+    'outlet': 'Outlet',
+    'saldos': 'Saldos de exportación'
+  };
+
+  // ============================================================
+  // INICIALIZAR SHELL
+  // ============================================================
+  pubHeader('catalogo');
+
+  // ============================================================
+  // REFERENCIAS DOM
+  // ============================================================
+  const $contenido = document.getElementById('producto-contenido');
+  const $btnTop = document.getElementById('btn-top');
+
+  // ============================================================
+  // ESTADO MODAL
+  // ============================================================
+  let modalImagenes = [];
+  let modalIndex = 0;
+  let modalZoom = 1;
+  let modalRotation = 0;
+
+  // ============================================================
+  // ICONOS SVG
+  // ============================================================
+  const ICONOS = {
+    fotos: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+    casa: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    patron: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`,
+    rango: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/></svg>`,
+    spec: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+    carrito: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>`,
+    alerta: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    herramienta: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`
+  };
+
+  // ============================================================
+  // FORMATO DE MEDIDAS CON CONVERSIÓN
+  // ============================================================
+  function formatMedida(valor, unidad, factorCm) {
+    if (valor == null) return null;
+    const u = unidad || 'cm';
+    const esPulgada = u === '"' || u === 'in' || u === 'pulg';
+    const texto = esPulgada ? `${valor}"` : `${valor} ${u}`;
+
+    // Tooltip con equivalencia en cm (solo si no es cm)
+    let tooltip = null;
+    if (!esPulgada && u !== 'cm') {
+      const cm = valor * (Number(factorCm) || 1);
+      tooltip = `${Math.round(cm * 100) / 100} cm`;
+    } else if (esPulgada) {
+      const cm = valor * 2.54;
+      tooltip = `${Math.round(cm * 100) / 100} cm`;
+    }
+
+    return { texto, tooltip };
+  }
+
+  // ============================================================
+  // BOTÓN VOLVER ARRIBA
+  // ============================================================
+  $btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  window.addEventListener('scroll', () => $btnTop.classList.toggle('visible', window.scrollY > 400));
+
+  // ============================================================
+  // MODAL DE IMÁGENES
+  // ============================================================
+  const $modal = document.getElementById('modal-imagenes');
+  const $modalImg = document.getElementById('modal-img');
+  const $modalContador = document.getElementById('modal-contador');
+  const $modalPrev = document.getElementById('modal-prev');
+  const $modalNext = document.getElementById('modal-next');
+
+  function abrirModal(url, todasLasFotos, index = 0) {
+    modalImagenes = (todasLasFotos || [url]).map(f => convertirUrlGoogleDrive(f) || f);
+    modalIndex = index;
+    modalZoom = 1;
+    modalRotation = 0;
+    actualizarModalImg();
+    $modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    $modal.focus();
+  }
+
+  function actualizarModalImg() {
+    const url = modalImagenes[modalIndex] || '';
+    $modalImg.src = url;
+    $modalImg.alt = `Imagen ${modalIndex + 1} de ${modalImagenes.length}`;
+    $modalImg.style.transform = `scale(${modalZoom}) rotate(${modalRotation}deg)`;
+    $modalContador.textContent = `${modalIndex + 1} / ${modalImagenes.length}`;
+    $modalPrev.style.display = modalImagenes.length > 1 ? 'flex' : 'none';
+    $modalNext.style.display = modalImagenes.length > 1 ? 'flex' : 'none';
+  }
+
+  function cerrarModal() {
+    $modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function navegarModal(dir) {
+    const nuevoIdx = modalIndex + dir;
+    if (nuevoIdx < 0 || nuevoIdx >= modalImagenes.length) return;
+    modalIndex = nuevoIdx;
+    modalZoom = 1;
+    modalRotation = 0;
+    actualizarModalImg();
+  }
+
+  function cambiarZoom(dir) {
+    modalZoom = Math.min(Math.max(modalZoom + dir * 0.25, 0.5), 3);
+    actualizarModalImg();
+  }
+
+  function rotarImagen() {
+    modalRotation = (modalRotation + 90) % 360;
+    actualizarModalImg();
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen?.();
+    }
+  }
+
+  document.getElementById('modal-close').addEventListener('click', cerrarModal);
+  $modalPrev.addEventListener('click', () => navegarModal(-1));
+  $modalNext.addEventListener('click', () => navegarModal(1));
+  document.getElementById('modal-zoom-in').addEventListener('click', () => cambiarZoom(1));
+  document.getElementById('modal-zoom-out').addEventListener('click', () => cambiarZoom(-1));
+  document.getElementById('modal-rotate').addEventListener('click', rotarImagen);
+  document.getElementById('modal-fullscreen').addEventListener('click', toggleFullscreen);
+  $modal.addEventListener('click', (e) => {
+    if (e.target === $modal) cerrarModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!$modal.classList.contains('open')) return;
+    if (e.key === 'Escape') cerrarModal();
+    if (e.key === 'ArrowLeft') navegarModal(-1);
+    if (e.key === 'ArrowRight') navegarModal(1);
+  });
+
+  // ============================================================
+  // RENDERIZAR GALERÍA
+  // ============================================================
+  function renderGaleria(containerId, fotos, titulo, iconoKey, subtitulo = '') {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    const fotosConvertidas = (fotos || [])
+      .map(f => convertirUrlGoogleDrive(f) || f)
+      .filter(Boolean);
+
+    if (fotosConvertidas.length === 0) {
+      el.innerHTML = '';
+      return;
+    }
+
+    const totalFotos = fotosConvertidas.length;
+    const mostrarVerMas = totalFotos > 2;
+    const fotosMostrar = mostrarVerMas ? fotosConvertidas.slice(0, 2) : fotosConvertidas;
+    const fotosJson = escapeAttr(JSON.stringify(fotosConvertidas));
+
+    el.innerHTML = `
+      <div class="galeria-container">
+        <div class="galeria-head">
+          ${ICONOS[iconoKey] || ''}
+          <h3 class="galeria-titulo">${escapeHtml(titulo)}</h3>
+        </div>
+        ${subtitulo ? `<p class="galeria-subtitulo">${escapeHtml(subtitulo)}</p>` : ''}
+        <div class="galeria-grid" role="list">
+          ${fotosMostrar.map((url, idx) => `
+            <div class="galeria-item"
+                 role="listitem"
+                 tabindex="0"
+                 data-fotos='${fotosJson}'
+                 data-index="${idx}"
+                 aria-label="${escapeAttr(titulo)} - Foto ${idx + 1} de ${totalFotos}">
+              <img src="${escapeAttr(url)}" alt="${escapeAttr(titulo)} - Foto ${idx + 1}" loading="lazy" decoding="async">
+            </div>
+          `).join('')}
+          ${mostrarVerMas ? `
+            <div class="galeria-item ver-mas"
+                 role="listitem"
+                 tabindex="0"
+                 data-fotos='${fotosJson}'
+                 data-index="0"
+                 aria-label="Ver todas las fotos (${totalFotos})">
+              +${totalFotos - 2}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
+    const items = el.querySelectorAll('.galeria-item');
+    items.forEach(item => {
+      // Click
+      item.addEventListener('click', () => {
+        try {
+          const fotos = JSON.parse(item.dataset.fotos.replace(/&#39;/g, "'").replace(/&quot;/g, '"'));
+          const idx = parseInt(item.dataset.index) || 0;
+          abrirModal(fotos[idx], fotos, idx);
+        } catch (err) {
+          console.error('Error abriendo modal:', err);
+        }
+      });
+
+      // Teclado: Enter o Space
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  // SWIPE EN GALERÍA (móvil)
+  // ============================================================
+  function enableSwipeGaleria(containerSelector) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    let touchStartX = 0;
+    container.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(dx) < 60) return;
+      const item = e.target.closest('.galeria-item');
+      if (!item) return;
+
+      const items = Array.from(container.querySelectorAll('.galeria-item'));
+      const idx = items.indexOf(item);
+      let targetIdx = null;
+
+      if (dx < 0 && idx < items.length - 1) targetIdx = idx + 1;      // swipe izq → sig
+      else if (dx > 0 && idx > 0) targetIdx = idx - 1;                 // swipe der → ant
+
+      if (targetIdx !== null) {
+        items[targetIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }, { passive: true });
+  }
+
+  // ============================================================
+  // SKELETON DE CARGA
+  // ============================================================
+  function renderSkeleton() {
+    $contenido.innerHTML = `
+      <div class="skeleton-producto">
+        <div>
+          <div class="skeleton-bloque skeleton-img"></div>
+        </div>
+        <div>
+          <div class="skeleton-bloque skeleton-linea corta"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:28px;margin-bottom:16px;"></div>
+          <div class="skeleton-bloque skeleton-linea media" style="margin-bottom:24px;"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:56px;margin-bottom:20px;"></div>
+          <div class="skeleton-bloque skeleton-linea precio"></div>
+          <div class="skeleton-bloque skeleton-linea media"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:48px;margin-top:24px;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // RENDERIZAR PRODUCTO
+  // ============================================================
+  function renderizarProducto(p) {
+    const isActive = p.activo !== false;
+
+    // --- Precios ---
+    const precioBase   = p.precio_base   != null ? Number(p.precio_base)   : null;
+    const precioOferta = p.precio_oferta != null ? Number(p.precio_oferta) : null;
+    const precioFinal  = p.precio        != null ? Number(p.precio)        : null;
+    const hayOferta = precioOferta != null && precioBase != null && precioOferta < precioBase;
+    const descuentoPorcentaje = hayOferta ? Math.round(((precioBase - precioOferta) / precioBase) * 100) : 0;
+    const precioTachado = hayOferta && precioBase != null ? precioBase : null;
+
+    const priceOld = precioTachado
+      ? `<span class="price-old">${GM.soles(precioTachado)}</span>`
+      : '';
+    const descuentoHtml = hayOferta
+      ? `<span class="price-discount">-${descuentoPorcentaje}%</span>`
+      : '';
+    const precioHtml = (precioFinal != null && precioFinal > 0)
+      ? GM.soles(precioFinal)
+      : 'Consultar precio';
+
+    // --- Imagen principal ---
+    let imagenPrincipal = null;
+    if (p.imagen_url) imagenPrincipal = convertirUrlGoogleDrive(p.imagen_url);
+    else if (p.imagen_alt) imagenPrincipal = convertirUrlGoogleDrive(p.imagen_alt);
+
+    // --- Fotos del modal ---
+    const fotosPrincipales = [];
+    if (p.galeria_fotos && p.galeria_fotos.length > 0) {
+      p.galeria_fotos.forEach(f => {
+        const url = convertirUrlGoogleDrive(f);
+        if (url) fotosPrincipales.push(url);
+      });
+    }
+    if (imagenPrincipal && !fotosPrincipales.includes(imagenPrincipal)) {
+      fotosPrincipales.unshift(imagenPrincipal);
+    }
+    const tieneFotos = fotosPrincipales.length > 0;
+
+    // --- Medidas con tooltips ---
+    const medidas = [
+      { k: 'Largo', ...(formatMedida(p.largo, p.unidad_largo_simbolo, p.unidad_largo_factor_cm) || {}) },
+      { k: 'Ancho', ...(formatMedida(p.ancho, p.unidad_ancho_simbolo, p.unidad_ancho_factor_cm) || {}) },
+      { k: 'Espesor', ...(formatMedida(p.espesor, p.unidad_espesor_simbolo, p.unidad_espesor_factor_cm) || {}) }
+    ].filter(m => m.texto);
+
+    const medidasHtml = medidas.length > 0
+      ? `<ul class="producto-medidas">
+          ${medidas.map(m => `
+            <li ${m.tooltip ? `title="${escapeAttr(m.tooltip)}"` : ''}>
+              <span class="k">${escapeHtml(m.k)}</span>
+              <span class="v">${escapeHtml(m.texto)}</span>
+            </li>
+          `).join('')}
+        </ul>`
+      : '';
+
+    // --- Badges ---
+    let badges = '';
+    if (p.linea === 'outlet') badges += GM.badge('Outlet', 'amber') + ' ';
+    if (p.linea === 'saldos') badges += GM.badge('Saldo de exportación', 'gold') + ' ';
+    if (p.destacado && p.linea === 'catalogo') badges += GM.badge('Destacado', 'gold') + ' ';
+    if (hayOferta) badges += GM.badge('Oferta', 'green') + ' ';
+    if (p.motivo) badges += GM.badge(p.motivo, 'gray') + ' ';
+    if (!isActive) badges += GM.badge('No disponible', 'red');
+
+    // --- Favorito ---
+    const esFav = esFavorito(p.sku, origenActual);
+
+    // --- Origen badge ---
+    const origenLabel = ORIGEN_LABELS[origenActual] || origenActual;
+
+    // --- HTML ---
+    $contenido.innerHTML = `
+      <div class="producto-origen-badge">Estás viendo: ${escapeHtml(origenLabel)}</div>
+
+      <div class="producto-grid">
+
+        <div class="producto-imagen" id="producto-imagen-principal"
+             ${tieneFotos ? 'role="button" tabindex="0" aria-label="Ampliar imagen del producto"' : ''}>
+          ${imagenPrincipal
+            ? `<img src="${escapeAttr(imagenPrincipal)}" alt="${escapeAttr(p.nombre)}" loading="eager" decoding="async">`
+            : `<div class="producto-imagen-swatch" style="${stoneSwatchStyle(p.familia_nombre || 'Mármol', p.sku)}"></div>`
+          }
+          ${tieneFotos ? `<div class="producto-imagen-badge">${fotosPrincipales.length} foto${fotosPrincipales.length !== 1 ? 's' : ''}</div>` : ''}
+        </div>
+
+        <div class="producto-info">
+          <div class="producto-familia">
+            ${escapeHtml(p.familia_nombre || 'Piedra Natural')}${p.material_nombre ? ' · ' + escapeHtml(p.material_nombre) : ''}
+          </div>
+          <h1 class="producto-titulo">${escapeHtml(p.nombre)}</h1>
+          <div class="producto-sku">SKU: ${escapeHtml(p.sku)}</div>
+
+          ${medidasHtml}
+
+          <div class="producto-precio">
+            ${priceOld}
+            <span class="price">${precioHtml}</span>
+            ${descuentoHtml}
+            <span class="unit">/ ${escapeHtml(p.unidad_venta || p.unidad_simbolo || 'm²')}</span>
+          </div>
+
+          ${badges ? `<div class="producto-badges">${badges}</div>` : ''}
+
+          <div class="producto-acciones">
+            <a href="${isActive ? `cotizacion.html?sku=${encodeURIComponent(p.sku)}&origen=${encodeURIComponent(origenActual)}` : '#'}"
+               class="btn btn-cotizar"
+               aria-label="${isActive ? 'Solicitar cotización del producto' : 'Producto no disponible'}"
+               ${!isActive ? 'aria-disabled="true" tabindex="-1"' : ''}>
+              ${isActive ? 'Solicitar cotización' : 'Producto no disponible'}
+            </a>
+
+            <button type="button"
+                    class="btn-favorito ${esFav ? 'active' : ''}"
+                    id="btn-favorito"
+                    aria-label="${esFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}"
+                    aria-pressed="${esFav}">
+              <span aria-hidden="true">${esFav ? '♥' : '♡'}</span>
+              ${esFav ? 'En favoritos' : 'Favorito'}
+            </button>
+
+            <button type="button"
+                    class="btn-compartir"
+                    id="btn-compartir"
+                    aria-label="Compartir por WhatsApp">
+              Compartir
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERÍAS -->
+      <div id="galeria-fotos"></div>
+      <div id="galeria-ambientadas"></div>
+      <div id="galeria-patrones"></div>
+      <div id="galeria-rangos"></div>
+
+      <!-- SECCIONES INFORMATIVAS -->
+      <div id="secciones-adicionales"></div>
+    `;
+
+    // --- Eventos ---
+    const $imgPrincipal = document.getElementById('producto-imagen-principal');
+    if ($imgPrincipal) {
+      $imgPrincipal.addEventListener('click', () => {
+        if (!tieneFotos) return;
+        abrirModal(fotosPrincipales[0], fotosPrincipales, 0);
+      });
+      $imgPrincipal.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && tieneFotos) {
+          e.preventDefault();
+          abrirModal(fotosPrincipales[0], fotosPrincipales, 0);
+        }
+      });
+    }
+
+    document.getElementById('btn-favorito')?.addEventListener('click', () => {
+      if (!isActive) return;
+      guardarFavorito(p.sku, origenActual);
+      const ahoraEsFav = esFavorito(p.sku, origenActual);
+      const btn = document.getElementById('btn-favorito');
+      if (btn) {
+        btn.classList.toggle('active', ahoraEsFav);
+        btn.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+        btn.setAttribute('aria-label', ahoraEsFav ? 'Quitar de favoritos' : 'Agregar a favoritos');
+        btn.innerHTML = `<span aria-hidden="true">${ahoraEsFav ? '♥' : '♡'}</span> ${ahoraEsFav ? 'En favoritos' : 'Favorito'}`;
+      }
+    });
+
+    document.getElementById('btn-compartir')?.addEventListener('click', () => {
+      const url = `${location.origin}${location.pathname}?sku=${encodeURIComponent(p.sku)}&origen=${encodeURIComponent(origenActual)}`;
+      const mensaje = encodeURIComponent(
+        `🪨 *${p.nombre}*\n\n` +
+        `📋 SKU: ${p.sku}\n` +
+        `🔗 ${url}\n\n` +
+        `¡Cotiza este producto con Gallos Mármol! 🏛️`
+      );
+      window.open(`https://wa.me/?text=${mensaje}`, '_blank');
+    });
+
+    // Galerías con iconos SVG
+    renderGaleria('galeria-fotos', p.galeria_fotos, 'Fotos del producto', 'fotos');
+    renderGaleria('galeria-ambientadas', p.galeria_ambientadas, 'Fotos ambientadas', 'casa');
+    renderGaleria('galeria-patrones', p.galeria_patrones, 'Patrones de instalación', 'patron');
+    if (p.es_piedra_natural) {
+      renderGaleria('galeria-rangos', p.galeria_rangos, 'Rangos del producto', 'rango');
+    }
+
+    // Swipe en galerías (solo activo en móvil por CSS)
+    enableSwipeGaleria('#galeria-fotos .galeria-grid');
+    enableSwipeGaleria('#galeria-ambientadas .galeria-grid');
+    enableSwipeGaleria('#galeria-patrones .galeria-grid');
+    enableSwipeGaleria('#galeria-rangos .galeria-grid');
+
+    // Secciones informativas
+    renderSecciones(p);
+  }
+
+  // ============================================================
+  // SECCIONES INFORMATIVAS
+  // ============================================================
+  function renderSecciones(p) {
+    const $el = document.getElementById('secciones-adicionales');
+    if (!$el) return;
+
+    let html = '';
+
+    // Especificaciones técnicas (tabla)
+    if (p.especificaciones_tecnicas) {
+      // Si es string simple, mostrar como tabla con un solo campo
+      html += `
+        <div class="info-seccion">
+          <div class="info-seccion-head">
+            ${ICONOS.spec}
+            <h3>Especificaciones técnicas</h3>
+          </div>
+          <table class="spec-table">
+            <tbody>
+              <tr>
+                <th>Detalle</th>
+                <td>${escapeHtml(p.especificaciones_tecnicas)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // Tabla de características del producto (siempre)
+    const specsProducto = [];
+    if (p.sku) specsProducto.push(['SKU', p.sku]);
+    if (p.familia_nombre) specsProducto.push(['Familia', p.familia_nombre]);
+    if (p.material_nombre) specsProducto.push(['Material', p.material_nombre]);
+    if (p.acabado_nombre) specsProducto.push(['Acabado', p.acabado_nombre]);
+    if (p.borde_nombre) specsProducto.push(['Borde', p.borde_nombre]);
+    if (p.calidad_nombre) specsProducto.push(['Calidad', p.calidad_nombre]);
+    if (p.modelo) specsProducto.push(['Modelo', p.modelo]);
+    if (p.origen) specsProducto.push(['Origen', p.origen]);
+    if (p.dimension_formateada) specsProducto.push(['Dimensiones', p.dimension_formateada]);
+    if (p.unidad_venta) specsProducto.push(['Unidad de venta', p.unidad_venta]);
+
+    if (specsProducto.length > 0) {
+      html += `
+        <div class="info-seccion">
+          <div class="info-seccion-head">
+            ${ICONOS.spec}
+            <h3>Especificaciones del producto</h3>
+          </div>
+          <table class="spec-table">
+            <tbody>
+              ${specsProducto.map(([k, v]) => `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(v)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // Separador
+    html += `<div class="vein-divider" style="margin: 28px 0;"></div>`;
+
+    // Lo que debes saber
+    html += `
+      <div class="info-seccion">
+        <div class="info-seccion-head">
+          ${ICONOS.carrito}
+          <h3>Lo que debes saber antes de comprar</h3>
+        </div>
+        <ul>
+          <li><span class="dot" aria-hidden="true">●</span> Las imágenes son REFERENCIALES, no contractuales</li>
+          <li><span class="dot" aria-hidden="true">●</span> La piedra natural presenta variabilidad en vetas y tonos</li>
+          <li><span class="dot" aria-hidden="true">●</span> No se puede seleccionar una veta o tonalidad específica</li>
+          <li><span class="dot" aria-hidden="true">●</span> Solicita una muestra física antes de tu pedido</li>
+          <li><span class="dot" aria-hidden="true">●</span> El producto final puede diferir de las muestras mostradas</li>
+          <li><span class="dot" aria-hidden="true">●</span> Las variaciones son características de calidad, no defectos</li>
+        </ul>
+      </div>
+    `;
+
+    // Variabilidad natural
+    if (p.mostrar_variabilidad) {
+      html += `<div class="vein-divider" style="margin: 28px 0;"></div>`;
+      html += `
+        <div class="variabilidad-natural">
+          <div class="info-seccion-head" style="margin-bottom:12px;">
+            ${ICONOS.alerta}
+            <h4 style="margin:0;">Nota sobre la variabilidad natural de la piedra</h4>
+          </div>
+          <p>Debido a su naturaleza, las piedras naturales como mármoles, travertinos, granitos y otras, poseen grados de variación en tono y color, diferencias en la formación de vetas y distintos niveles de porosidad. Por este motivo, los tonos y características de las muestras exhibidas y/o entregadas, son referenciales y pueden variar.</p>
+          <p><strong>Características del material comercial:</strong> Las piezas pueden presentar esquinas postilladas, marcas del disco de corte, cangrejera superficial en la cara de la baldosa, y rango de color variado (más pronunciado entre lotes). Estas son características normales de los materiales pétreos y no constituyen defectos.</p>
+          <p class="destacado">⚠️ Las imágenes de rangos y variaciones mostradas son EJEMPLOS de la variabilidad natural que PUEDE presentar el producto. NO es posible seleccionar una veta o tonalidad específica al momento de la compra.</p>
+          <p>Para mayor certeza, recomendamos solicitar una <strong>muestra física</strong> antes de realizar su pedido.</p>
+        </div>
+      `;
+    }
+
+    // Características comerciales
+    if (p.calidad_nivel === 3 || p.mostrar_caracteristicas) {
+      html += `<div class="vein-divider" style="margin: 28px 0;"></div>`;
+      html += `
+        <div class="caracteristicas-comerciales">
+          <div class="info-seccion-head" style="margin-bottom:12px;">
+            ${ICONOS.herramienta}
+            <h4 style="margin:0;">Características del material comercial</h4>
+          </div>
+          <p style="color:var(--text-muted);font-size:13px;margin:0 0 12px;">Información importante sobre las particularidades de la piedra natural</p>
+          <div class="caracteristicas-grid">
+            <div class="item">
+              <h6>Esquinas Postilladas</h6>
+              <p>Las piezas pueden presentar esquinas postilladas o desportilladuras leves en los bordes, lo cual es normal en materiales pétreos.</p>
+            </div>
+            <div class="item">
+              <h6>Marcas del Disco</h6>
+              <p>Es posible encontrar marcas del disco de corte en la superficie durante el procesamiento del material.</p>
+            </div>
+            <div class="item">
+              <h6>Cangrejera Superficial</h6>
+              <p>La cara de las baldosas puede presentar cangrejera (pequeñas imperfecciones superficiales) características del material.</p>
+            </div>
+            <div class="item">
+              <h6>Rango de Color Variado</h6>
+              <p>El rango de color es variado y puede ser más pronunciado entre diferentes lotes de producción.</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    $el.innerHTML = html;
+  }
+
+  // ============================================================
+  // SWATCH (por si no hay imagen)
+  // ============================================================
+  function stoneSwatchStyle(categoria, seed) {
+    const THEME = {
+      'Mármol': { base: '#efece4', vein: '#c9c2b2', deep: '#a9a08a' },
+      'Granito': { base: '#2b2a28', vein: '#54514c', deep: '#0f0e0d' },
+      'Cuarzo': { base: '#f2f0ec', vein: '#d7cdb8', deep: '#b6a97e' },
+      'Travertino': { base: '#e4d3b8', vein: '#c9b28a', deep: '#a9895c' },
+      'Porcelanato': { base: '#8f8d89', vein: '#a9a7a2', deep: '#6b6966' },
+      'Revestimientos': { base: '#c7b9a3', vein: '#a08d6d', deep: '#7c6947' },
+      'Molduras': { base: '#efece4', vein: '#d8d0bd', deep: '#b8ac8e' },
+      'Baldosas': { base: '#b5573f', vein: '#8f3f2c', deep: '#622a1d' }
+    };
+    const t = THEME[categoria] || THEME['Mármol'];
+    let h = 0;
+    const s = String(seed || '');
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+    h = Math.abs(h);
+    const a1 = 15 + (h % 140);
+    const a2 = (a1 + 70 + (h >> 3) % 50) % 360;
+    const a3 = (a1 + 140 + (h >> 5) % 40) % 360;
+    const p1 = 20 + (h % 60);
+    const p2 = 30 + ((h >> 4) % 50);
+    return `background:
+      linear-gradient(${a1}deg, transparent 0%, ${t.vein}55 ${p1}%, transparent ${p1+2}%, transparent 100%),
+      linear-gradient(${a2}deg, transparent 0%, ${t.deep}44 ${p2}%, transparent ${p2+3}%, transparent 100%),
+      linear-gradient(${a3}deg, transparent 40%, ${t.vein}33 46%, transparent 52%),
+      linear-gradient(160deg, ${t.base}, ${t.deep}33);`;
+  }
+
+  // ============================================================
+  // META TAGS + JSON-LD
+  // ============================================================
+  function actualizarMeta(p, imagenUrl) {
+    const nombre = p.nombre || 'Producto';
+    const familia = p.familia_nombre || 'Piedra natural';
+    const desc = p.descripcion || `${nombre} — ${familia} de Gallos Mármol.`;
+
+    document.title = `${nombre} · Gallos Mármol`;
+    document.getElementById('page-description')?.setAttribute('content', desc);
+    document.getElementById('og-title')?.setAttribute('content', `${nombre} · Gallos Mármol`);
+    document.getElementById('og-description')?.setAttribute('content', desc);
+    if (imagenUrl) document.getElementById('og-image')?.setAttribute('content', imagenUrl);
+
+    const schemaEl = document.getElementById('product-schema');
+    if (schemaEl) {
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": nombre,
+        "sku": p.sku || '',
+        "description": desc,
+        "brand": { "@type": "Organization", "name": "Gallos Mármol S.A.C." },
+        "image": imagenUrl || ''
+      };
+      if (p.precio && Number(p.precio) > 0) {
+        schema.offers = {
+          "@type": "Offer",
+          "price": Number(p.precio),
+          "priceCurrency": "PEN",
+          "availability": p.activo === false
+            ? "https://schema.org/OutOfStock"
+            : "https://schema.org/InStock"
+        };
+      }
+      schemaEl.textContent = JSON.stringify(schema);
+    }
+  }
+
+  // ============================================================
+  // MOSTRAR ERROR
+  // ============================================================
+  function mostrarError(titulo, mensaje) {
+    $contenido.innerHTML = `
+      <div class="saldos-empty" style="padding:80px 20px;">
+        <div class="saldos-empty__icon">⚠️</div>
+        <h2 class="saldos-empty__title">${escapeHtml(titulo)}</h2>
+        <p class="saldos-empty__text">${escapeHtml(mensaje)}</p>
+        <a href="catalogo.html" class="saldos-empty__btn" style="text-decoration:none;">Ver catálogo</a>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // CARGAR PRODUCTO
+  // ============================================================
+  async function cargarProducto() {
+    if (!skuParam) {
+      mostrarError('Producto no especificado', 'No se ha seleccionado un producto válido.');
+      return;
+    }
+
+    renderSkeleton();
+
+    try {
+      const productos = await CatalogoAPI.getProductos({ linea: origenActual });
+      let producto = (productos || []).find(p => p.sku === skuParam);
+
+      if (!producto) {
+        const todos = await CatalogoAPI.getProductos({});
+        producto = (todos || []).find(p => p.sku === skuParam);
+      }
+
+      if (!producto) {
+        mostrarError('Producto no encontrado', `El SKU "${skuParam}" no existe en nuestro catálogo.`);
+        return;
+      }
+
+      const imagenParaOG = producto.imagen_url
+        ? convertirUrlGoogleDrive(producto.imagen_url)
+        : null;
+
+      actualizarMeta(producto, imagenParaOG);
+      renderizarProducto(producto);
+
+    } catch (error) {
+      console.error('Error cargando producto:', error);
+      mostrarError('Error al cargar el producto', error.message || 'Error desconocido');
+    }
+  }
+
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
+  cargarProducto();
+
+</script>
+
+</body>
+</html>

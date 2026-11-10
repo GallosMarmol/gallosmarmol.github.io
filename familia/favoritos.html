@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Favoritos · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tus productos favoritos de Gallos Mármol: catálogo, outlet y saldos de exportación.">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+</head>
+<body class="page-favoritos">
+
+<header class="pub-header" id="pub-header"></header>
+
+<main>
+  <section class="page-hero">
+    <div class="page-hero-in">
+      <div class="kicker">Tu lista de deseos</div>
+      <h1>Favoritos</h1>
+      <p>Los productos que guardaste para revisar después. Puedes cotizarlos, compararlos o eliminarlos de tu lista.</p>
+    </div>
+  </section>
+
+  <div class="saldos-page">
+
+    <!-- Aviso de no disponibles -->
+    <div id="favoritos-aviso" class="favoritos-aviso" hidden></div>
+
+    <!-- Controles -->
+    <div class="saldos-controls saldos-controls--favoritos">
+      <div class="saldos-controls__row">
+
+        <!-- Buscador -->
+        <div class="saldos-controls__search" id="favoritos-search-wrap" hidden>
+          <input
+            type="search"
+            id="favoritos-search"
+            placeholder="Buscar en tus favoritos..."
+            autocomplete="off"
+            aria-label="Buscar en favoritos"
+          >
+        </div>
+
+        <!-- Toggle vista -->
+        <div class="saldos-controls__view" role="group" aria-label="Cambiar vista">
+          <button type="button" id="favoritos-vista-grid" class="active" aria-label="Vista en cuadrícula" aria-pressed="true">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+          <button type="button" id="favoritos-vista-lista" aria-label="Vista en lista" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="3" rx="1" fill="currentColor"/>
+              <rect x="3" y="10.5" width="18" height="3" rx="1" fill="currentColor"/>
+              <rect x="3" y="17" width="18" height="3" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Vaciar -->
+        <button type="button" class="btn-vaciar-favoritos" id="btn-vaciar-favoritos" hidden>
+          Vaciar favoritos
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs por origen -->
+    <div class="favoritos-tabs" id="favoritos-tabs" role="tablist" hidden></div>
+
+    <!-- Chips por familia -->
+    <div class="saldos-familias" id="favoritos-familias" hidden role="group" aria-label="Filtrar por familia"></div>
+
+    <!-- Grid -->
+    <div class="saldos-productos saldos-productos--grid" id="favoritos-grid" aria-live="polite">
+      <!-- Skeleton inicial -->
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+        <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal de confirmación para vaciar -->
+<div class="favoritos-modal" id="favoritos-modal-vaciar" role="dialog" aria-modal="true" aria-labelledby="favoritos-modal-title">
+  <div class="favoritos-modal__content">
+    <h2 class="favoritos-modal__title" id="favoritos-modal-title">¿Vaciar favoritos?</h2>
+    <p class="favoritos-modal__text">Se eliminarán todos los productos de tu lista. Esta acción no se puede deshacer.</p>
+    <div class="favoritos-modal__actions">
+      <button type="button" class="btn btn-ghost" id="favoritos-modal-cancelar">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="favoritos-modal-confirmar">Sí, vaciar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+
+<script type="module">
+import { CatalogoAPI } from '../shared/js/supabase-client.js';
+import {
+  productCardHtml,
+  escapeHtml,
+  escapeAttr
+} from './assets/js/public.js';
+
+// ============================================================
+// INICIALIZAR SHELL
+// ============================================================
+pubHeader('catalogo');
+
+// ============================================================
+// ESTADO
+// ============================================================
+let favoritos = [];       // { sku, origen, fecha }
+let productosMap = new Map(); // sku → producto
+let items = [];           // { producto, origen, fecha } (cruzados)
+let filtros = {
+  q: '',
+  origen: 'todos',        // 'todos' | 'catalogo' | 'outlet' | 'saldos'
+  familia_id: null
+};
+let vista = 'grid';       // 'grid' | 'lista'
+
+// ============================================================
+// REFERENCIAS DOM
+// ============================================================
+const $grid = document.getElementById('favoritos-grid');
+const $tabs = document.getElementById('favoritos-tabs');
+const $familias = document.getElementById('favoritos-familias');
+const $searchWrap = document.getElementById('favoritos-search-wrap');
+const $search = document.getElementById('favoritos-search');
+const $btnVaciar = document.getElementById('btn-vaciar-favoritos');
+const $aviso = document.getElementById('favoritos-aviso');
+const $vistaGrid = document.getElementById('favoritos-vista-grid');
+const $vistaLista = document.getElementById('favoritos-vista-lista');
+
+// ============================================================
+// LEER FAVORITOS DEL LOCALSTORAGE
+// ============================================================
+function leerFavoritos() {
+  try {
+    const raw = JSON.parse(localStorage.getItem('favoritos') || '[]');
+    if (!Array.isArray(raw)) return [];
+    return raw.map(f =>
+      typeof f === 'string'
+        ? { sku: f, origen: 'catalogo', fecha: null }
+        : f
+    ).filter(f => f && f.sku);
+  } catch (e) {
+    return [];
+  }
+}
+
+// ============================================================
+// FORMATEAR FECHA "Agregado hace X días"
+// ============================================================
+function formatearFechaAgregado(fechaISO) {
+  if (!fechaISO) return null;
+  const fecha = new Date(fechaISO);
+  if (isNaN(fecha.getTime())) return null;
+
+  const ahora = new Date();
+  const diffMs = ahora - fecha;
+  const diffMin = Math.floor(diffMs / (1000 * 60));
+  const diffH = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffD = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMin < 1) return 'Agregado ahora';
+  if (diffMin < 60) return `Agregado hace ${diffMin} min`;
+  if (diffH < 24) return `Agregado hace ${diffH} h`;
+  if (diffD === 1) return 'Agregado ayer';
+  if (diffD < 7) return `Agregado hace ${diffD} días`;
+  if (diffD < 30) {
+    const semanas = Math.floor(diffD / 7);
+    return `Agregado hace ${semanas} sem`;
+  }
+  return `Agregado el ${fecha.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' })}`;
+}
+
+// ============================================================
+// BADGES DE ESTADO DEL PRODUCTO
+// ============================================================
+function renderBadgesEstado(p) {
+  const badges = [];
+
+  if (p.activo === false) {
+    badges.push(`<span class="favorito-badge favorito-badge--no-disponible">No disponible</span>`);
+  } else if (p.stock != null && p.stock <= 5 && p.stock > 0) {
+    badges.push(`<span class="favorito-badge favorito-badge--ultima">Últimas unidades (${p.stock})</span>`);
+  } else if (p.stock != null && p.stock <= 20 && p.stock > 5) {
+    badges.push(`<span class="favorito-badge favorito-badge--stock-bajo">Stock bajo</span>`);
+  }
+
+  return badges.length ? `<div class="favorito-badges-estado">${badges.join('')}</div>` : '';
+}
+
+// ============================================================
+// FILTRAR ITEMS
+// ============================================================
+function aplicarFiltros() {
+  let visibles = [...items];
+
+  // Tab por origen
+  if (filtros.origen !== 'todos') {
+    visibles = visibles.filter(it => it.origen === filtros.origen);
+  }
+
+  // Búsqueda
+  if (filtros.q) {
+    const norm = filtros.q.toLowerCase();
+    visibles = visibles.filter(it =>
+      (it.producto.nombre || '').toLowerCase().includes(norm) ||
+      (it.producto.sku || '').toLowerCase().includes(norm)
+    );
+  }
+
+  // Filtro por familia
+  if (filtros.familia_id) {
+    visibles = visibles.filter(it => it.producto.familia_id === filtros.familia_id);
+  }
+
+  return visibles;
+}
+
+// ============================================================
+// RENDERIZAR TABS
+// ============================================================
+function renderTabs() {
+  const counts = {
+    todos: items.length,
+    catalogo: items.filter(it => it.origen === 'catalogo').length,
+    outlet: items.filter(it => it.origen === 'outlet').length,
+    saldos: items.filter(it => it.origen === 'saldos').length
+  };
+
+  const origenes = [
+    { key: 'todos', label: 'Todos', count: counts.todos },
+    { key: 'catalogo', label: 'Catálogo', count: counts.catalogo },
+    { key: 'outlet', label: 'Outlet', count: counts.outlet },
+    { key: 'saldos', label: 'Saldos de exportación', count: counts.saldos }
+  ].filter(o => o.key === 'todos' || o.count > 0);
+
+  if (origenes.length <= 1) {
+    $tabs.hidden = true;
+    return;
+  }
+
+  $tabs.hidden = false;
+  $tabs.innerHTML = origenes.map(o => `
+    <button type="button"
+            class="favoritos-tab ${filtros.origen === o.key ? 'active' : ''}"
+            data-origen="${escapeAttr(o.key)}"
+            role="tab"
+            aria-selected="${filtros.origen === o.key}">
+      ${escapeHtml(o.label)} <span class="tab-count">${o.count}</span>
+    </button>
+  `).join('');
+
+  $tabs.onclick = (e) => {
+    const tab = e.target.closest('.favoritos-tab');
+    if (!tab) return;
+    filtros.origen = tab.dataset.origen;
+    renderTabs();
+    renderContenido();
+  };
+}
+
+// ============================================================
+// RENDERIZAR CHIPS DE FAMILIA
+// ============================================================
+function renderFamilias() {
+  // Solo mostrar si hay >15 favoritos
+  if (items.length <= 15) {
+    $familias.hidden = true;
+    return;
+  }
+
+  const famMap = new Map();
+  items.forEach(it => {
+    const p = it.producto;
+    if (p.familia_id && p.familia_nombre) {
+      const prev = famMap.get(p.familia_id);
+      famMap.set(p.familia_id, {
+        id: p.familia_id,
+        nombre: p.familia_nombre,
+        count: (prev?.count || 0) + 1
+      });
+    }
+  });
+
+  const familias = Array.from(famMap.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  if (familias.length <= 1) {
+    $familias.hidden = true;
+    return;
+  }
+
+  $familias.hidden = false;
+  $familias.innerHTML = `
+    <button type="button" class="saldos-familia-chip ${!filtros.familia_id ? 'active' : ''}" data-familia="">
+      Todas <span class="chip-count">${items.length}</span>
+    </button>
+    ${familias.map(f => `
+      <button type="button"
+              class="saldos-familia-chip ${filtros.familia_id === f.id ? 'active' : ''}"
+              data-familia="${escapeAttr(f.id)}">
+        ${escapeHtml(f.nombre)} <span class="chip-count">${f.count}</span>
+      </button>
+    `).join('')}
+  `;
+
+  $familias.onclick = (e) => {
+    const chip = e.target.closest('.saldos-familia-chip');
+    if (!chip) return;
+    filtros.familia_id = chip.dataset.familia || null;
+    renderFamilias();
+    renderContenido();
+  };
+}
+
+// ============================================================
+// RENDERIZAR CONTENIDO (grid/lista)
+// ============================================================
+function renderContenido() {
+  const visibles = aplicarFiltros();
+
+  // Toggle clases
+  $grid.classList.toggle('saldos-productos--grid', vista === 'grid');
+  $grid.classList.toggle('saldos-productos--lista', vista === 'lista');
+
+  // Vacío
+  if (visibles.length === 0) {
+    $grid.innerHTML = `
+      <div class="saldos-empty" style="grid-column:1/-1;">
+        <div class="saldos-empty__icon">◇</div>
+        <h3 class="saldos-empty__title">Sin resultados</h3>
+        <p class="saldos-empty__text">No se encontraron favoritos con esos filtros.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Renderizar
+  $grid.innerHTML = visibles.map(it => {
+    const origenLabel = {
+      'catalogo': 'Catálogo',
+      'outlet': 'Outlet',
+      'saldos': 'Saldos de exportación'
+    }[it.origen] || it.origen;
+
+    const fechaTexto = formatearFechaAgregado(it.fecha);
+    const badgesEstado = renderBadgesEstado(it.producto);
+
+    const cardHtml = productCardHtml(it.producto, true, vista, it.origen, {
+      ocultarBadgeLinea: true,
+      ocultarBotonFavorito: true
+    });
+    return `
+      <div class="favorito-wrapper" data-sku="${escapeAttr(it.producto.sku)}">
+        <div class="favorito-origen-tag">${escapeHtml(origenLabel)}</div>
+        ${cardHtml}
+        ${badgesEstado}
+        ${fechaTexto ? `<div class="favorito-fecha">${escapeHtml(fechaTexto)}</div>` : ''}
+        <button
+          type="button"
+          class="favorito-eliminar"
+          data-sku="${escapeAttr(it.producto.sku)}"
+          data-origen="${escapeAttr(it.origen)}"
+          aria-label="Quitar de favoritos">
+          ✕ Quitar de favoritos
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// TOGGLE VISTA
+// ============================================================
+$vistaGrid.addEventListener('click', () => {
+  if (vista === 'grid') return;
+  vista = 'grid';
+  $vistaGrid.classList.add('active');
+  $vistaGrid.setAttribute('aria-pressed', 'true');
+  $vistaLista.classList.remove('active');
+  $vistaLista.setAttribute('aria-pressed', 'false');
+  try { localStorage.setItem('favoritos_vista', 'grid'); } catch (e) {}
+  renderContenido();
+});
+
+$vistaLista.addEventListener('click', () => {
+  if (vista === 'lista') return;
+  vista = 'lista';
+  $vistaLista.classList.add('active');
+  $vistaLista.setAttribute('aria-pressed', 'true');
+  $vistaGrid.classList.remove('active');
+  $vistaGrid.setAttribute('aria-pressed', 'false');
+  try { localStorage.setItem('favoritos_vista', 'lista'); } catch (e) {}
+  renderContenido();
+});
+
+// ============================================================
+// BUSCADOR
+// ============================================================
+let searchTimer;
+$search.addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    filtros.q = e.target.value.trim();
+    renderContenido();
+  }, 250);
+});
+
+// ============================================================
+// ELIMINAR FAVORITO INDIVIDUAL
+// ============================================================
+$grid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.favorito-eliminar');
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  const sku = btn.dataset.sku;
+  const origen = btn.dataset.origen;
+
+  // Eliminar SOLO la combinación (sku + origen)
+  const nuevos = favoritos.filter(f => !(f.sku === sku && f.origen === origen));
+  localStorage.setItem('favoritos', JSON.stringify(nuevos));
+
+  if (window.GM?.toast) window.GM.toast('❌ Eliminado de favoritos');
+  if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+
+  // Recargar
+  favoritos = nuevos;
+  items = items.filter(it => !(it.producto.sku === sku && it.origen === origen));
+  renderTabs();
+  renderFamilias();
+  renderContenido();
+  actualizarAvisoNoDisponibles();
+});
+
+// ============================================================
+// VACIAR FAVORITOS (con modal)
+// ============================================================
+const $modal = document.getElementById('favoritos-modal-vaciar');
+const $modalCancelar = document.getElementById('favoritos-modal-cancelar');
+const $modalConfirmar = document.getElementById('favoritos-modal-confirmar');
+
+$btnVaciar.addEventListener('click', () => {
+  $modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+
+$modalCancelar.addEventListener('click', () => {
+  $modal.classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+$modalConfirmar.addEventListener('click', () => {
+  localStorage.setItem('favoritos', '[]');
+  $modal.classList.remove('open');
+  document.body.style.overflow = '';
+  if (window.GM?.toast) window.GM.toast('🗑️ Favoritos vaciados');
+  if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+  window.location.reload();
+});
+
+$modal.addEventListener('click', (e) => {
+  if (e.target === $modal) {
+    $modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// ============================================================
+// AVISO DE NO DISPONIBLES
+// ============================================================
+function actualizarAvisoNoDisponibles() {
+  const noDisponibles = favoritos.length - items.length;
+  if (noDisponibles > 0) {
+    $aviso.innerHTML = `<strong>${noDisponibles} producto${noDisponibles !== 1 ? 's' : ''}</strong> de tu lista ya no está${noDisponibles !== 1 ? 'n' : ''} disponible${noDisponibles !== 1 ? 's' : ''}. Puede que se hayan agotado.`;
+    $aviso.hidden = false;
+  } else {
+    $aviso.hidden = true;
+  }
+}
+
+// ============================================================
+// CARGAR FAVORITOS
+// ============================================================
+// ============================================================
+// CARGAR FAVORITOS
+// ============================================================
+async function cargarFavoritos() {
+  favoritos = leerFavoritos();
+
+  // ------------------------------------------------------------
+  // Cargar vista guardada (grid o lista)
+  // ------------------------------------------------------------
+  try {
+    const guardada = localStorage.getItem('favoritos_vista');
+    if (guardada === 'lista' || guardada === 'grid') {
+      vista = guardada;
+      if (vista === 'lista') {
+        $vistaLista.classList.add('active');
+        $vistaLista.setAttribute('aria-pressed', 'true');
+        $vistaGrid.classList.remove('active');
+        $vistaGrid.setAttribute('aria-pressed', 'false');
+      }
+    }
+  } catch (e) {}
+
+  // ------------------------------------------------------------
+  // Estado vacío
+  // ------------------------------------------------------------
+  if (favoritos.length === 0) {
+    $grid.innerHTML = `
+      <div class="saldos-empty" style="grid-column:1/-1;">
+        <div class="saldos-empty__icon">♡</div>
+        <h3 class="saldos-empty__title">Aún no tienes favoritos</h3>
+        <p class="saldos-empty__text">Guarda los productos que te interesen.</p>
+      </div>
+    `;
+    $btnVaciar.hidden = true;
+    $tabs.hidden = true;
+    $familias.hidden = true;
+    $searchWrap.hidden = true;
+    $aviso.hidden = true;
+    return;
+  }
+
+  // ------------------------------------------------------------
+  // Cargar productos desde Supabase
+  // ------------------------------------------------------------
+  let productos = [];
+  try {
+    productos = await CatalogoAPI.getProductos({});
+  } catch (error) {
+    console.error('Error cargando productos:', error);
+    $grid.innerHTML = `
+      <div class="saldos-empty" style="grid-column:1/-1;">
+        <div class="saldos-empty__icon">⚠️</div>
+        <h3 class="saldos-empty__title">Error al cargar</h3>
+        <p class="saldos-empty__text">${escapeHtml(error.message || 'Error desconocido')}</p>
+        <button type="button" class="saldos-empty__btn" onclick="location.reload()">Reintentar</button>
+      </div>
+    `;
+    return;
+  }
+
+  // ------------------------------------------------------------
+  // Mapa de productos (deduplicado por SKU)
+  // ------------------------------------------------------------
+  productosMap.clear();
+  productos.forEach(p => {
+    if (!productosMap.has(p.sku)) productosMap.set(p.sku, p);
+  });
+
+  // ------------------------------------------------------------
+  // Cruzar favoritos con productos
+  // Priorizar p.linea (estado actual en Supabase)
+  // ------------------------------------------------------------
+  items = favoritos
+    .map(fav => {
+      const p = productosMap.get(fav.sku);
+      if (!p) return null;
+      return {
+        producto: p,
+        origen: fav.origen || 'catalogo',  
+      };
+    })
+    .filter(Boolean);
+
+  // ------------------------------------------------------------
+  // Mostrar/ocultar controles según cantidad
+  // ------------------------------------------------------------
+  // Buscador: solo si > 10 favoritos
+  $searchWrap.hidden = items.length <= 10;
+
+  // Botón vaciar: si hay favoritos
+  $btnVaciar.hidden = favoritos.length === 0;
+
+  // ------------------------------------------------------------
+  // Aviso de productos no disponibles
+  // (favoritos que ya no existen en Supabase)
+  // ------------------------------------------------------------
+  actualizarAvisoNoDisponibles();
+
+  // ------------------------------------------------------------
+  // Renderizar
+  // ------------------------------------------------------------
+  renderTabs();
+  renderFamilias();
+  renderContenido();
+
+  // ------------------------------------------------------------
+  // Actualizar contador del header
+  // ------------------------------------------------------------
+  if (window.actualizarContadorFavoritosHeader) {
+    window.actualizarContadorFavoritosHeader();
+  }
+}
+
+cargarFavoritos();
+</script>
+
+</body>
+</html>
