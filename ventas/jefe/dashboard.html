@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard · Jefe de Ventas · Gallos Mármol</title>
+  <meta name="description" content="Panel de supervisión del equipo de ventas">
+  <link rel="stylesheet" href="/shared/css/shared.css">
+  <link rel="stylesheet" href="/ventas/assets/css/ventas.css">
+</head>
+<body data-rol="jefe">
+
+  <div class="ventas-layout">
+    <aside class="v-sidebar" id="v-sidebar"></aside>
+    <div class="v-main">
+      <header class="v-topbar">
+        <div class="v-topbar-left">
+          <div class="v-crumb" id="v-crumb">Ventas / Jefe</div>
+          <h1 class="v-title" id="v-title">Dashboard</h1>
+        </div>
+        <div class="v-topbar-right" id="v-topbar-right"></div>
+      </header>
+      <div class="v-content" id="v-content">
+        <div class="v-empty">
+          <div class="v-empty-icon">⋯</div>
+          <div class="v-empty-text">Cargando KPIs…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    NOTA: El jefe ve KPIs de SUPERVISIÓN del equipo:
+      - Leads totales del equipo
+      - Sin asignar (urgente)
+      - Nuevos esta semana
+      - Convertidos esta semana
+      - Tasa de conversión
+      - Sin contactar > 3 días (leads olvidados)
+      - Top vendedores
+    Acciones rápidas:
+      - Ver todos los leads
+      - Asignar leads
+    Tabla:
+      - Leads sin asignar (para asignar hoy)
+      - Últimos leads del equipo
+  -->
+
+  <script src="/shared/js/shared.js"></script>
+  <script type="module" src="/ventas/assets/js/dashboard-jefe.js"></script>
+</body>
+</html>
