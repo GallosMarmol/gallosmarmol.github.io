@@ -1,0 +1,2797 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Outlet · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Productos de outlet con descuentos especiales. Mármol, granito, cuarzo y piedra natural con stock limitado.">
+<link rel="icon" type="image/png" href="../shared/assets/foto_02.png">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+<link
+  rel="preload"
+  as="image"
+  href="assets/img/outlet/Foto_01.jpeg"
+  fetchpriority="high"
+>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+</head>
+<body class="page-outlet" data-linea="outlet">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<main>
+  <!-- ============================================================ -->
+  <!-- HERO -->
+  <!-- ============================================================ -->
+  <section class="page-hero page-hero--outlet page-hero--con-foto">
+    <!-- Imagen de fondo (decorativa) -->
+    <div class="page-hero__bg" aria-hidden="true">
+      <img
+        src="assets/img/outlet/Foto_01.jpeg"
+        alt=""
+        width="1920"
+        height="600"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="page-hero__bg-img"
+        onerror="this.style.display='none'; this.parentElement.parentElement.classList.add('page-hero--sin-foto');"
+      >
+      <div class="page-hero__overlay"></div>
+    </div>
+
+    <div class="page-hero-in">
+      <div class="kicker">
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:middle; margin-right:6px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        Ofertas especiales
+      </div>
+      <h1>Outlet</h1>
+      <p>Productos seleccionados con descuentos especiales. Mármol travertino, granito, gress, porcelanato y muchos más con stock limitado. Aprovecha estas ofertas antes de que se agoten.</p>
+
+      <!-- Contador (se llena dinámicamente) -->
+      <div id="outlet-countdown" class="saldos-countdown" hidden></div>
+
+      <!-- CTA principal -->
+      <div class="page-hero-cta">
+        <button type="button" class="btn btn-gold" id="btn-ver-outlet">
+          Ver outlet ↓
+        </button>
+        <a
+          class="btn btn-ghost"
+          id="btn-como-llegar"
+          href="https://maps.app.goo.gl/U9CrUQpyHQqU1JaL6"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Cómo llegar al outlet (abre Google Maps)"
+          style="border-color:rgba(232,228,210,.35);color: #6b0000;"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          ¿Cómo llegar?
+        </a>
+      </div>
+
+      <!-- Fecha de actualización -->
+      <div id="outlet-actualizado" class="saldos-actualizado" hidden></div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <button type="button" class="saldos-scroll-indicator" id="outlet-scroll-indicator" aria-label="Desliza para ver los productos">
+      <span>Desliza para ver</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ============================================================ -->
+  <div class="saldos-page">
+
+    <!-- CONTENIDO VISIBLE (se oculta cuando está bloqueado) -->
+    <div id="outlet-contenido">
+
+      <!-- ======================================================== -->
+      <!-- BARRA STICKY DE CONTROLES -->
+      <!-- ======================================================== -->
+      <div class="saldos-controls">
+        <div class="saldos-controls__row">
+
+          <!-- Buscador con QR -->
+          <div class="saldos-controls__search">
+            <input
+              type="search"
+              id="outlet-search"
+              placeholder="Buscar por nombre, SKU o familia…"
+              autocomplete="off"
+              aria-label="Buscar productos"
+              aria-autocomplete="list"
+              aria-controls="outlet-sugerencias">
+            <button type="button" class="saldos-qr-btn" id="outlet-qr-btn" title="Escanear código QR" aria-label="Escanear código QR">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="saldos-sugerencias" id="outlet-sugerencias" role="listbox" hidden></div>
+          </div>
+
+          <!-- Botón filtros -->
+          <button type="button" class="saldos-controls__btn" id="outlet-btn-filtros" aria-label="Abrir filtros">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Filtros
+          </button>
+
+          <!-- Selector de ordenamiento -->
+          <label class="saldos-orden-wrapper" aria-label="Ordenar productos">
+            <select id="outlet-orden" class="saldos-orden-select" aria-label="Ordenar por">
+              <option value="mayor-descuento">Mayor descuento</option>
+              <option value="menor-precio">Menor precio</option>
+              <option value="mayor-precio">Mayor precio</option>
+              <option value="recientes">Más recientes</option>
+              <option value="a-z">A-Z</option>
+              <option value="orden">Recomendados</option>
+            </select>
+          </label>
+
+          <!-- Toggle vista grid/lista -->
+          <div class="saldos-controls__view" role="group" aria-label="Cambiar vista">
+            <button type="button" id="outlet-vista-grid" class="active" aria-label="Vista en cuadrícula" aria-pressed="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+            <button type="button" id="outlet-vista-lista" aria-label="Vista en lista" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="3" rx="1" fill="currentColor"/>
+                <rect x="3" y="10.5" width="18" height="3" rx="1" fill="currentColor"/>
+                <rect x="3" y="17" width="18" height="3" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Toggle solo destacados -->
+          <label class="saldos-toggle-destacados" title="Mostrar solo productos destacados">
+            <input type="checkbox" id="outlet-solo-destacados">
+            <span>Destacados</span>
+          </label>
+
+          <!-- Contador -->
+          <div class="saldos-controls__count" id="outlet-count" aria-live="polite">
+            Cargando…
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FAMILIA -->
+      <!-- ======================================================== -->
+      <div class="saldos-familias" id="outlet-familias" role="group" aria-label="Filtrar por familia"></div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FILTROS ACTIVOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-activos" id="outlet-activos" role="list" aria-label="Filtros activos"></div>
+
+      <!-- ======================================================== -->
+      <!-- GRID / LISTA DE PRODUCTOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-productos saldos-productos--grid" id="outlet-grid" aria-live="polite">
+      <!-- Skeleton inicial (4 cards, altura similar a la card real) -->
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CARGAR MÁS -->
+      <!-- ======================================================== -->
+      <div class="saldos-cargar-mas" id="outlet-cargar-mas" style="display:none;">
+        <button type="button" class="saldos-cargar-mas__btn" id="outlet-btn-cargar-mas">
+          Cargar más productos
+        </button>
+      </div>
+
+    </div><!-- /#outlet-contenido -->
+
+    <!-- BLOQUE DE "BLOQUEADO" (finalizado o próximamente) -->
+    <div id="outlet-bloqueado"></div>
+
+  </div><!-- /.saldos-page -->
+</main>
+
+<!-- ============================================================ -->
+<!-- BOTTOM SHEET DE FILTROS -->
+<!-- ============================================================ -->
+<div class="saldos-sheet-backdrop" id="outlet-sheet-backdrop"></div>
+
+<aside class="saldos-sheet" id="outlet-sheet" role="dialog" aria-modal="true" aria-labelledby="outlet-sheet-title">
+  <div class="saldos-sheet__handle"></div>
+  <div class="saldos-sheet__header">
+    <h2 class="saldos-sheet__title" id="outlet-sheet-title">Filtros</h2>
+    <button type="button" class="saldos-sheet__close" id="outlet-sheet-close" aria-label="Cerrar filtros">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="saldos-sheet__body">
+
+    <!-- ============================================================
+        FAMILIA
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-familia">
+      <h3 class="saldos-filtro-grupo__titulo">Familia</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-familia"></div>
+    </div>
+
+    <!-- ============================================================
+        MATERIAL
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-material">
+      <h3 class="saldos-filtro-grupo__titulo">Material</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-material"></div>
+    </div>
+
+    <!-- ============================================================
+        ACABADO
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-acabado">
+      <h3 class="saldos-filtro-grupo__titulo">Acabado</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-acabado"></div>
+    </div>
+
+    <!-- ============================================================
+        PRECIO (slider)
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-precio">
+      <h3 class="saldos-filtro-grupo__titulo">Precio</h3>
+      <div class="saldos-precio-slider-wrapper">
+        <div id="outlet-precio-slider" class="saldos-precio-slider"></div>
+        <div class="saldos-precio-valores">
+          <span id="outlet-precio-min-valor">S/ 0</span>
+          <span id="outlet-precio-max-valor">S/ 0</span>
+        </div>
+      </div>
+      <button type="button" class="saldos-precio-reset" id="outlet-precio-reset">Resetear rango</button>
+    </div>
+
+    <!-- ============================================================
+        % DESCUENTO
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-descuento">
+      <h3 class="saldos-filtro-grupo__titulo">Descuento</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-descuento"></div>
+    </div>
+
+    <!-- ============================================================
+        STOCK
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-stock">
+      <h3 class="saldos-filtro-grupo__titulo">Disponibilidad</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="outlet-toggle-stock">
+        <span>Solo con stock</span>
+      </label>
+    </div>
+
+    <!-- ============================================================
+        CALIDAD
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-calidad">
+      <h3 class="saldos-filtro-grupo__titulo">Calidad</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-calidad"></div>
+    </div>
+
+    <!-- ============================================================
+        BORDE
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-borde">
+      <h3 class="saldos-filtro-grupo__titulo">Borde</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-borde"></div>
+    </div>
+
+    <!-- ============================================================
+        MODELO (buscador)
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-modelo">
+      <h3 class="saldos-filtro-grupo__titulo">Modelo</h3>
+      <input
+        type="search"
+        id="outlet-modelo-search"
+        class="saldos-modelo-search"
+        placeholder="Buscar modelo…"
+        autocomplete="off"
+        aria-label="Buscar modelo"
+      >
+    </div>
+
+    <!-- ============================================================
+        LARGO / ANCHO / ESPESOR
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-largo">
+      <h3 class="saldos-filtro-grupo__titulo">Largo</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-largo"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="outlet-grupo-ancho">
+      <h3 class="saldos-filtro-grupo__titulo">Ancho</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-ancho"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="outlet-grupo-espesor">
+      <h3 class="saldos-filtro-grupo__titulo">Espesor</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-espesor"></div>
+    </div>
+
+    <!-- ============================================================
+        DESTACADOS
+        ============================================================ -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-destacados">
+      <h3 class="saldos-filtro-grupo__titulo">Destacados</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="outlet-toggle-destacados">
+        <span>Solo destacados</span>
+      </label>
+    </div>
+
+  </div>
+  <div class="saldos-sheet__footer">
+    <button type="button" class="btn-limpiar" id="outlet-btn-limpiar">Limpiar</button>
+    <button type="button" class="btn-aplicar" id="outlet-btn-aplicar">Aplicar filtros</button>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- MODAL QR -->
+<!-- ============================================================ -->
+<div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-label="Escanear código QR">
+  <div class="qr-modal__content">
+  <button type="button" class="qr-modal__close" id="qr-modal-close" aria-label="Cerrar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+    <h2 class="qr-modal__title">Escanear código QR</h2>
+    <p class="qr-modal__hint">Apunta la cámara al código QR del producto.</p>
+    <div id="qr-reader" class="qr-modal__reader"></div>
+    <p class="qr-modal__status" id="qr-status"></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BANNER FLOTANTE DE CARRITO -->
+<!-- ============================================================ -->
+<div class="carrito-banner" id="carrito-banner" hidden role="status" aria-live="polite">
+  <span class="carrito-banner__text">
+    Tienes <strong id="carrito-count-banner">0</strong> <span id="carrito-count-label">producto</span> en tu cotización
+  </span>
+  <div class="carrito-banner__acciones">
+    <a href="cotizacion.html?origen=outlet" class="carrito-banner__btn carrito-banner__btn--primary" id="carrito-ver">
+      Ver
+    </a>
+    <button type="button" class="carrito-banner__btn carrito-banner__btn--ghost" id="carrito-seguir">
+      Seguir
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- BOTÓN FLOTANTE DE FAQs -->
+<!-- ============================================================ -->
+<button
+  type="button"
+  class="outlet-faq-fab"
+  id="outlet-faq-fab"
+  aria-label="Preguntas frecuentes del outlet"
+  aria-haspopup="dialog"
+  aria-controls="outlet-faq-drawer"
+>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- DRAWER DE FAQs DEL OUTLET -->
+<!-- ============================================================ -->
+<div class="outlet-faq-backdrop" id="outlet-faq-backdrop"></div>
+
+<aside
+  class="outlet-faq-drawer"
+  id="outlet-faq-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="outlet-faq-title"
+  aria-hidden="true"
+>
+  <div class="outlet-faq-header">
+    <h2 class="outlet-faq-title" id="outlet-faq-title">Preguntas frecuentes del outlet</h2>
+    <button
+      type="button"
+      class="outlet-faq-close"
+      id="outlet-faq-close"
+      aria-label="Cerrar preguntas frecuentes"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="outlet-faq-body">
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Tiene garantía?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los productos de outlet tienen garantía contra defectos de fabricación. No cubre daños por instalación inadecuada ni el desgaste natural del material. Consulta los términos específicos con tu asesor.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo devolverlo?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Los productos de outlet se venden en los términos y condiciones. No aceptamos devoluciones.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El precio incluye IGV?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los precios mostrados en el outlet incluyen IGV (18%).
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Hay más unidades disponibles?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        El stock del outlet es limitado y se actualiza en tiempo real. Te recomendamos confirmar disponibilidad por WhatsApp antes de acercarte al outlet.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Hay atención todos los días?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los días de 10:00 a.m. a 05:00 p.m. (incluye domingos y feriados).
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Si realizo mi compra me lo puedo llevar el mismo día?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todo dependerá del volumen de compra para poder atenderlo de manera correcta con previa coordinación con el asesor.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El producto viene embalado en cajas?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Algunos productos dependiendo del tamaño se atienden a granel y otros encajados dependiendo de los inventarios.
+      </div>
+    </details>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+<script src="./assets/js/tracking.js" defer></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+<script type="module">
+  // ============================================================
+  // IMPORTACIONES
+  // ============================================================
+  import { CatalogoAPI, LineasConfigAPI } from '../shared/js/supabase-client.js';
+  import { productCardHtml, escapeHtml, escapeAttr } from './assets/js/public.js';
+
+  // ============================================================
+  // CONSTANTES
+  // ============================================================
+  const LINEA = 'outlet';
+  const ORIGEN = 'outlet';
+  const POR_PAGINA = 12;
+  const DEBOUNCE_MS = 250;
+  const UMBRAL_CHIPS_DIMENSION = 20;
+
+  // ============================================================
+  // INICIALIZAR SHELL
+  // ============================================================
+  pubHeader('outlet');
+
+  setTimeout(() => {
+    if (typeof window.actualizarContadorCarritoHeader === 'function') {
+      window.actualizarContadorCarritoHeader('outlet');
+    }
+    if (typeof window.actualizarContadorFavoritosHeader === 'function') {
+      window.actualizarContadorFavoritosHeader();
+    }
+  }, 50);
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let todosLosProductos = [];
+  const LS_ORDEN = 'gm.outlet.orden';
+  const ORDENES_VALIDAS = ['mayor-descuento', 'menor-precio', 'mayor-precio', 'recientes', 'a-z', 'orden'];
+  const ordenInicial = ORDENES_VALIDAS.includes(localStorage.getItem(LS_ORDEN))
+    ? localStorage.getItem(LS_ORDEN)
+    : 'mayor-descuento';  
+  let filtros = {
+    q: '',
+    familia_id: null,
+    materiales: [],
+    acabados: [],
+    largo: [],
+    ancho: [],
+    espesor: [],
+    soloDestacados: false,
+
+    // NUEVOS:
+    descuento: null,         
+    precioMin: null,         
+    precioMax: null,        
+    soloConStock: false,     
+    calidades: [],           
+    bordes: [],              
+    modelo: '',
+    orden: ordenInicial
+    
+  };
+  let vista = 'grid';
+  let pagina = 1;
+  let resultadosFiltrados = [];
+  let countdownInterval = null;
+  let qrScanner = null;
+
+  // ============================================================
+  // REFERENCIAS DOM
+  // ============================================================
+  const $search        = document.getElementById('outlet-search');
+  const $sugerencias   = document.getElementById('outlet-sugerencias');
+  const $btnFiltros    = document.getElementById('outlet-btn-filtros');
+  const $vistaGrid     = document.getElementById('outlet-vista-grid');
+  const $vistaLista    = document.getElementById('outlet-vista-lista');
+  const $soloDest      = document.getElementById('outlet-solo-destacados');
+  const $count         = document.getElementById('outlet-count');
+  const $familias      = document.getElementById('outlet-familias');
+  const $activos       = document.getElementById('outlet-activos');
+  const $grid          = document.getElementById('outlet-grid');
+  const $cargarMas     = document.getElementById('outlet-cargar-mas');
+  const $btnCargarMas  = document.getElementById('outlet-btn-cargar-mas');
+  const $sheet         = document.getElementById('outlet-sheet');
+  const $sheetBackdrop = document.getElementById('outlet-sheet-backdrop');
+  const $sheetClose    = document.getElementById('outlet-sheet-close');
+  const $btnLimpiar    = document.getElementById('outlet-btn-limpiar');
+  const $btnAplicar    = document.getElementById('outlet-btn-aplicar');
+  const $btnTop        = document.getElementById('btn-top');
+  const $contenido     = document.getElementById('outlet-contenido');
+  const $bloqueado     = document.getElementById('outlet-bloqueado');
+  const $precioSlider = document.getElementById('outlet-precio-slider');
+  const $precioMinValor = document.getElementById('outlet-precio-min-valor');
+  const $precioMaxValor = document.getElementById('outlet-precio-max-valor');
+  const $precioReset = document.getElementById('outlet-precio-reset');
+  const $toggleStock = document.getElementById('outlet-toggle-stock');
+  const $toggleDestacados = document.getElementById('outlet-toggle-destacados');
+  const $modeloSearch = document.getElementById('outlet-modelo-search');
+
+let precioSliderInstance = null;
+let precioRangoGlobal = { min: 0, max: 0 };
+  // ============================================================
+  // UTILIDADES
+  // ============================================================
+  function debounce(fn, ms = DEBOUNCE_MS) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  // ============================================================
+  // BÚSQUEDA INTELIGENTE (tokens + plurales + fuzzy + sinónimos)
+  // ============================================================
+  function normalizarTexto(str) {
+    return String(str || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function pareceSKU(termino) {
+    if (!termino) return false;
+    const t = String(termino).trim();
+    return /^[A-Z0-9]{6,}$/i.test(t);
+  }
+
+  function reducirPalabra(palabra) {
+    if (!palabra || palabra.length <= 3) return palabra;
+    if (palabra.endsWith('es') && palabra.length > 4) {
+      const sinEs = palabra.slice(0, -2);
+      if (sinEs.length >= 3 && /[aeiou]$/.test(sinEs)) {
+        return sinEs;
+      }
+    }
+    if (palabra.endsWith('s') && !palabra.endsWith('ss') && palabra.length > 3) {
+      return palabra.slice(0, -1);
+    }
+    return palabra;
+  }
+
+  function tokensDe(str) {
+    const norm = normalizarTexto(str);
+    if (!norm) return [];
+    return norm.split(' ').map(reducirPalabra).filter(Boolean);
+  }
+
+  function distanciaLevenshtein(a, b) {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const m = [];
+    for (let i = 0; i <= b.length; i++) m[i] = [i];
+    for (let j = 0; j <= a.length; j++) m[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        m[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+          ? m[i - 1][j - 1]
+          : 1 + Math.min(m[i - 1][j - 1], m[i][j - 1], m[i - 1][j]);
+      }
+    }
+    return m[b.length][a.length];
+  }
+
+  const SINONIMOS = {
+    'marmol':   ['marmol', 'marble'],
+    'granito':  ['granito', 'granite'],
+    'cuarzo':   ['cuarzo', 'quartz'],
+    'travertino': ['travertino', 'travertine'],
+    'porcelanato': ['porcelanato', 'porcelain', 'porcelanico'],
+    'revestimiento': ['revestimiento', 'recubrimiento', 'revestir'],
+    'moldura':  ['moldura', 'molde', 'cornisa'],
+    'baldosa':  ['baldosa', 'baldosin', 'baldoson', 'tile', 'losa'],
+    'losa':     ['losa', 'slab', 'plancha'],
+    'plancha':  ['plancha', 'slab', 'losa'],
+    'pulido':   ['pulido', 'polished', 'brillante'],
+    'mate':     ['mate', 'matte', 'opaco'],
+    'honed':    ['honed', 'mate', 'apomazado'],
+    'abujardado': ['abujardado', 'bushhammered'],
+    'cepillado': ['cepillado', 'brushed'],
+    'apomazado': ['apomazado', 'honed'],
+    'blanco':   ['blanco', 'white', 'bianco'],
+    'negro':    ['negro', 'black', 'nero'],
+    'gris':     ['gris', 'gray', 'grey', 'grigio'],
+    'beige':    ['beige', 'beis', 'crema'],
+    'crema':    ['crema', 'cream', 'beige'],
+    'marron':   ['marron', 'brown', 'cafe'],
+    'piedra':   ['piedra', 'stone', 'marmol', 'granito', 'cuarzo', 'travertino'],
+    'natural':  ['natural', 'stone', 'piedra'],
+    'comercial': ['comercial', 'commercial', 'standard'],
+  };
+
+  function expandirTokens(tokens) {
+    const expandidos = new Set(tokens);
+    tokens.forEach(t => {
+      const sinonimos = SINONIMOS[t];
+      if (sinonimos) {
+        sinonimos.forEach(s => expandidos.add(reducirPalabra(normalizarTexto(s))));
+      }
+    });
+    return Array.from(expandidos);
+  }
+
+  function tokensMatchean(tokensBuscados, textoObjetivo) {
+    if (!textoObjetivo) return false;
+    const tokensObjetivo = tokensDe(textoObjetivo);
+    if (tokensObjetivo.length === 0) return false;
+    return tokensBuscados.every(tokenBuscado => {
+      const variantes = expandirTokens([tokenBuscado]);
+      return variantes.some(variante => {
+        if (tokensObjetivo.some(t => t.includes(variante) || variante.includes(t))) {
+          return true;
+        }
+        const umbral = variante.length <= 5 ? 1 : 2;
+        return tokensObjetivo.some(t => {
+          if (Math.abs(t.length - variante.length) > umbral) return false;
+          return distanciaLevenshtein(t, variante) <= umbral;
+        });
+      });
+    });
+  }
+
+  function extraerMedidasDeQuery(q) {
+    const norm = normalizarTexto(q);
+    const patronPulgada = /(\d+(?:\.\d+)?)\s*(?:pulg|pulgada|pulgadas|in|")/gi;
+    const patronCm = /(\d+(?:\.\d+)?)\s*(?:cm|centimetro|centimetros)/gi;
+    const patronMm = /(\d+(?:\.\d+)?)\s*(?:mm|milimetro|milimetros)/gi;
+    const matchPulgada = [...norm.matchAll(patronPulgada)];
+    const matchCm = [...norm.matchAll(patronCm)];
+    const matchMm = [...norm.matchAll(patronMm)];
+    if (matchPulgada.length === 0 && matchCm.length === 0 && matchMm.length === 0) {
+      return null;
+    }
+    const valoresCm = [];
+    matchPulgada.forEach(m => valoresCm.push(parseFloat(m[1]) * 2.54));
+    matchCm.forEach(m => valoresCm.push(parseFloat(m[1])));
+    matchMm.forEach(m => valoresCm.push(parseFloat(m[1]) * 0.1));
+    return { valoresCm };
+  }
+
+  function matchMedidas(p, query) {
+    const medidasQuery = extraerMedidasDeQuery(query);
+    if (!medidasQuery) return null;
+    const coincide = (valorCm, valoresQuery) => {
+      if (valorCm == null) return false;
+      return valoresQuery.some(v => {
+        const tolerancia = Math.max(v * 0.02, 0.5);
+        return Math.abs(valorCm - v) <= tolerancia;
+      });
+    };
+    return (
+      coincide(p._largo_cm, medidasQuery.valoresCm) ||
+      coincide(p._ancho_cm, medidasQuery.valoresCm) ||
+      coincide(p._espesor_cm, medidasQuery.valoresCm)
+    );
+  }
+
+  function matchBusqueda(p, q) {
+    const norm = normalizarTexto(q);
+    if (!norm) return true;
+    if (pareceSKU(q)) {
+      return String(p.sku || '').toUpperCase() === String(q).trim().toUpperCase();
+    }
+    const matchPorMedidas = matchMedidas(p, q);
+    if (matchPorMedidas === true) return true;
+    const campos = [p.nombre, p.sku, p.familia_nombre, p.material_nombre, p.acabado_nombre, p.descripcion, p.modelo];
+    for (const campo of campos) {
+      if (campo && normalizarTexto(campo).includes(norm)) return true;
+    }
+    const tokensBuscados = tokensDe(q);
+    if (tokensBuscados.length === 0) return true;
+    for (const campo of campos) {
+      if (campo && tokensMatchean(tokensBuscados, campo)) return true;
+    }
+    return false;
+  }
+
+  function matchFamilia(p, familiaId) {
+    return !familiaId || p.familia_id === familiaId;
+  }
+
+  function matchMulti(valor, lista) {
+    return lista.length === 0 || lista.includes(valor);
+  }
+
+  function toggleArray(arr, val) {
+    const i = arr.indexOf(val);
+    if (i > -1) arr.splice(i, 1);
+    else arr.push(val);
+  }
+
+// ============================================================
+// HELPERS DE ORDENAMIENTO
+// ============================================================
+
+function fechaProducto(p) {
+  const f = p.actualizado_en || p.creado_en;
+  return f ? new Date(f).getTime() : 0;
+}
+
+// ============================================================
+// ORDENAR PRODUCTOS
+// ============================================================
+
+  function ordenarProductos(lista) {
+    const orden = filtros.orden || 'mayor-descuento';
+    const copia = [...lista];
+
+    // ORDEN POR DEFECTO DEL OUTLET: primero destacados, luego por 'orden' del campo orden
+    if (orden === 'mayor-descuento' || orden === 'orden') {
+      copia.sort((a, b) => {
+        // 1. Destacados primero
+        const da = a.destacado === true ? 1 : 0;
+        const db = b.destacado === true ? 1 : 0;
+        if (da !== db) return db - da;
+
+        // 2. Si es 'mayor-descuento', ordenar por descuento
+        if (orden === 'mayor-descuento') {
+          const descA = calcularDescuento(a) ?? -1;
+          const descB = calcularDescuento(b) ?? -1;
+          if (descA !== descB) return descB - descA;
+        }
+
+        // 3. Orden por el campo 'orden' del producto (menor primero)
+        const oa = Number(a.orden) || 999999;
+        const ob = Number(b.orden) || 999999;
+        if (oa !== ob) return oa - ob;
+
+        // 4. Fallback alfabético
+        return String(a.nombre || '').localeCompare(String(b.nombre || ''));
+      });
+      return copia;
+    }
+
+    if (orden === 'menor-precio') {
+      copia.sort((a, b) => {
+        const pa = precioFinal(a) ?? Infinity;
+        const pb = precioFinal(b) ?? Infinity;
+        return pa - pb;
+      });
+      return copia;
+    }
+
+    if (orden === 'mayor-precio') {
+      copia.sort((a, b) => {
+        const pa = precioFinal(a) ?? -1;
+        const pb = precioFinal(b) ?? -1;
+        return pb - pa;
+      });
+      return copia;
+    }
+
+    if (orden === 'recientes') {
+      copia.sort((a, b) => fechaProducto(b) - fechaProducto(a));
+      return copia;
+    }
+
+    if (orden === 'a-z') {
+      copia.sort((a, b) =>
+        String(a.nombre || '').localeCompare(String(b.nombre || ''))
+      );
+      return copia;
+    }
+
+    return copia;
+  }
+
+  // ============================================================
+  // APLICAR FILTROS
+  // ============================================================
+  function aplicarFiltros() {
+    resultadosFiltrados = todosLosProductos.filter(p => {
+      if (!matchBusqueda(p, filtros.q)) return false;
+      if (!matchFamilia(p, filtros.familia_id)) return false;
+      if (!matchMulti(p.material_id, filtros.materiales)) return false;
+      if (!matchMulti(p.acabado_id, filtros.acabados)) return false;
+      if (filtros.largo.length > 0 && !filtros.largo.includes(p._largo_cm)) return false;
+      if (filtros.ancho.length > 0 && !filtros.ancho.includes(p._ancho_cm)) return false;
+      if (filtros.espesor.length > 0 && !filtros.espesor.includes(p._espesor_cm)) return false;
+      if (filtros.soloDestacados && p.destacado !== true) return false;
+
+      // === NUEVOS FILTROS ===
+
+      // 1. Descuento mínimo
+      if (filtros.descuento != null) {
+        const desc = calcularDescuento(p);
+        if (desc == null || desc < filtros.descuento) return false;
+      }
+
+      // 2. Precio (rango)
+      if (filtros.precioMin != null || filtros.precioMax != null) {
+        const precio = precioFinal(p);
+        if (precio == null) return false;
+        if (filtros.precioMin != null && precio < filtros.precioMin) return false;
+        if (filtros.precioMax != null && precio > filtros.precioMax) return false;
+      }
+
+      // 3. Solo con stock
+      if (filtros.soloConStock) {
+        const stock = stockDeLinea(p, LINEA);
+        if (stock === 0) return false;   // 0 = agotado → excluir
+      }
+
+      // 4. Calidad
+      if (filtros.calidades.length > 0 && !filtros.calidades.includes(p.calidad_id)) return false;
+
+      // 5. Borde
+      if (filtros.bordes.length > 0 && !filtros.bordes.includes(p.borde_id)) return false;
+
+      // 6. Modelo
+      if (filtros.modelo) {
+        const q = normalizarTexto(filtros.modelo);
+        const modelo = normalizarTexto(p.modelo || '');
+        if (!modelo.includes(q)) return false;
+      }
+
+      return true;
+    });
+
+    // Aplicar ordenamiento
+    resultadosFiltrados = ordenarProductos(resultadosFiltrados);
+
+    pagina = 1;
+    renderProductos();
+    renderContador();
+    renderActivos();
+    renderFacetas();
+    renderFamilias();
+  }
+
+  // ============================================================
+  // Helpers para los nuevos filtros
+  // ============================================================
+
+  function calcularDescuento(p) {
+    const base = Number(p.precio_base ?? p.precio);
+    const oferta = Number(p.precio_oferta);
+    if (!base || !oferta || oferta >= base) return null;
+    return Math.round(((base - oferta) / base) * 100);
+  }
+
+  function precioFinal(p) {
+    const oferta = Number(p.precio_oferta);
+    if (oferta > 0) return oferta;
+    const base = Number(p.precio_base ?? p.precio);
+    if (base > 0) return base;
+    return null;
+  }
+
+  function stockDeLinea(p, linea) {
+    const l = (p.lineas || []).find(x => x.linea === linea && x.activo !== false);
+    if (!l) return null;
+    return l.stock == null ? null : Number(l.stock);
+  }
+
+  // ============================================================
+  // RENDER PRODUCTOS
+  // ============================================================
+  function renderProductos() {
+    const totalMostrar = pagina * POR_PAGINA;
+    const visibles = resultadosFiltrados.slice(0, totalMostrar);
+    $grid.classList.toggle('saldos-productos--grid', vista === 'grid');
+    $grid.classList.toggle('saldos-productos--lista', vista === 'lista');
+    if (visibles.length === 0) {
+      const esSKU = pareceSKU(filtros.q);
+      const svgIcon = esSKU
+        ? `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="9" y1="11" x2="13" y2="11"/>
+          </svg>`
+        : `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>`;
+      $grid.innerHTML = `
+        <div class="saldos-empty" style="grid-column:1/-1;" aria-live="polite">
+          <div class="saldos-empty__icon">${svgIcon}</div>
+          <h3 class="saldos-empty__title">
+            ${esSKU ? 'SKU no encontrado' : 'Sin resultados'}
+          </h3>
+          <p class="saldos-empty__text">
+            ${esSKU
+              ? `No existe un producto con el SKU <strong>${escapeHtml(filtros.q)}</strong>. Verifica el código.`
+              : 'No se encontraron productos con esos filtros.'}
+          </p>
+          <button type="button" class="saldos-empty__btn" id="outlet-empty-limpiar">
+            ${esSKU ? 'Limpiar búsqueda' : 'Limpiar filtros'}
+          </button>
+        </div>
+      `;
+      document.getElementById('outlet-empty-limpiar')?.addEventListener('click', () => {
+        resetFiltros();
+      });
+      $cargarMas.style.display = 'none';
+      return;
+    }
+    $grid.innerHTML = visibles.map(p => productCardHtml(p, true, vista, ORIGEN)).join('');
+    if (totalMostrar < resultadosFiltrados.length) {
+      $cargarMas.style.display = 'flex';
+    } else {
+      $cargarMas.style.display = 'none';
+    }
+  }
+
+  function renderContador() {
+    const total = todosLosProductos.length;
+    const mostrados = resultadosFiltrados.length;
+    if (mostrados === total) {
+      $count.textContent = `${total} producto${total !== 1 ? 's' : ''}`;
+    } else {
+      $count.textContent = `Mostrando ${mostrados} de ${total}`;
+    }
+  }
+
+  // ============================================================
+  // RENDER CHIPS DE FAMILIA
+  // ============================================================
+  function renderFamilias() {
+    const pool = todosLosProductos.filter(p => {
+      if (!matchBusqueda(p, filtros.q)) return false;
+      if (!matchMulti(p.material_id, filtros.materiales)) return false;
+      if (!matchMulti(p.acabado_id, filtros.acabados)) return false;
+      if (filtros.largo.length > 0 && !filtros.largo.includes(p._largo_cm)) return false;
+      if (filtros.ancho.length > 0 && !filtros.ancho.includes(p._ancho_cm)) return false;
+      if (filtros.espesor.length > 0 && !filtros.espesor.includes(p._espesor_cm)) return false;
+      if (filtros.soloDestacados && p.destacado !== true) return false;
+      return true;
+    });
+    const familiasMap = new Map();
+    pool.forEach(p => {
+      if (p.familia_id && p.familia_nombre) {
+        const prev = familiasMap.get(p.familia_id);
+        familiasMap.set(p.familia_id, {
+          id: p.familia_id,
+          nombre: p.familia_nombre,
+          count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const familias = Array.from(familiasMap.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    const totalTodos = pool.length;
+    $familias.innerHTML = `
+      <button type="button" class="saldos-familia-chip ${!filtros.familia_id ? 'active' : ''}" data-familia="">
+        Todas <span class="chip-count">${totalTodos}</span>
+      </button>
+      ${familias.map(f => `
+        <button type="button"
+                class="saldos-familia-chip ${filtros.familia_id === f.id ? 'active' : ''}"
+                data-familia="${escapeAttr(f.id)}">
+          ${escapeHtml(f.nombre)} <span class="chip-count">${f.count}</span>
+        </button>
+      `).join('')}
+    `;
+    $familias.onclick = (e) => {
+      const chip = e.target.closest('.saldos-familia-chip');
+      if (!chip) return;
+      const id = chip.dataset.familia || null;
+      filtros.familia_id = id;
+      aplicarFiltros();
+    };
+  }
+
+  // ============================================================
+  // RENDER CHIPS DE FILTROS ACTIVOS
+  // ============================================================
+  function renderActivos() {
+    const chips = [];
+    // Descuento
+    if (filtros.descuento != null) {
+      chips.push({ key: 'descuento', label: `Descuento ≥ ${filtros.descuento}%` });
+    }
+
+    // Precio
+    if (filtros.precioMin != null || filtros.precioMax != null) {
+      const min = filtros.precioMin != null ? `S/ ${filtros.precioMin}` : 'S/ 0';
+      const max = filtros.precioMax != null ? `S/ ${filtros.precioMax}` : '∞';
+      chips.push({ key: 'precio', label: `Precio: ${min} – ${max}` });
+    }
+
+    // Stock
+    if (filtros.soloConStock) {
+      chips.push({ key: 'soloConStock', label: 'Solo con stock' });
+    }
+
+    // Calidad
+    filtros.calidades.forEach(id => {
+      const c = todosLosProductos.find(p => p.calidad_id === id);
+      chips.push({ key: 'calidad', value: id, label: c?.calidad_nombre || 'Calidad' });
+    });
+
+    // Borde
+    filtros.bordes.forEach(id => {
+      const b = todosLosProductos.find(p => p.borde_id === id);
+      chips.push({ key: 'borde', value: id, label: b?.borde_nombre || 'Borde' });
+    });
+
+    // Modelo
+    if (filtros.modelo) {
+      chips.push({ key: 'modelo', label: `Modelo: "${filtros.modelo}"` });
+    }
+
+    if (filtros.familia_id) {
+      const fam = todosLosProductos.find(p => p.familia_id === filtros.familia_id);
+      chips.push({ key: 'familia_id', label: fam?.familia_nombre || 'Familia' });
+    }
+    filtros.materiales.forEach(id => {
+      const mat = todosLosProductos.find(p => p.material_id === id);
+      chips.push({ key: 'material', value: id, label: mat?.material_nombre || 'Material' });
+    });
+    filtros.acabados.forEach(id => {
+      const aca = todosLosProductos.find(p => p.acabado_id === id);
+      chips.push({ key: 'acabado', value: id, label: aca?.acabado_nombre || 'Acabado' });
+    });
+    const formatearEtiquetaDimension = (dimension, valorCm) => {
+      const prod = todosLosProductos.find(p => p[`_${dimension}_cm`] === valorCm);
+      const cmRedondeado = Math.round(valorCm * 10) / 10;
+      if (!prod) return `${cmRedondeado} cm`;
+      const unidad = prod[`_unidad_${dimension}`] || 'cm';
+      const original = prod[`_${dimension}_original`];
+      if (unidad === 'cm') return `${cmRedondeado} cm`;
+      const esPulgada = unidad === '"' || unidad === 'in' || unidad === 'pulg';
+      const simbolo = esPulgada ? '"' : ` ${unidad}`;
+      return `${original}${simbolo} (${cmRedondeado} cm)`;
+    };
+    filtros.largo.forEach(v => {
+      chips.push({ key: 'largo', value: v, label: `Largo: ${formatearEtiquetaDimension('largo', v)}` });
+    });
+    filtros.ancho.forEach(v => {
+      chips.push({ key: 'ancho', value: v, label: `Ancho: ${formatearEtiquetaDimension('ancho', v)}` });
+    });
+    filtros.espesor.forEach(v => {
+      chips.push({ key: 'espesor', value: v, label: `Espesor: ${formatearEtiquetaDimension('espesor', v)}` });
+    });
+    if (filtros.soloDestacados) {
+      chips.push({ key: 'soloDestacados', label: 'Solo destacados' });
+    }
+    if (chips.length === 0) {
+      $activos.innerHTML = '';
+      return;
+    }
+    const SVG_X = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    $activos.innerHTML = `
+      ${chips.map(c => `
+        <button type="button"
+                class="saldos-activo"
+                data-key="${escapeAttr(c.key)}"
+                data-value="${escapeAttr(c.value ?? '')}">
+          <span>${escapeHtml(c.label)}</span>
+          <span class="saldos-activo__close">${SVG_X}</span>
+        </button>
+      `).join('')}
+      <button type="button" class="saldos-activo saldos-activo--clear" id="outlet-activos-clear">
+        Limpiar todo
+      </button>
+    `;
+    $activos.onclick = (e) => {
+      const clear = e.target.closest('#outlet-activos-clear');
+      if (clear) { resetFiltros(); return; }
+      const chip = e.target.closest('.saldos-activo');
+      if (!chip) return;
+      quitarFiltro(chip.dataset.key, chip.dataset.value);
+    };
+  }
+
+  function quitarFiltro(key, value) {
+    switch (key) {
+      case 'familia_id':    filtros.familia_id = null; break;
+      case 'material':      filtros.materiales = filtros.materiales.filter(x => x !== value); break;
+      case 'acabado':       filtros.acabados = filtros.acabados.filter(x => x !== value); break;
+      case 'largo':         filtros.largo = filtros.largo.filter(v => v !== parseFloat(value)); break;
+      case 'ancho':         filtros.ancho = filtros.ancho.filter(v => v !== parseFloat(value)); break;
+      case 'espesor':       filtros.espesor = filtros.espesor.filter(v => v !== parseFloat(value)); break;
+      case 'soloDestacados': filtros.soloDestacados = false; $soloDest.checked = false; break;
+      case 'descuento': filtros.descuento = null; break;
+      case 'precio':
+        filtros.precioMin = null;
+        filtros.precioMax = null;
+        resetearSliderPrecio();
+        break;
+      case 'soloConStock': filtros.soloConStock = false; if ($toggleStock) $toggleStock.checked = false; break;
+      case 'calidad': filtros.calidades = filtros.calidades.filter(x => x !== value); break;
+      case 'borde': filtros.bordes = filtros.bordes.filter(x => x !== value); break;
+      case 'modelo':
+        filtros.modelo = '';
+        if ($modeloSearch) $modeloSearch.value = '';
+        break;
+      case 'familia_id':
+        filtros.familia_id = null;
+        break;      
+    }
+    aplicarFiltros();
+  }
+
+  function resetFiltros() {
+    filtros = {
+      q: '',
+      familia_id: null,
+      materiales: [],
+      acabados: [],
+      largo: [],
+      ancho: [],
+      espesor: [],
+      soloDestacados: false,
+      descuento: null,
+      precioMin: null,
+      precioMax: null,
+      soloConStock: false,
+      calidades: [],
+      bordes: [],
+      modelo: ''
+    };
+    if ($search) $search.value = '';
+    if ($soloDest) $soloDest.checked = false;
+    if ($toggleStock) $toggleStock.checked = false;
+    if ($toggleDestacados) $toggleDestacados.checked = false;
+    if ($modeloSearch) $modeloSearch.value = '';
+    resetearSliderPrecio();
+    aplicarFiltros();
+    filtros.orden = 'mayor-descuento';
+    if ($ordenSelect) $ordenSelect.value = 'mayor-descuento';
+    try { localStorage.setItem(LS_ORDEN, 'mayor-descuento'); } catch (e) {}    
+  }
+
+  // ============================================================
+  // RENDER FACETAS
+  // ============================================================
+  function renderFacetas() {
+    const base = (overrides) => todosLosProductos.filter(p => {
+      const f = { ...filtros, ...overrides };
+      if (!matchBusqueda(p, f.q)) return false;
+      if (!matchFamilia(p, f.familia_id)) return false;
+      if (!matchMulti(p.material_id, f.materiales)) return false;
+      if (!matchMulti(p.acabado_id, f.acabados)) return false;
+      if (f.largo.length > 0 && !f.largo.includes(p._largo_cm)) return false;
+      if (f.ancho.length > 0 && !f.ancho.includes(p._ancho_cm)) return false;
+      if (f.espesor.length > 0 && !f.espesor.includes(p._espesor_cm)) return false;
+      if (f.soloDestacados && p.destacado !== true) return false;
+      return true;
+    });
+
+    const poolMaterial = base({ materiales: [] });
+    const materiales = new Map();
+    poolMaterial.forEach(p => {
+      if (p.material_id && p.material_nombre) {
+        const prev = materiales.get(p.material_id);
+        materiales.set(p.material_id, {
+          id: p.material_id, nombre: p.material_nombre, count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const $opMat = document.getElementById('outlet-opciones-material');
+    if ($opMat) {
+      if (materiales.size === 0) {
+        $opMat.innerHTML = `<p class="saldos-filtro-vacio">Sin materiales disponibles</p>`;
+      } else {
+        $opMat.innerHTML = Array.from(materiales.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(m => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.materiales.includes(m.id) ? 'active' : ''}"
+                    data-faceta="material"
+                    data-value="${escapeAttr(m.id)}">
+              ${escapeHtml(m.nombre)}
+              <span class="saldos-filtro-opcion__count">${m.count}</span>
+            </button>
+          `).join('');
+      }
+    }
+
+    const poolAcabado = base({ acabados: [] });
+    const acabados = new Map();
+    poolAcabado.forEach(p => {
+      if (p.acabado_id && p.acabado_nombre) {
+        const prev = acabados.get(p.acabado_id);
+        acabados.set(p.acabado_id, {
+          id: p.acabado_id, nombre: p.acabado_nombre, count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const $opAca = document.getElementById('outlet-opciones-acabado');
+    if ($opAca) {
+      if (acabados.size === 0) {
+        $opAca.innerHTML = `<p class="saldos-filtro-vacio">Sin acabados disponibles</p>`;
+      } else {
+        $opAca.innerHTML = Array.from(acabados.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(a => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.acabados.includes(a.id) ? 'active' : ''}"
+                    data-faceta="acabado"
+                    data-value="${escapeAttr(a.id)}">
+              ${escapeHtml(a.nombre)}
+              <span class="saldos-filtro-opcion__count">${a.count}</span>
+            </button>
+          `).join('');
+      }
+    }
+
+    document.querySelectorAll('[data-faceta="material"], [data-faceta="acabado"]').forEach(btn => {
+      btn.onclick = () => {
+        const faceta = btn.dataset.faceta;
+        const val = btn.dataset.value;
+        if (faceta === 'material') toggleArray(filtros.materiales, val);
+        else if (faceta === 'acabado') toggleArray(filtros.acabados, val);
+        aplicarFiltros();
+      };
+    });
+
+  // 1. Familia (sincronizada con los chips del toolbar)
+  const poolFamilia = base({ familia_id: null });
+  const familiasMap = new Map();
+  poolFamilia.forEach(p => {
+    if (p.familia_id && p.familia_nombre) {
+      const prev = familiasMap.get(p.familia_id);
+      familiasMap.set(p.familia_id, {
+        id: p.familia_id,
+        nombre: p.familia_nombre,
+        count: (prev?.count || 0) + 1
+      });
+    }
+  });
+  const $opFam = document.getElementById('outlet-opciones-familia');
+  if ($opFam) {
+    const familiasArr = Array.from(familiasMap.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    const totalFam = poolFamilia.length;
+    if (familiasArr.length === 0) {
+      $opFam.innerHTML = `<p class="saldos-filtro-vacio">Sin familias disponibles</p>`;
+    } else {
+      $opFam.innerHTML = `
+        <button type="button" class="saldos-filtro-opcion ${!filtros.familia_id ? 'active' : ''}"
+                data-faceta="familia" data-value="">
+          Todas <span class="saldos-filtro-opcion__count">${totalFam}</span>
+        </button>
+        ${familiasArr.map(f => `
+          <button type="button"
+                  class="saldos-filtro-opcion ${filtros.familia_id === f.id ? 'active' : ''}"
+                  data-faceta="familia" data-value="${escapeAttr(f.id)}">
+            ${escapeHtml(f.nombre)} <span class="saldos-filtro-opcion__count">${f.count}</span>
+          </button>
+        `).join('')}
+      `;
+      $opFam.querySelectorAll('[data-faceta="familia"]').forEach(btn => {
+        btn.onclick = () => {
+          filtros.familia_id = btn.dataset.value || null;
+          aplicarFiltros();
+        };
+      });
+    }
+  }
+
+  // 2. % Descuento
+  const $opDesc = document.getElementById('outlet-opciones-descuento');
+  if ($opDesc) {
+    const opcionesDesc = [
+      { value: null, label: 'Cualquier descuento' },
+      { value: 20,   label: '≥ 20%' },
+      { value: 30,   label: '≥ 30%' },
+      { value: 50,   label: '≥ 50%' },
+      { value: 70,   label: '≥ 70%' }
+    ];
+    const poolDesc = base({ descuento: null });
+    $opDesc.innerHTML = opcionesDesc.map(o => {
+      const count = poolDesc.filter(p => {
+        const d = calcularDescuento(p);
+        if (o.value == null) return d != null;
+        return d != null && d >= o.value;
+      }).length;
+      const activo = filtros.descuento === o.value;
+      return `
+        <button type="button"
+                class="saldos-filtro-opcion ${activo ? 'active' : ''}"
+                data-faceta="descuento" data-value="${o.value ?? ''}">
+          ${escapeHtml(o.label)} <span class="saldos-filtro-opcion__count">${count}</span>
+        </button>
+      `;
+    }).join('');
+    $opDesc.querySelectorAll('[data-faceta="descuento"]').forEach(btn => {
+      btn.onclick = () => {
+        const v = btn.dataset.value;
+        filtros.descuento = v === '' ? null : Number(v);
+        aplicarFiltros();
+      };
+    });
+  }
+
+  // 3. Calidad
+  const $opCal = document.getElementById('outlet-opciones-calidad');
+  if ($opCal) {
+    const poolCal = base({ calidades: [] });
+    const calMap = new Map();
+    poolCal.forEach(p => {
+      if (p.calidad_id && p.calidad_nombre) {
+        const prev = calMap.get(p.calidad_id);
+        calMap.set(p.calidad_id, {
+          id: p.calidad_id,
+          nombre: p.calidad_nombre,
+          count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    if (calMap.size === 0) {
+      $opCal.innerHTML = `<p class="saldos-filtro-vacio">Sin calidades disponibles</p>`;
+    } else {
+      $opCal.innerHTML = Array.from(calMap.values())
+        .sort((a, b) => a.nombre.localeCompare(b.nombre))
+        .map(c => `
+          <button type="button"
+                  class="saldos-filtro-opcion ${filtros.calidades.includes(c.id) ? 'active' : ''}"
+                  data-faceta="calidad" data-value="${escapeAttr(c.id)}">
+            ${escapeHtml(c.nombre)} <span class="saldos-filtro-opcion__count">${c.count}</span>
+          </button>
+        `).join('');
+      $opCal.querySelectorAll('[data-faceta="calidad"]').forEach(btn => {
+        btn.onclick = () => {
+          toggleArray(filtros.calidades, btn.dataset.value);
+          aplicarFiltros();
+        };
+      });
+    }
+  }
+
+  // 4. Borde
+  const $opBorde = document.getElementById('outlet-opciones-borde');
+  if ($opBorde) {
+    const poolBorde = base({ bordes: [] });
+    const bordeMap = new Map();
+    poolBorde.forEach(p => {
+      if (p.borde_id && p.borde_nombre) {
+        const prev = bordeMap.get(p.borde_id);
+        bordeMap.set(p.borde_id, {
+          id: p.borde_id,
+          nombre: p.borde_nombre,
+          count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    if (bordeMap.size === 0) {
+      $opBorde.innerHTML = `<p class="saldos-filtro-vacio">Sin bordes disponibles</p>`;
+    } else {
+      $opBorde.innerHTML = Array.from(bordeMap.values())
+        .sort((a, b) => a.nombre.localeCompare(b.nombre))
+        .map(b => `
+          <button type="button"
+                  class="saldos-filtro-opcion ${filtros.bordes.includes(b.id) ? 'active' : ''}"
+                  data-faceta="borde" data-value="${escapeAttr(b.id)}">
+            ${escapeHtml(b.nombre)} <span class="saldos-filtro-opcion__count">${b.count}</span>
+          </button>
+        `).join('');
+      $opBorde.querySelectorAll('[data-faceta="borde"]').forEach(btn => {
+        btn.onclick = () => {
+          toggleArray(filtros.bordes, btn.dataset.value);
+          aplicarFiltros();
+        };
+      });
+    }
+  }
+
+    renderFacetaDimension('largo',   base({ largo: []   }));
+    renderFacetaDimension('ancho',   base({ ancho: []   }));
+    renderFacetaDimension('espesor', base({ espesor: [] }));
+  }
+
+  function renderFacetaDimension(dimension, pool) {
+    const $opciones = document.getElementById(`outlet-opciones-${dimension}`);
+    if (!$opciones) return;
+    const grupos = new Map();
+    pool.forEach(p => {
+      const valorCm = p[`_${dimension}_cm`];
+      if (valorCm == null) return;
+      const valorOriginal = p[`_${dimension}_original`];
+      const unidad = p[`_unidad_${dimension}`] || 'cm';
+      const clave = Math.round(valorCm * 100) / 100;
+      if (!grupos.has(clave)) {
+        grupos.set(clave, { valorCm: clave, valorOriginal, unidad, count: 0 });
+      }
+      grupos.get(clave).count++;
+    });
+    if (grupos.size === 0) {
+      $opciones.innerHTML = `<p class="saldos-filtro-vacio">Sin valores disponibles</p>`;
+      return;
+    }
+    const lista = Array.from(grupos.values()).sort((a, b) => a.valorCm - b.valorCm);
+    const formatearEtiqueta = (g) => {
+      const esPulgada = g.unidad === '"' || g.unidad === 'in' || g.unidad === 'pulg';
+      const cmRedondeado = Math.round(g.valorCm * 10) / 10;
+      if (g.unidad === 'cm') return `${cmRedondeado} cm`;
+      const simboloOriginal = esPulgada ? '"' : ` ${g.unidad}`;
+      return `${g.valorOriginal}${simboloOriginal} (${cmRedondeado} cm)`;
+    };
+    if (lista.length <= UMBRAL_CHIPS_DIMENSION) {
+      $opciones.innerHTML = lista.map(g => {
+        const activo = filtros[dimension].includes(g.valorCm);
+        return `
+          <button type="button"
+                  class="saldos-filtro-opcion ${activo ? 'active' : ''}"
+                  data-faceta="${dimension}"
+                  data-value="${g.valorCm}">
+            ${escapeHtml(formatearEtiqueta(g))}
+            <span class="saldos-filtro-opcion__count">${g.count}</span>
+          </button>
+        `;
+      }).join('');
+      $opciones.querySelectorAll('[data-faceta]').forEach(btn => {
+        btn.onclick = () => {
+          const faceta = btn.dataset.faceta;
+          const valor = parseFloat(btn.dataset.value);
+          toggleArray(filtros[faceta], valor);
+          aplicarFiltros();
+        };
+      });
+    } else {
+      const valorActual = filtros[dimension][0] ?? '';
+      $opciones.innerHTML = `
+        <select class="saldos-select-dimension" data-faceta="${dimension}">
+          <option value="">Todas las medidas</option>
+          ${lista.map(g => `
+            <option value="${g.valorCm}" ${valorActual === g.valorCm ? 'selected' : ''}>
+              ${escapeHtml(formatearEtiqueta(g))} — ${g.count} producto${g.count !== 1 ? 's' : ''}
+            </option>
+          `).join('')}
+        </select>
+      `;
+      const $select = $opciones.querySelector('select');
+      $select.addEventListener('change', (e) => {
+        const faceta = $select.dataset.faceta;
+        const valor = e.target.value ? parseFloat(e.target.value) : null;
+        filtros[faceta] = valor === null ? [] : [valor];
+        aplicarFiltros();
+      });
+    }
+  }
+
+  // ============================================================
+  // SHEET
+  // ============================================================
+  function abrirSheet() {
+    renderFacetas();
+    inicializarSliderPrecio();
+    $sheet.classList.add('open');
+    $sheetBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    $sheetClose.focus();
+  }
+
+  // ============================================================
+  // SLIDER DE PRECIO (noUiSlider)
+  // ============================================================
+  function calcularRangoPrecioGlobal() {
+    const precios = todosLosProductos
+      .map(p => precioFinal(p))
+      .filter(v => v != null && v > 0);
+    if (precios.length === 0) return { min: 0, max: 0 };
+    return {
+      min: Math.floor(Math.min(...precios)),
+      max: Math.ceil(Math.max(...precios))
+    };
+  }
+
+  function inicializarSliderPrecio() {
+    if (!$precioSlider) return;
+    if (typeof noUiSlider === 'undefined') {
+      console.warn('[outlet] noUiSlider no cargado');
+      return;
+    }
+
+    const rango = calcularRangoPrecioGlobal();
+    precioRangoGlobal = rango;
+
+    // Si el min === max, no mostrar slider
+    if (rango.min === rango.max) {
+      $precioSlider.style.display = 'none';
+      if ($precioMinValor) $precioMinValor.textContent = `S/ ${rango.min}`;
+      if ($precioMaxValor) $precioMaxValor.textContent = `S/ ${rango.max}`;
+      return;
+    }
+    $precioSlider.style.display = '';
+
+    // Destruir slider previo
+    if (precioSliderInstance) {
+      try { precioSliderInstance.destroy(); } catch (e) {}
+      precioSliderInstance = null;
+    }
+
+    const startMin = filtros.precioMin ?? rango.min;
+    const startMax = filtros.precioMax ?? rango.max;
+
+    noUiSlider.create($precioSlider, {
+      start: [startMin, startMax],
+      connect: true,
+      range: { min: rango.min, max: rango.max },
+      step: 1,
+      tooltips: false,
+      format: {
+        to: (v) => Math.round(v),
+        from: (v) => Number(v)
+      }
+    });
+
+    precioSliderInstance = $precioSlider.noUiSlider;
+
+    precioSliderInstance.on('update', (values) => {
+      const [min, max] = values.map(Number);
+      if ($precioMinValor) $precioMinValor.textContent = `S/ ${min}`;
+      if ($precioMaxValor) $precioMaxValor.textContent = `S/ ${max}`;
+    });
+
+    precioSliderInstance.on('change', (values) => {
+      const [min, max] = values.map(Number);
+      filtros.precioMin = min === rango.min ? null : min;
+      filtros.precioMax = max === rango.max ? null : max;
+      aplicarFiltros();
+    });
+  }
+
+  function resetearSliderPrecio() {
+    if (!precioSliderInstance) return;
+    const rango = precioRangoGlobal;
+    if (rango.min === rango.max) return;
+    precioSliderInstance.set([rango.min, rango.max]);
+  }
+
+  function cerrarSheet() {
+    $sheet.classList.remove('open');
+    $sheetBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  $btnFiltros.addEventListener('click', abrirSheet);
+  $sheetClose.addEventListener('click', cerrarSheet);
+  $sheetBackdrop.addEventListener('click', cerrarSheet);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      cerrarSugerencias();
+      if ($sheet.classList.contains('open')) cerrarSheet();
+      if (document.getElementById('qr-modal')?.classList.contains('open')) cerrarModalQR();
+    }
+  });
+
+  $btnAplicar.addEventListener('click', () => {
+    aplicarFiltros();
+    cerrarSheet();
+  });
+
+  $btnLimpiar.addEventListener('click', () => {
+    resetFiltros();
+    cerrarSheet();
+  });
+
+  // ============================================================
+  // BUSCADOR CON SUGERENCIAS
+  // ============================================================
+  let sugerenciaActiva = -1;
+
+  function generarSugerencias(q) {
+    const tokensBuscados = tokensDe(q);
+    if (tokensBuscados.length === 0) return [];
+    const encontrados = new Map();
+    todosLosProductos.forEach(p => {
+      let score = 0;
+      let tipo = null;
+      if (p.sku && tokensMatchean(tokensBuscados, p.sku)) {
+        score = 100; tipo = 'SKU';
+      } else if (p.nombre && tokensMatchean(tokensBuscados, p.nombre)) {
+        score = 80; tipo = 'Producto';
+      } else if (p.familia_nombre && tokensMatchean(tokensBuscados, p.familia_nombre)) {
+        score = 40; tipo = 'Familia';
+      } else if (p.material_nombre && tokensMatchean(tokensBuscados, p.material_nombre)) {
+        score = 30; tipo = 'Material';
+      } else if (p.acabado_nombre && tokensMatchean(tokensBuscados, p.acabado_nombre)) {
+        score = 20; tipo = 'Acabado';
+      } else if (matchMedidas(p, q) === true) {
+        score = 10; tipo = 'Medida';
+      }
+      if (tipo) {
+        const prev = encontrados.get(p.sku);
+        if (!prev || prev.score < score) {
+          encontrados.set(p.sku, { producto: p, tipo, score });
+        }
+      }
+    });
+    return Array.from(encontrados.values()).sort((a, b) => b.score - a.score).slice(0, 6);
+  }
+
+  function renderSugerencias(lista) {
+    if (lista.length === 0) {
+      $sugerencias.hidden = true;
+      $sugerencias.innerHTML = '';
+      sugerenciaActiva = -1;
+      return;
+    }
+    const formatearMedidas = (p) => {
+      const partes = [];
+      const format = (valor, unidad) => {
+        if (valor == null) return null;
+        const esPulgada = unidad === '"' || unidad === 'in' || unidad === 'pulg';
+        return esPulgada ? `${valor}"` : `${valor} ${unidad || 'cm'}`;
+      };
+      const l = format(p._largo_original, p._unidad_largo);
+      const a = format(p._ancho_original, p._unidad_ancho);
+      const e = format(p._espesor_original, p._unidad_espesor);
+      if (l) partes.push(l);
+      if (a) partes.push(a);
+      if (e) partes.push(e);
+      return partes.length ? partes.join(' × ') : null;
+    };
+    $sugerencias.innerHTML = lista.map((s, i) => {
+      const img = s.producto.imagen_url ? `background-image:url('${s.producto.imagen_url}');` : '';
+      const meta = [s.producto.sku, s.producto.familia_nombre].filter(Boolean).join(' · ');
+      const medidas = formatearMedidas(s.producto);
+      return `
+        <div class="saldos-sugerencia ${i === sugerenciaActiva ? 'activa' : ''}"
+             data-sku="${escapeAttr(s.producto.sku)}"
+             data-index="${i}"
+             role="option"
+             aria-selected="${i === sugerenciaActiva}">
+          <div class="saldos-sugerencia__thumb" style="${img}"></div>
+          <div class="saldos-sugerencia__info">
+            <div class="saldos-sugerencia__nombre">${escapeHtml(s.producto.nombre)}</div>
+            <div class="saldos-sugerencia__meta">${escapeHtml(meta)}</div>
+            ${medidas ? `<div class="saldos-sugerencia__medidas">${escapeHtml(medidas)}</div>` : ''}
+          </div>
+          <span class="saldos-sugerencia__tag saldos-sugerencia__tag--cat">${escapeHtml(s.tipo)}</span>
+        </div>
+      `;
+    }).join('');
+    $sugerencias.hidden = false;
+    sugerenciaActiva = -1;
+  }
+
+  function cerrarSugerencias() {
+    $sugerencias.hidden = true;
+    $sugerencias.innerHTML = '';
+    sugerenciaActiva = -1;
+  }
+
+  function seleccionarSugerencia(sku) {
+    cerrarSugerencias();
+    const p = todosLosProductos.find(x => x.sku === sku);
+    if (!p) return;
+    window.location.href = `producto.html?sku=${encodeURIComponent(p.sku)}&origen=${ORIGEN}`;
+  }
+
+  $search.addEventListener('input', debounce((e) => {
+    const q = e.target.value.trim();
+    filtros.q = q;
+    aplicarFiltros();
+    if (q.length >= 2) {
+      renderSugerencias(generarSugerencias(q));
+    } else {
+      cerrarSugerencias();
+    }
+  }, DEBOUNCE_MS));
+
+  $search.addEventListener('keydown', (e) => {
+    if ($sugerencias.hidden) return;
+    const items = $sugerencias.querySelectorAll('.saldos-sugerencia');
+    if (items.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      sugerenciaActiva = (sugerenciaActiva + 1) % items.length;
+      items.forEach((it, i) => it.classList.toggle('activa', i === sugerenciaActiva));
+      items[sugerenciaActiva].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      sugerenciaActiva = (sugerenciaActiva - 1 + items.length) % items.length;
+      items.forEach((it, i) => it.classList.toggle('activa', i === sugerenciaActiva));
+      items[sugerenciaActiva].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && sugerenciaActiva >= 0) {
+      e.preventDefault();
+      seleccionarSugerencia(items[sugerenciaActiva].dataset.sku);
+    } else if (e.key === 'Escape') {
+      cerrarSugerencias();
+    }
+  });
+
+  $sugerencias.addEventListener('click', (e) => {
+    const item = e.target.closest('.saldos-sugerencia');
+    if (!item) return;
+    seleccionarSugerencia(item.dataset.sku);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.saldos-controls__search') &&
+        !e.target.closest('#outlet-sugerencias')) {
+      cerrarSugerencias();
+    }
+  });
+
+  $search.addEventListener('blur', () => {
+    setTimeout(() => {
+      if (!document.activeElement?.closest('#outlet-sugerencias')) {
+        cerrarSugerencias();
+      }
+    }, 150);
+  });
+
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const sku = btn.dataset.sku;
+    const origen = btn.dataset.origen || 'catalogo';
+    if (!sku) return;
+    if (action !== 'cotizar') return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    await toggleProductoEnCarrito(btn, sku, origen);
+  }, true);
+
+  // ============================================================
+  // TOGGLE VISTA
+  // ============================================================
+  $vistaGrid.addEventListener('click', () => {
+    if (vista === 'grid') return;
+    vista = 'grid';
+    $vistaGrid.classList.add('active');
+    $vistaGrid.setAttribute('aria-pressed', 'true');
+    $vistaLista.classList.remove('active');
+    $vistaLista.setAttribute('aria-pressed', 'false');
+    try { localStorage.setItem('outlet_vista', 'grid'); } catch (e) {}
+    renderProductos();
+  });
+
+  $vistaLista.addEventListener('click', () => {
+    if (vista === 'lista') return;
+    vista = 'lista';
+    $vistaLista.classList.add('active');
+    $vistaLista.setAttribute('aria-pressed', 'true');
+    $vistaGrid.classList.remove('active');
+    $vistaGrid.setAttribute('aria-pressed', 'false');
+    try { localStorage.setItem('outlet_vista', 'lista'); } catch (e) {}
+    renderProductos();
+  });
+
+  // ============================================================
+  // TOGGLE SOLO DESTACADOS
+  // ============================================================
+  $soloDest.addEventListener('change', (e) => {
+    filtros.soloDestacados = e.target.checked;
+    aplicarFiltros();
+  });
+
+  // ============================================================
+  // PAGINACIÓN
+  // ============================================================
+  $btnCargarMas.addEventListener('click', () => {
+    pagina++;
+    renderProductos();
+
+    // Tracking del click
+    window.trackEvento?.('click_cargar_mas', {
+      linea: LINEA,
+      pagina_actual: pagina,
+      productos_mostrados: resultadosFiltrados.length
+    });
+  });
+
+  // ============================================================
+  // BOTÓN VOLVER ARRIBA
+  // ============================================================
+  $btnTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', () => {
+    $btnTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ============================================================
+  // SWIPE HORIZONTAL EN MODO LISTA
+  // ============================================================
+  let touchStartX = 0, touchEndX = 0;
+  $grid.addEventListener('touchstart', (e) => {
+    if (vista !== 'lista') return;
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  $grid.addEventListener('touchend', (e) => {
+    if (vista !== 'lista') return;
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) < 60) return;
+    const card = e.target.closest('.product-card--lista');
+    if (!card) return;
+    const cards = Array.from($grid.querySelectorAll('.product-card--lista'));
+    const idx = cards.indexOf(card);
+    if (diff < 0 && idx < cards.length - 1) cards[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    else if (diff > 0 && idx > 0) cards[idx - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, { passive: true });
+
+  // ============================================================
+  // TOGGLE: AGREGAR O QUITAR DEL CARRITO
+  // ============================================================
+  async function toggleProductoEnCarrito(btn, sku, origen) {
+    const CARRITO_KEY = `gallos_cotizacion_carrito_${origen}`;
+    if (btn.disabled) return;
+    btn.disabled = true;
+    try {
+      let carrito = { items: [] };
+      try {
+        carrito = JSON.parse(localStorage.getItem(CARRITO_KEY) || '{"items":[]}');
+      } catch (err) {
+        carrito = { items: [] };
+      }
+      if (!Array.isArray(carrito.items)) carrito.items = [];
+      const idx = carrito.items.findIndex(item => item.producto_sku === sku);
+      if (idx > -1) {
+        carrito.items.splice(idx, 1);
+        localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+        btn.classList.remove('btn-agregado', 'active');
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('title', 'Agregar a la cotización');
+        btn.setAttribute('aria-label', 'Agregar a la cotización');
+        btn.setAttribute('data-en-carrito', 'false');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" fill="currentColor"/>
+            <circle cx="20" cy="21" r="1" fill="currentColor"/>
+            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"
+                  fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="label">Cotizar</span>
+        `;
+        GM.toast?.('Producto quitado de la cotización');
+      } else {
+        const producto = todosLosProductos.find(p => p.sku === sku);
+        if (!producto) {
+          GM.toast?.('Producto no encontrado');
+          btn.disabled = false;
+          return;
+        }
+        carrito.items.push({
+          producto_id: producto.id,
+          producto_sku: producto.sku,
+          producto_nombre: producto.nombre,
+          cantidad: 1,
+          unidad_venta_id: producto.unidad_venta_id || null,
+          unidad_simbolo: producto.unidad_simbolo || producto.unidad_venta || 'm²',
+          imagen_url: producto.imagen_url,
+          familia_nombre: producto.familia_nombre || null,
+          largo: producto.largo ?? null,
+          ancho: producto.ancho ?? null,
+          espesor: producto.espesor ?? null,
+          unidad_largo_simbolo: producto.unidad_largo_simbolo || 'cm',
+          unidad_ancho_simbolo: producto.unidad_ancho_simbolo || 'cm',
+          unidad_espesor_simbolo: producto.unidad_espesor_simbolo || 'cm'
+        });
+        localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+        btn.classList.add('btn-agregado', 'active');
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('title', 'Quitar de la cotización');
+        btn.setAttribute('aria-label', 'Quitar de la cotización');
+        btn.setAttribute('data-en-carrito', 'true');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="label">Agregado</span>
+        `;
+        GM.toast?.('✓ Agregado a tu cotización');
+      }
+      if (window.actualizarContadorCarritoHeader) {
+        window.actualizarContadorCarritoHeader(origen);
+      }
+      mostrarBannerCarrito();
+    } catch (err) {
+      console.error('Error toggling carrito:', err);
+      GM.toast?.('Error al procesar. Intenta nuevamente.');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================================
+  // BANNER FLOTANTE DEL CARRITO
+  // ============================================================
+  const CARRITO_KEY_BANNER = `gallos_cotizacion_carrito_${ORIGEN}`;
+  let bannerTimeout = null;
+
+  function mostrarBannerCarrito() {
+    const banner = document.getElementById('carrito-banner');
+    const countEl = document.getElementById('carrito-count-banner');
+    const labelEl = document.getElementById('carrito-count-label');
+    if (!banner || !countEl) return;
+    let carrito = { items: [] };
+    try {
+      carrito = JSON.parse(localStorage.getItem(CARRITO_KEY_BANNER) || '{"items":[]}');
+    } catch (e) {}
+    const total = (carrito.items || []).length;
+    if (total === 0) {
+      banner.hidden = true;
+      banner.classList.remove('visible');
+      return;
+    }
+    countEl.textContent = total;
+    if (labelEl) labelEl.textContent = total === 1 ? 'producto' : 'productos';
+    banner.hidden = false;
+    requestAnimationFrame(() => {
+      banner.classList.add('visible');
+    });
+    clearTimeout(bannerTimeout);
+    bannerTimeout = setTimeout(() => {
+      banner.classList.remove('visible');
+      setTimeout(() => { banner.hidden = true; }, 300);
+    }, 8000);
+  }
+
+  document.getElementById('carrito-seguir')?.addEventListener('click', () => {
+    const banner = document.getElementById('carrito-banner');
+    if (banner) {
+      banner.classList.remove('visible');
+      setTimeout(() => { banner.hidden = true; }, 300);
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    mostrarBannerCarrito();
+  });
+
+  // ============================================================
+  // CONTADOR DE OUTLET
+  // ============================================================
+  function renderCountdown(config) {
+    const cont = document.getElementById('outlet-countdown');
+    if (!cont) return;
+
+    if (!config) {
+      cont.hidden = true;
+      return;
+    }
+
+    const ahora = new Date();
+    const estado = (config.estado || 'activo').toLowerCase().trim();
+    const inicio = config.fecha_inicio ? new Date(config.fecha_inicio) : null;
+    const fin = config.fecha_fin ? new Date(config.fecha_fin) : null;
+    const mensajeCustom = config.mensaje_custom ? String(config.mensaje_custom).trim() : '';
+
+    // ============================================================
+    // ESTADO: MANTENIMIENTO
+    // → ocultar countdown (el bloque de mantenimiento ya tiene su mensaje)
+    // ============================================================
+    if (estado === 'mantenimiento') {
+      cont.hidden = true;
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: PRÓXIMAMENTE (forzado)
+    // → countdown a fecha_inicio (o mensaje si no hay fecha)
+    // ============================================================
+    if (estado === 'proximamente') {
+      if (inicio && inicio > ahora) {
+        const diff = inicio - ahora;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        const fechaFmt = inicio.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        cont.innerHTML = `
+          <span class="saldos-countdown__label">El outlet llega en</span>
+          <div class="saldos-countdown__time">
+            <span class="tiempo-seg"><b>${String(d).padStart(2, '0')}</b>días</span>
+            <span class="tiempo-seg"><b>${String(h).padStart(2, '0')}</b>h</span>
+            <span class="tiempo-seg"><b>${String(m).padStart(2, '0')}</b>min</span>
+            <span class="tiempo-seg"><b>${String(s).padStart(2, '0')}</b>seg</span>
+          </div>
+        `;
+        cont.classList.remove('saldos-countdown--hoy', 'saldos-countdown--finalizado');
+        cont.hidden = false;
+        return;
+      }
+      // Sin fecha → mensaje
+      cont.innerHTML = `
+        <span class="saldos-countdown__label">
+          ${mensajeCustom || 'Muy pronto estaremos disponibles.'}
+        </span>
+      `;
+      cont.classList.remove('saldos-countdown--hoy', 'saldos-countdown--finalizado');
+      cont.hidden = false;
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: FINALIZADO (forzado)
+    // → mensaje, sin countdown
+    // ============================================================
+    if (estado === 'finalizado') {
+      const fechaFmt = fin
+        ? fin.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null;
+      cont.innerHTML = `
+        <span class="saldos-countdown__label">
+          ${fechaFmt ? `El outlet finalizó el ${fechaFmt}.` : (mensajeCustom || 'El outlet ya finalizó.')}
+        </span>
+      `;
+      cont.classList.remove('saldos-countdown--hoy');
+      cont.classList.add('saldos-countdown--finalizado');
+      cont.hidden = false;
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: ACTIVO → evaluar fechas (comportamiento actual)
+    // ============================================================
+
+    // FINALIZADO POR FECHA
+    if (fin && fin <= ahora) {
+      const fechaFmt = fin.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+      cont.innerHTML = `
+        <span class="saldos-countdown__label">
+          El outlet finalizó el ${fechaFmt}.
+        </span>
+      `;
+      cont.classList.remove('saldos-countdown--hoy');
+      cont.classList.add('saldos-countdown--finalizado');
+      cont.hidden = false;
+      return;
+    }
+
+    // PRÓXIMAMENTE POR FECHA
+    if (inicio && inicio > ahora) {
+      const diff = inicio - ahora;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      const fechaFmt = inicio.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      const label = config.mostrar_antes_de_inicio === true
+        ? `El outlet abre oficialmente el ${fechaFmt}`
+        : `El outlet llega en`;
+
+      cont.innerHTML = `
+        <span class="saldos-countdown__label">${label}</span>
+        <div class="saldos-countdown__time">
+          <span class="tiempo-seg"><b>${String(d).padStart(2, '0')}</b>días</span>
+          <span class="tiempo-seg"><b>${String(h).padStart(2, '0')}</b>h</span>
+          <span class="tiempo-seg"><b>${String(m).padStart(2, '0')}</b>min</span>
+          <span class="tiempo-seg"><b>${String(s).padStart(2, '0')}</b>seg</span>
+        </div>
+      `;
+      cont.classList.remove('saldos-countdown--hoy', 'saldos-countdown--finalizado');
+      cont.hidden = false;
+      return;
+    }
+
+    // DISPONIBLE CON FIN
+    if (inicio && inicio <= ahora && fin && fin > ahora) {
+      const diff = fin - ahora;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      const fechaFmt = fin.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      cont.innerHTML = `
+        <span class="saldos-countdown__label">¡Outlet disponible! Termina el ${fechaFmt}.</span>
+        <div class="saldos-countdown__time">
+          <span class="tiempo-seg"><b>${String(d).padStart(2, '0')}</b>días</span>
+          <span class="tiempo-seg"><b>${String(h).padStart(2, '0')}</b>h</span>
+          <span class="tiempo-seg"><b>${String(m).padStart(2, '0')}</b>min</span>
+          <span class="tiempo-seg"><b>${String(s).padStart(2, '0')}</b>seg</span>
+        </div>
+      `;
+      cont.classList.remove('saldos-countdown--finalizado');
+      cont.classList.add('saldos-countdown--hoy');
+      cont.hidden = false;
+      return;
+    }
+
+    // DISPONIBLE SIN FIN
+    if (inicio && inicio <= ahora && !fin) {
+      cont.innerHTML = `<span class="saldos-countdown__label">¡El outlet ya está disponible!</span>`;
+      cont.classList.remove('saldos-countdown--finalizado');
+      cont.classList.add('saldos-countdown--hoy');
+      cont.hidden = false;
+      return;
+    }
+
+    // SIN FECHAS
+    cont.hidden = true;
+  }
+
+
+  function ocultarContador() {
+    const cont = document.getElementById('outlet-countdown');
+    if (cont) cont.hidden = true;
+  }
+
+  async function initCountdown() {
+    try {
+      const config = await LineasConfigAPI.get('outlet');
+      if (!config || !config.activo) {
+        ocultarContador();
+        aplicarEstadoSegunFechas(null);
+        return;
+      }
+      if (!config.fecha_inicio && !config.fecha_fin) {
+        ocultarContador();
+        aplicarEstadoSegunFechas(config);
+        return;
+      }
+      renderCountdown(config);
+      aplicarEstadoSegunFechas(config);
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        renderCountdown(config);
+        aplicarEstadoSegunFechas(config);
+      }, 1000);
+    } catch (error) {
+      console.error('Error cargando configuración de outlet:', error);
+      aplicarEstadoSegunFechas(null);
+    }
+  }
+
+  function aplicarEstadoSegunFechas(config) {
+    if (!$contenido || !$bloqueado) return;
+
+    const ahora = new Date();
+
+    // ============================================================
+    // SIN CONFIG o INACTIVA
+    // ============================================================
+    if (!config || config.activo === false) {
+      $contenido.classList.remove('hidden');
+      $bloqueado.dataset.estado = '';
+      $bloqueado.innerHTML = '';
+      return;
+    }
+
+    const estado = (config.estado || 'activo').toLowerCase().trim();
+    const mensajeCustom = config.mensaje_custom ? String(config.mensaje_custom).trim() : '';
+
+    // ============================================================
+    // ESTADO: MANTENIMIENTO
+    // → siempre bloquea. Ignora fechas.
+    // ============================================================
+    if (estado === 'mantenimiento') {
+      $contenido.classList.add('hidden');
+      if ($bloqueado.dataset.estado !== 'mantenimiento') {
+        $bloqueado.dataset.estado = 'mantenimiento';
+        $bloqueado.innerHTML = `
+          <div class="saldos-bloqueado saldos-bloqueado--mantenimiento">
+            <div class="saldos-bloqueado__icon saldos-bloqueado__icon--circular">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <span class="saldos-bloqueado__kicker saldos-bloqueado__kicker--mantenimiento">Mantenimiento</span>
+            <h2 class="saldos-bloqueado__title">Estamos actualizando el outlet</h2>
+            <p class="saldos-bloqueado__text">
+              ${mensajeCustom
+                ? `<strong>${escapeHtml(mensajeCustom)}</strong>`
+                : 'Estamos mejorando la experiencia del outlet. Vuelve en unos minutos.'}
+            </p>
+            <div class="saldos-bloqueado__cta">
+              <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
+              <a href="saldos_exportacion.html" class="btn btn-ghost">Ver saldos</a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: PRÓXIMAMENTE (forzado por estado)
+    // → siempre bloquea. Usa fecha_inicio si existe.
+    // ============================================================
+    if (estado === 'proximamente') {
+      $contenido.classList.add('hidden');
+      const inicio = config.fecha_inicio ? new Date(config.fecha_inicio) : null;
+      const fechaFmt = inicio
+        ? inicio.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null;
+
+      if ($bloqueado.dataset.estado !== 'proximamente') {
+        $bloqueado.dataset.estado = 'proximamente';
+        $bloqueado.innerHTML = `
+          <div class="saldos-bloqueado saldos-bloqueado--proximamente">
+            <div class="saldos-bloqueado__icon saldos-bloqueado__icon--circular">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="13" r="8"/>
+                <path d="M12 9v4l2.5 2.5"/>
+                <path d="M9 2h6"/>
+                <path d="M12 2v2"/>
+                <path d="M19 6l-1.5 1.5"/>
+              </svg>
+            </div>
+            <span class="saldos-bloqueado__kicker">Próximamente</span>
+            <h2 class="saldos-bloqueado__title">El outlet está por llegar</h2>
+            <p class="saldos-bloqueado__text">
+              ${mensajeCustom
+                ? `<strong>${escapeHtml(mensajeCustom)}</strong>`
+                : 'Muy pronto podrás acceder a nuestras mejores ofertas.'}
+              ${fechaFmt ? `<br><strong>Apertura oficial:</strong> ${fechaFmt}.` : ''}
+            </p>
+            <div class="saldos-bloqueado__cta">
+              <a href="catalogo.html" class="btn btn-primary">Ver catálogo actual</a>
+              <a href="saldos_exportacion.html" class="btn btn-ghost">Ver saldos de exportación</a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: FINALIZADO (forzado por estado)
+    // → siempre bloquea. Usa fecha_fin si existe.
+    // ============================================================
+    if (estado === 'finalizado') {
+      $contenido.classList.add('hidden');
+      const fin = config.fecha_fin ? new Date(config.fecha_fin) : null;
+      const fechaFmt = fin
+        ? fin.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null;
+
+      if ($bloqueado.dataset.estado !== 'finalizado') {
+        $bloqueado.dataset.estado = 'finalizado';
+        $bloqueado.innerHTML = `
+          <div class="saldos-bloqueado saldos-bloqueado--finalizado">
+            <div class="saldos-bloqueado__icon saldos-bloqueado__icon--circular">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M4.93 4.93l14.14 14.14"/>
+              </svg>
+            </div>
+            <span class="saldos-bloqueado__kicker saldos-bloqueado__kicker--finalizado">Finalizado</span>
+            <h2 class="saldos-bloqueado__title">Esta sección ya no está disponible</h2>
+            <p class="saldos-bloqueado__text">
+              ${fechaFmt ? `El outlet finalizó el ${fechaFmt}.` : 'El outlet ya finalizó.'}
+              ${mensajeCustom ? `<br><strong>${escapeHtml(mensajeCustom)}</strong>` : ''}
+              <br>Mientras tanto, explora nuestro catálogo y saldos disponibles.
+            </p>
+            <div class="saldos-bloqueado__cta">
+              <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
+              <a href="saldos_exportacion.html" class="btn btn-ghost">Ver saldos de exportación</a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // ============================================================
+    // ESTADO: ACTIVO
+    // → evalúa fechas (comportamiento actual)
+    // ============================================================
+    const inicio = config.fecha_inicio ? new Date(config.fecha_inicio) : null;
+    const fin = config.fecha_fin ? new Date(config.fecha_fin) : null;
+
+    // FINALIZADO POR FECHA
+    if (fin && fin <= ahora) {
+      $contenido.classList.add('hidden');
+      const fechaFmt = fin.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+      if ($bloqueado.dataset.estado !== 'finalizado') {
+        $bloqueado.dataset.estado = 'finalizado';
+        $bloqueado.innerHTML = `
+          <div class="saldos-bloqueado saldos-bloqueado--finalizado">
+            <div class="saldos-bloqueado__icon saldos-bloqueado__icon--circular">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M4.93 4.93l14.14 14.14"/>
+              </svg>
+            </div>
+            <span class="saldos-bloqueado__kicker saldos-bloqueado__kicker--finalizado">Finalizado</span>
+            <h2 class="saldos-bloqueado__title">Esta sección ya no está disponible</h2>
+            <p class="saldos-bloqueado__text">
+              El outlet finalizó el ${fechaFmt}.
+              ${mensajeCustom ? `<br><strong>${escapeHtml(mensajeCustom)}</strong>` : ''}
+              <br>Mientras tanto, explora nuestro catálogo y saldos disponibles.
+            </p>
+            <div class="saldos-bloqueado__cta">
+              <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
+              <a href="saldos_exportacion.html" class="btn btn-ghost">Ver saldos de exportación</a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // PRÓXIMAMENTE POR FECHA
+    if (inicio && inicio > ahora) {
+      // Si mostrar_antes_de_inicio → NO bloquear
+      if (config.mostrar_antes_de_inicio === true) {
+        $contenido.classList.remove('hidden');
+        if ($bloqueado.dataset.estado !== '') {
+          $bloqueado.dataset.estado = '';
+          $bloqueado.innerHTML = '';
+        }
+        return;
+      }
+      // Si no, bloquear
+      $contenido.classList.add('hidden');
+      const fechaFmt = inicio.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+      if ($bloqueado.dataset.estado !== 'proximamente') {
+        $bloqueado.dataset.estado = 'proximamente';
+        $bloqueado.innerHTML = `
+          <div class="saldos-bloqueado saldos-bloqueado--proximamente">
+            <div class="saldos-bloqueado__icon saldos-bloqueado__icon--circular">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="13" r="8"/>
+                <path d="M12 9v4l2.5 2.5"/>
+                <path d="M9 2h6"/>
+                <path d="M12 2v2"/>
+                <path d="M19 6l-1.5 1.5"/>
+              </svg>
+            </div>
+            <span class="saldos-bloqueado__kicker">Próximamente</span>
+            <h2 class="saldos-bloqueado__title">El outlet está por llegar</h2>
+            <p class="saldos-bloqueado__text">
+              Muy pronto podrás acceder a nuestras mejores ofertas.
+              <br><strong>Apertura oficial:</strong> ${fechaFmt}.
+            </p>
+            <div class="saldos-bloqueado__cta">
+              <a href="catalogo.html" class="btn btn-primary">Ver catálogo actual</a>
+              <a href="saldos_exportacion.html" class="btn btn-ghost">Ver saldos de exportación</a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // DISPONIBLE
+    $contenido.classList.remove('hidden');
+    if ($bloqueado.dataset.estado !== '') {
+      $bloqueado.dataset.estado = '';
+      $bloqueado.innerHTML = '';
+    }
+  }
+
+  // ============================================================
+  // FECHA DE ACTUALIZACIÓN
+  // ============================================================
+  function actualizarFechaActualizado(productos) {
+    const el = document.getElementById('outlet-actualizado');
+    if (!el || !productos || productos.length === 0) return;
+    const fechas = productos.map(p => p.actualizado_en || p.creado_en).filter(Boolean).map(f => new Date(f).getTime()).filter(t => !isNaN(t));
+    if (fechas.length === 0) return;
+    const masReciente = new Date(Math.max(...fechas));
+    const fechaFmt = masReciente.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+    el.innerHTML = `<span>Actualizado el ${fechaFmt}</span>`;
+    el.hidden = false;
+  }
+
+  // ============================================================
+  // BOTONES DEL HERO
+  // ============================================================
+  function initBotonesHero() {
+    const irAlListado = () => {
+      document.querySelector('.saldos-controls')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    document.getElementById('btn-ver-outlet')?.addEventListener('click', irAlListado);
+    document.getElementById('outlet-scroll-indicator')?.addEventListener('click', irAlListado);
+  }
+
+  // ============================================================
+  // QR
+  // ============================================================
+  function abrirModalQR() {
+    const modal = document.getElementById('qr-modal');
+    const status = document.getElementById('qr-status');
+    if (!modal) return;
+    if (typeof Html5Qrcode === 'undefined') {
+      alert('La librería de QR no se cargó.');
+      return;
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    status.textContent = 'Iniciando cámara…';
+    if (!qrScanner) qrScanner = new Html5Qrcode('qr-reader');
+    qrScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => {
+        const sku = extraerSkuDeQR(decodedText);
+        status.textContent = `SKU detectado: ${sku}`;
+        if ($search) {
+          $search.value = sku;
+          filtros.q = sku;
+          aplicarFiltros();
+        }
+        setTimeout(() => cerrarModalQR(), 800);
+      },
+      () => {}
+    ).catch((err) => {
+      status.textContent = 'No se pudo acceder a la cámara.';
+      console.error(err);
+    });
+  }
+
+  function cerrarModalQR() {
+    const modal = document.getElementById('qr-modal');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (qrScanner) qrScanner.stop().then(() => qrScanner.clear()).catch(() => {});
+  }
+
+  function extraerSkuDeQR(texto) {
+    const t = String(texto).trim();
+    try {
+      const url = new URL(t);
+      const sku = url.searchParams.get('sku');
+      if (sku) return sku.trim();
+      const m = url.pathname.match(/\/producto\/([A-Z0-9-]+)/i);
+      if (m) return m[1];
+    } catch (e) {}
+    const match = t.match(/[A-Z0-9][A-Z0-9-]{2,}/i);
+    return match ? match[0] : t;
+  }
+
+  document.getElementById('outlet-qr-btn')?.addEventListener('click', abrirModalQR);
+  document.getElementById('qr-modal-close')?.addEventListener('click', cerrarModalQR);
+  document.getElementById('qr-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'qr-modal') cerrarModalQR();
+  });
+
+  // ============================================================
+  // CARGAR PRODUCTOS
+  // ============================================================
+  async function cargarProductos() {
+    try {
+      const productos = await CatalogoAPI.getProductos({ linea: LINEA });
+      todosLosProductos = (productos || [])
+        .filter(p => p.activo !== false)
+        .map(p => {
+          const factorLargo = Number(p.unidad_largo_factor_cm) || 1;
+          const factorAncho = Number(p.unidad_ancho_factor_cm) || 1;
+          const factorEspesor = Number(p.unidad_espesor_factor_cm) || 1;
+          return {
+            ...p,
+            _largo_cm:   p.largo   != null ? Number(p.largo)   * factorLargo   : null,
+            _ancho_cm:   p.ancho   != null ? Number(p.ancho)   * factorAncho   : null,
+            _espesor_cm: p.espesor != null ? Number(p.espesor) * factorEspesor : null,
+            _largo_original:   p.largo,
+            _ancho_original:   p.ancho,
+            _espesor_original: p.espesor,
+            _unidad_largo:   p.unidad_largo_simbolo   || 'cm',
+            _unidad_ancho:   p.unidad_ancho_simbolo   || 'cm',
+            _unidad_espesor: p.unidad_espesor_simbolo || 'cm'
+          };
+        });
+      actualizarFechaActualizado(todosLosProductos);
+      try {
+        const guardada = localStorage.getItem('outlet_vista');
+        if (guardada === 'lista' || guardada === 'grid') {
+          vista = guardada;
+          if (vista === 'lista') {
+            $vistaLista.classList.add('active');
+            $vistaLista.setAttribute('aria-pressed', 'true');
+            $vistaGrid.classList.remove('active');
+            $vistaGrid.setAttribute('aria-pressed', 'false');
+          }
+        }
+      } catch (e) {}
+      const params = new URLSearchParams(location.search);
+      const familiaUrl = params.get('familia');
+      if (familiaUrl) filtros.familia_id = familiaUrl;
+      renderFamilias();
+      aplicarFiltros();
+    } catch (error) {
+      console.error('Error cargando productos:', error);
+      $count.textContent = 'Error';
+      $grid.innerHTML = `
+        <div class="saldos-empty" style="grid-column:1/-1;">
+          <div class="saldos-empty__icon">⚠️</div>
+          <h3 class="saldos-empty__title">Error al cargar</h3>
+          <p class="saldos-empty__text">${escapeHtml(error.message || 'Error desconocido')}</p>
+          <button type="button" class="saldos-empty__btn" id="outlet-btn-retry">Reintentar</button>
+        </div>
+      `;
+      document.getElementById('outlet-btn-retry')?.addEventListener('click', () => location.reload());
+    }
+  }
+
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
+  initBotonesHero();
+  initCountdown();
+  cargarProductos();
+  if (window.actualizarContadorCarritoHeader) {
+    window.actualizarContadorCarritoHeader();
+  }
+
+  // ============================================================
+  // LISTENERS DE LOS NUEVOS FILTROS
+  // ============================================================
+
+  // 1. Reset del slider de precio
+  $precioReset?.addEventListener('click', () => {
+    filtros.precioMin = null;
+    filtros.precioMax = null;
+    resetearSliderPrecio();
+    aplicarFiltros();
+  });
+
+  // 2. Toggle de stock
+  $toggleStock?.addEventListener('change', (e) => {
+    filtros.soloConStock = e.target.checked;
+    aplicarFiltros();
+  });
+
+  // 3. Toggle de destacados (sincronizado con toolbar)
+  $toggleDestacados?.addEventListener('change', (e) => {
+    filtros.soloDestacados = e.target.checked;
+    if ($soloDest) $soloDest.checked = e.target.checked;
+    aplicarFiltros();
+  });
+
+  // Sincronizar al revés: si el toolbar cambia, el sheet se actualiza
+  $soloDest?.addEventListener('change', (e) => {
+    if ($toggleDestacados) $toggleDestacados.checked = e.target.checked;
+  });
+
+  // 4. Buscador de modelo (con debounce)
+  let modeloDebounceTimer = null;
+  $modeloSearch?.addEventListener('input', (e) => {
+    clearTimeout(modeloDebounceTimer);
+    modeloDebounceTimer = setTimeout(() => {
+      filtros.modelo = e.target.value.trim();
+      aplicarFiltros();
+    }, 300);
+  });
+
+  // ============================================================
+  // SELECTOR DE ORDENAMIENTO
+  // ============================================================
+  const $ordenSelect = document.getElementById('outlet-orden');
+
+  if ($ordenSelect) {
+    // Aplicar el valor persistido
+    $ordenSelect.value = filtros.orden;
+
+    $ordenSelect.addEventListener('change', (e) => {
+      const nuevo = e.target.value;
+      if (!ORDENES_VALIDAS.includes(nuevo)) return;
+      filtros.orden = nuevo;
+      try { localStorage.setItem(LS_ORDEN, nuevo); } catch (e) {}
+      aplicarFiltros();
+    });
+  }  
+
+  // ============================================================
+  // FAQs DEL OUTLET (botón flotante + drawer lateral)
+  // ============================================================
+  (function initFaqs() {
+    const fab = document.getElementById('outlet-faq-fab');
+    const drawer = document.getElementById('outlet-faq-drawer');
+    const backdrop = document.getElementById('outlet-faq-backdrop');
+    const closeBtn = document.getElementById('outlet-faq-close');
+    if (!fab || !drawer || !backdrop) return;
+
+    let focusReturn = null;
+
+    function abrir() {
+      focusReturn = document.activeElement;
+      drawer.classList.add('open');
+      backdrop.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn?.focus(), 50);
+    }
+
+    function cerrar() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (focusReturn && typeof focusReturn.focus === 'function') {
+        try { focusReturn.focus(); } catch (e) {}
+      }
+    }
+
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      if (!drawer.classList.contains('open')) return;
+      const focusables = drawer.querySelectorAll(
+        'button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    fab.addEventListener('click', abrir);
+    closeBtn?.addEventListener('click', cerrar);
+    backdrop.addEventListener('click', cerrar);
+
+    document.addEventListener('keydown', (e) => {
+      if (!drawer.classList.contains('open')) return;
+      if (e.key === 'Escape') { e.preventDefault(); cerrar(); }
+      if (e.key === 'Tab') trapFocus(e);
+    });
+  })();
+
+</script>
+
+</body>
+</html>

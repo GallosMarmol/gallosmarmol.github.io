@@ -1,0 +1,1896 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title id="page-title">Producto · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" id="page-description" content="Detalle del producto · Gallos Mármol">
+<meta property="og:title" id="og-title" content="Producto · Gallos Mármol">
+<meta property="og:description" id="og-description" content="Detalle del producto · Gallos Mármol">
+<meta property="og:type" content="product">
+<meta property="og:image" id="og-image" content="">
+<link rel="icon" type="image/png" href="../shared/assets/foto_02.png">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+
+<script type="application/ld+json" id="product-schema">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Producto · Gallos Mármol",
+  "brand": { "@type": "Organization", "name": "Gallos Mármol S.A.C." }
+}
+</script>
+
+<style>
+  /* ============================================================
+     PRODUCTO — Estilos locales
+     Mobile first. Premium. Limpio.
+     ============================================================ */
+
+  :root {
+    --pd-bg: #ffffff;
+    --pd-ink: #1a1210;
+    --pd-muted: #6e6559;
+    --pd-line: #e6dfd1;
+    --pd-soft: #faf8f4;
+    --pd-accent: #6b0000;
+    --pd-accent-soft: rgba(107,0,0,.08);
+    --pd-secondary: #e8e4d2;
+    --pd-radius: 10px;
+    --pd-shadow: 0 1px 0 rgba(107,0,0,.03), 0 12px 28px -18px rgba(107,0,0,.35);
+  }
+
+  @keyframes pd-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === Layout principal === */
+  .producto-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+    animation: pd-fade-in .35s ease both;
+  }
+
+  .producto-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .producto-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  /* === Badge de origen === */
+  .producto-origen-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--pd-accent-soft);
+    border: 1px solid rgba(107,0,0,.18);
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--pd-accent);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 16px;
+  }
+
+  /* === Imagen principal === */
+  .producto-imagen {
+    position: relative;
+    border-radius: var(--pd-radius);
+    overflow: hidden;
+    cursor: zoom-in;
+    aspect-ratio: 4 / 3;
+    background: var(--pd-soft);
+    border: 1px solid var(--pd-line);
+  }
+
+  .producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .producto-imagen-swatch {
+    width: 100%;
+    height: 100%;
+  }
+
+  .producto-imagen-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(26, 18, 16, .72);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .producto-imagen-badge svg {
+    width: 14px; height: 14px;
+    opacity: .9;
+  }
+
+  /* === Columna de información === */
+  .producto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .producto-info {
+      position: sticky;
+      top: calc(var(--pub-header-height, 68px) + 20px);
+      align-self: start;
+      max-height: calc(100vh - var(--pub-header-height, 68px) - 40px);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .producto-info::-webkit-scrollbar { width: 6px; }
+    .producto-info::-webkit-scrollbar-thumb {
+      background: rgba(107,0,0,.15);
+      border-radius: 3px;
+    }
+  }
+
+  .producto-familia {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--pd-accent); 
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .producto-titulo {
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: clamp(24px, 4vw, 34px);
+    line-height: 1.15;
+    font-weight: 600;
+    color: var(--pd-ink);
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+
+  .producto-sku {
+    font-size: 12.5px;
+    color: var(--pd-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .02em;
+  }
+
+  /* === Medidas === */
+  .producto-medidas {
+    list-style: none;
+    padding: 14px 16px;
+    margin: 0;
+    background: var(--pd-soft);
+    border: 1px solid var(--pd-line);
+    border-radius: var(--pd-radius);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 14px;
+  }
+
+  .producto-medidas li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+    min-width: 0;
+  }
+
+  .producto-medidas li[title] { cursor: help; }
+
+  .producto-medidas li[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    background: var(--pd-ink);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .producto-medidas .k {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--pd-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .producto-medidas .v {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--pd-ink);
+    font-variant-numeric: tabular-nums;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* === Precio === */
+  .producto-precio {
+    display: flex;
+    align-items: baseline;
+    gap: 8px 10px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+    border-top: 1px solid var(--pd-line);
+    border-bottom: 1px solid var(--pd-line);
+  }
+
+  .producto-precio .price-old {
+    font-size: 15px;
+    color: #9b8f7d;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .producto-precio .price {
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: clamp(26px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--pd-accent);
+    line-height: 1;
+    letter-spacing: -.01em;
+  }
+
+  .producto-precio .price-discount {
+    display: inline-block;
+    padding: 3px 8px;
+    background: rgba(77, 124, 83, .12);
+    color: #3d6843;
+    font-size: 12.5px;
+    font-weight: 700;
+    border-radius: 4px;
+  }
+
+  .producto-precio .unit {
+    font-size: 13.5px;
+    color: var(--pd-muted);
+  }
+
+  .producto-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* === Acciones === */
+  .producto-acciones {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 480px) {
+    .producto-acciones {
+      grid-template-columns: 1fr 1fr;
+    }
+    .producto-acciones .btn-cotizar {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .producto-acciones {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .producto-acciones .btn-cotizar {
+      grid-column: auto;
+    }
+  }
+
+  .producto-acciones .btn-cotizar,
+  .producto-acciones .btn-favorito,
+  .producto-acciones .btn-compartir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+    min-height: 44px;
+  }
+
+  .producto-acciones .btn-cotizar {
+    background: var(--pd-accent);
+    color: #fff;
+    border: 1px solid var(--pd-accent);
+  }
+  .producto-acciones .btn-cotizar:hover {
+    background: #4d0000;
+    border-color: #4d0000;
+  }
+  .producto-acciones .btn-cotizar:active { transform: translateY(1px); }
+  .producto-acciones .btn-cotizar[aria-disabled="true"] {
+    opacity: .4;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  .producto-acciones .btn-favorito,
+  .producto-acciones .btn-compartir {
+    background: #fff;
+    border: 1px solid var(--pd-line);
+    color: var(--pd-ink);
+  }
+  .producto-acciones .btn-favorito:hover,
+  .producto-acciones .btn-compartir:hover {
+    border-color: var(--pd-accent);
+    color: var(--pd-accent);
+  }
+  .producto-acciones .btn-favorito.active {
+    background: var(--pd-accent);
+    color: #fff;
+    border-color: var(--pd-accent);
+  }
+  .producto-acciones .btn-favorito.active:hover {
+    background: #4d0000;
+    border-color: #4d0000;
+    color: #fff;
+  }
+
+  /* === Galerías === */
+  .galeria-seccion {
+    margin-top: 48px;
+    padding-top: 4px;
+  }
+
+  .galeria-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--pd-line);
+  }
+
+  .galeria-head-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--pd-accent-soft);
+    color: var(--pd-accent);
+    flex-shrink: 0;
+  }
+
+  .galeria-head-icon svg {
+    width: 16px; height: 16px;
+  }
+
+  .galeria-titulo {
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pd-ink);
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+
+  .galeria-subtitulo {
+    font-size: 13px;
+    color: var(--pd-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .galeria-subtitulo-wrap {
+    padding-left: 42px;
+    margin-top: -8px;
+    margin-bottom: 14px;
+  }
+
+  /* Grid de galería */
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  @media (min-width: 480px) {
+    .galeria-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .galeria-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+  }
+
+  .galeria-item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--pd-soft);
+    border: 1px solid var(--pd-line);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+
+  .galeria-item:hover,
+  .galeria-item:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--pd-accent);
+    box-shadow: 0 10px 24px -14px rgba(107,0,0,.4);
+    outline: none;
+  }
+
+  .galeria-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .galeria-item.ver-mas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pd-accent);
+    color: #fff;
+    border-color: var(--pd-accent);
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+
+  .galeria-item.ver-mas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.1), transparent 60%);
+    pointer-events: none;
+  }
+
+  .galeria-item.ver-mas span {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === Secciones informativas === */
+  .seccion-informativa {
+    margin-top: 40px;
+  }
+
+  .seccion-card {
+    background: #fff;
+    border: 1px solid var(--pd-line);
+    border-radius: var(--pd-radius);
+    padding: 22px 20px;
+    margin-top: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .seccion-card { padding: 28px; }
+  }
+
+  .seccion-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .seccion-head-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--pd-accent-soft);
+    color: var(--pd-accent);
+    flex-shrink: 0;
+  }
+
+  .seccion-head-icon svg { width: 17px; height: 17px; }
+
+  .seccion-head h3 {
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--pd-ink);
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+
+  /* Tabla de specs */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .spec-table tr {
+    border-bottom: 1px solid var(--pd-line);
+  }
+  .spec-table tr:last-child { border-bottom: none; }
+
+  .spec-table th,
+  .spec-table td {
+    text-align: left;
+    padding: 10px 0;
+    vertical-align: top;
+  }
+
+  .spec-table th {
+    width: 40%;
+    color: var(--pd-muted);
+    font-weight: 600;
+    font-size: 12.5px;
+    padding-right: 16px;
+  }
+
+  .spec-table td {
+    color: var(--pd-ink);
+    font-weight: 500;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Lista de "lo que debes saber" — versión visual con tarjetas */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .tips-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+  }
+
+  .tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--pd-soft);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--pd-ink);
+  }
+
+  .tip-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--pd-accent-soft);
+    color: var(--pd-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .tip-icon svg { width: 12px; height: 12px; }
+
+  /* Aviso de variabilidad */
+  .aviso-variabilidad {
+    background: var(--pd-secondary);  
+    border-left: 3px solid var(--pd-accent); 
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 16px;
+  }
+
+  .aviso-variabilidad h4 {
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pd-ink);
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .aviso-variabilidad h4 svg {
+    width: 16px; height: 16px;
+    color: var(--pd-accent); 
+    flex-shrink: 0;
+  }
+
+  .aviso-variabilidad p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--pd-muted);
+    margin: 0 0 8px;
+  }
+  .aviso-variabilidad p:last-child { margin-bottom: 0; }
+  .aviso-variabilidad strong { color: var(--pd-ink); font-weight: 600; }
+
+  .aviso-variabilidad .destacado {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    background: rgba(107, 0, 0, .06); 
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--pd-ink);
+    margin: 10px 0;
+  }
+  .aviso-variabilidad .destacado svg {
+    width: 14px; height: 14px;
+    color: var(--pd-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Características comerciales — versión tarjetas */
+  .caracteristicas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  @media (min-width: 640px) {
+    .caracteristicas-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+  }
+
+  .caracteristica {
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--pd-line);
+    border-radius: 8px;
+    border-left: 3px solid var(--pd-accent);
+  }
+
+  .caracteristica h6 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pd-ink);
+    margin: 0 0 4px;
+    letter-spacing: .01em;
+  }
+
+  .caracteristica p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--pd-muted);
+    margin: 0;
+  }
+
+  /* === Skeleton === */
+  .skeleton-producto {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  @media (min-width: 900px) {
+    .skeleton-producto {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 48px;
+    }
+  }
+
+  .skeleton-bloque {
+    background: linear-gradient(90deg, #efece4 25%, #f7f4ec 50%, #efece4 75%);
+    background-size: 200% 100%;
+    animation: pd-skeleton 1.5s infinite;
+    border-radius: 8px;
+  }
+  @keyframes pd-skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skeleton-img { aspect-ratio: 4/3; width: 100%; }
+  .skeleton-linea { height: 16px; margin-bottom: 10px; border-radius: 4px; }
+  .skeleton-linea.corta { width: 40%; }
+  .skeleton-linea.media { width: 70%; }
+  .skeleton-linea.larga { width: 90%; }
+  .skeleton-linea.precio { height: 36px; width: 55%; margin: 20px 0; }
+
+  /* === Modal de imágenes === */
+  .modal-imagenes {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .modal-imagenes.open { display: flex; opacity: 1; }
+
+  .modal-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 16px 40px;
+  }
+
+  .modal-img-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    touch-action: none;
+  }
+
+  .modal-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform .12s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+    position: relative;
+    cursor: grab;
+  }
+  .modal-img:active { cursor: grabbing; }
+
+  /* Barra superior del modal: contador + tools a la izquierda,
+     botón cerrar a la derecha, todo en una fila */
+  .modal-topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .modal-topbar > * { pointer-events: auto; }
+
+  .modal-contador {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.15);
+    padding: 6px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .modal-tools {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .modal-tools button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-tools button:hover {
+    background: rgba(255,255,255,.18);
+    transform: scale(1.05);
+  }
+
+  .modal-close {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .modal-close:hover {
+    background: rgba(166, 61, 51, .85);
+    transform: scale(1.05);
+  }
+
+  /* Navegación prev/next */
+  .modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    transition: background .18s ease, transform .18s ease;
+  }
+  .modal-nav:hover {
+    background: rgba(255,255,255,.18);
+    transform: translateY(-50%) scale(1.05);
+  }
+  .modal-prev { left: 14px; }
+  .modal-next { right: 14px; }
+
+  @media (max-width: 640px) {
+    .modal-content { padding: 56px 8px 24px; }
+    .modal-topbar { padding: 12px 12px; gap: 8px; }
+    .modal-contador { font-size: 12px; padding: 5px 10px; }
+    .modal-tools { gap: 4px; }
+    .modal-tools button,
+    .modal-close {
+      width: 36px; height: 36px; font-size: 14px;
+    }
+    .modal-nav { width: 38px; height: 38px; font-size: 16px; }
+    .modal-prev { left: 8px; }
+    .modal-next { right: 8px; }
+  }
+
+  /* === Botón volver arriba === */
+  #btn-top.saldos-btn-top {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--pd-accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: opacity .25s ease, transform .25s ease, background .18s ease;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+  }
+  #btn-top.saldos-btn-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  #btn-top.saldos-btn-top:hover {
+    background: #4d0000;
+    transform: scale(1.06);
+  }
+
+  /* === Prefers reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .producto-page,
+    .skeleton-producto,
+    .galeria-item,
+    .producto-imagen-badge {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* === Noscript === */
+  .noscript-warn {
+    max-width: 640px;
+    margin: 60px auto;
+    padding: 24px;
+    background: #fef3f2;
+    border: 1px solid #f5c2c0;
+    border-radius: 8px;
+    color: #a63d33;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body class="page-producto" data-linea="catalogo">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<noscript>
+  <div class="noscript-warn" role="alert">
+    <strong>Necesitas activar JavaScript</strong> para ver el detalle del producto.
+    Por favor, actívalo en tu navegador y recarga la página.
+  </div>
+</noscript>
+
+<main>
+  <div class="producto-page">
+    <div id="producto-contenido">
+      <!-- Se llena dinámicamente -->
+    </div>
+  </div>
+</main>
+
+<footer class="pub-footer" id="pub-footer"></footer>
+
+<!-- ============================================================ -->
+<!-- MODAL DE IMÁGENES -->
+<!-- ============================================================ -->
+<div id="modal-imagenes" class="modal-imagenes" role="dialog" aria-modal="true" aria-label="Visor de imágenes" tabindex="-1">
+  <div class="modal-content">
+    <div class="modal-topbar">
+      <span id="modal-contador" class="modal-contador" aria-live="polite">1 / 1</span>
+      <div class="modal-tools">
+        <button type="button" id="modal-zoom-out" aria-label="Alejar imagen" title="Alejar">−</button>
+        <button type="button" id="modal-zoom-in" aria-label="Acercar imagen" title="Acercar">+</button>
+        <button type="button" id="modal-rotate" aria-label="Rotar imagen 90 grados" title="Rotar 90°">↻</button>
+        <button type="button" id="modal-fullscreen" aria-label="Pantalla completa" title="Pantalla completa">⛶</button>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Cerrar visor">✕</button>
+      </div>
+    </div>
+
+    <div class="modal-img-wrapper">
+      <img id="modal-img" class="modal-img" src="" alt="Imagen del producto">
+    </div>
+
+    <button id="modal-prev" class="modal-nav modal-prev" aria-label="Imagen anterior">◀</button>
+    <button id="modal-next" class="modal-nav modal-next" aria-label="Imagen siguiente">▶</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+<script src="./assets/js/tracking.js" defer></script>
+
+<script type="module">
+  // ============================================================
+  // IMPORTACIONES
+  // ============================================================
+  import { CatalogoAPI } from '../shared/js/supabase-client.js';
+  import {
+    escapeHtml,
+    escapeAttr,
+    esFavorito,
+    guardarFavorito,
+    convertirUrlGoogleDrive,
+    stoneSwatchStyle
+  } from './assets/js/public.js';
+
+  // ============================================================
+  // ORIGEN Y PARAMS
+  // ============================================================
+  const params = new URLSearchParams(location.search);
+  const origenActual = (params.get('origen') || 'catalogo').toLowerCase();
+  const skuParam = params.get('sku');
+
+  const ORIGEN_LABELS = {
+    'catalogo': 'Catálogo',
+    'outlet': 'Outlet',
+    'saldos': 'Saldos de exportación'
+  };
+
+  // Mapeo para el key de GM_NAV
+  const ORIGEN_A_NAV = {
+    'catalogo': 'catalogo',
+    'outlet': 'outlet',
+    'saldos': 'saldos_exportacion'
+  };
+
+  // ============================================================
+  // SHELL + data-linea
+  // ============================================================
+  pubHeader(ORIGEN_A_NAV[origenActual] || 'catalogo');
+  
+  document.body.dataset.linea = origenActual;
+
+  // ============================================================
+  // DOM
+  // ============================================================
+  const $contenido = document.getElementById('producto-contenido');
+  const $btnTop = document.getElementById('btn-top');
+
+  // ============================================================
+  // ICONOS SVG
+  // ============================================================
+  const ICONOS = {
+    // Fotos del producto — cámara con destello
+    fotos: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 8h3l1.5-2.5a1 1 0 0 1 .87-.5h5.26a1 1 0 0 1 .87.5L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+      <circle cx="12" cy="13" r="3.25"/>
+      <path d="M9.5 5.5 10 4h4l.5 1.5"/>
+    </svg>`,
+
+    // Fotos ambientadas — casa con techo a dos aguas
+    casa: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 10.5 12 3l9 7.5"/>
+      <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+    </svg>`,
+
+    // Patrones de instalación — mosaico geométrico
+    patron: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="8" height="8" rx="1"/>
+      <rect x="13" y="3" width="8" height="8" rx="1"/>
+      <rect x="3" y="13" width="8" height="8" rx="1"/>
+      <path d="M13 13h8v8h-8z" opacity="0.5"/>
+      <path d="M13 17h8M17 13v8" opacity="0.5"/>
+    </svg>`,
+
+    // Rangos — paleta de muestras apiladas
+    rango: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="7" width="14" height="14" rx="2"/>
+      <path d="M7 3h12a2 2 0 0 1 2 2v12"/>
+      <circle cx="8" cy="12" r="1.25" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none"/>
+      <circle cx="10" cy="16" r="1.25" fill="currentColor" stroke="none"/>
+    </svg>`,
+
+    // Especificaciones — documento con líneas
+    spec: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2.5 14 8 19.5 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="13" y2="17"/>
+    </svg>`,
+
+    // Carrito — carrito de compras estilizado
+    carrito: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21.5 8H6.2"/>
+      <circle cx="9.5" cy="20" r="1.5"/>
+      <circle cx="18" cy="20" r="1.5"/>
+    </svg>`,
+
+    // Alerta — triángulo con exclamación
+    alerta: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13.5"/>
+      <circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/>
+    </svg>`,
+
+    // Herramienta — llave inglesa estilizada
+    herramienta: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14.5 6.5a3.5 3.5 0 0 1 4.8-4.8l-2.3 2.3 2.3 2.3a3.5 3.5 0 0 1-4.8 4.8L4.2 20.4a2 2 0 1 1-2.8-2.8l9.3-9.3a3.5 3.5 0 0 1 3.8-1.8z"/>
+      <circle cx="4" cy="20" r="0.8" fill="currentColor" stroke="none"/>
+    </svg>`,
+
+    // Check — check en círculo
+    check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="20 6.5 9 17.5 4 12.5"/>
+    </svg>`,
+
+    // Info — círculo con i
+    info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <line x1="12" y1="11" x2="12" y2="16.5"/>
+      <circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>
+    </svg>`,
+
+    // Cámara — cámara fotográfica con lente
+    camara: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 8h3l1.5-2.5a1 1 0 0 1 .87-.5h5.26a1 1 0 0 1 .87.5L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+      <circle cx="12" cy="13" r="3.25"/>
+    </svg>`
+  };
+
+  // ============================================================
+  // FORMATO DE MEDIDAS
+  // ============================================================
+  function formatMedida(valor, unidad, factorCm) {
+    if (valor == null) return null;
+    const u = unidad || 'cm';
+    const esPulgada = u === '"' || u === 'in' || u === 'pulg';
+    const texto = esPulgada ? `${valor}"` : `${valor} ${u}`;
+    let tooltip = null;
+    if (!esPulgada && u !== 'cm') {
+      const cm = valor * (Number(factorCm) || 1);
+      tooltip = `${Math.round(cm * 100) / 100} cm`;
+    } else if (esPulgada) {
+      const cm = valor * 2.54;
+      tooltip = `${Math.round(cm * 100) / 100} cm`;
+    }
+    return { texto, tooltip };
+  }
+
+  // ============================================================
+  // BOTÓN VOLVER ARRIBA
+  // ============================================================
+  $btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  window.addEventListener('scroll', () => $btnTop.classList.toggle('visible', window.scrollY > 400));
+
+  // ============================================================
+  // GALERÍAS: caché en memoria (sin data-fotos)
+  // ============================================================
+  const galeriasCache = new Map(); // containerId -> array de URLs
+
+  // ============================================================
+  // MODAL DE IMÁGENES (con drag + zoom + rotación + fullscreen + focus trap)
+  // ============================================================
+  const $modal = document.getElementById('modal-imagenes');
+  const $modalImg = document.getElementById('modal-img');
+  const $modalContador = document.getElementById('modal-contador');
+  const $modalPrev = document.getElementById('modal-prev');
+  const $modalNext = document.getElementById('modal-next');
+  const $modalClose = document.getElementById('modal-close');
+
+  let modalImagenes = [];
+  let modalIndex = 0;
+  let modalZoom = 1;
+  let modalRotation = 0;
+  let modalDrag = { active: false, startX: 0, startY: 0, offsetX: 0, offsetY: 0 };
+  let modalFocusReturn = null;
+
+  function aplicarTransformModal() {
+    $modalImg.style.transform =
+      `translate(${modalDrag.offsetX}px, ${modalDrag.offsetY}px) scale(${modalZoom}) rotate(${modalRotation}deg)`;
+  }
+
+  function abrirModalImagen(url, todasLasFotos, index = 0) {
+    modalImagenes = (todasLasFotos || [url]).map(f => convertirUrlGoogleDrive(f) || f);
+    modalIndex = index;
+    modalZoom = 1;
+    modalRotation = 0;
+    modalDrag = { active: false, startX: 0, startY: 0, offsetX: 0, offsetY: 0 };
+
+    modalFocusReturn = document.activeElement;
+
+    $modalImg.src = modalImagenes[modalIndex] || '';
+    $modalImg.alt = `Imagen ${modalIndex + 1} de ${modalImagenes.length}`;
+    $modalContador.textContent = `${modalIndex + 1} / ${modalImagenes.length}`;
+    $modalPrev.style.display = modalImagenes.length > 1 ? 'inline-flex' : 'none';
+    $modalNext.style.display = modalImagenes.length > 1 ? 'inline-flex' : 'none';
+    aplicarTransformModal();
+
+    $modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Focus inicial en el botón de cerrar
+    setTimeout(() => $modalClose.focus(), 50);
+  }
+
+  function cerrarModalImagen() {
+    $modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (modalFocusReturn && typeof modalFocusReturn.focus === 'function') {
+      try { modalFocusReturn.focus(); } catch (e) {}
+    }
+  }
+
+  function navegarModal(dir) {
+    const nuevoIdx = modalIndex + dir;
+    if (nuevoIdx < 0 || nuevoIdx >= modalImagenes.length) return;
+    modalIndex = nuevoIdx;
+    modalZoom = 1;
+    modalRotation = 0;
+    modalDrag.offsetX = 0;
+    modalDrag.offsetY = 0;
+    $modalImg.src = modalImagenes[modalIndex];
+    $modalImg.alt = `Imagen ${modalIndex + 1} de ${modalImagenes.length}`;
+    $modalContador.textContent = `${modalIndex + 1} / ${modalImagenes.length}`;
+    aplicarTransformModal();
+  }
+
+  function cambiarZoom(dir) {
+    modalZoom = Math.min(Math.max(modalZoom + dir * 0.25, 0.5), 3);
+    aplicarTransformModal();
+  }
+
+  function rotarImagen() {
+    modalRotation = (modalRotation + 90) % 360;
+    aplicarTransformModal();
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen?.();
+    }
+  }
+
+  // Focus trap
+  function trapFocus(e) {
+    if (e.key !== 'Tab') return;
+    const focusables = $modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  // Eventos del modal
+  $modalClose.addEventListener('click', cerrarModalImagen);
+  $modalPrev.addEventListener('click', () => navegarModal(-1));
+  $modalNext.addEventListener('click', () => navegarModal(1));
+  document.getElementById('modal-zoom-in').addEventListener('click', () => cambiarZoom(1));
+  document.getElementById('modal-zoom-out').addEventListener('click', () => cambiarZoom(-1));
+  document.getElementById('modal-rotate').addEventListener('click', rotarImagen);
+  document.getElementById('modal-fullscreen').addEventListener('click', toggleFullscreen);
+  $modal.addEventListener('click', (e) => { if (e.target === $modal) cerrarModalImagen(); });
+
+  // Drag
+  $modalImg.addEventListener('mousedown', (e) => {
+    if (modalZoom <= 1 && modalRotation === 0) return;
+    modalDrag.active = true;
+    modalDrag.startX = e.clientX - modalDrag.offsetX;
+    modalDrag.startY = e.clientY - modalDrag.offsetY;
+    $modalImg.style.transition = 'none';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!modalDrag.active) return;
+    modalDrag.offsetX = e.clientX - modalDrag.startX;
+    modalDrag.offsetY = e.clientY - modalDrag.startY;
+    aplicarTransformModal();
+  });
+  window.addEventListener('mouseup', () => {
+    if (!modalDrag.active) return;
+    modalDrag.active = false;
+    $modalImg.style.transition = 'transform .12s ease';
+  });
+
+  // Touch drag
+  $modalImg.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    if (modalZoom <= 1 && modalRotation === 0) return;
+    modalDrag.active = true;
+    modalDrag.startX = e.touches[0].clientX - modalDrag.offsetX;
+    modalDrag.startY = e.touches[0].clientY - modalDrag.offsetY;
+    $modalImg.style.transition = 'none';
+  }, { passive: true });
+  $modalImg.addEventListener('touchmove', (e) => {
+    if (!modalDrag.active) return;
+    if (e.touches.length !== 1) return;
+    modalDrag.offsetX = e.touches[0].clientX - modalDrag.startX;
+    modalDrag.offsetY = e.touches[0].clientY - modalDrag.startY;
+    aplicarTransformModal();
+  }, { passive: true });
+  $modalImg.addEventListener('touchend', () => {
+    if (!modalDrag.active) return;
+    modalDrag.active = false;
+    $modalImg.style.transition = 'transform .12s ease';
+  });
+
+  // Teclado
+  document.addEventListener('keydown', (e) => {
+    if (!$modal.classList.contains('open')) return;
+    if (e.key === 'Escape') cerrarModalImagen();
+    else if (e.key === 'ArrowLeft') navegarModal(-1);
+    else if (e.key === 'ArrowRight') navegarModal(1);
+    else if (e.key === 'Tab') trapFocus(e);
+  });
+
+  // ============================================================
+  // RENDERIZAR GALERÍA (versión limpia, con Map en memoria)
+  // ============================================================
+  function renderGaleriaSeccion(containerId, fotos, titulo, iconoKey, subtitulo = '') {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    const fotosConvertidas = (fotos || [])
+      .map(f => convertirUrlGoogleDrive(f) || f)
+      .filter(Boolean);
+
+    if (fotosConvertidas.length === 0) {
+      el.innerHTML = '';
+      return;
+    }
+
+    galeriasCache.set(containerId, fotosConvertidas);
+
+    const totalFotos = fotosConvertidas.length;
+    const mostrarVerMas = totalFotos > 3;
+    const fotosMostrar = mostrarVerMas ? fotosConvertidas.slice(0, 3) : fotosConvertidas;
+
+    el.innerHTML = `
+      <section class="galeria-seccion" aria-label="${escapeAttr(titulo)}">
+        <div class="galeria-head">
+          <span class="galeria-head-icon">${ICONOS[iconoKey] || ICONOS.fotos}</span>
+          <h3 class="galeria-titulo">${escapeHtml(titulo)}</h3>
+        </div>
+        ${subtitulo ? `<div class="galeria-subtitulo-wrap"><p class="galeria-subtitulo">${escapeHtml(subtitulo)}</p></div>` : ''}
+        <div class="galeria-grid" role="list">
+          ${fotosMostrar.map((url, idx) => `
+            <div class="galeria-item"
+                 role="listitem"
+                 tabindex="0"
+                 data-index="${idx}"
+                 aria-label="${escapeAttr(titulo)} - Foto ${idx + 1} de ${totalFotos}">
+              <img src="${escapeAttr(url)}" alt="${escapeAttr(titulo)} - Foto ${idx + 1}" loading="lazy" decoding="async">
+            </div>
+          `).join('')}
+          ${mostrarVerMas ? `
+            <div class="galeria-item ver-mas"
+                 role="listitem"
+                 tabindex="0"
+                 data-index="0"
+                 aria-label="Ver todas las fotos (${totalFotos})">
+              <span>+${totalFotos - 3}</span>
+            </div>
+          ` : ''}
+        </div>
+      </section>
+    `;
+
+    el.querySelectorAll('.galeria-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const fotos = galeriasCache.get(containerId);
+        if (!fotos) return;
+        const idx = parseInt(item.dataset.index) || 0;
+        abrirModalImagen(fotos[idx], fotos, idx);
+      });
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  // SKELETON
+  // ============================================================
+  function renderSkeleton() {
+    $contenido.innerHTML = `
+      <div class="skeleton-producto">
+        <div>
+          <div class="skeleton-bloque skeleton-img"></div>
+        </div>
+        <div>
+          <div class="skeleton-bloque skeleton-linea corta"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:28px;margin-bottom:16px;"></div>
+          <div class="skeleton-bloque skeleton-linea media" style="margin-bottom:24px;"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:56px;margin-bottom:20px;"></div>
+          <div class="skeleton-bloque skeleton-linea precio"></div>
+          <div class="skeleton-bloque skeleton-linea media"></div>
+          <div class="skeleton-bloque skeleton-linea larga" style="height:48px;margin-top:24px;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // RENDER PRODUCTO
+  // ============================================================
+  function renderizarProducto(p) {
+    const isActive = p.activo !== false;
+
+    // Precios
+    const precioBase   = p.precio_base   != null ? Number(p.precio_base)   : null;
+    const precioOferta = p.precio_oferta != null ? Number(p.precio_oferta) : null;
+    const precioFinal  = p.precio        != null ? Number(p.precio)        : null;
+    const hayOferta = precioOferta != null && precioBase != null && precioOferta < precioBase;
+    const descuentoPorcentaje = hayOferta ? Math.round(((precioBase - precioOferta) / precioBase) * 100) : 0;
+    const precioTachado = hayOferta && precioBase != null ? precioBase : null;
+
+    const priceOldHtml = precioTachado
+      ? `<span class="price-old">${GM.soles(precioTachado)}</span>` : '';
+    const descuentoHtml = hayOferta
+      ? `<span class="price-discount">-${descuentoPorcentaje}%</span>` : '';
+    const precioHtml = (precioFinal != null && precioFinal > 0)
+      ? GM.soles(precioFinal) : 'Consultar precio';
+
+    // Imagen principal
+    let imagenPrincipal = null;
+    if (p.imagen_url) imagenPrincipal = convertirUrlGoogleDrive(p.imagen_url);
+    else if (p.imagen_alt) imagenPrincipal = convertirUrlGoogleDrive(p.imagen_alt);
+
+    // Fotos para el modal
+    const fotosPrincipales = [];
+    if (Array.isArray(p.galeria_fotos) && p.galeria_fotos.length > 0) {
+      p.galeria_fotos.forEach(f => {
+        const url = convertirUrlGoogleDrive(f);
+        if (url) fotosPrincipales.push(url);
+      });
+    }
+    if (imagenPrincipal && !fotosPrincipales.includes(imagenPrincipal)) {
+      fotosPrincipales.unshift(imagenPrincipal);
+    }
+    const tieneFotos = fotosPrincipales.length > 0;
+
+    // Medidas
+    const medidas = [
+      { k: 'Largo', ...(formatMedida(p.largo, p.unidad_largo_simbolo, p.unidad_largo_factor_cm) || {}) },
+      { k: 'Ancho', ...(formatMedida(p.ancho, p.unidad_ancho_simbolo, p.unidad_ancho_factor_cm) || {}) },
+      { k: 'Espesor', ...(formatMedida(p.espesor, p.unidad_espesor_simbolo, p.unidad_espesor_factor_cm) || {}) }
+    ].filter(m => m.texto);
+
+    const medidasHtml = medidas.length > 0
+      ? `<ul class="producto-medidas">
+          ${medidas.map(m => `
+            <li ${m.tooltip ? `title="${escapeAttr(m.tooltip)}"` : ''}>
+              <span class="k">${escapeHtml(m.k)}</span>
+              <span class="v">${escapeHtml(m.texto)}</span>
+            </li>
+          `).join('')}
+        </ul>`
+      : '';
+
+    // Badges
+    let badges = '';
+    if (p.linea === 'outlet') badges += GM.badge('Outlet', 'gold') + ' ';
+    if (p.linea === 'saldos') badges += GM.badge('Saldo de exportación', 'gold') + ' ';
+    if (p.destacado && p.linea === 'catalogo') badges += GM.badge('Destacado', 'gold') + ' ';
+    if (hayOferta) badges += GM.badge('Oferta', 'green') + ' ';
+    if (p.motivo) badges += GM.badge(p.motivo, 'gray') + ' ';
+    if (!isActive) badges += GM.badge('No disponible', 'red');
+
+    // Favorito
+    const esFav = esFavorito(p.sku, origenActual);
+
+    // Origen
+    const origenLabel = ORIGEN_LABELS[origenActual] || origenActual;
+
+    // HTML
+    $contenido.innerHTML = `
+      <div class="producto-origen-badge">Estás viendo: ${escapeHtml(origenLabel)}</div>
+
+      <div class="producto-grid">
+        <div class="producto-imagen" id="producto-imagen-principal"
+             ${tieneFotos ? 'role="button" tabindex="0" aria-label="Ampliar imagen del producto"' : ''}>
+          ${imagenPrincipal
+            ? `<img src="${escapeAttr(imagenPrincipal)}" alt="${escapeAttr(p.nombre)}" loading="eager" decoding="async">`
+            : `<div class="producto-imagen-swatch" style="${stoneSwatchStyle(p.familia_nombre || 'Mármol', p.sku)}"></div>`
+          }
+          ${tieneFotos ? `
+            <span class="producto-imagen-badge">
+              ${ICONOS.camara}
+              ${fotosPrincipales.length} foto${fotosPrincipales.length !== 1 ? 's' : ''}
+            </span>` : ''}
+        </div>
+
+        <div class="producto-info">
+          <div class="producto-familia">
+            ${escapeHtml(p.familia_nombre || 'Piedra Natural')}${p.material_nombre ? ' · ' + escapeHtml(p.material_nombre) : ''}
+          </div>
+          <h1 class="producto-titulo">${escapeHtml(p.nombre)}</h1>
+          <div class="producto-sku">SKU: ${escapeHtml(p.sku)}</div>
+
+          ${medidasHtml}
+
+          <div class="producto-precio">
+            ${priceOldHtml}
+            <span class="price">${precioHtml}</span>
+            ${descuentoHtml}
+            <span class="unit">/ ${escapeHtml(p.unidad_simbolo || 'm²')}</span>
+          </div>
+
+          ${badges ? `<div class="producto-badges">${badges}</div>` : ''}
+
+          <div class="producto-acciones">
+            <a href="${isActive ? `cotizacion.html?sku=${encodeURIComponent(p.sku)}&origen=${encodeURIComponent(origenActual)}` : '#'}"
+               class="btn-cotizar"
+               aria-label="${isActive ? 'Solicitar cotización del producto' : 'Producto no disponible'}"
+               ${!isActive ? 'aria-disabled="true" tabindex="-1"' : ''}>
+              ${isActive ? 'Solicitar cotización' : 'Producto no disponible'}
+            </a>
+
+            <button type="button"
+                    class="btn-favorito ${esFav ? 'active' : ''}"
+                    id="btn-favorito"
+                    aria-label="${esFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}"
+                    aria-pressed="${esFav}">
+              <span aria-hidden="true"></span>
+              <span class="btn-label">${esFav ? 'En favoritos' : 'Favorito'}</span>
+            </button>
+
+            <button type="button"
+                    class="btn-compartir"
+                    id="btn-compartir"
+                    aria-label="Compartir por WhatsApp">
+              <span aria-hidden="true">↗</span>
+              <span class="btn-label">Compartir</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERÍAS -->
+      <div id="galeria-fotos"></div>
+      <div id="galeria-ambientadas"></div>
+      <div id="galeria-patrones"></div>
+      <div id="galeria-rangos"></div>
+
+      <!-- SECCIONES INFORMATIVAS -->
+      <div id="secciones-informativas" class="seccion-informativa"></div>
+    `;
+
+    // === Eventos ===
+    const $imgPrincipal = document.getElementById('producto-imagen-principal');
+    if ($imgPrincipal && tieneFotos) {
+      $imgPrincipal.addEventListener('click', () => abrirModalImagen(fotosPrincipales[0], fotosPrincipales, 0));
+      $imgPrincipal.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          abrirModalImagen(fotosPrincipales[0], fotosPrincipales, 0);
+        }
+      });
+    }
+
+    document.getElementById('btn-favorito')?.addEventListener('click', () => {
+      if (!isActive) return;
+      guardarFavorito(p.sku, origenActual);
+      const ahoraEsFav = esFavorito(p.sku, origenActual);
+      const btn = document.getElementById('btn-favorito');
+      if (btn) {
+        btn.classList.toggle('active', ahoraEsFav);
+        btn.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+        btn.setAttribute('aria-label', ahoraEsFav ? 'Quitar de favoritos' : 'Agregar a favoritos');
+        btn.innerHTML = `<span aria-hidden="true"></span><span class="btn-label">${ahoraEsFav ? 'En favoritos' : 'Favorito'}</span>`;
+      }
+    });
+
+    document.getElementById('btn-compartir')?.addEventListener('click', () => {
+      const url = `${location.origin}${location.pathname}?sku=${encodeURIComponent(p.sku)}&origen=${encodeURIComponent(origenActual)}`;
+      const mensaje = encodeURIComponent(
+        `*${p.nombre}*\n\n SKU: ${p.sku}\n ${url}\n\n¡Cotiza este producto con Gallos Mármol! `
+      );
+      window.open(`https://wa.me/?text=${mensaje}`, '_blank', 'noopener,noreferrer');
+    });
+
+    // Galerías
+    renderGaleriaSeccion('galeria-fotos', p.galeria_fotos, 'Fotos del producto', 'fotos');
+    renderGaleriaSeccion('galeria-ambientadas', p.galeria_ambientadas, 'Fotos ambientadas', 'casa');
+    renderGaleriaSeccion('galeria-patrones', p.galeria_patrones, 'Patrones de instalación', 'patron');
+    if (p.es_piedra_natural) {
+      renderGaleriaSeccion('galeria-rangos', p.galeria_rangos, 'Rangos del producto', 'rango');
+    }
+
+    // Secciones informativas
+    renderSecciones(p);
+  }
+
+  // ============================================================
+  // SECCIONES INFORMATIVAS (diseño limpio y visual)
+  // ============================================================
+  function parseEspecificaciones(valor) {
+    if (valor == null) return null;
+    if (typeof valor === 'object') return valor;
+    const str = String(valor).trim();
+    if (!str) return null;
+    if ((str.startsWith('{') && str.endsWith('}')) || (str.startsWith('[') && str.endsWith(']'))) {
+      try { return JSON.parse(str); } catch (e) { return { 'Detalle': str }; }
+    }
+    return { 'Detalle': str };
+  }
+
+  function renderSecciones(p) {
+    const $el = document.getElementById('secciones-informativas');
+    if (!$el) return;
+
+    const bloques = [];
+
+    // === 1. Especificaciones técnicas (si existen) ===
+    if (p.especificaciones_tecnicas) {
+      const specs = parseEspecificaciones(p.especificaciones_tecnicas);
+      let tabla = '';
+      if (specs && typeof specs === 'object') {
+        tabla = Object.entries(specs).map(([k, v]) => `
+          <tr>
+            <th>${escapeHtml(k)}</th>
+            <td>${escapeHtml(typeof v === 'object' ? JSON.stringify(v) : v)}</td>
+          </tr>
+        `).join('');
+      }
+      if (tabla) {
+        bloques.push(`
+          <div class="seccion-card">
+            <div class="seccion-head">
+              <span class="seccion-head-icon">${ICONOS.spec}</span>
+              <h3>Especificaciones técnicas</h3>
+            </div>
+            <table class="spec-table"><tbody>${tabla}</tbody></table>
+          </div>
+        `);
+      }
+    }
+
+    // === 2. Especificaciones del producto (siempre) ===
+    const specsProducto = [];
+    if (p.sku) specsProducto.push(['SKU', p.sku]);
+    if (p.familia_nombre) specsProducto.push(['Familia', p.familia_nombre]);
+    if (p.material_nombre) specsProducto.push(['Material', p.material_nombre]);
+    if (p.acabado_nombre) specsProducto.push(['Acabado', p.acabado_nombre]);
+    if (p.borde_nombre) specsProducto.push(['Borde', p.borde_nombre]);
+    if (p.calidad_nombre) specsProducto.push(['Calidad', p.calidad_nombre]);
+    if (p.modelo) specsProducto.push(['Modelo', p.modelo]);
+    if (p.origen) specsProducto.push(['Origen', p.origen]);
+    // Dimensiones: largo × ancho × espesor (si existe)
+    const dimPartes = [];
+    if (p.largo != null) {
+      const u = p.unidad_largo_simbolo || 'cm';
+      const esPulgada = u === '"' || u === 'in' || u === 'pulg';
+      dimPartes.push(esPulgada ? `${p.largo} pulg` : `${p.largo} ${u}`);
+    }
+    if (p.ancho != null) {
+      const u = p.unidad_ancho_simbolo || 'cm';
+      const esPulgada = u === '"' || u === 'in' || u === 'pulg';
+      dimPartes.push(esPulgada ? `${p.ancho} pulg` : `${p.ancho} ${u}`);
+    }
+    if (p.espesor != null) {
+      const u = p.unidad_espesor_simbolo || 'cm';
+      const esPulgada = u === '"' || u === 'in' || u === 'pulg';
+      dimPartes.push(esPulgada ? `${p.espesor} pulg` : `${p.espesor} ${u}`);
+    }
+
+    if (dimPartes.length > 0) {
+      specsProducto.push(['Dimensiones', dimPartes.join(' × ')]);
+    }
+    if (p.unidad_simbolo) specsProducto.push(['Unidad de venta', p.unidad_simbolo]);
+
+    if (specsProducto.length > 0) {
+      bloques.push(`
+        <div class="seccion-card">
+          <div class="seccion-head">
+            <span class="seccion-head-icon">${ICONOS.info}</span>
+            <h3>Especificaciones del producto</h3>
+          </div>
+          <table class="spec-table">
+            <tbody>
+              ${specsProducto.map(([k, v]) => `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(v)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      `);
+    }
+
+    // === 3. Lo que debes saber (formato tarjetas) ===
+    const tips = [
+      'Las imágenes son referenciales, no contractuales.',
+      'La piedra natural presenta variabilidad en vetas y tonos.',
+      'No se puede seleccionar una veta o tonalidad específica.',
+      'Solicita una muestra física antes de tu pedido.',
+      'El producto final puede diferir de las muestras.',
+      'Las variaciones son características de calidad, no defectos.'
+    ];
+    bloques.push(`
+      <div class="seccion-card">
+        <div class="seccion-head">
+          <span class="seccion-head-icon">${ICONOS.carrito}</span>
+          <h3>Lo que debes saber antes de comprar</h3>
+        </div>
+        <div class="tips-grid">
+          ${tips.map(t => `
+            <div class="tip">
+              <span class="tip-icon">${ICONOS.check}</span>
+              <span>${escapeHtml(t)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `);
+
+    // === 4. Variabilidad natural (si aplica) ===
+    if (p.mostrar_variabilidad) {
+      bloques.push(`
+        <div class="seccion-card">
+          <div class="seccion-head">
+            <span class="seccion-head-icon">${ICONOS.alerta}</span>
+            <h3>Nota sobre la variabilidad natural</h3>
+          </div>
+          <div class="aviso-variabilidad" style="margin-top:0;">
+            <h4>${ICONOS.alerta} ¿Por qué mi pieza puede verse distinta?</h4>
+            <p>Las piedras naturales como mármoles, travertinos, granitos y otras, poseen variaciones en tono, veta y porosidad. Los tonos y características de las muestras exhibidas son <strong>referenciales</strong>.</p>
+            <p><strong>Características normales del material comercial:</strong> esquinas postilladas, marcas del disco de corte, cangrejera superficial y rango de color variado entre lotes. No son defectos.</p>
+            <div class="destacado">
+              ${ICONOS.alerta}
+              <span>Las imágenes de rangos y variaciones son <strong>ejemplos</strong> de la variabilidad natural. No es posible seleccionar una veta o tonalidad específica al momento de la compra.</span>
+            </div>
+            <p>Para mayor certeza, recomendamos solicitar una <strong>muestra física</strong> antes de realizar tu pedido.</p>
+          </div>
+        </div>
+      `);
+    }
+
+    // === 5. Características comerciales (si aplica) ===
+    if (Number(p.calidad_nivel) >= 3 || p.mostrar_caracteristicas) {
+      const caracts = [
+        ['Esquinas postilladas', 'Las piezas pueden presentar esquinas postilladas o desportilladuras leves en los bordes.'],
+        ['Marcas del disco', 'Es posible encontrar marcas del disco de corte en la superficie del material.'],
+        ['Cangrejera superficial', 'La cara de las baldosas puede presentar pequeñas imperfecciones superficiales.'],
+        ['Rango de color variado', 'El color puede variar entre lotes de producción.']
+      ];
+      bloques.push(`
+        <div class="seccion-card">
+          <div class="seccion-head">
+            <span class="seccion-head-icon">${ICONOS.herramienta}</span>
+            <h3>Características del material comercial</h3>
+          </div>
+          <div class="caracteristicas-grid">
+            ${caracts.map(([titulo, texto]) => `
+              <div class="caracteristica">
+                <h6>${escapeHtml(titulo)}</h6>
+                <p>${escapeHtml(texto)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `);
+    }
+
+    $el.innerHTML = bloques.join('');
+  }
+
+  // ============================================================
+  // META TAGS + JSON-LD
+  // ============================================================
+  function actualizarMeta(p, imagenUrl) {
+    const nombre = p.nombre || 'Producto';
+    const familia = p.familia_nombre || 'Piedra natural';
+    const desc = p.descripcion || `${nombre} — ${familia} de Gallos Mármol.`;
+
+    document.title = `${nombre} · Gallos Mármol`;
+    document.getElementById('page-description')?.setAttribute('content', desc);
+    document.getElementById('og-title')?.setAttribute('content', `${nombre} · Gallos Mármol`);
+    document.getElementById('og-description')?.setAttribute('content', desc);
+    if (imagenUrl) document.getElementById('og-image')?.setAttribute('content', imagenUrl);
+
+    const schemaEl = document.getElementById('product-schema');
+    if (schemaEl) {
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": nombre,
+        "sku": p.sku || '',
+        "description": desc,
+        "brand": { "@type": "Organization", "name": "Gallos Mármol S.A.C." },
+        "image": imagenUrl || ''
+      };
+      if (p.precio && Number(p.precio) > 0) {
+        schema.offers = {
+          "@type": "Offer",
+          "price": Number(p.precio),
+          "priceCurrency": "PEN",
+          "availability": p.activo === false
+            ? "https://schema.org/OutOfStock"
+            : "https://schema.org/InStock"
+        };
+      }
+      schemaEl.textContent = JSON.stringify(schema);
+    }
+  }
+
+  // ============================================================
+  // ERROR
+  // ============================================================
+  function mostrarError(titulo, mensaje) {
+    $contenido.innerHTML = `
+      <div class="saldos-empty" style="padding:80px 20px;">
+        <div class="saldos-empty__icon">⚠️</div>
+        <h2 class="saldos-empty__title">${escapeHtml(titulo)}</h2>
+        <p class="saldos-empty__text">${escapeHtml(mensaje)}</p>
+        <a href="catalogo.html" class="saldos-empty__btn" style="text-decoration:none;">Ver catálogo</a>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // CARGAR PRODUCTO
+  // ============================================================
+  async function cargarProducto() {
+    if (!skuParam) {
+      mostrarError('Producto no especificado', 'No se ha seleccionado un producto válido.');
+      return;
+    }
+
+    renderSkeleton();
+
+    try {
+      const productos = await CatalogoAPI.getProductos({ linea: origenActual });
+      let producto = (productos || []).find(p => p.sku === skuParam);
+
+      if (!producto) {
+        const todos = await CatalogoAPI.getProductos({});
+        producto = (todos || []).find(p => p.sku === skuParam);
+      }
+
+      if (!producto) {
+        mostrarError('Producto no encontrado', `El SKU "${skuParam}" no existe en nuestro catálogo.`);
+        return;
+      }
+
+      const imagenParaOG = producto.imagen_url
+        ? convertirUrlGoogleDrive(producto.imagen_url)
+        : null;
+
+      actualizarMeta(producto, imagenParaOG);
+      renderizarProducto(producto);
+
+    } catch (error) {
+      console.error('Error cargando producto:', error);
+      mostrarError('Error al cargar el producto', error.message || 'Error desconocido');
+    }
+  }
+
+  cargarProducto();
+</script>
+
+</body>
+</html>
