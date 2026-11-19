@@ -1,0 +1,2724 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Favoritos · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tus productos favoritos de Gallos Mármol: catálogo, outlet y saldos de exportación.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Favoritos · Gallos Mármol">
+<meta property="og:description" content="Tus productos favoritos de Gallos Mármol.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/shared/assets/foto_01.png">
+<link rel="icon" type="image/png" href="../shared/assets/foto_02.png">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+<link rel="stylesheet" href="./assets/css/favoritos.css">
+
+<link
+  rel="preload"
+  as="image"
+  href="assets/img/favorito/Foto_01.webp"
+  fetchpriority="high"
+>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+</head>
+<body class="page-favoritos" data-linea="catalogo">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<noscript>
+  <div style="max-width:640px;margin:60px auto;padding:24px;background:#fef3f2;border:1px solid #f5c2c0;border-radius:8px;color:#a63d33;text-align:center;font-size:14px;line-height:1.5;" role="alert">
+    <strong>Necesitas activar JavaScript</strong> para ver tus favoritos.
+    Por favor, actívalo en tu navegador y recarga la página.
+  </div>
+</noscript>
+
+<main>
+  <!-- ============================================================ -->
+  <!-- HERO CON IMAGEN -->
+  <!-- ============================================================ -->
+  <section class="page-hero page-hero--outlet page-hero--con-foto">
+    <!-- Imagen de fondo (decorativa) -->
+    <div class="page-hero__bg" aria-hidden="true">
+      <img
+        src="assets/img/favorito/Foto_01.webp"
+        alt=""
+        width="1920"
+        height="600"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="page-hero__bg-img"
+        onerror="this.style.display='none'; this.parentElement.parentElement.classList.add('page-hero--sin-foto');"
+      >
+      <div class="page-hero__overlay"></div>
+    </div>
+
+    <div class="page-hero-in">
+      <div class="kicker">
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:middle; margin-right:6px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;">
+          <path d="M12 21s-7.5-4.35-9.5-9.5C1.12 8.55 3.5 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 3.5 0 5.88 3.55 4.5 6.5C19.5 16.65 12 21 12 21z"/>
+        </svg>
+        Tu lista de deseos
+      </div>
+      <h1>Favoritos</h1>
+      <p>Los productos que guardaste para revisar después. Puedes filtrarlos, ordenarlos, cotizarlos o eliminarlos de tu lista.</p>
+
+      <!-- CTA principal -->
+      <div class="page-hero-cta">
+        <button type="button" class="btn btn-gold" id="btn-ver-favoritos">
+          Ver mis favoritos ↓
+        </button>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <button type="button" class="saldos-scroll-indicator" id="favoritos-scroll-indicator" aria-label="Desliza para ver tus favoritos">
+      <span>Desliza para ver</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ============================================================ -->
+  <div class="saldos-page">
+
+    <!-- Aviso de no disponibles -->
+    <div id="favoritos-aviso" class="favoritos-aviso" hidden role="status" aria-live="polite"></div>
+
+    <!-- ======================================================== -->
+    <!-- BARRA STICKY DE CONTROLES -->
+    <!-- ======================================================== -->
+    <div class="saldos-controls">
+      <div class="saldos-controls__row">
+
+        <!-- Buscador con QR -->
+        <div class="saldos-controls__search" id="favoritos-search-wrap">
+          <input
+            type="search"
+            id="favoritos-search"
+            placeholder="Buscar por nombre, SKU o familia…"
+            autocomplete="off"
+            aria-label="Buscar en favoritos"
+            aria-autocomplete="list"
+            aria-controls="favoritos-sugerencias">
+          <button type="button" class="saldos-qr-btn" id="favoritos-qr-btn" title="Escanear código QR" aria-label="Escanear código QR">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"
+                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="saldos-sugerencias" id="favoritos-sugerencias" role="listbox" hidden></div>
+        </div>
+
+        <!-- Botón filtros -->
+        <button type="button" class="saldos-controls__btn" id="favoritos-btn-filtros" aria-label="Abrir filtros">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Filtros
+        </button>
+
+        <!-- Selector de ordenamiento -->
+        <label class="saldos-orden-wrapper" aria-label="Ordenar favoritos">
+          <select id="favoritos-orden" class="saldos-orden-select" aria-label="Ordenar por">
+            <option value="recientes">Más recientes</option>
+            <option value="a-z">A-Z</option>
+            <option value="menor-precio">Menor precio</option>
+            <option value="mayor-precio">Mayor precio</option>
+            <option value="recomendados">Recomendados</option>
+          </select>
+        </label>
+
+        <!-- Toggle vista grid/lista -->
+        <div class="saldos-controls__view" role="group" aria-label="Cambiar vista">
+          <button type="button" id="favoritos-vista-grid" class="active" aria-label="Vista en cuadrícula" aria-pressed="true">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+              <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+          <button type="button" id="favoritos-vista-lista" aria-label="Vista en lista" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="3" rx="1" fill="currentColor"/>
+              <rect x="3" y="10.5" width="18" height="3" rx="1" fill="currentColor"/>
+              <rect x="3" y="17" width="18" height="3" rx="1" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Toggle solo destacados -->
+        <label class="saldos-toggle-destacados" title="Mostrar solo productos destacados">
+          <input type="checkbox" id="favoritos-solo-destacados">
+          <span>Destacados</span>
+        </label>
+
+        <!-- Vaciar -->
+        <button type="button" class="btn-vaciar-favoritos" id="btn-vaciar-favoritos" hidden>
+          Vaciar favoritos
+        </button>
+
+        <!-- Contador -->
+        <!-- Después -->
+        <div class="saldos-controls__count" id="favoritos-contador" aria-live="polite">
+          Cargando…
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TABS POR ORIGEN -->
+    <!-- ======================================================== -->
+    <div class="favoritos-tabs" id="favoritos-tabs" role="tablist" hidden></div>
+
+    <!-- ======================================================== -->
+    <!-- CHIPS DE FAMILIA -->
+    <!-- ======================================================== -->
+    <div class="saldos-familias" id="favoritos-familias" hidden role="group" aria-label="Filtrar por familia"></div>
+
+    <!-- ======================================================== -->
+    <!-- CHIPS DE FILTROS ACTIVOS -->
+    <!-- ======================================================== -->
+    <div class="saldos-activos" id="favoritos-activos" role="list" aria-label="Filtros activos"></div>
+
+    <!-- ======================================================== -->
+    <!-- GRID / LISTA DE PRODUCTOS -->
+    <!-- ======================================================== -->
+    <div
+      class="saldos-productos saldos-productos--grid"
+      id="favoritos-grid"
+      aria-live="polite"
+      role="tabpanel"
+      aria-labelledby="favoritos-tabs">
+      <!-- Skeleton inicial (4 cards) -->
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ============================================================ -->
+<!-- BOTTOM SHEET DE FILTROS -->
+<!-- ============================================================ -->
+<div class="saldos-sheet-backdrop" id="favoritos-sheet-backdrop"></div>
+
+<aside class="saldos-sheet" id="favoritos-sheet" role="dialog" aria-modal="true" aria-labelledby="favoritos-sheet-title">
+  <div class="saldos-sheet__handle"></div>
+  <div class="saldos-sheet__header">
+    <h2 class="saldos-sheet__title" id="favoritos-sheet-title">Filtros</h2>
+    <button type="button" class="saldos-sheet__close" id="favoritos-sheet-close" aria-label="Cerrar filtros">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="saldos-sheet__body">
+
+    <!-- FAMILIA -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-familia">
+      <h3 class="saldos-filtro-grupo__titulo">Familia</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-familia"></div>
+    </div>
+
+    <!-- MATERIAL -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-material">
+      <h3 class="saldos-filtro-grupo__titulo">Material</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-material"></div>
+    </div>
+
+    <!-- ACABADO -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-acabado">
+      <h3 class="saldos-filtro-grupo__titulo">Acabado</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-acabado"></div>
+    </div>
+
+    <!-- PRECIO (slider) -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-precio">
+      <h3 class="saldos-filtro-grupo__titulo">Precio</h3>
+      <div class="saldos-precio-slider-wrapper">
+        <div id="favoritos-precio-slider" class="saldos-precio-slider"></div>
+        <div class="saldos-precio-valores">
+          <span id="favoritos-precio-min-valor">S/ 0</span>
+          <span id="favoritos-precio-max-valor">S/ 0</span>
+        </div>
+      </div>
+      <button type="button" class="saldos-precio-reset" id="favoritos-precio-reset">Resetear rango</button>
+    </div>
+
+    <!-- % DESCUENTO -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-descuento">
+      <h3 class="saldos-filtro-grupo__titulo">Descuento</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-descuento"></div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-stock">
+      <h3 class="saldos-filtro-grupo__titulo">Disponibilidad</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="favoritos-toggle-stock">
+        <span>Solo con stock</span>
+      </label>
+    </div>
+
+    <!-- CALIDAD -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-calidad">
+      <h3 class="saldos-filtro-grupo__titulo">Calidad</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-calidad"></div>
+    </div>
+
+    <!-- BORDE -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-borde">
+      <h3 class="saldos-filtro-grupo__titulo">Borde</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-borde"></div>
+    </div>
+
+    <!-- MODELO (buscador) -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-modelo">
+      <h3 class="saldos-filtro-grupo__titulo">Modelo</h3>
+      <input
+        type="search"
+        id="favoritos-modelo-search"
+        class="saldos-modelo-search"
+        placeholder="Buscar modelo…"
+        autocomplete="off"
+        aria-label="Buscar modelo"
+      >
+    </div>
+
+    <!-- LARGO / ANCHO / ESPESOR -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-largo">
+      <h3 class="saldos-filtro-grupo__titulo">Largo</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-largo"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-ancho">
+      <h3 class="saldos-filtro-grupo__titulo">Ancho</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-ancho"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-espesor">
+      <h3 class="saldos-filtro-grupo__titulo">Espesor</h3>
+      <div class="saldos-filtro-opciones" id="favoritos-opciones-espesor"></div>
+    </div>
+
+    <!-- DESTACADOS -->
+    <div class="saldos-filtro-grupo" id="favoritos-grupo-destacados">
+      <h3 class="saldos-filtro-grupo__titulo">Destacados</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="favoritos-toggle-destacados">
+        <span>Solo destacados</span>
+      </label>
+    </div>
+
+  </div>
+  <div class="saldos-sheet__footer">
+    <button type="button" class="btn-limpiar" id="favoritos-btn-limpiar">Limpiar</button>
+    <button type="button" class="btn-aplicar" id="favoritos-btn-aplicar">Aplicar filtros</button>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- MODAL QR -->
+<!-- ============================================================ -->
+<div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-label="Escanear código QR">
+  <div class="qr-modal__content">
+  <button type="button" class="qr-modal__close" id="qr-modal-close" aria-label="Cerrar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+    <h2 class="qr-modal__title">Escanear código QR</h2>
+    <p class="qr-modal__hint">Apunta la cámara al código QR del producto.</p>
+    <div id="qr-reader" class="qr-modal__reader"></div>
+    <p class="qr-modal__status" id="qr-status"></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL VACIAR FAVORITOS -->
+<!-- ============================================================ -->
+<div class="favoritos-modal" id="favoritos-modal-vaciar" role="alertdialog" aria-modal="true" aria-labelledby="favoritos-modal-title" aria-describedby="favoritos-modal-text" aria-hidden="true">
+  <div class="favoritos-modal__content">
+    <h2 class="favoritos-modal__title" id="favoritos-modal-title">¿Vaciar favoritos?</h2>
+    <p class="favoritos-modal__text" id="favoritos-modal-text">Se eliminarán todos los productos de tu lista. Esta acción no se puede deshacer.</p>
+    <div class="favoritos-modal__actions">
+      <button type="button" class="btn btn-ghost" id="favoritos-modal-cancelar">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="favoritos-modal-confirmar">Sí, vaciar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- BOTÓN FLOTANTE DE FAQs -->
+<!-- ============================================================ -->
+<button
+  type="button"
+  class="outlet-faq-fab"
+  id="favoritos-faq-fab"
+  aria-label="Preguntas frecuentes de favoritos"
+  aria-haspopup="dialog"
+  aria-controls="favoritos-faq-drawer"
+>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- DRAWER DE FAQs DE FAVORITOS -->
+<!-- ============================================================ -->
+<div class="outlet-faq-backdrop" id="favoritos-faq-backdrop"></div>
+
+<aside
+  class="outlet-faq-drawer"
+  id="favoritos-faq-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="favoritos-faq-title"
+  aria-hidden="true"
+>
+  <div class="outlet-faq-header">
+    <h2 class="outlet-faq-title" id="favoritos-faq-title">Preguntas frecuentes de favoritos</h2>
+    <button
+      type="button"
+      class="outlet-faq-close"
+      id="favoritos-faq-close"
+      aria-label="Cerrar preguntas frecuentes"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="outlet-faq-body">
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Cómo agrego productos a favoritos?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Desde cualquier producto en catálogo, outlet o saldos de exportación, toca el ícono del corazón ❤️. El producto se guardará automáticamente en esta lista.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Mis favoritos se guardan si cierro el navegador?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Tus favoritos se guardan en tu navegador. Si borras los datos del sitio o usas otro dispositivo, no se sincronizarán automáticamente.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Qué pasa si un producto ya no está disponible?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        El producto seguirá en tu lista con una etiqueta "No disponible" para que sepas qué guardaste. Puedes quitarlo manualmente cuando quieras.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo cotizar varios favoritos a la vez?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Puedes ir agregando cada uno a tu cotización con el botón "Cotizar" y luego revisar el carrito completo en la página de cotización.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo buscar dentro de mis favoritos?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Usa el buscador de la barra superior para filtrar por nombre, SKU, familia, material o incluso medidas.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Cómo elimino un producto de favoritos?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Toca nuevamente el corazón ❤️ sobre el producto, o usa el botón "Quitar de favoritos" si el producto ya no está disponible.
+      </div>
+    </details>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+<script src="./assets/js/tracking.js" defer></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+<script type="module">
+  // ============================================================
+  // IMPORTACIONES
+  // ============================================================
+  import { CatalogoAPI } from '../shared/js/supabase-client.js';
+  import { productCardHtml, escapeHtml, escapeAttr } from './assets/js/public.js';
+
+  // ============================================================
+  // CONSTANTES
+  // ============================================================
+  const DEBOUNCE_MS = 250;
+  const UMBRAL_CHIPS_DIMENSION = 20;
+  const ORIGENES_VALIDOS = ['catalogo', 'outlet', 'saldos'];
+  const LS_VISTA = 'favoritos_vista';
+  const LS_ORDEN = 'gm.favoritos.orden';
+  const ORDENES_VALIDAS = ['recientes', 'a-z', 'menor-precio', 'mayor-precio', 'recomendados'];
+
+  // ============================================================
+  // INICIALIZAR SHELL
+  // ============================================================
+    pubHeader('favoritos', {
+    mostrarBotonCotizar: false,
+    mostrarBotonCarrito: false
+  });
+  if (typeof pubFooter === 'function') pubFooter();
+
+  setTimeout(() => {
+    if (typeof window.actualizarContadorCarritoHeader === 'function') {
+      window.actualizarContadorCarritoHeader('catalogo');
+    }
+    if (typeof window.actualizarContadorFavoritosHeader === 'function') {
+      window.actualizarContadorFavoritosHeader();
+    }
+  }, 50);
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let favoritos = [];            // { sku, origen, fecha, nombre, imagen_url, familia_nombre, precio_snapshot, moneda }
+  let productosMap = new Map();  // sku → producto (con lineas)
+  let items = [];                // { estado, producto, snapshot, origen, origenCambiado, fecha }
+  const ordenInicial = ORDENES_VALIDAS.includes(localStorage.getItem(LS_ORDEN))
+    ? localStorage.getItem(LS_ORDEN)
+    : 'recientes';
+  let filtros = {
+    q: '',
+    origen: 'todos',
+    familia_id: null,
+    materiales: [],
+    acabados: [],
+    largo: [],
+    ancho: [],
+    espesor: [],
+    soloDestacados: false,
+    descuento: null,
+    precioMin: null,
+    precioMax: null,
+    soloConStock: false,
+    calidades: [],
+    bordes: [],
+    modelo: '',
+    orden: ordenInicial
+  };
+  let vista = 'grid';
+  let qrScanner = null;
+  let precioSliderInstance = null;
+  let precioRangoGlobal = { min: 0, max: 0 };
+
+  // ============================================================
+  // REFERENCIAS DOM
+  // ============================================================
+  const $grid          = document.getElementById('favoritos-grid');
+  const $tabs          = document.getElementById('favoritos-tabs');
+  const $familias      = document.getElementById('favoritos-familias');
+  const $activos       = document.getElementById('favoritos-activos');
+  const $searchWrap    = document.getElementById('favoritos-search-wrap');
+  const $search        = document.getElementById('favoritos-search');
+  const $sugerencias   = document.getElementById('favoritos-sugerencias');
+  const $btnFiltros    = document.getElementById('favoritos-btn-filtros');
+  const $btnVaciar     = document.getElementById('btn-vaciar-favoritos');
+  const $aviso         = document.getElementById('favoritos-aviso');
+  const $vistaGrid     = document.getElementById('favoritos-vista-grid');
+  const $vistaLista    = document.getElementById('favoritos-vista-lista');
+  const $soloDest      = document.getElementById('favoritos-solo-destacados');
+  const $count         = document.getElementById('favoritos-contador');
+  const $btnTop        = document.getElementById('btn-top');
+  const $sheet         = document.getElementById('favoritos-sheet');
+  const $sheetBackdrop = document.getElementById('favoritos-sheet-backdrop');
+  const $sheetClose    = document.getElementById('favoritos-sheet-close');
+  const $btnLimpiar    = document.getElementById('favoritos-btn-limpiar');
+  const $btnAplicar    = document.getElementById('favoritos-btn-aplicar');
+  const $precioSlider  = document.getElementById('favoritos-precio-slider');
+  const $precioMinValor = document.getElementById('favoritos-precio-min-valor');
+  const $precioMaxValor = document.getElementById('favoritos-precio-max-valor');
+  const $precioReset   = document.getElementById('favoritos-precio-reset');
+  const $toggleStock   = document.getElementById('favoritos-toggle-stock');
+  const $toggleDestacados = document.getElementById('favoritos-toggle-destacados');
+  const $modeloSearch  = document.getElementById('favoritos-modelo-search');
+  const $ordenSelect   = document.getElementById('favoritos-orden');
+
+  // ============================================================
+  // UTILIDADES
+  // ============================================================
+  function debounce(fn, ms = DEBOUNCE_MS) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  // ============================================================
+  // BÚSQUEDA INTELIGENTE
+  // ============================================================
+  function normalizarTexto(str) {
+    return String(str || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function pareceSKU(termino) {
+    if (!termino) return false;
+    return /^[A-Z0-9]{6,}$/i.test(String(termino).trim());
+  }
+
+  function reducirPalabra(palabra) {
+    if (!palabra || palabra.length <= 3) return palabra;
+    if (palabra.endsWith('es') && palabra.length > 4) {
+      const sinEs = palabra.slice(0, -2);
+      if (sinEs.length >= 3 && /[aeiou]$/.test(sinEs)) return sinEs;
+    }
+    if (palabra.endsWith('s') && !palabra.endsWith('ss') && palabra.length > 3) {
+      return palabra.slice(0, -1);
+    }
+    return palabra;
+  }
+
+  function tokensDe(str) {
+    const norm = normalizarTexto(str);
+    if (!norm) return [];
+    return norm.split(' ').map(reducirPalabra).filter(Boolean);
+  }
+
+  function distanciaLevenshtein(a, b) {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const m = [];
+    for (let i = 0; i <= b.length; i++) m[i] = [i];
+    for (let j = 0; j <= a.length; j++) m[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        m[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+          ? m[i - 1][j - 1]
+          : 1 + Math.min(m[i - 1][j - 1], m[i][j - 1], m[i - 1][j]);
+      }
+    }
+    return m[b.length][a.length];
+  }
+
+  const SINONIMOS = {
+    'marmol':   ['marmol', 'marble'],
+    'granito':  ['granito', 'granite'],
+    'cuarzo':   ['cuarzo', 'quartz'],
+    'travertino': ['travertino', 'travertine'],
+    'porcelanato': ['porcelanato', 'porcelain', 'porcelanico'],
+    'revestimiento': ['revestimiento', 'recubrimiento', 'revestir'],
+    'moldura':  ['moldura', 'molde', 'cornisa'],
+    'baldosa':  ['baldosa', 'baldosin', 'baldoson', 'tile', 'losa'],
+    'losa':     ['losa', 'slab', 'plancha'],
+    'plancha':  ['plancha', 'slab', 'losa'],
+    'pulido':   ['pulido', 'polished', 'brillante'],
+    'mate':     ['mate', 'matte', 'opaco'],
+    'honed':    ['honed', 'mate', 'apomazado'],
+    'abujardado': ['abujardado', 'bushhammered'],
+    'cepillado': ['cepillado', 'brushed'],
+    'apomazado': ['apomazado', 'honed'],
+    'blanco':   ['blanco', 'white', 'bianco'],
+    'negro':    ['negro', 'black', 'nero'],
+    'gris':     ['gris', 'gray', 'grey', 'grigio'],
+    'beige':    ['beige', 'beis', 'crema'],
+    'crema':    ['crema', 'cream', 'beige'],
+    'marron':   ['marron', 'brown', 'cafe'],
+    'piedra':   ['piedra', 'stone', 'marmol', 'granito', 'cuarzo', 'travertino'],
+    'natural':  ['natural', 'stone', 'piedra'],
+    'comercial': ['comercial', 'commercial', 'standard'],
+  };
+
+  function expandirTokens(tokens) {
+    const expandidos = new Set(tokens);
+    tokens.forEach(t => {
+      const sinonimos = SINONIMOS[t];
+      if (sinonimos) {
+        sinonimos.forEach(s => expandidos.add(reducirPalabra(normalizarTexto(s))));
+      }
+    });
+    return Array.from(expandidos);
+  }
+
+  function tokensMatchean(tokensBuscados, textoObjetivo) {
+    if (!textoObjetivo) return false;
+    const tokensObjetivo = tokensDe(textoObjetivo);
+    if (tokensObjetivo.length === 0) return false;
+    return tokensBuscados.every(tokenBuscado => {
+      const variantes = expandirTokens([tokenBuscado]);
+      return variantes.some(variante => {
+        if (tokensObjetivo.some(t => t.includes(variante) || variante.includes(t))) return true;
+        const umbral = variante.length <= 5 ? 1 : 2;
+        return tokensObjetivo.some(t => {
+          if (Math.abs(t.length - variante.length) > umbral) return false;
+          return distanciaLevenshtein(t, variante) <= umbral;
+        });
+      });
+    });
+  }
+
+  function extraerMedidasDeQuery(q) {
+    const norm = normalizarTexto(q);
+    const patronPulgada = /(\d+(?:\.\d+)?)\s*(?:pulg|pulgada|pulgadas|in|")/gi;
+    const patronCm = /(\d+(?:\.\d+)?)\s*(?:cm|centimetro|centimetros)/gi;
+    const patronMm = /(\d+(?:\.\d+)?)\s*(?:mm|milimetro|milimetros)/gi;
+    const matchPulgada = [...norm.matchAll(patronPulgada)];
+    const matchCm = [...norm.matchAll(patronCm)];
+    const matchMm = [...norm.matchAll(patronMm)];
+    if (matchPulgada.length === 0 && matchCm.length === 0 && matchMm.length === 0) return null;
+    const valoresCm = [];
+    matchPulgada.forEach(m => valoresCm.push(parseFloat(m[1]) * 2.54));
+    matchCm.forEach(m => valoresCm.push(parseFloat(m[1])));
+    matchMm.forEach(m => valoresCm.push(parseFloat(m[1]) * 0.1));
+    return { valoresCm };
+  }
+
+  function matchMedidas(p, query) {
+    const medidasQuery = extraerMedidasDeQuery(query);
+    if (!medidasQuery) return null;
+    const coincide = (valorCm, valoresQuery) => {
+      if (valorCm == null) return false;
+      return valoresQuery.some(v => {
+        const tolerancia = Math.max(v * 0.02, 0.5);
+        return Math.abs(valorCm - v) <= tolerancia;
+      });
+    };
+    return (
+      coincide(p._largo_cm, medidasQuery.valoresCm) ||
+      coincide(p._ancho_cm, medidasQuery.valoresCm) ||
+      coincide(p._espesor_cm, medidasQuery.valoresCm)
+    );
+  }
+
+  function matchBusqueda(p, q) {
+    const norm = normalizarTexto(q);
+    if (!norm) return true;
+    if (pareceSKU(q)) {
+      return String(p.sku || '').toUpperCase() === String(q).trim().toUpperCase();
+    }
+    const matchPorMedidas = matchMedidas(p, q);
+    if (matchPorMedidas === true) return true;
+    const campos = [p.nombre, p.sku, p.familia_nombre, p.material_nombre, p.acabado_nombre, p.descripcion, p.modelo];
+    for (const campo of campos) {
+      if (campo && normalizarTexto(campo).includes(norm)) return true;
+    }
+    const tokensBuscados = tokensDe(q);
+    if (tokensBuscados.length === 0) return true;
+    for (const campo of campos) {
+      if (campo && tokensMatchean(tokensBuscados, campo)) return true;
+    }
+    return false;
+  }
+
+  function matchMulti(valor, lista) {
+    return lista.length === 0 || lista.includes(valor);
+  }
+
+  function toggleArray(arr, val) {
+    const i = arr.indexOf(val);
+    if (i > -1) arr.splice(i, 1);
+    else arr.push(val);
+  }
+
+  // ============================================================
+  // HELPERS DE PRECIO / STOCK / DESCUENTO
+  // ============================================================
+  function calcularDescuento(p) {
+    const base = Number(p.precio_base ?? p.precio);
+    const oferta = Number(p.precio_oferta);
+    if (!base || !oferta || oferta >= base) return null;
+    return Math.round(((base - oferta) / base) * 100);
+  }
+
+  function precioFinal(p) {
+    const oferta = Number(p.precio_oferta);
+    if (oferta > 0) return oferta;
+    const base = Number(p.precio_base ?? p.precio);
+    if (base > 0) return base;
+    return null;
+  }
+
+  function stockDeLinea(p, linea) {
+    const l = (p.lineas || []).find(x => x.linea === linea && x.activo !== false);
+    if (!l) return null;
+    return l.stock == null ? null : Number(l.stock);
+  }
+
+  function detectarLineasActivas(p) {
+    return (p.lineas || []).filter(l => l.activo !== false);
+  }
+
+  // ============================================================
+  // LEER FAVORITOS DEL LOCALSTORAGE (con soporte legacy)
+  // ============================================================
+  function leerFavoritos() {
+    try {
+      const raw = JSON.parse(localStorage.getItem('favoritos') || '[]');
+      if (!Array.isArray(raw)) return [];
+      const seen = new Set();
+      return raw
+        .map(f =>
+          typeof f === 'string'
+            ? { sku: f, origen: 'catalogo', fecha: null }
+            : f
+        )
+        .filter(f => {
+          if (!f || !f.sku) return false;
+          const key = `${f.sku}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // ============================================================
+  // FECHA "Agregado hace X"
+  // ============================================================
+  function formatearFechaAgregado(fechaISO) {
+    if (!fechaISO) return null;
+    const fecha = new Date(fechaISO);
+    if (isNaN(fecha.getTime())) return null;
+
+    const ahora = new Date();
+    let diffMs = ahora - fecha;
+    if (diffMs < 0) diffMs = 0; // protegerse contra fechas futuras
+
+    const diffMin = Math.floor(diffMs / (1000 * 60));
+    const diffH = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffD = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMin < 1) return 'Agregado ahora';
+    if (diffMin < 60) return `Agregado hace ${diffMin} min`;
+    if (diffH < 24) return `Agregado hace ${diffH} h`;
+    if (diffD === 1) return 'Agregado ayer';
+    if (diffD < 7) return `Agregado hace ${diffD} días`;
+    if (diffD < 30) {
+      const semanas = Math.floor(diffD / 7);
+      return `Agregado hace ${semanas} sem`;
+    }
+    return `Agregado el ${fecha.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' })}`;
+  }
+
+  function formatearFechaCompleta(fechaISO) {
+    if (!fechaISO) return '';
+    const fecha = new Date(fechaISO);
+    if (isNaN(fecha.getTime())) return '';
+    return fecha.toLocaleString('es-PE', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  // ============================================================
+  // DETECCIÓN DE ESTADO
+  // ============================================================
+  function resolverEstadoFavorito(fav, p) {
+    // Producto no existe o está inactivo global
+    if (!p || p.activo === false) {
+      return {
+        estado: 'no-disponible',
+        producto: null,
+        origen: fav.origen || 'catalogo',
+        origenCambiado: false
+      };
+    }
+
+    const lineasActivas = detectarLineasActivas(p);
+
+    if (lineasActivas.length === 0) {
+      return {
+        estado: 'no-disponible',
+        producto: p,
+        origen: fav.origen || 'catalogo',
+        origenCambiado: false
+      };
+    }
+
+    // Determinar origen real
+    const origenGuardado = fav.origen && ORIGENES_VALIDOS.includes(fav.origen) ? fav.origen : null;
+    const existeOrigenGuardado = origenGuardado && lineasActivas.some(l => l.linea === origenGuardado);
+
+    let origenReal;
+    let origenCambiado = false;
+
+    if (existeOrigenGuardado) {
+      origenReal = origenGuardado;
+    } else {
+      // Preferir catalogo, luego outlet, luego saldos
+      const preferencia = ['catalogo', 'outlet', 'saldos'];
+      origenReal = preferencia.find(l => lineasActivas.some(x => x.linea === l)) || lineasActivas[0].linea;
+      origenCambiado = true;
+    }
+
+    const lineaActual = lineasActivas.find(l => l.linea === origenReal);
+    const stock = lineaActual?.stock == null ? null : Number(lineaActual.stock);
+
+    return {
+      estado: stock === 0 ? 'agotado' : 'disponible',
+      producto: p,
+      origen: origenReal,
+      origenCambiado
+    };
+  }
+
+  // ============================================================
+  // NORMALIZAR PRODUCTO (dimensiones en cm + nombre de familia)
+  // ============================================================
+  function normalizarProducto(p) {
+    const factorLargo = Number(p.unidad_largo_factor_cm) || 1;
+    const factorAncho = Number(p.unidad_ancho_factor_cm) || 1;
+    const factorEspesor = Number(p.unidad_espesor_factor_cm) || 1;
+    return {
+      ...p,
+      _largo_cm:   p.largo   != null ? Number(p.largo)   * factorLargo   : null,
+      _ancho_cm:   p.ancho   != null ? Number(p.ancho)   * factorAncho   : null,
+      _espesor_cm: p.espesor != null ? Number(p.espesor) * factorEspesor : null,
+      _largo_original:   p.largo,
+      _ancho_original:   p.ancho,
+      _espesor_original: p.espesor,
+      _unidad_largo:   p.unidad_largo_simbolo   || 'cm',
+      _unidad_ancho:   p.unidad_ancho_simbolo   || 'cm',
+      _unidad_espesor: p.unidad_espesor_simbolo || 'cm'
+    };
+  }
+
+  // ============================================================
+  // FILTRAR
+  // ============================================================
+  function aplicarFiltros(itemsIn) {
+    return itemsIn.filter(it => {
+      // Filtros por origen (tab)
+      if (filtros.origen !== 'todos' && it.origen !== filtros.origen) return false;
+
+      // Filtros de estado (solo disponibles en búsqueda por texto)
+      const p = it.producto;
+
+      // Búsqueda de texto: si es no-disponible, buscamos en snapshot
+      if (filtros.q) {
+        if (!p) {
+          const snap = it.snapshot || {};
+          const q = normalizarTexto(filtros.q);
+          const nombre = normalizarTexto(snap.nombre || '');
+          const sku = normalizarTexto(snap.sku || '');
+          if (!nombre.includes(q) && !sku.includes(q)) return false;
+        } else if (!matchBusqueda(p, filtros.q)) {
+          return false;
+        }
+      }
+
+      // Filtros que requieren producto real
+      if (p) {
+        if (filtros.familia_id && p.familia_id !== filtros.familia_id) return false;
+        if (!matchMulti(p.material_id, filtros.materiales)) return false;
+        if (!matchMulti(p.acabado_id, filtros.acabados)) return false;
+        if (filtros.largo.length > 0 && !filtros.largo.includes(p._largo_cm)) return false;
+        if (filtros.ancho.length > 0 && !filtros.ancho.includes(p._ancho_cm)) return false;
+        if (filtros.espesor.length > 0 && !filtros.espesor.includes(p._espesor_cm)) return false;
+        if (filtros.soloDestacados && p.destacado !== true) return false;
+
+        if (filtros.descuento != null) {
+          const desc = calcularDescuento(p);
+          if (desc == null || desc < filtros.descuento) return false;
+        }
+
+        if (filtros.precioMin != null || filtros.precioMax != null) {
+          const precio = precioFinal(p);
+          if (precio == null) return false;
+          if (filtros.precioMin != null && precio < filtros.precioMin) return false;
+          if (filtros.precioMax != null && precio > filtros.precioMax) return false;
+        }
+
+        if (filtros.soloConStock) {
+          const stock = stockDeLinea(p, it.origen);
+          if (stock === 0) return false;
+        }
+
+        if (filtros.calidades.length > 0 && !filtros.calidades.includes(p.calidad_id)) return false;
+        if (filtros.bordes.length > 0 && !filtros.bordes.includes(p.borde_id)) return false;
+
+        if (filtros.modelo) {
+          const q = normalizarTexto(filtros.modelo);
+          const modelo = normalizarTexto(p.modelo || '');
+          if (!modelo.includes(q)) return false;
+        }
+      } else {
+        // No disponible: solo los filtros de texto aplican
+        if (filtros.familia_id) return false;
+        if (filtros.materiales.length > 0) return false;
+        if (filtros.acabados.length > 0) return false;
+        if (filtros.largo.length > 0) return false;
+        if (filtros.ancho.length > 0) return false;
+        if (filtros.espesor.length > 0) return false;
+        if (filtros.soloDestacados) return false;
+        if (filtros.descuento != null) return false;
+        if (filtros.precioMin != null || filtros.precioMax != null) return false;
+        if (filtros.soloConStock) return false;
+        if (filtros.calidades.length > 0) return false;
+        if (filtros.bordes.length > 0) return false;
+        if (filtros.modelo) return false;
+      }
+
+      return true;
+    });
+  }
+
+  // ============================================================
+  // ORDENAR
+  // ============================================================
+  function ordenarItems(lista) {
+    const orden = filtros.orden || 'recientes';
+    const copia = [...lista];
+
+    // Primero destacados, luego por criterio
+    const cmpDestacados = (a, b) => {
+      const da = a.producto?.destacado === true ? 1 : 0;
+      const db = b.producto?.destacado === true ? 1 : 0;
+      return db - da;
+    };
+
+    if (orden === 'recientes') {
+      copia.sort((a, b) => {
+        const c = cmpDestacados(a, b);
+        if (c !== 0) return c;
+        const fa = a.fecha ? new Date(a.fecha).getTime() : 0;
+        const fb = b.fecha ? new Date(b.fecha).getTime() : 0;
+        return fb - fa;
+      });
+      return copia;
+    }
+
+    if (orden === 'a-z') {
+      copia.sort((a, b) => {
+        const c = cmpDestacados(a, b);
+        if (c !== 0) return c;
+        const na = String(a.producto?.nombre || a.snapshot?.nombre || '');
+        const nb = String(b.producto?.nombre || b.snapshot?.nombre || '');
+        return na.localeCompare(nb);
+      });
+      return copia;
+    }
+
+    if (orden === 'menor-precio') {
+      copia.sort((a, b) => {
+        const c = cmpDestacados(a, b);
+        if (c !== 0) return c;
+        const pa = a.producto ? (precioFinal(a.producto) ?? Infinity) : Infinity;
+        const pb = b.producto ? (precioFinal(b.producto) ?? Infinity) : Infinity;
+        return pa - pb;
+      });
+      return copia;
+    }
+
+    if (orden === 'mayor-precio') {
+      copia.sort((a, b) => {
+        const c = cmpDestacados(a, b);
+        if (c !== 0) return c;
+        const pa = a.producto ? (precioFinal(a.producto) ?? -1) : -1;
+        const pb = b.producto ? (precioFinal(b.producto) ?? -1) : -1;
+        return pb - pa;
+      });
+      return copia;
+    }
+
+    if (orden === 'recomendados') {
+      copia.sort((a, b) => {
+        const c = cmpDestacados(a, b);
+        if (c !== 0) return c;
+        // Productos disponibles primero, luego agotados, luego no disponibles
+        const rank = (it) => {
+          if (it.estado === 'disponible') return 0;
+          if (it.estado === 'origen-cambiado') return 0;
+          if (it.estado === 'agotado') return 1;
+          return 2; // no-disponible
+        };
+        return rank(a) - rank(b);
+      });
+      return copia;
+    }
+
+    return copia;
+  }
+
+  // ============================================================
+  // APLICAR FILTROS GLOBALES (recalcula items)
+  // ============================================================
+  function reaplicar() {
+    const filtrados = ordenarItems(aplicarFiltros(items));
+    renderProductos(filtrados);
+    renderContador(filtrados.length);
+    renderActivos();
+    renderFacetas();
+    renderFamilias();
+    renderTabs();
+  }
+
+  // ============================================================
+  // RENDER PRODUCTOS (con estados)
+  // ============================================================
+  function renderProductos(lista) {
+    $grid.classList.toggle('saldos-productos--grid', vista === 'grid');
+    $grid.classList.toggle('saldos-productos--lista', vista === 'lista');
+
+    if (lista.length === 0) {
+      renderEstadoVacio(favoritos.length === 0 ? 'sin-favoritos' : 'sin-filtros');
+      return;
+    }
+
+    $grid.innerHTML = lista.map(it => renderFavoritoCard(it)).join('');
+  }
+
+  function renderFavoritoCard(it) {
+    const origenLabel = {
+      'catalogo': 'Catálogo',
+      'outlet': 'Outlet',
+      'saldos': 'Saldos de exportación'
+    }[it.origen] || it.origen;
+
+    const fechaTexto = formatearFechaAgregado(it.fecha);
+    const fechaTitle = formatearFechaCompleta(it.fecha);
+    const fechaHtml = fechaTexto
+      ? `<div class="favorito-fecha" title="${escapeAttr(fechaTitle)}">${escapeHtml(fechaTexto)}</div>`
+      : '';
+
+    // ============================================================
+    // CARD NO DISPONIBLE (fantasma con snapshot)
+    // ============================================================
+    if (it.estado === 'no-disponible') {
+      const s = it.snapshot || {};
+      const img = s.imagen_url ? `background-image:url('${escapeAttr(s.imagen_url)}');` : '';
+      const nombre = s.nombre || 'Producto';
+      const familia = s.familia_nombre ? `<span class="product-card__familia">${escapeHtml(s.familia_nombre)}</span>` : '';
+      return `
+        <div class="favorito-wrapper favorito-wrapper--no-disponible" data-sku="${escapeAttr(s.sku || '')}">
+          <div class="favorito-origen-tag">${escapeHtml(origenLabel)}</div>
+          <div class="product-card product-card--no-disponible">
+            <div class="product-card__media" style="${img}"></div>
+            <div class="product-card__body">
+              ${familia}
+              <h3 class="product-card__title">${escapeHtml(nombre)}</h3>
+              <p class="product-card__meta">SKU: ${escapeHtml(s.sku || '—')}</p>
+              <span class="favorito-badge favorito-badge--no-disponible">No disponible</span>
+              <button type="button" class="btn-quitar-favorito" data-sku="${escapeAttr(s.sku || '')}">
+                Quitar de favoritos
+              </button>
+            </div>
+          </div>
+          ${fechaHtml}
+        </div>
+      `;
+    }
+
+    // ============================================================
+    // CARD DISPONIBLE / AGOTADA / ORIGEN CAMBIADO
+    // ============================================================
+    const p = it.producto;
+    const cardHtml = productCardHtml(p, true, vista, it.origen, {
+      ocultarBadgeLinea: true,
+      ocultarBotonFavorito: true
+    });
+
+    const avisoOrigen = it.origenCambiado
+      ? `<div class="favorito-aviso-origen">Ahora en <strong>${escapeHtml(origenLabel)}</strong></div>`
+      : '';
+
+    const badgeAgotado = it.estado === 'agotado'
+      ? `<span class="favorito-badge favorito-badge--agotado">Agotado</span>`
+      : '';
+
+    const claseEstado = it.estado === 'agotado' ? 'favorito-wrapper--agotado' : '';
+
+    return `
+      <div class="favorito-wrapper ${claseEstado}" data-sku="${escapeAttr(p.sku)}">
+        <div class="favorito-origen-tag">${escapeHtml(origenLabel)}</div>
+        ${avisoOrigen}
+        ${cardHtml}
+        ${badgeAgotado}
+        ${fechaHtml}
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // ESTADO VACÍO
+  // ============================================================
+  const SVG_EMPTY_HEART = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.35-9.5-9.5C1.12 8.55 3.5 5 7 5c2 0 3.5 1 5 3 1.5-2 3-3 5-3 3.5 0 5.88 3.55 4.5 6.5C19.5 16.65 12 21 12 21z"/></svg>`;
+  const SVG_EMPTY_FILTER = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="9" y1="11" x2="13" y2="11"/></svg>`;
+
+  function renderEstadoVacio(tipo = 'sin-filtros') {
+    if (tipo === 'sin-favoritos') {
+      $grid.innerHTML = `
+        <div class="saldos-empty" style="grid-column:1/-1;">
+          <div class="saldos-empty__icon">${SVG_EMPTY_HEART}</div>
+          <h3 class="saldos-empty__title">Aún no tienes favoritos</h3>
+          <p class="saldos-empty__text">Guarda los productos que te interesen para revisarlos después.</p>
+          <div class="saldos-empty__cta">
+            <a href="catalogo.html" class="btn btn-primary">Explorar catálogo</a>
+            <a href="outlet.html" class="btn btn-ghost">Ver saldos</a>
+            <a href="outlet.html" class="btn btn-ghost">Ver outlet</a>
+          </div>
+        </div>
+      `;
+      $btnVaciar.hidden = true;
+      $tabs.hidden = true;
+      $familias.hidden = true;
+      $searchWrap.hidden = true;
+      $aviso.hidden = true;
+      $activos.innerHTML = '';
+      $count.textContent = '0 productos';
+      return;
+    }
+
+    $grid.innerHTML = `
+      <div class="saldos-empty" style="grid-column:1/-1;">
+        <div class="saldos-empty__icon">${SVG_EMPTY_FILTER}</div>
+        <h3 class="saldos-empty__title">Sin resultados</h3>
+        <p class="saldos-empty__text">No se encontraron favoritos con esos filtros.</p>
+        <button type="button" class="saldos-empty__btn" id="favoritos-empty-limpiar">Limpiar filtros</button>
+      </div>
+    `;
+    document.getElementById('favoritos-empty-limpiar')?.addEventListener('click', () => {
+      resetFiltros();
+    });
+  }
+
+  // ============================================================
+  // CONTADOR
+  // ============================================================
+  function renderContador(visibles) {
+    const total = items.length;
+    if (visibles === total) {
+      $count.textContent = `${total} producto${total !== 1 ? 's' : ''}`;
+    } else {
+      $count.textContent = `Mostrando ${visibles} de ${total}`;
+    }
+  }
+
+  // ============================================================
+  // TABS POR ORIGEN
+  // ============================================================
+  function renderTabs() {
+    const counts = {
+      todos: items.length,
+      catalogo: items.filter(it => it.origen === 'catalogo').length,
+      outlet: items.filter(it => it.origen === 'outlet').length,
+      saldos: items.filter(it => it.origen === 'saldos').length
+    };
+
+    const origenes = [
+      { key: 'todos', label: 'Todos', count: counts.todos },
+      { key: 'catalogo', label: 'Catálogo', count: counts.catalogo },
+      { key: 'outlet', label: 'Outlet', count: counts.outlet },
+      { key: 'saldos', label: 'Saldos de exportación', count: counts.saldos }
+    ].filter(o => o.key === 'todos' || o.count > 0);
+
+    if (origenes.length <= 1) {
+      $tabs.hidden = true;
+      return;
+    }
+
+    $tabs.hidden = false;
+    $tabs.innerHTML = origenes.map(o => `
+      <button type="button"
+              class="favoritos-tab ${filtros.origen === o.key ? 'active' : ''}"
+              data-origen="${escapeAttr(o.key)}"
+              role="tab"
+              aria-selected="${filtros.origen === o.key}">
+        ${escapeHtml(o.label)} <span class="tab-count">${o.count}</span>
+      </button>
+    `).join('');
+
+    $tabs.onclick = (e) => {
+      const tab = e.target.closest('.favoritos-tab');
+      if (!tab) return;
+      filtros.origen = tab.dataset.origen;
+      reaplicar();
+    };
+  }
+
+  // ============================================================
+  // CHIPS DE FAMILIA
+  // ============================================================
+  function renderFamilias() {
+    if (items.length <= 15) {
+      $familias.hidden = true;
+      return;
+    }
+
+    const famMap = new Map();
+    items.forEach(it => {
+      const p = it.producto;
+      if (p && p.familia_id && p.familia_nombre) {
+        const prev = famMap.get(p.familia_id);
+        famMap.set(p.familia_id, {
+          id: p.familia_id,
+          nombre: p.familia_nombre,
+          count: (prev?.count || 0) + 1
+        });
+      }
+    });
+
+    const familias = Array.from(famMap.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    if (familias.length <= 1) {
+      $familias.hidden = true;
+      return;
+    }
+
+    $familias.hidden = false;
+    $familias.innerHTML = `
+      <button type="button" class="saldos-familia-chip ${!filtros.familia_id ? 'active' : ''}" data-familia="">
+        Todas <span class="chip-count">${items.length}</span>
+      </button>
+      ${familias.map(f => `
+        <button type="button"
+                class="saldos-familia-chip ${filtros.familia_id === f.id ? 'active' : ''}"
+                data-familia="${escapeAttr(f.id)}">
+          ${escapeHtml(f.nombre)} <span class="chip-count">${f.count}</span>
+        </button>
+      `).join('')}
+    `;
+
+    $familias.onclick = (e) => {
+      const chip = e.target.closest('.saldos-familia-chip');
+      if (!chip) return;
+      filtros.familia_id = chip.dataset.familia || null;
+      reaplicar();
+    };
+  }
+
+  // ============================================================
+  // CHIPS DE FILTROS ACTIVOS
+  // ============================================================
+  function renderActivos() {
+    const chips = [];
+
+    if (filtros.origen !== 'todos') {
+      const label = { catalogo: 'Catálogo', outlet: 'Outlet', saldos: 'Saldos' }[filtros.origen] || filtros.origen;
+      chips.push({ key: 'origen', value: filtros.origen, label });
+    }
+    if (filtros.descuento != null) {
+      chips.push({ key: 'descuento', label: `Descuento ≥ ${filtros.descuento}%` });
+    }
+    if (filtros.precioMin != null || filtros.precioMax != null) {
+      const min = filtros.precioMin != null ? `S/ ${filtros.precioMin}` : 'S/ 0';
+      const max = filtros.precioMax != null ? `S/ ${filtros.precioMax}` : '∞';
+      chips.push({ key: 'precio', label: `Precio: ${min} – ${max}` });
+    }
+    if (filtros.soloConStock) {
+      chips.push({ key: 'soloConStock', label: 'Solo con stock' });
+    }
+    filtros.calidades.forEach(id => {
+      const c = items.find(it => it.producto?.calidad_id === id);
+      chips.push({ key: 'calidad', value: id, label: c?.producto?.calidad_nombre || 'Calidad' });
+    });
+    filtros.bordes.forEach(id => {
+      const b = items.find(it => it.producto?.borde_id === id);
+      chips.push({ key: 'borde', value: id, label: b?.producto?.borde_nombre || 'Borde' });
+    });
+    if (filtros.modelo) {
+      chips.push({ key: 'modelo', label: `Modelo: "${filtros.modelo}"` });
+    }
+    if (filtros.familia_id) {
+      const fam = items.find(it => it.producto?.familia_id === filtros.familia_id);
+      chips.push({ key: 'familia_id', label: fam?.producto?.familia_nombre || 'Familia' });
+    }
+    filtros.materiales.forEach(id => {
+      const mat = items.find(it => it.producto?.material_id === id);
+      chips.push({ key: 'material', value: id, label: mat?.producto?.material_nombre || 'Material' });
+    });
+    filtros.acabados.forEach(id => {
+      const aca = items.find(it => it.producto?.acabado_id === id);
+      chips.push({ key: 'acabado', value: id, label: aca?.producto?.acabado_nombre || 'Acabado' });
+    });
+
+    const formatearDim = (dim, val) => {
+      const prod = items.find(it => it.producto?.[`_${dim}_cm`] === val);
+      const cm = Math.round(val * 10) / 10;
+      if (!prod) return `${cm} cm`;
+      const unidad = prod.producto[`_unidad_${dim}`] || 'cm';
+      const original = prod.producto[`_${dim}_original`];
+      if (unidad === 'cm') return `${cm} cm`;
+      const esPulgada = unidad === '"' || unidad === 'in' || unidad === 'pulg';
+      const simbolo = esPulgada ? '"' : ` ${unidad}`;
+      return `${original}${simbolo} (${cm} cm)`;
+    };
+    filtros.largo.forEach(v => chips.push({ key: 'largo', value: v, label: `Largo: ${formatearDim('largo', v)}` }));
+    filtros.ancho.forEach(v => chips.push({ key: 'ancho', value: v, label: `Ancho: ${formatearDim('ancho', v)}` }));
+    filtros.espesor.forEach(v => chips.push({ key: 'espesor', value: v, label: `Espesor: ${formatearDim('espesor', v)}` }));
+    if (filtros.soloDestacados) chips.push({ key: 'soloDestacados', label: 'Solo destacados' });
+    if (filtros.q) chips.push({ key: 'q', label: `"${filtros.q}"` });
+
+    if (chips.length === 0) {
+      $activos.innerHTML = '';
+      return;
+    }
+
+    const SVG_X = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+    $activos.innerHTML = `
+      ${chips.map(c => `
+        <button type="button"
+                class="saldos-activo"
+                data-key="${escapeAttr(c.key)}"
+                data-value="${escapeAttr(c.value ?? '')}">
+          <span>${escapeHtml(c.label)}</span>
+          <span class="saldos-activo__close">${SVG_X}</span>
+        </button>
+      `).join('')}
+      <button type="button" class="saldos-activo saldos-activo--clear" id="favoritos-activos-clear">
+        Limpiar todo
+      </button>
+    `;
+
+    $activos.onclick = (e) => {
+      const clear = e.target.closest('#favoritos-activos-clear');
+      if (clear) { resetFiltros(); return; }
+      const chip = e.target.closest('.saldos-activo');
+      if (!chip) return;
+      quitarFiltro(chip.dataset.key, chip.dataset.value);
+    };
+  }
+
+  function quitarFiltro(key, value) {
+    switch (key) {
+      case 'origen': filtros.origen = 'todos'; break;
+      case 'familia_id': filtros.familia_id = null; break;
+      case 'material': filtros.materiales = filtros.materiales.filter(x => x !== value); break;
+      case 'acabado': filtros.acabados = filtros.acabados.filter(x => x !== value); break;
+      case 'largo': filtros.largo = filtros.largo.filter(v => v !== parseFloat(value)); break;
+      case 'ancho': filtros.ancho = filtros.ancho.filter(v => v !== parseFloat(value)); break;
+      case 'espesor': filtros.espesor = filtros.espesor.filter(v => v !== parseFloat(value)); break;
+      case 'soloDestacados': filtros.soloDestacados = false; if ($soloDest) $soloDest.checked = false; break;
+      case 'descuento': filtros.descuento = null; break;
+      case 'precio':
+        filtros.precioMin = null;
+        filtros.precioMax = null;
+        resetearSliderPrecio();
+        break;
+      case 'soloConStock': filtros.soloConStock = false; if ($toggleStock) $toggleStock.checked = false; break;
+      case 'calidad': filtros.calidades = filtros.calidades.filter(x => x !== value); break;
+      case 'borde': filtros.bordes = filtros.bordes.filter(x => x !== value); break;
+      case 'modelo':
+        filtros.modelo = '';
+        if ($modeloSearch) $modeloSearch.value = '';
+        break;
+      case 'q':
+        filtros.q = '';
+        if ($search) $search.value = '';
+        break;
+    }
+    reaplicar();
+  }
+
+  function resetFiltros() {
+    const orden = filtros.orden;
+    filtros = {
+      q: '',
+      origen: 'todos',
+      familia_id: null,
+      materiales: [],
+      acabados: [],
+      largo: [],
+      ancho: [],
+      espesor: [],
+      soloDestacados: false,
+      descuento: null,
+      precioMin: null,
+      precioMax: null,
+      soloConStock: false,
+      calidades: [],
+      bordes: [],
+      modelo: '',
+      orden
+    };
+    if ($search) $search.value = '';
+    if ($soloDest) $soloDest.checked = false;
+    if ($toggleStock) $toggleStock.checked = false;
+    if ($toggleDestacados) $toggleDestacados.checked = false;
+    if ($modeloSearch) $modeloSearch.value = '';
+    resetearSliderPrecio();
+    reaplicar();
+  }
+
+  // ============================================================
+  // RENDER FACETAS (sheet)
+  // ============================================================
+  function renderFacetas() {
+    const base = items.filter(it => it.producto);
+
+    const poolMaterial = base.filter(it => matchMulti(it.producto.material_id, []));
+    const materiales = new Map();
+    poolMaterial.forEach(it => {
+      const p = it.producto;
+      if (p.material_id && p.material_nombre) {
+        const prev = materiales.get(p.material_id);
+        materiales.set(p.material_id, {
+          id: p.material_id, nombre: p.material_nombre, count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const $opMat = document.getElementById('favoritos-opciones-material');
+    if ($opMat) {
+      if (materiales.size === 0) {
+        $opMat.innerHTML = `<p class="saldos-filtro-vacio">Sin materiales disponibles</p>`;
+      } else {
+        $opMat.innerHTML = Array.from(materiales.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(m => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.materiales.includes(m.id) ? 'active' : ''}"
+                    data-faceta="material"
+                    data-value="${escapeAttr(m.id)}">
+              ${escapeHtml(m.nombre)}
+              <span class="saldos-filtro-opcion__count">${m.count}</span>
+            </button>
+          `).join('');
+      }
+    }
+
+    const acabados = new Map();
+    base.forEach(it => {
+      const p = it.producto;
+      if (p.acabado_id && p.acabado_nombre) {
+        const prev = acabados.get(p.acabado_id);
+        acabados.set(p.acabado_id, {
+          id: p.acabado_id, nombre: p.acabado_nombre, count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const $opAca = document.getElementById('favoritos-opciones-acabado');
+    if ($opAca) {
+      if (acabados.size === 0) {
+        $opAca.innerHTML = `<p class="saldos-filtro-vacio">Sin acabados disponibles</p>`;
+      } else {
+        $opAca.innerHTML = Array.from(acabados.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(a => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.acabados.includes(a.id) ? 'active' : ''}"
+                    data-faceta="acabado"
+                    data-value="${escapeAttr(a.id)}">
+              ${escapeHtml(a.nombre)}
+              <span class="saldos-filtro-opcion__count">${a.count}</span>
+            </button>
+          `).join('');
+      }
+    }
+
+    document.querySelectorAll('#favoritos-sheet [data-faceta="material"], #favoritos-sheet [data-faceta="acabado"]').forEach(btn => {
+      btn.onclick = () => {
+        const faceta = btn.dataset.faceta;
+        const val = btn.dataset.value;
+        if (faceta === 'material') toggleArray(filtros.materiales, val);
+        else if (faceta === 'acabado') toggleArray(filtros.acabados, val);
+        reaplicar();
+      };
+    });
+
+    // Familia
+    const familiasMap = new Map();
+    base.forEach(it => {
+      const p = it.producto;
+      if (p.familia_id && p.familia_nombre) {
+        const prev = familiasMap.get(p.familia_id);
+        familiasMap.set(p.familia_id, {
+          id: p.familia_id, nombre: p.familia_nombre, count: (prev?.count || 0) + 1
+        });
+      }
+    });
+    const $opFam = document.getElementById('favoritos-opciones-familia');
+    if ($opFam) {
+      const familiasArr = Array.from(familiasMap.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+      if (familiasArr.length === 0) {
+        $opFam.innerHTML = `<p class="saldos-filtro-vacio">Sin familias disponibles</p>`;
+      } else {
+        $opFam.innerHTML = `
+          <button type="button" class="saldos-filtro-opcion ${!filtros.familia_id ? 'active' : ''}"
+                  data-faceta="familia" data-value="">
+            Todas <span class="saldos-filtro-opcion__count">${base.length}</span>
+          </button>
+          ${familiasArr.map(f => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.familia_id === f.id ? 'active' : ''}"
+                    data-faceta="familia" data-value="${escapeAttr(f.id)}">
+              ${escapeHtml(f.nombre)} <span class="saldos-filtro-opcion__count">${f.count}</span>
+            </button>
+          `).join('')}
+        `;
+        $opFam.querySelectorAll('[data-faceta="familia"]').forEach(btn => {
+          btn.onclick = () => {
+            filtros.familia_id = btn.dataset.value || null;
+            reaplicar();
+          };
+        });
+      }
+    }
+
+    // Descuento
+    const $opDesc = document.getElementById('favoritos-opciones-descuento');
+    if ($opDesc) {
+      const opcionesDesc = [
+        { value: null, label: 'Cualquier descuento' },
+        { value: 20,   label: '≥ 20%' },
+        { value: 30,   label: '≥ 30%' },
+        { value: 50,   label: '≥ 50%' },
+        { value: 70,   label: '≥ 70%' }
+      ];
+      $opDesc.innerHTML = opcionesDesc.map(o => {
+        const count = base.filter(it => {
+          const d = calcularDescuento(it.producto);
+          if (o.value == null) return d != null;
+          return d != null && d >= o.value;
+        }).length;
+        const activo = filtros.descuento === o.value;
+        return `
+          <button type="button"
+                  class="saldos-filtro-opcion ${activo ? 'active' : ''}"
+                  data-faceta="descuento" data-value="${o.value ?? ''}">
+            ${escapeHtml(o.label)} <span class="saldos-filtro-opcion__count">${count}</span>
+          </button>
+        `;
+      }).join('');
+      $opDesc.querySelectorAll('[data-faceta="descuento"]').forEach(btn => {
+        btn.onclick = () => {
+          const v = btn.dataset.value;
+          filtros.descuento = v === '' ? null : Number(v);
+          reaplicar();
+        };
+      });
+    }
+
+    // Calidad
+    const $opCal = document.getElementById('favoritos-opciones-calidad');
+    if ($opCal) {
+      const calMap = new Map();
+      base.forEach(it => {
+        const p = it.producto;
+        if (p.calidad_id && p.calidad_nombre) {
+          const prev = calMap.get(p.calidad_id);
+          calMap.set(p.calidad_id, {
+            id: p.calidad_id, nombre: p.calidad_nombre, count: (prev?.count || 0) + 1
+          });
+        }
+      });
+      if (calMap.size === 0) {
+        $opCal.innerHTML = `<p class="saldos-filtro-vacio">Sin calidades disponibles</p>`;
+      } else {
+        $opCal.innerHTML = Array.from(calMap.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(c => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.calidades.includes(c.id) ? 'active' : ''}"
+                    data-faceta="calidad" data-value="${escapeAttr(c.id)}">
+              ${escapeHtml(c.nombre)} <span class="saldos-filtro-opcion__count">${c.count}</span>
+            </button>
+          `).join('');
+        $opCal.querySelectorAll('[data-faceta="calidad"]').forEach(btn => {
+          btn.onclick = () => {
+            toggleArray(filtros.calidades, btn.dataset.value);
+            reaplicar();
+          };
+        });
+      }
+    }
+
+    // Borde
+    const $opBorde = document.getElementById('favoritos-opciones-borde');
+    if ($opBorde) {
+      const bordeMap = new Map();
+      base.forEach(it => {
+        const p = it.producto;
+        if (p.borde_id && p.borde_nombre) {
+          const prev = bordeMap.get(p.borde_id);
+          bordeMap.set(p.borde_id, {
+            id: p.borde_id, nombre: p.borde_nombre, count: (prev?.count || 0) + 1
+          });
+        }
+      });
+      if (bordeMap.size === 0) {
+        $opBorde.innerHTML = `<p class="saldos-filtro-vacio">Sin bordes disponibles</p>`;
+      } else {
+        $opBorde.innerHTML = Array.from(bordeMap.values())
+          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          .map(b => `
+            <button type="button"
+                    class="saldos-filtro-opcion ${filtros.bordes.includes(b.id) ? 'active' : ''}"
+                    data-faceta="borde" data-value="${escapeAttr(b.id)}">
+              ${escapeHtml(b.nombre)} <span class="saldos-filtro-opcion__count">${b.count}</span>
+            </button>
+          `).join('');
+        $opBorde.querySelectorAll('[data-faceta="borde"]').forEach(btn => {
+          btn.onclick = () => {
+            toggleArray(filtros.bordes, btn.dataset.value);
+            reaplicar();
+          };
+        });
+      }
+    }
+
+    renderFacetaDimension('largo', base);
+    renderFacetaDimension('ancho', base);
+    renderFacetaDimension('espesor', base);
+  }
+
+  function renderFacetaDimension(dimension, base) {
+    const $opciones = document.getElementById(`favoritos-opciones-${dimension}`);
+    if (!$opciones) return;
+    const grupos = new Map();
+    base.forEach(it => {
+      const p = it.producto;
+      const valorCm = p[`_${dimension}_cm`];
+      if (valorCm == null) return;
+      const valorOriginal = p[`_${dimension}_original`];
+      const unidad = p[`_unidad_${dimension}`] || 'cm';
+      const clave = Math.round(valorCm * 100) / 100;
+      if (!grupos.has(clave)) {
+        grupos.set(clave, { valorCm: clave, valorOriginal, unidad, count: 0 });
+      }
+      grupos.get(clave).count++;
+    });
+    if (grupos.size === 0) {
+      $opciones.innerHTML = `<p class="saldos-filtro-vacio">Sin valores disponibles</p>`;
+      return;
+    }
+    const lista = Array.from(grupos.values()).sort((a, b) => a.valorCm - b.valorCm);
+    const formatearEtiqueta = (g) => {
+      const esPulgada = g.unidad === '"' || g.unidad === 'in' || g.unidad === 'pulg';
+      const cmRedondeado = Math.round(g.valorCm * 10) / 10;
+      if (g.unidad === 'cm') return `${cmRedondeado} cm`;
+      const simbolo = esPulgada ? '"' : ` ${g.unidad}`;
+      return `${g.valorOriginal}${simbolo} (${cmRedondeado} cm)`;
+    };
+    if (lista.length <= UMBRAL_CHIPS_DIMENSION) {
+      $opciones.innerHTML = lista.map(g => {
+        const activo = filtros[dimension].includes(g.valorCm);
+        return `
+          <button type="button"
+                  class="saldos-filtro-opcion ${activo ? 'active' : ''}"
+                  data-faceta="${dimension}"
+                  data-value="${g.valorCm}">
+            ${escapeHtml(formatearEtiqueta(g))}
+            <span class="saldos-filtro-opcion__count">${g.count}</span>
+          </button>
+        `;
+      }).join('');
+      $opciones.querySelectorAll('[data-faceta]').forEach(btn => {
+        btn.onclick = () => {
+          const faceta = btn.dataset.faceta;
+          const valor = parseFloat(btn.dataset.value);
+          toggleArray(filtros[faceta], valor);
+          reaplicar();
+        };
+      });
+    } else {
+      const valorActual = filtros[dimension][0] ?? '';
+      $opciones.innerHTML = `
+        <select class="saldos-select-dimension" data-faceta="${dimension}">
+          <option value="">Todas las medidas</option>
+          ${lista.map(g => `
+            <option value="${g.valorCm}" ${valorActual === g.valorCm ? 'selected' : ''}>
+              ${escapeHtml(formatearEtiqueta(g))} — ${g.count} producto${g.count !== 1 ? 's' : ''}
+            </option>
+          `).join('')}
+        </select>
+      `;
+      const $select = $opciones.querySelector('select');
+      $select.addEventListener('change', (e) => {
+        const faceta = $select.dataset.faceta;
+        const valor = e.target.value ? parseFloat(e.target.value) : null;
+        filtros[faceta] = valor === null ? [] : [valor];
+        reaplicar();
+      });
+    }
+  }
+
+  // ============================================================
+  // SHEET
+  // ============================================================
+  function abrirSheet() {
+    renderFacetas();
+    inicializarSliderPrecio();
+    $sheet.classList.add('open');
+    $sheetBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    $sheetClose.focus();
+  }
+
+  function cerrarSheet() {
+    $sheet.classList.remove('open');
+    $sheetBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  // SLIDER DE PRECIO (noUiSlider)
+  // ============================================================
+  function calcularRangoPrecioGlobal() {
+    const precios = items
+      .filter(it => it.producto)
+      .map(it => precioFinal(it.producto))
+      .filter(v => v != null && v > 0);
+    if (precios.length === 0) return { min: 0, max: 0 };
+    return {
+      min: Math.floor(Math.min(...precios)),
+      max: Math.ceil(Math.max(...precios))
+    };
+  }
+
+  function inicializarSliderPrecio() {
+    if (!$precioSlider) return;
+    if (typeof noUiSlider === 'undefined') {
+      console.warn('[favoritos] noUiSlider no cargado');
+      return;
+    }
+    const rango = calcularRangoPrecioGlobal();
+    precioRangoGlobal = rango;
+    if (rango.min === rango.max) {
+      $precioSlider.style.display = 'none';
+      if ($precioMinValor) $precioMinValor.textContent = `S/ ${rango.min}`;
+      if ($precioMaxValor) $precioMaxValor.textContent = `S/ ${rango.max}`;
+      return;
+    }
+    $precioSlider.style.display = '';
+    if (precioSliderInstance) {
+      try { precioSliderInstance.destroy(); } catch (e) {}
+      precioSliderInstance = null;
+    }
+    const startMin = filtros.precioMin ?? rango.min;
+    const startMax = filtros.precioMax ?? rango.max;
+    noUiSlider.create($precioSlider, {
+      start: [startMin, startMax],
+      connect: true,
+      range: { min: rango.min, max: rango.max },
+      step: 1,
+      tooltips: false,
+      format: {
+        to: (v) => Math.round(v),
+        from: (v) => Number(v)
+      }
+    });
+    precioSliderInstance = $precioSlider.noUiSlider;
+    precioSliderInstance.on('update', (values) => {
+      const [min, max] = values.map(Number);
+      if ($precioMinValor) $precioMinValor.textContent = `S/ ${min}`;
+      if ($precioMaxValor) $precioMaxValor.textContent = `S/ ${max}`;
+    });
+    precioSliderInstance.on('change', (values) => {
+      const [min, max] = values.map(Number);
+      filtros.precioMin = min === rango.min ? null : min;
+      filtros.precioMax = max === rango.max ? null : max;
+      reaplicar();
+    });
+  }
+
+  function resetearSliderPrecio() {
+    if (!precioSliderInstance) return;
+    const rango = precioRangoGlobal;
+    if (rango.min === rango.max) return;
+    precioSliderInstance.set([rango.min, rango.max]);
+  }
+
+  // ============================================================
+  // QR
+  // ============================================================
+  function abrirModalQR() {
+    const modal = document.getElementById('qr-modal');
+    const status = document.getElementById('qr-status');
+    if (!modal) return;
+    if (typeof Html5Qrcode === 'undefined') {
+      alert('La librería de QR no se cargó.');
+      return;
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    status.textContent = 'Iniciando cámara…';
+    if (!qrScanner) qrScanner = new Html5Qrcode('qr-reader');
+    qrScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => {
+        const sku = extraerSkuDeQR(decodedText);
+        status.textContent = `SKU detectado: ${sku}`;
+        if ($search) {
+          $search.value = sku;
+          filtros.q = sku;
+          reaplicar();
+        }
+        setTimeout(() => cerrarModalQR(), 800);
+      },
+      () => {}
+    ).catch((err) => {
+      status.textContent = 'No se pudo acceder a la cámara.';
+      console.error(err);
+    });
+  }
+
+  function cerrarModalQR() {
+    const modal = document.getElementById('qr-modal');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (qrScanner) qrScanner.stop().then(() => qrScanner.clear()).catch(() => {});
+  }
+
+  function extraerSkuDeQR(texto) {
+    const t = String(texto).trim();
+    try {
+      const url = new URL(t);
+      const sku = url.searchParams.get('sku');
+      if (sku) return sku.trim();
+      const m = url.pathname.match(/\/producto\/([A-Z0-9-]+)/i);
+      if (m) return m[1];
+    } catch (e) {}
+    const match = t.match(/[A-Z0-9][A-Z0-9-]{2,}/i);
+    return match ? match[0] : t;
+  }
+
+  // ============================================================
+  // MODAL VACIAR
+  // ============================================================
+  const $modal = document.getElementById('favoritos-modal-vaciar');
+  const $modalCancelar = document.getElementById('favoritos-modal-cancelar');
+  const $modalConfirmar = document.getElementById('favoritos-modal-confirmar');
+  let modalFocusReturn = null;
+
+  function abrirModalVaciar() {
+    modalFocusReturn = document.activeElement;
+    $modal.classList.add('open');
+    $modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $modalCancelar.focus(), 50);
+  }
+
+  function cerrarModalVaciar() {
+    $modal.classList.remove('open');
+    $modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (modalFocusReturn && typeof modalFocusReturn.focus === 'function') {
+      try { modalFocusReturn.focus(); } catch (e) {}
+    }
+  }
+
+  function trapFocusModal(e) {
+    if (e.key !== 'Tab') return;
+    const focusables = $modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  // ============================================================
+  // AVISO NO DISPONIBLES
+  // ============================================================
+  function actualizarAvisoNoDisponibles() {
+    const noDisponibles = items.filter(it => it.estado === 'no-disponible').length;
+    if (noDisponibles > 0) {
+      $aviso.innerHTML = `
+        <span><strong>${noDisponibles} producto${noDisponibles !== 1 ? 's' : ''}</strong> de tu lista ya no está${noDisponibles !== 1 ? 'n' : ''} disponible${noDisponibles !== 1 ? 's' : ''}.</span>
+        <button type="button" class="favoritos-aviso__btn" id="favoritos-limpiar-nodisponibles">
+          Quitar no disponibles
+        </button>
+      `;
+      $aviso.hidden = false;
+      document.getElementById('favoritos-limpiar-nodisponibles')?.addEventListener('click', limpiarNoDisponibles);
+    } else {
+      $aviso.hidden = true;
+      $aviso.innerHTML = '';
+    }
+  }
+
+  function limpiarNoDisponibles() {
+    const antes = favoritos.length;
+    const skusNoDisponibles = items
+      .filter(it => it.estado === 'no-disponible')
+      .map(it => it.snapshot?.sku || it.producto?.sku)
+      .filter(Boolean);
+    favoritos = favoritos.filter(f => !skusNoDisponibles.includes(f.sku));
+    try {
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    } catch (e) {}
+    items = items.filter(it => it.estado !== 'no-disponible');
+    reaplicar();
+    actualizarAvisoNoDisponibles();
+    if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+    const quitados = antes - favoritos.length;
+    if (quitados > 0) GM.toast?.(`${quitados} favorito${quitados !== 1 ? 's' : ''} eliminado${quitados !== 1 ? 's' : ''}`);
+  }
+
+  // ============================================================
+  // SUGERENCIAS DEL BUSCADOR
+  // ============================================================
+  let sugerenciaActiva = -1;
+
+  function generarSugerencias(q) {
+    const tokensBuscados = tokensDe(q);
+    if (tokensBuscados.length === 0) return [];
+    const encontrados = new Map();
+
+    items.forEach(it => {
+      const p = it.producto;
+      if (!p) return;
+      let score = 0;
+      let tipo = null;
+      if (p.sku && tokensMatchean(tokensBuscados, p.sku)) {
+        score = 100; tipo = 'SKU';
+      } else if (p.nombre && tokensMatchean(tokensBuscados, p.nombre)) {
+        score = 80; tipo = 'Producto';
+      } else if (p.familia_nombre && tokensMatchean(tokensBuscados, p.familia_nombre)) {
+        score = 40; tipo = 'Familia';
+      } else if (p.material_nombre && tokensMatchean(tokensBuscados, p.material_nombre)) {
+        score = 30; tipo = 'Material';
+      } else if (p.acabado_nombre && tokensMatchean(tokensBuscados, p.acabado_nombre)) {
+        score = 20; tipo = 'Acabado';
+      } else if (matchMedidas(p, q) === true) {
+        score = 10; tipo = 'Medida';
+      }
+      if (tipo) {
+        const prev = encontrados.get(p.sku);
+        if (!prev || prev.score < score) {
+          encontrados.set(p.sku, { producto: p, tipo, score });
+        }
+      }
+    });
+
+    return Array.from(encontrados.values()).sort((a, b) => b.score - a.score).slice(0, 6);
+  }
+
+  function renderSugerencias(lista) {
+    if (lista.length === 0) {
+      $sugerencias.hidden = true;
+      $sugerencias.innerHTML = '';
+      sugerenciaActiva = -1;
+      return;
+    }
+
+    const formatearMedidas = (p) => {
+      const partes = [];
+      const format = (valor, unidad) => {
+        if (valor == null) return null;
+        const esPulgada = unidad === '"' || unidad === 'in' || unidad === 'pulg';
+        return esPulgada ? `${valor}"` : `${valor} ${unidad || 'cm'}`;
+      };
+      const l = format(p._largo_original, p._unidad_largo);
+      const a = format(p._ancho_original, p._unidad_ancho);
+      const e = format(p._espesor_original, p._unidad_espesor);
+      if (l) partes.push(l);
+      if (a) partes.push(a);
+      if (e) partes.push(e);
+      return partes.length ? partes.join(' × ') : null;
+    };
+
+    $sugerencias.innerHTML = lista.map((s, i) => {
+      const img = s.producto.imagen_url ? `background-image:url('${s.producto.imagen_url}');` : '';
+      const meta = [s.producto.sku, s.producto.familia_nombre].filter(Boolean).join(' · ');
+      const medidas = formatearMedidas(s.producto);
+      return `
+        <div class="saldos-sugerencia ${i === sugerenciaActiva ? 'activa' : ''}"
+             data-sku="${escapeAttr(s.producto.sku)}"
+             data-index="${i}"
+             role="option"
+             aria-selected="${i === sugerenciaActiva}">
+          <div class="saldos-sugerencia__thumb" style="${img}"></div>
+          <div class="saldos-sugerencia__info">
+            <div class="saldos-sugerencia__nombre">${escapeHtml(s.producto.nombre)}</div>
+            <div class="saldos-sugerencia__meta">${escapeHtml(meta)}</div>
+            ${medidas ? `<div class="saldos-sugerencia__medidas">${escapeHtml(medidas)}</div>` : ''}
+          </div>
+          <span class="saldos-sugerencia__tag saldos-sugerencia__tag--cat">${escapeHtml(s.tipo)}</span>
+        </div>
+      `;
+    }).join('');
+    $sugerencias.hidden = false;
+    sugerenciaActiva = -1;
+  }
+
+  function cerrarSugerencias() {
+    $sugerencias.hidden = true;
+    $sugerencias.innerHTML = '';
+    sugerenciaActiva = -1;
+  }
+
+  function seleccionarSugerencia(sku) {
+    cerrarSugerencias();
+    const it = items.find(x => x.producto?.sku === sku);
+    if (!it) return;
+    window.location.href = `producto.html?sku=${encodeURIComponent(sku)}&origen=${it.origen}`;
+  }
+
+  window.sincronizarFavoritosPage = function () {
+    // Re-leer favoritos y re-renderizar
+    favoritos = leerFavoritos();
+    if (favoritos.length === 0) {
+      items = [];
+      renderEstadoVacio('sin-favoritos');
+      actualizarAvisoNoDisponibles();
+      return;
+    }
+    cargarFavoritos();
+  };
+
+  // ============================================================
+  // CARGA INICIAL
+  // ============================================================
+  async function cargarFavoritos() {
+    favoritos = leerFavoritos();
+
+    // Vista guardada
+    try {
+      const guardada = localStorage.getItem(LS_VISTA);
+      if (guardada === 'lista' || guardada === 'grid') {
+        vista = guardada;
+        if (vista === 'lista') {
+          $vistaLista.classList.add('active');
+          $vistaLista.setAttribute('aria-pressed', 'true');
+          $vistaGrid.classList.remove('active');
+          $vistaGrid.setAttribute('aria-pressed', 'false');
+        }
+      }
+    } catch (e) {}
+
+    // Estado vacío
+    if (favoritos.length === 0) {
+      items = [];
+      renderEstadoVacio('sin-favoritos');
+      if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+      return;
+    }
+
+    // Verificar API antes de llamar
+    if (typeof CatalogoAPI?.getProductosPorSKUs !== 'function') {
+      console.error('[favoritos] CatalogoAPI.getProductosPorSKUs no existe');
+      $count.textContent = 'Error (API)';
+      $grid.innerHTML = `
+        <div class="saldos-empty" style="grid-column:1/-1;">
+          <div class="saldos-empty__icon">⚠️</div>
+          <h3 class="saldos-empty__title">Error de configuración</h3>
+          <p class="saldos-empty__text">El método <code>getProductosPorSKUs</code> no está disponible. Contacta al administrador.</p>
+          <button type="button" class="saldos-empty__btn" id="favoritos-btn-retry">Reintentar</button>
+        </div>
+      `;
+      document.getElementById('favoritos-btn-retry')?.addEventListener('click', cargarFavoritos);
+      return;
+    }
+
+    // Cargar productos
+    let productos = [];
+    try {
+      const skus = [...new Set(favoritos.map(f => f.sku))];
+      productos = await CatalogoAPI.getProductosPorSKUs(skus);
+    } catch (error) {
+      console.error('Error cargando productos:', error);
+      $count.textContent = 'Error';
+      $grid.innerHTML = `
+        <div class="saldos-empty" style="grid-column:1/-1;">
+          <div class="saldos-empty__icon">⚠️</div>
+          <h3 class="saldos-empty__title">Error al cargar</h3>
+          <p class="saldos-empty__text">${escapeHtml(error.message || 'Error desconocido')}</p>
+          <button type="button" class="saldos-empty__btn" id="favoritos-btn-retry">Reintentar</button>
+        </div>
+      `;
+      document.getElementById('favoritos-btn-retry')?.addEventListener('click', cargarFavoritos);
+      return;
+    }
+
+    // Mapa de productos + normalización
+    productosMap.clear();
+    productos.forEach(p => {
+      if (!productosMap.has(p.sku)) {
+        productosMap.set(p.sku, normalizarProducto(p));
+      }
+    });
+
+    // Resolver estados
+    items = favoritos.map(fav => {
+      const p = productosMap.get(fav.sku);
+      const res = resolverEstadoFavorito(fav, p);
+      return {
+        estado: res.estado,
+        producto: res.producto,
+        snapshot: fav,
+        origen: res.origen,
+        origenCambiado: res.origenCambiado,
+        fecha: fav.fecha
+      };
+    });
+
+    // Persistir correcciones + snapshot enriquecido
+    try {
+      const corregidos = items.map(it => {
+        const p = it.producto;
+        return {
+          sku: it.snapshot.sku,
+          origen: it.origen,
+          fecha: it.fecha,
+          nombre: it.snapshot.nombre || p?.nombre || null,
+          imagen_url: it.snapshot.imagen_url || p?.imagen_url || null,
+          familia_nombre: it.snapshot.familia_nombre || p?.familia_nombre || null,
+          precio_snapshot: it.snapshot.precio_snapshot ?? (p ? precioFinal(p) : null),
+          moneda: it.snapshot.moneda || p?.moneda || 'PEN'
+        };
+      });
+      localStorage.setItem('favoritos', JSON.stringify(corregidos));
+    } catch (e) {
+      console.warn('[favoritos] error guardando en localStorage:', e);
+    }
+
+    // Controles
+    $searchWrap.hidden = favoritos.length <= 10;
+    $btnVaciar.hidden = favoritos.length === 0;
+
+    actualizarAvisoNoDisponibles();
+    reaplicar();
+
+    if (window.actualizarContadorFavoritosHeader) {
+      window.actualizarContadorFavoritosHeader();
+    }
+  }
+
+  // ============================================================
+  // VISTA GRID/LISTA
+  // ============================================================
+  $vistaGrid.addEventListener('click', () => {
+    if (vista === 'grid') return;
+    vista = 'grid';
+    $vistaGrid.classList.add('active');
+    $vistaGrid.setAttribute('aria-pressed', 'true');
+    $vistaLista.classList.remove('active');
+    $vistaLista.setAttribute('aria-pressed', 'false');
+    try { localStorage.setItem(LS_VISTA, 'grid'); } catch (e) {}
+    reaplicar();
+  });
+
+  $vistaLista.addEventListener('click', () => {
+    if (vista === 'lista') return;
+    vista = 'lista';
+    $vistaLista.classList.add('active');
+    $vistaLista.setAttribute('aria-pressed', 'true');
+    $vistaGrid.classList.remove('active');
+    $vistaGrid.setAttribute('aria-pressed', 'false');
+    try { localStorage.setItem(LS_VISTA, 'lista'); } catch (e) {}
+    reaplicar();
+  });
+
+  // ============================================================
+  // TOGGLE DESTACADOS
+  // ============================================================
+  $soloDest.addEventListener('change', (e) => {
+    filtros.soloDestacados = e.target.checked;
+    if ($toggleDestacados) $toggleDestacados.checked = e.target.checked;
+    reaplicar();
+  });
+
+  $toggleDestacados?.addEventListener('change', (e) => {
+    filtros.soloDestacados = e.target.checked;
+    if ($soloDest) $soloDest.checked = e.target.checked;
+    reaplicar();
+  });
+
+  // ============================================================
+  // TOGGLE STOCK
+  // ============================================================
+  $toggleStock?.addEventListener('change', (e) => {
+    filtros.soloConStock = e.target.checked;
+    reaplicar();
+  });
+
+  // ============================================================
+  // RESET PRECIO
+  // ============================================================
+  $precioReset?.addEventListener('click', () => {
+    filtros.precioMin = null;
+    filtros.precioMax = null;
+    resetearSliderPrecio();
+    reaplicar();
+  });
+
+  // ============================================================
+  // MODELO
+  // ============================================================
+  let modeloDebounceTimer = null;
+  $modeloSearch?.addEventListener('input', (e) => {
+    clearTimeout(modeloDebounceTimer);
+    modeloDebounceTimer = setTimeout(() => {
+      filtros.modelo = e.target.value.trim();
+      reaplicar();
+    }, 300);
+  });
+
+  // ============================================================
+  // SELECTOR DE ORDEN
+  // ============================================================
+  if ($ordenSelect) {
+    $ordenSelect.value = filtros.orden;
+    $ordenSelect.addEventListener('change', (e) => {
+      const nuevo = e.target.value;
+      if (!ORDENES_VALIDAS.includes(nuevo)) return;
+      filtros.orden = nuevo;
+      try { localStorage.setItem(LS_ORDEN, nuevo); } catch (e) {}
+      reaplicar();
+    });
+  }
+
+  // ============================================================
+  // BUSCADOR
+  // ============================================================
+  $search.addEventListener('input', debounce((e) => {
+    const q = e.target.value.trim();
+    filtros.q = q;
+    reaplicar();
+    if (q.length >= 2) {
+      renderSugerencias(generarSugerencias(q));
+    } else {
+      cerrarSugerencias();
+    }
+  }, DEBOUNCE_MS));
+
+  $search.addEventListener('keydown', (e) => {
+    if ($sugerencias.hidden) return;
+    const itemsEls = $sugerencias.querySelectorAll('.saldos-sugerencia');
+    if (itemsEls.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      sugerenciaActiva = (sugerenciaActiva + 1) % itemsEls.length;
+      itemsEls.forEach((it, i) => it.classList.toggle('activa', i === sugerenciaActiva));
+      itemsEls[sugerenciaActiva].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      sugerenciaActiva = (sugerenciaActiva - 1 + itemsEls.length) % itemsEls.length;
+      itemsEls.forEach((it, i) => it.classList.toggle('activa', i === sugerenciaActiva));
+      itemsEls[sugerenciaActiva].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && sugerenciaActiva >= 0) {
+      e.preventDefault();
+      seleccionarSugerencia(itemsEls[sugerenciaActiva].dataset.sku);
+    } else if (e.key === 'Escape') {
+      cerrarSugerencias();
+    }
+  });
+
+  $sugerencias.addEventListener('click', (e) => {
+    const item = e.target.closest('.saldos-sugerencia');
+    if (!item) return;
+    seleccionarSugerencia(item.dataset.sku);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#favoritos-search-wrap') &&
+        !e.target.closest('#favoritos-sugerencias')) {
+      cerrarSugerencias();
+    }
+  });
+
+  $search.addEventListener('blur', () => {
+    setTimeout(() => {
+      if (!document.activeElement?.closest('#favoritos-sugerencias')) {
+        cerrarSugerencias();
+      }
+    }, 150);
+  });
+
+  // ============================================================
+  // SHEET EVENTS
+  // ============================================================
+  $btnFiltros.addEventListener('click', abrirSheet);
+  $sheetClose.addEventListener('click', cerrarSheet);
+  $sheetBackdrop.addEventListener('click', cerrarSheet);
+
+  $btnAplicar.addEventListener('click', () => {
+    reaplicar();
+    cerrarSheet();
+  });
+
+  $btnLimpiar.addEventListener('click', () => {
+    resetFiltros();
+    cerrarSheet();
+  });
+
+  document.getElementById('favoritos-qr-btn')?.addEventListener('click', abrirModalQR);
+  document.getElementById('qr-modal-close')?.addEventListener('click', cerrarModalQR);
+  document.getElementById('qr-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'qr-modal') cerrarModalQR();
+  });
+
+  // ============================================================
+  // BOTÓN VOLVER ARRIBA
+  // ============================================================
+  $btnTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', () => {
+    $btnTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ============================================================
+  // BOTONES DEL HERO
+  // ============================================================
+  function initBotonesHero() {
+    const irAlListado = () => {
+      document.querySelector('.saldos-controls')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    document.getElementById('btn-ver-favoritos')?.addEventListener('click', irAlListado);
+    document.getElementById('favoritos-scroll-indicator')?.addEventListener('click', irAlListado);
+  }
+
+  // ============================================================
+  // COTIZAR / TOGGLE CARRITO
+  // ============================================================
+  async function toggleProductoEnCarrito(btn, sku, origen) {
+    const CARRITO_KEY = `gallos_cotizacion_carrito_${origen}`;
+    if (btn.disabled) return;
+    btn.disabled = true;
+    try {
+      let carrito = { items: [] };
+      try {
+        carrito = JSON.parse(localStorage.getItem(CARRITO_KEY) || '{"items":[]}');
+      } catch (err) {
+        carrito = { items: [] };
+      }
+      if (!Array.isArray(carrito.items)) carrito.items = [];
+      const idx = carrito.items.findIndex(item => item.producto_sku === sku);
+      if (idx > -1) {
+        carrito.items.splice(idx, 1);
+        localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+        btn.classList.remove('btn-agregado', 'active');
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('title', 'Agregar a la cotización');
+        btn.setAttribute('aria-label', 'Agregar a la cotización');
+        btn.setAttribute('data-en-carrito', 'false');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" fill="currentColor"/>
+            <circle cx="20" cy="21" r="1" fill="currentColor"/>
+            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"
+                  fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="label">Cotizar</span>
+        `;
+        GM.toast?.('Producto quitado de la cotización');
+      } else {
+        const it = items.find(x => x.producto?.sku === sku);
+        const producto = it?.producto;
+        if (!producto) {
+          GM.toast?.('Producto no encontrado');
+          btn.disabled = false;
+          return;
+        }
+        carrito.items.push({
+          producto_id: producto.id,
+          producto_sku: producto.sku,
+          producto_nombre: producto.nombre,
+          cantidad: 1,
+          unidad_venta_id: producto.unidad_venta_id || null,
+          unidad_simbolo: producto.unidad_simbolo || producto.unidad_venta || 'm²',
+          imagen_url: producto.imagen_url,
+          familia_nombre: producto.familia_nombre || null,
+          largo: producto.largo ?? null,
+          ancho: producto.ancho ?? null,
+          espesor: producto.espesor ?? null,
+          unidad_largo_simbolo: producto.unidad_largo_simbolo || 'cm',
+          unidad_ancho_simbolo: producto.unidad_ancho_simbolo || 'cm',
+          unidad_espesor_simbolo: producto.unidad_espesor_simbolo || 'cm'
+        });
+        localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+        btn.classList.add('btn-agregado', 'active');
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('title', 'Quitar de la cotización');
+        btn.setAttribute('aria-label', 'Quitar de la cotización');
+        btn.setAttribute('data-en-carrito', 'true');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="label">Agregado</span>
+        `;
+        GM.toast?.('✓ Agregado a tu cotización');
+      }
+      if (window.actualizarContadorCarritoHeader) {
+        window.actualizarContadorCarritoHeader(origen);
+      }
+    } catch (err) {
+      console.error('Error toggling carrito:', err);
+      GM.toast?.('Error al procesar. Intenta nuevamente.');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================================
+  // LISTENER GLOBAL PARA data-action (cotizar) y quitar favorito
+  // ============================================================
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const sku = btn.dataset.sku;
+    const origen = btn.dataset.origen || 'catalogo';
+    if (!sku) return;
+    if (action !== 'cotizar') return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    await toggleProductoEnCarrito(btn, sku, origen);
+  }, true);
+
+  // Listener específico para "Quitar de favoritos" en card fantasma
+  $grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-quitar-favorito');
+    if (!btn) return;
+    const sku = btn.dataset.sku;
+    if (!sku) return;
+    favoritos = favoritos.filter(f => f.sku !== sku);
+    try {
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    } catch (err) {}
+    items = items.filter(it => it.snapshot?.sku !== sku);
+    reaplicar();
+    actualizarAvisoNoDisponibles();
+    if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+    GM.toast?.('Producto eliminado de favoritos');
+  });
+
+  // Listener para sincronizar al desmarcar un favorito desde el corazón de la card
+  $grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-favorito');
+    if (!btn) return;
+    setTimeout(() => sincronizarDesdeLocalStorage(), 0);
+  });
+
+  function sincronizarDesdeLocalStorage() {
+    const nuevosFavoritos = leerFavoritos();
+    if (nuevosFavoritos.length === favoritos.length) return; // nada cambió
+    favoritos = nuevosFavoritos;
+
+    if (favoritos.length === 0) {
+      items = [];
+      renderEstadoVacio('sin-favoritos');
+      actualizarAvisoNoDisponibles();
+      if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+      return;
+    }
+
+    // Re-filtrar los items existentes conservando los que aún están
+    const skusActuales = new Set(favoritos.map(f => f.sku));
+    items = items.filter(it => skusActuales.has(it.snapshot?.sku || it.producto?.sku));
+
+    $searchWrap.hidden = favoritos.length <= 10;
+    $btnVaciar.hidden = favoritos.length === 0;
+    actualizarAvisoNoDisponibles();
+    reaplicar();
+    if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+  }
+
+  // ============================================================
+  // MODAL VACIAR EVENTS
+  // ============================================================
+  $btnVaciar.addEventListener('click', abrirModalVaciar);
+  $modalCancelar.addEventListener('click', cerrarModalVaciar);
+  $modalConfirmar.addEventListener('click', () => {
+    try {
+      localStorage.setItem('favoritos', '[]');
+    } catch (e) {
+      GM.toast?.('No se pudo vaciar los favoritos');
+    }
+    favoritos = [];
+    items = [];
+    cerrarModalVaciar();
+    renderEstadoVacio('sin-favoritos');
+    GM.toast?.('Favoritos vaciados');
+    if (window.actualizarContadorFavoritosHeader) window.actualizarContadorFavoritosHeader();
+  });
+  $modal.addEventListener('click', (e) => {
+    if (e.target === $modal) cerrarModalVaciar();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ($modal.classList.contains('open')) {
+      if (e.key === 'Escape') { e.preventDefault(); cerrarModalVaciar(); }
+      else if (e.key === 'Tab') trapFocusModal(e);
+      return;
+    }
+    if (e.key === 'Escape') {
+      cerrarSugerencias();
+      if ($sheet.classList.contains('open')) cerrarSheet();
+      if (document.getElementById('qr-modal')?.classList.contains('open')) cerrarModalQR();
+    }
+  });
+
+  // ============================================================
+  // FAQs
+  // ============================================================
+  (function initFaqs() {
+    const fab = document.getElementById('favoritos-faq-fab');
+    const drawer = document.getElementById('favoritos-faq-drawer');
+    const backdrop = document.getElementById('favoritos-faq-backdrop');
+    const closeBtn = document.getElementById('favoritos-faq-close');
+    if (!fab || !drawer || !backdrop) return;
+
+    let focusReturn = null;
+
+    function abrir() {
+      focusReturn = document.activeElement;
+      drawer.classList.add('open');
+      backdrop.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn?.focus(), 50);
+    }
+
+    function cerrar() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (focusReturn && typeof focusReturn.focus === 'function') {
+        try { focusReturn.focus(); } catch (e) {}
+      }
+    }
+
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      if (!drawer.classList.contains('open')) return;
+      const focusables = drawer.querySelectorAll(
+        'button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    fab.addEventListener('click', abrir);
+    closeBtn?.addEventListener('click', cerrar);
+    backdrop.addEventListener('click', cerrar);
+
+    document.addEventListener('keydown', (e) => {
+      if (!drawer.classList.contains('open')) return;
+      if (e.key === 'Escape') { e.preventDefault(); cerrar(); }
+      if (e.key === 'Tab') trapFocus(e);
+    });
+  })();
+
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
+  initBotonesHero();
+  cargarFavoritos();
+
+</script>
+
+</body>
+</html>

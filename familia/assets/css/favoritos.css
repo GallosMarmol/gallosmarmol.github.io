@@ -1,0 +1,417 @@
+/* ============================================================
+   FAVORITOS — Estados de producto
+   ============================================================ */
+
+/* Wrapper general de cada favorito */
+.favorito-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Etiqueta de origen (Catálogo / Outlet / Saldos) */
+.favorito-origen-tag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #6b0000;
+  background: #f4efe6;
+  border: 1px solid rgba(107, 0, 0, 0.12);
+  border-radius: 999px;
+}
+
+/* Fecha "Agregado hace X" */
+.favorito-fecha {
+  font-size: 12px;
+  color: #7a7a7a;
+  padding: 0 4px;
+}
+
+/* ------------------------------------------------------------
+   Card NO DISPONIBLE (fantasma con snapshot)
+   ------------------------------------------------------------ */
+.favorito-wrapper--no-disponible {
+  opacity: 0.85;
+}
+
+.favorito-wrapper--no-disponible .favorito-origen-tag {
+  color: #6b6b6b;
+  background: #efefef;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.product-card--no-disponible {
+  background: #f8f6f2;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card--no-disponible .product-card__media {
+  aspect-ratio: 4 / 3;
+  background-color: #e8e4d2;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(60%);
+}
+
+.product-card--no-disponible .product-card__body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.product-card--no-disponible .product-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3a3a3a;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.product-card--no-disponible .product-card__meta {
+  font-size: 12px;
+  color: #7a7a7a;
+  margin: 0;
+}
+
+.product-card--no-disponible .product-card__familia {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #a06b2c;
+}
+
+/* Badge "No disponible" */
+.favorito-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  line-height: 1.4;
+}
+
+.favorito-badge--no-disponible {
+  color: #6b0000;
+  background: #fde8e6;
+  border: 1px solid rgba(107, 0, 0, 0.2);
+}
+
+.favorito-badge--agotado {
+  color: #8a5a00;
+  background: #fff4d6;
+  border: 1px solid rgba(138, 90, 0, 0.25);
+}
+
+/* Contenedor de badges de estado (por si los usas agrupados) */
+.favorito-badges-estado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+/* Botón "Quitar de favoritos" en card fantasma */
+.btn-quitar-favorito {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6b0000;
+  background: transparent;
+  border: 1px solid rgba(107, 0, 0, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.btn-quitar-favorito:hover,
+.btn-quitar-favorito:focus-visible {
+  background: #6b0000;
+  color: #fff;
+  border-color: #6b0000;
+  outline: none;
+}
+
+/* ------------------------------------------------------------
+   Card AGOTADA (existe pero stock = 0)
+   ------------------------------------------------------------ */
+.favorito-wrapper--agotado .product-card {
+  position: relative;
+}
+
+.favorito-wrapper--agotado .product-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.favorito-wrapper--agotado .product-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.favorito-wrapper--agotado .product-card__btn-cotizar,
+.favorito-wrapper--agotado [data-action="cotizar"] {
+  pointer-events: none;
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+
+/* ------------------------------------------------------------
+   Aviso "Ahora en <Outlet>"
+   ------------------------------------------------------------ */
+.favorito-aviso-origen {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #8a5a00;
+  background: #fff4d6;
+  border: 1px solid rgba(138, 90, 0, 0.25);
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.favorito-aviso-origen strong {
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------
+   Aviso global de no disponibles (banner superior)
+   ------------------------------------------------------------ */
+.favoritos-aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  background: #fdf3e7;
+  border: 1px solid #e8c9a0;
+  border-left: 4px solid #c9a227;
+  border-radius: 8px;
+  color: #5a3a00;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.favoritos-aviso[hidden] {
+  display: none;
+}
+
+.favoritos-aviso strong {
+  font-weight: 700;
+}
+
+.favoritos-aviso__btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #6b0000;
+  border: 1px solid #6b0000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.favoritos-aviso__btn:hover,
+.favoritos-aviso__btn:focus-visible {
+  background: #8a1a1a;
+  border-color: #8a1a1a;
+  outline: none;
+}
+
+/* ------------------------------------------------------------
+   Empty state con CTA (usado en "sin favoritos")
+   ------------------------------------------------------------ */
+.saldos-empty__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* ------------------------------------------------------------
+   Tabs por origen
+   ------------------------------------------------------------ */
+.favoritos-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
+
+.favoritos-tabs[hidden] {
+  display: none;
+}
+
+.favoritos-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a3a3a;
+  background: #f4efe6;
+  border: 1px solid rgba(107, 0, 0, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.favoritos-tab:hover {
+  background: #ece4d6;
+}
+
+.favoritos-tab.active {
+  color: #fff;
+  background: #6b0000;
+  border-color: #6b0000;
+}
+
+.favoritos-tab .tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  color: inherit;
+}
+
+.favoritos-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ------------------------------------------------------------
+   Botón "Vaciar favoritos"
+   ------------------------------------------------------------ */
+.btn-vaciar-favoritos {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b0000;
+  background: transparent;
+  border: 1px solid rgba(107, 0, 0, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.btn-vaciar-favoritos:hover,
+.btn-vaciar-favoritos:focus-visible {
+  background: #6b0000;
+  color: #fff;
+  outline: none;
+}
+
+.btn-vaciar-favoritos[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------
+   Modal "Vaciar favoritos"
+   ------------------------------------------------------------ */
+.favoritos-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(20, 15, 10, 0.55);
+  z-index: 9999;
+}
+
+.favoritos-modal.open {
+  display: flex;
+}
+
+.favoritos-modal__content {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.favoritos-modal__title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2b1a0a;
+}
+
+.favoritos-modal__text {
+  margin: 0 0 20px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: #5a5147;
+}
+
+.favoritos-modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .favoritos-aviso {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .favoritos-aviso__btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .favoritos-tabs {
+    flex-wrap: nowrap;
+  }
+
+  .favoritos-modal__actions {
+    flex-direction: column-reverse;
+  }
+
+  .favoritos-modal__actions .btn {
+    width: 100%;
+  }
+}
