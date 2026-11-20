@@ -98,7 +98,7 @@
   function getOrigenesValidos() {
     return [
       'volante', 'instagram', 'facebook', 'tiktok', 'feria', 'whatsapp','camion','planta',
-      'llamada', 'referido', 'email', 'google', 'qr', 'otro'
+      'llamada', 'referido', 'email', 'google', 'qr', 'otro','web'
     ];
   }
 
