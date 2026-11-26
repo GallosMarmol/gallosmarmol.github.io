@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Leads · Gerencia · Gallos Mármol</title>
+  <meta name="description" content="Consulta y análisis de leads">
+  <link rel="stylesheet" href="/shared/css/shared.css">
+  <link rel="stylesheet" href="/ventas/assets/css/ventas.css">
+</head>
+<body data-rol="gerencia">
+
+  <div class="ventas-layout">
+    <aside class="v-sidebar" id="v-sidebar"></aside>
+    <div class="v-main">
+      <header class="v-topbar">
+        <div class="v-topbar-left">
+          <div class="v-crumb" id="v-crumb">Ventas / Gerencia</div>
+          <h1 class="v-title" id="v-title">Leads</h1>
+        </div>
+        <div class="v-topbar-right" id="v-topbar-right"></div>
+      </header>
+      <div class="v-content" id="v-content">
+        <div class="v-empty">
+          <div class="v-empty-icon">⋯</div>
+          <div class="v-empty-text">Cargando…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    NOTA: Gerencia es SOLO LECTURA.
+    El leads.js oculta automáticamente:
+      - Botón "+ Nuevo lead"
+      - Selector de vendedor en cada fila (solo texto)
+      - Selector de estado (solo badge)
+      - Botones de contacto (llamar/WhatsApp/email)
+      - Formulario de notas (solo lectura)
+      - Campo de próximo contacto
+    Y muestra:
+      - Date range picker (para reportes)
+      - Filtro por vendedor (para ver desempeño)
+      - Filtros rápidos: "Todo el tiempo", "Últimos 7/30/90 días",
+        "Convertidos", "Descartados"
+      - Drawer con datos + productos (lectura)
+  -->
+
+  <script src="/shared/js/shared.js"></script>
+  <script type="module" src="/ventas/assets/js/leads.js"></script>
+</body>
+</html>

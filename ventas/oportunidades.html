@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Oportunidades · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../shared/css/shared.css">
+<style>
+  #gm-burger{display:none;}
+  @media (max-width:880px){ #gm-burger{display:inline-flex;} }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="gm-sidebar"></aside>
+  <div class="app-main">
+    <header class="app-topbar" id="gm-topbar"></header>
+    <main class="app-content" id="gm-content"></main>
+  </div>
+</div>
+<script src="../../shared/js/mock-data.js"></script>
+<script src="../../shared/js/shared.js"></script>
+<script src="../../shared/js/nav.js"></script>
+<script src="../../shared/js/list-page.js"></script>
+<script>
+gmListPage({
+  portal: "ventas",
+  active: "oportunidades",
+  title: "Oportunidades",
+  crumb: "CRM",
+  base: "../",
+  dbKey: "cotizaciones",
+  searchPlaceholder: "Buscar oportunidad…",
+  subtitle: "Pipeline de negociación: cada oportunidad nace de una cotización y avanza hasta convertirse en pedido.",
+  idField: null,
+  addLabel: null,
+  addFields: null,
+  columns: [{key:'id',label:'Cotización',mono:true},{key:'cliente',label:'Cliente'},{key:'vendedor',label:'Vendedor'},{key:'fecha',label:'Fecha',mono:true},{key:'total',label:'Monto',render:r=>GM.soles(r.total)},{key:'estado',label:'Etapa',render:r=>GM.badge(r.estado, GM.estadoTone(r.estado))}]
+});
+</script>
+</body>
+</html>

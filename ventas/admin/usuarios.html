@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Usuarios · Administrador · Gallos Mármol</title>
+  <link rel="stylesheet" href="/shared/css/shared.css">
+  <link rel="stylesheet" href="/ventas/assets/css/ventas.css">
+</head>
+<body data-rol="admin">
+
+  <div class="ventas-layout">
+    <aside class="v-sidebar" id="v-sidebar"></aside>
+    <div class="v-main">
+      <header class="v-topbar">
+        <div class="v-topbar-left">
+          <div class="v-crumb" id="v-crumb">Administración / Usuarios</div>
+          <h1 class="v-title" id="v-title">Usuarios</h1>
+        </div>
+        <div class="v-topbar-right" id="v-topbar-right"></div>
+      </header>
+      <div class="v-content" id="v-content">
+        <div class="v-empty">
+          <div class="v-empty-icon">⋯</div>
+          <div class="v-empty-text">Cargando usuarios…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    NOTA: Usuarios es exclusivo del admin.
+    - Lista todos los usuarios del sistema.
+    - Permite cambiar el rol de un usuario.
+    - Permite activar/desactivar un usuario.
+    - NO crea usuarios (eso se hace desde el dashboard de Supabase).
+  -->
+
+  <script src="/shared/js/shared.js"></script>
+  <script type="module" src="/ventas/assets/js/usuarios.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Clientes · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../shared/css/shared.css">
+<style>
+  #gm-burger{display:none;}
+  @media (max-width:880px){ #gm-burger{display:inline-flex;} }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="app-sidebar" id="gm-sidebar"></aside>
+  <div class="app-main">
+    <header class="app-topbar" id="gm-topbar"></header>
+    <main class="app-content" id="gm-content"></main>
+  </div>
+</div>
+<script src="../../shared/js/mock-data.js"></script>
+<script src="../../shared/js/shared.js"></script>
+<script src="../../shared/js/nav.js"></script>
+<script src="../../shared/js/list-page.js"></script>
+<script>
+gmListPage({
+  portal: "ventas",
+  active: "clientes",
+  title: "Clientes",
+  crumb: "CRM",
+  base: "../",
+  dbKey: "clientes",
+  searchPlaceholder: "Buscar cliente, RUC o contacto…",
+  subtitle: "Clientes convertidos desde leads, con historial de compra consolidado entre Ventas y Almacén.",
+  idField: "id",
+  addLabel: "Nuevo cliente",
+  addFields: [{key:'nombre',label:'Razón social / Nombre',type:'text',placeholder:''},{key:'tipo',label:'Tipo',type:'select',placeholder:'',options:["Empresa", "Persona natural"]},{key:'ruc',label:'RUC',type:'text',placeholder:''},{key:'contacto',label:'Persona de contacto',type:'text',placeholder:''},{key:'telefono',label:'Teléfono',type:'text',placeholder:''},{key:'email',label:'Correo',type:'email',placeholder:''},{key:'sede',label:'Sede / Distrito',type:'text',placeholder:''},{key:'estado',label:'Estado',type:'select',placeholder:'',options:["Activo", "Inactivo"]}],
+  columns: [{key:'id',label:'ID',mono:true},{key:'nombre',label:'Cliente'},{key:'tipo',label:'Tipo'},{key:'contacto',label:'Contacto'},{key:'telefono',label:'Teléfono',mono:true},{key:'sede',label:'Sede'},{key:'totalComprado',label:'Total comprado',render:r=>GM.soles(r.totalComprado)},{key:'ultimaCompra',label:'Última compra',mono:true},{key:'estado',label:'Estado',render:r=>GM.badge(r.estado, GM.estadoTone(r.estado))}]
+});
+</script>
+</body>
+</html>
