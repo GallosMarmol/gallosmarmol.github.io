@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Outlet · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Productos de outlet con descuentos especiales. Mármol, granito, cuarzo y piedra natural con stock limitado. Aprovecha estas ofertas antes de que se agoten.">
+<meta name="robots" content="index,follow" id="outlet-robots">
+<link rel="canonical" href="https://gallosmarmol.com/familia/outlet.html">
+
+<!-- Open Graph / Twitter (best-effort; para SSR real ver nota de migración) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gallos Mármol">
+<meta property="og:title" content="Outlet · Gallos Mármol">
+<meta property="og:description" content="Productos de outlet con descuentos especiales. Stock limitado.">
+<meta property="og:image" content="https://gallosmarmol.com/familia/assets/img/outlet/Foto_01.webp">
+<meta property="og:url" content="https://gallosmarmol.com/familia/outlet.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Outlet · Gallos Mármol">
+<meta name="twitter:description" content="Productos de outlet con descuentos especiales. Stock limitado.">
+<meta name="twitter:image" content="https://gallosmarmol.com/familia/assets/img/outlet/Foto_01.webp">
+
+<link rel="icon" type="image/png" href="../shared/assets/foto_02.png">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+<link
+  rel="preload"
+  as="image"
+  href="assets/img/outlet/Foto_01.webp"
+  fetchpriority="high"
+>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+</head>
+<body class="page-outlet" data-linea="outlet">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<main id="outlet-main">
+  <!-- ============================================================ -->
+  <!-- HERO -->
+  <!-- ============================================================ -->
+  <section class="page-hero page-hero--outlet page-hero--con-foto">
+    <!-- Imagen de fondo -->
+    <div class="page-hero__bg" aria-hidden="true">
+      <img
+        src="assets/img/outlet/Foto_01.webp"
+        alt=""
+        width="1920"
+        height="600"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="page-hero__bg-img"
+      >
+      <div class="page-hero__overlay"></div>
+    </div>
+
+    <div class="page-hero-in">
+      <!-- Kicker -->
+      <div class="kicker">
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:middle; margin-right:6px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        Ofertas especiales · Solo cotización
+      </div>
+
+      <h1>Outlet</h1>
+
+      <!-- Subtítulo con propuesta de valor -->
+      <p class="page-hero__subtitle">
+        Productos seleccionados con descuentos especiales. Mármol travertino, granito, gress, porcelanato y muchos más con stock limitado. Aprovecha estas ofertas antes de que se agoten.
+      </p>
+
+      <!-- Contador (se llena dinámicamente) -->
+      <div id="outlet-countdown" class="saldos-countdown" hidden></div>
+
+      <!-- CTA: 2 botones -->
+      <div class="page-hero-cta">
+        <button
+          type="button"
+          class="btn btn-gold"
+          id="btn-como-funciona"
+          aria-haspopup="dialog"
+          aria-controls="drawer-como-funciona"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          ¿Cómo funciona?
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-ghost"
+          id="btn-como-llegar"
+          aria-haspopup="dialog"
+          aria-controls="drawer-como-llegar"
+          aria-expanded="false"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          ¿Cómo llegar?
+        </button>
+      </div>
+
+      <div id="outlet-actualizado" class="saldos-actualizado" hidden></div>
+
+    </div>
+
+    <!-- ❌ Scroll indicator eliminado -->
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ============================================================ -->
+  <div class="saldos-page">
+
+    <!-- CONTENIDO VISIBLE (se oculta cuando está bloqueado) -->
+    <div id="outlet-contenido">
+
+      <!-- ======================================================== -->
+      <!-- BARRA STICKY DE CONTROLES -->
+      <!-- ======================================================== -->
+      <div class="saldos-controls">
+        <div class="saldos-controls__row">
+
+          <!-- Buscador con QR + limpiar -->
+          <div class="saldos-controls__search" id="outlet-search-wrap">
+            <input
+              type="search"
+              id="outlet-search"
+              placeholder="Buscar producto para cotizar…"
+              autocomplete="off"
+              aria-label="Buscar productos"
+              aria-autocomplete="list"
+              aria-controls="outlet-sugerencias">
+            <span class="saldos-search-sku-badge" id="outlet-search-sku-badge" hidden aria-live="polite">
+              Buscando por SKU
+            </span>
+            <span class="saldos-search-loading" id="outlet-search-loading" hidden aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="42" stroke-dashoffset="14">
+                  <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </span>
+            <button type="button" class="saldos-search-clear" id="outlet-search-clear" hidden title="Limpiar búsqueda" aria-label="Limpiar búsqueda">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            <button type="button" class="saldos-qr-btn" id="outlet-qr-btn" title="Escanear código QR" aria-label="Escanear código QR">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="saldos-sugerencias" id="outlet-sugerencias" role="listbox" hidden></div>
+          </div>
+
+          <!-- Botón filtros -->
+          <button type="button" class="saldos-controls__btn" id="outlet-btn-filtros" aria-label="Abrir filtros" aria-haspopup="dialog" aria-controls="outlet-sheet" aria-expanded="false">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Filtros
+          </button>
+
+          <!-- Selector de ordenamiento -->
+          <label class="saldos-orden-wrapper">
+            <select id="outlet-orden" class="saldos-orden-select" aria-label="Ordenar por">
+              <option value="mayor-descuento">Mayor descuento</option>
+              <option value="menor-precio">Menor precio</option>
+              <option value="mayor-precio">Mayor precio</option>
+              <option value="recientes">Más recientes</option>
+              <option value="a-z">A-Z</option>
+              <option value="orden">Recomendados</option>
+            </select>
+          </label>
+
+          <!-- Toggle solo destacados -->
+          <label class="saldos-toggle-destacados" title="Mostrar solo productos destacados">
+            <input type="checkbox" id="outlet-solo-destacados">
+            <span>Destacados</span>
+          </label>
+
+          <!-- Contador -->
+          <div class="saldos-controls__count" id="outlet-count" aria-live="polite">
+            Cargando…
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FAMILIA -->
+      <!-- ======================================================== -->
+      <div class="saldos-familias" id="outlet-familias" role="group" aria-label="Filtrar por familia"></div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FILTROS ACTIVOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-activos" id="outlet-activos" role="list" aria-label="Filtros activos"></div>
+
+      <!-- ======================================================== -->
+      <!-- GRID / LISTA DE PRODUCTOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-productos saldos-productos--grid" id="outlet-grid">
+      <!-- Skeleton inicial (4 cards) -->
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    <!-- ======================================================== -->
+    <!-- INFINITE SCROLL: loader + fin de resultados -->
+    <!-- ======================================================== -->
+    <div class="saldos-infinite" id="outlet-infinite">
+      <!-- Centinela invisible: dispara la carga de la siguiente página -->
+      <div class="saldos-infinite__sentinel" id="outlet-infinite-sentinel" aria-hidden="true"></div>
+
+      <!-- Loader visible mientras carga -->
+      <div class="saldos-infinite__loader" id="outlet-infinite-loader" hidden aria-live="polite">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="42" stroke-dashoffset="14">
+            <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.9s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <span>Cargando más productos…</span>
+      </div>
+
+      <!-- Fin de resultados -->
+      <div class="saldos-infinite__fin" id="outlet-infinite-fin" hidden>
+        <div class="saldos-infinite__fin-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <p class="saldos-infinite__fin-text">
+          Has visto todos los productos de esta búsqueda.
+          <br>
+          <span>Prueba otra búsqueda o filtro para encontrar más opciones.</span>
+        </p>
+
+        <!-- CTA alternativo: siempre visible -->
+        <div class="saldos-infinite__fin-ctas" id="outlet-infinite-ctas">
+          <button type="button" class="saldos-infinite__fin-btn saldos-infinite__fin-btn--primary" id="outlet-infinite-cotizar" hidden>
+            Solicitar cotización →
+          </button>
+          <a
+            href="#"
+            class="saldos-infinite__fin-btn saldos-infinite__fin-btn--ghost"
+            id="outlet-infinite-whatsapp"
+          >
+            ¿No encuentras lo que buscas? Escríbenos
+          </a>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /#outlet-contenido -->
+
+    <!-- BLOQUE DE "BLOQUEADO" (finalizado o próximamente) -->
+    <div id="outlet-bloqueado"></div>
+
+  </div><!-- /.saldos-page -->
+</main>
+
+<!-- ============================================================ -->
+<!-- BOTTOM SHEET DE FILTROS -->
+<!-- ============================================================ -->
+<div class="saldos-sheet-backdrop" id="outlet-sheet-backdrop"></div>
+
+<aside class="saldos-sheet" id="outlet-sheet" role="dialog" aria-modal="true" aria-labelledby="outlet-sheet-title" aria-hidden="true">
+  <div class="saldos-sheet__handle"></div>
+  <div class="saldos-sheet__header">
+    <h2 class="saldos-sheet__title" id="outlet-sheet-title">Filtros</h2>
+    <button type="button" class="saldos-sheet__close" id="outlet-sheet-close" aria-label="Cerrar filtros">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="saldos-sheet__body">
+
+    <!-- FAMILIA -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-familia">
+      <h3 class="saldos-filtro-grupo__titulo">Familia</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-familia"></div>
+    </div>
+
+    <!-- MATERIAL -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-material">
+      <h3 class="saldos-filtro-grupo__titulo">Material</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-material"></div>
+    </div>
+
+    <!-- ACABADO -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-acabado">
+      <h3 class="saldos-filtro-grupo__titulo">Acabado</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-acabado"></div>
+    </div>
+
+    <!-- CALIDAD -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-calidad">
+      <h3 class="saldos-filtro-grupo__titulo">Calidad</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-calidad"></div>
+    </div>
+
+    <!-- BORDE -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-borde">
+      <h3 class="saldos-filtro-grupo__titulo">Borde</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-borde"></div>
+    </div>
+
+    <!-- LARGO / ANCHO / ESPESOR -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-largo">
+      <h3 class="saldos-filtro-grupo__titulo">Largo</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-largo"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="outlet-grupo-ancho">
+      <h3 class="saldos-filtro-grupo__titulo">Ancho</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-ancho"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="outlet-grupo-espesor">
+      <h3 class="saldos-filtro-grupo__titulo">Espesor</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-espesor"></div>
+    </div>
+
+    <!-- PRECIO (slider) -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-precio">
+      <h3 class="saldos-filtro-grupo__titulo">Precio</h3>
+      <div class="saldos-precio-slider-wrapper">
+        <div id="outlet-precio-slider" class="saldos-precio-slider"></div>
+        <div class="saldos-precio-valores">
+          <span id="outlet-precio-min-valor">S/ 0</span>
+          <span id="outlet-precio-max-valor">S/ 0</span>
+        </div>
+      </div>
+      <button type="button" class="saldos-precio-reset" id="outlet-precio-reset">Resetear rango</button>
+    </div>
+
+    <!-- % DESCUENTO -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-descuento">
+      <h3 class="saldos-filtro-grupo__titulo">Descuento</h3>
+      <div class="saldos-filtro-opciones" id="outlet-opciones-descuento"></div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-stock">
+      <h3 class="saldos-filtro-grupo__titulo">Disponibilidad</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="outlet-toggle-stock">
+        <span>Solo con stock</span>
+      </label>
+    </div>
+
+    <!-- DESTACADOS -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-destacados">
+      <h3 class="saldos-filtro-grupo__titulo">Destacados</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="outlet-toggle-destacados">
+        <span>Solo destacados</span>
+      </label>
+    </div>
+
+    <!-- MODELO (buscador) -->
+    <div class="saldos-filtro-grupo" id="outlet-grupo-modelo">
+      <h3 class="saldos-filtro-grupo__titulo">Modelo</h3>
+      <input
+        type="search"
+        id="outlet-modelo-search"
+        class="saldos-modelo-search"
+        placeholder="Buscar modelo…"
+        autocomplete="off"
+        aria-label="Buscar modelo"
+      >
+    </div>
+
+  </div>
+  <div class="saldos-sheet__footer">
+    <button type="button" class="btn-limpiar" id="outlet-btn-limpiar">Limpiar</button>
+    <button type="button" class="btn-aplicar" id="outlet-btn-aplicar">Aplicar filtros</button>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- MODAL QR -->
+<!-- ============================================================ -->
+<div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-label="Escanear código QR" aria-hidden="true">
+  <div class="qr-modal__content">
+  <button type="button" class="qr-modal__close" id="qr-modal-close" aria-label="Cerrar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+    <h2 class="qr-modal__title">Escanear código QR</h2>
+    <p class="qr-modal__hint">Apunta la cámara al código QR del producto.</p>
+    <div id="qr-reader" class="qr-modal__reader"></div>
+    <p class="qr-modal__status" id="qr-status"></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- BOTÓN FLOTANTE DE FAQs -->
+<!-- ============================================================ -->
+<button
+  type="button"
+  class="outlet-faq-fab"
+  id="outlet-faq-fab"
+  aria-label="Preguntas frecuentes del outlet"
+  aria-haspopup="dialog"
+  aria-controls="outlet-faq-drawer"
+  aria-expanded="false"
+>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+</button>
+
+<!-- FAB: Ver mi solicitud (aparece cuando hay productos) -->
+<button
+  type="button"
+  class="cot-fab"
+  id="cot-fab"
+  hidden
+  aria-label="Ver mi solicitud de cotización"
+  aria-controls="cot-aside"
+>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="8" y1="13" x2="16" y2="13"/>
+    <line x1="8" y1="17" x2="13" y2="17"/>
+  </svg>
+  <span class="cot-fab__count" id="cot-fab-count">0</span>
+  <span class="cot-fab__label">Mi solicitud</span>
+</button>
+
+<!-- ============================================================ -->
+<!-- WHATSAPP FAB + MODAL DE LEAD -->
+<!-- ============================================================ -->
+<button
+  type="button"
+  class="wa-fab"
+  id="wa-fab"
+  aria-label="Consultar por WhatsApp"
+  aria-haspopup="dialog"
+  aria-controls="wa-modal"
+>
+  <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</button>
+
+<div class="wa-modal" id="wa-modal" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title" aria-hidden="true">
+  <div class="wa-modal__backdrop" id="wa-modal-backdrop"></div>
+  <div class="wa-modal__panel">
+
+    <div class="wa-modal__header">
+      <div class="wa-modal__header-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+      </div>
+      <div class="wa-modal__header-text">
+        <h2 class="wa-modal__title" id="wa-modal-title">¿Tienes dudas? Escríbenos</h2>
+        <p class="wa-modal__subtitle">Cuéntanos qué necesitas y un asesor te contactará.</p>
+      </div>
+      <button type="button" class="wa-modal__close" id="wa-modal-close" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <form class="wa-form" id="wa-form" novalidate>
+      <!-- Honeypot anti-bot -->
+      <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+        <label for="wa-website">No completar</label>
+        <input id="wa-website" name="website" type="text" tabindex="-1" autocomplete="off" value="">
+      </div>
+
+      <div class="wa-field">
+        <label for="wa-nombre">Nombre <span class="wa-required">*</span></label>
+        <input
+          id="wa-nombre"
+          name="nombre"
+          type="text"
+          placeholder="Ej. Carlos"
+          autocomplete="given-name"
+          required
+          aria-required="true"
+          aria-describedby="wa-err-nombre">
+        <div class="wa-error" id="wa-err-nombre" aria-live="polite"></div>
+      </div>
+
+      <div class="wa-field">
+        <label for="wa-apellido">Apellido (opcional)</label>
+        <input
+          id="wa-apellido"
+          name="apellido"
+          type="text"
+          placeholder="Ej. Chumpitaz"
+          autocomplete="family-name"
+          aria-describedby="wa-err-apellido">
+        <div class="wa-error" id="wa-err-apellido" aria-live="polite"></div>
+      </div>
+
+      <div class="wa-field">
+        <label for="wa-telefono">Teléfono / WhatsApp <span class="wa-required">*</span></label>
+        <div class="wa-phone-wrapper">
+          <select id="wa-pais" class="wa-pais-select" aria-label="País">
+            <option value="PE" selected>🇵🇪 +51</option>
+            <option value="CO">🇨🇴 +57</option>
+            <option value="MX">🇲🇽 +52</option>
+            <option value="AR">🇦🇷 +54</option>
+            <option value="CL">🇨🇱 +56</option>
+            <option value="EC">🇪🇨 +593</option>
+            <option value="BO">🇧🇴 +591</option>
+            <option value="US">🇺🇸 +1</option>
+            <option value="ES">🇪🇸 +34</option>
+          </select>
+          <input
+            id="wa-telefono"
+            name="telefono"
+            type="tel"
+            placeholder="9xx xxx xxx"
+            autocomplete="tel-national"
+            required
+            aria-required="true"
+            aria-describedby="wa-err-telefono">
+        </div>
+        <div class="wa-error" id="wa-err-telefono" aria-live="polite"></div>
+      </div>
+
+      <div class="wa-field">
+        <label for="wa-mensaje">Mensaje</label>
+        <textarea
+          id="wa-mensaje"
+          name="mensaje"
+          rows="3"
+          placeholder="¿Qué producto buscas? ¿Para qué proyecto? (opcional)"
+          maxlength="1000"
+          aria-describedby="wa-err-mensaje"></textarea>
+        <div class="wa-error" id="wa-err-mensaje" aria-live="polite"></div>
+      </div>
+
+      <div class="wa-actions">
+        <button type="submit" class="wa-btn wa-btn--primary" id="wa-submit">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          <span class="wa-btn__label">Enviar consulta</span>
+        </button>
+      </div>
+
+      <p class="wa-privacy">
+        Al enviar aceptas ser contactado por un asesor. <strong>Esto no es una compra ni reserva stock.</strong>
+      </p>
+    </form>
+
+    <!-- Pantalla de éxito -->
+    <div class="wa-success" id="wa-success" hidden>
+      <div class="wa-success__icon">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <h3 class="wa-success__title">¡Consulta enviada!</h3>
+      <p class="wa-success__text" id="wa-success-text">
+        Un asesor te contactará pronto.
+      </p>
+      <p class="wa-success__ref" id="wa-success-ref" hidden></p>
+      <div class="wa-success__actions">
+        <button type="button" class="wa-btn wa-btn--ghost" id="wa-success-cerrar">
+          Cerrar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DRAWER DE FAQs DEL OUTLET -->
+<!-- ============================================================ -->
+<div class="outlet-faq-backdrop" id="outlet-faq-backdrop"></div>
+
+<aside
+  class="outlet-faq-drawer"
+  id="outlet-faq-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="outlet-faq-title"
+  aria-hidden="true"
+>
+  <div class="outlet-faq-header">
+    <h2 class="outlet-faq-title" id="outlet-faq-title">Preguntas frecuentes del outlet</h2>
+    <button
+      type="button"
+      class="outlet-faq-close"
+      id="outlet-faq-close"
+      aria-label="Cerrar preguntas frecuentes"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="outlet-faq-body">
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Tiene garantía?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los productos de outlet tienen garantía contra defectos de fabricación. No cubre daños por instalación inadecuada ni el desgaste natural del material. Consulta los términos y condiciones con tu asesor.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo devolverlo?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Los productos de outlet se venden en los términos y condiciones. No aceptamos devoluciones.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El precio incluye IGV?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los precios mostrados en el outlet incluyen IGV (18%).
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Hay más unidades disponibles?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        El stock del outlet es limitado y se actualiza en tiempo real.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Hay atención todos los días?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los días de 10:00 a.m. a 05:00 p.m. (incluye domingos y feriados).
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Si realizo mi compra me lo puedo llevar el mismo día?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todo dependerá del volumen de compra para poder atenderlo de manera correcta con previa coordinación con el asesor.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El producto viene embalado en cajas?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Algunos productos dependiendo del tamaño se atienden a granel y otros encajados dependiendo de los inventarios.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Una cotización reserva el stock disponible?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        No. Toda reserva es previa cancelación del producto al 100%.     
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo comprar directamente en esta página?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        No. Esta página es <strong>solo para solicitar cotizaciones</strong>. No es una tienda online y no se realizan compras desde aquí. Un asesor te contactará para coordinar la compra formal.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Se reserva stock al solicitar cotización?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        No. La solicitud <strong>no reserva stock</strong>. La disponibilidad se confirma al momento de emitir la cotización formal. El stock es limitado y puede variar entre la solicitud y la confirmación.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Los precios mostrados son finales?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Los precios mostrados son <strong>referenciales</strong> e incluyen IGV. El precio final se confirma en la cotización formal, según disponibilidad y condiciones comerciales vigentes.
+      </div>
+    </details>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- DRAWER "¿CÓMO FUNCIONA?" -->
+<!-- ============================================================ -->
+<div class="como-funciona-backdrop" id="como-funciona-backdrop"></div>
+
+<aside
+  class="como-funciona-drawer"
+  id="drawer-como-funciona"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="como-funciona-title"
+  aria-hidden="true"
+>
+  <div class="como-funciona-header">
+    <h2 class="como-funciona-title" id="como-funciona-title">¿Cómo cotizar en el Outlet?</h2>
+    <button type="button" class="como-funciona-close" id="como-funciona-close" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="como-funciona-body">
+
+    <div class="como-funciona-intro">
+      Esta página es <strong>solo para solicitar cotizaciones</strong>. No es una tienda online: no se realizan compras ni se reserva stock desde aquí.
+    </div>
+
+    <ol class="como-funciona-steps">
+      <li class="como-funciona-step">
+        <span class="como-funciona-step__num">1</span>
+        <div class="como-funciona-step__content">
+          <h3>Busca o filtra</h3>
+          <p>Encuentra los productos que te interesan usando el buscador o los filtros (material, acabado, medidas, etc.).</p>
+        </div>
+      </li>
+      <li class="como-funciona-step">
+        <span class="como-funciona-step__num">2</span>
+        <div class="como-funciona-step__content">
+          <h3>Añádelos a tu solicitud</h3>
+          <p>Pulsa <strong>"Incluir en cotización"</strong> en los productos que quieras cotizar. Puedes ajustar la cantidad.</p>
+        </div>
+      </li>
+      <li class="como-funciona-step">
+        <span class="como-funciona-step__num">3</span>
+        <div class="como-funciona-step__content">
+          <h3>Revisa tu solicitud</h3>
+          <p>Abre tu solicitud y verifica los productos y cantidades antes de enviarla.</p>
+        </div>
+      </li>
+      <li class="como-funciona-step">
+        <span class="como-funciona-step__num">4</span>
+        <div class="como-funciona-step__content">
+          <h3>Envíala y recibe tu cotización</h3>
+          <p>Un asesor te contactará para confirmar disponibilidad desde whatsapp, precios finales y coordinar la entrega.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="como-funciona-nota">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <div>
+        <strong>Importante:</strong> al enviar tu solicitud <strong>no se reserva stock</strong> ni se realiza una compra. La disponibilidad y el precio final se confirman al momento de emitir la cotización formal.
+      </div>
+    </div>
+
+    <button type="button" class="como-funciona-cta" id="btn-como-funciona-ver-productos">
+      Ver productos ↓
+    </button>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ASIDE "CÓMO LLEGAR" -->
+<!-- ============================================================ -->
+<div class="como-llegar-backdrop" id="como-llegar-backdrop"></div>
+
+<aside
+  class="como-llegar-drawer"
+  id="drawer-como-llegar"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="como-llegar-title"
+  aria-hidden="true"
+>
+  <div class="como-llegar-header">
+    <h2 class="como-llegar-title" id="como-llegar-title">Cómo llegar al Outlet</h2>
+    <button type="button" class="como-llegar-close" id="como-llegar-close" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="como-llegar-body">
+
+    <!-- Info principal -->
+    <div class="como-llegar-info">
+      <h3>Outlet Gallos Mármol</h3>
+      <p class="como-llegar-direccion" id="como-llegar-direccion-texto">
+        Antigua Panamericana Sur km. 40, Zona Industrial – Urb. Las Praderas de Lurín (Av. Gallos 100)<br>
+        Lurín, Lima
+      </p>
+    </div>
+
+    <!-- Mini-mapa (Google Maps Embed) -->
+    <div class="como-llegar-mapa">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!4v1795579983137!6m8!1m7!1sGupkOSZmq1ank4_SMHAPQA!2m2!1d-12.30179840111289!2d-76.83788571126573!3f205.82!4f0.5999999999999943!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+        width="100%"
+        height="240"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Ubicación del Outlet Gallos Mármol"
+      ></iframe>
+    </div>
+
+    <!-- Detalles -->
+    <div class="como-llegar-detalles">
+
+      <div class="como-llegar-detalle">
+        <div>
+          <strong>Horarios</strong>
+          <p>Lun – Dom: 10:00 a.m. – 5:00 p.m.</p>
+        </div>
+      </div>
+
+      <div class="como-llegar-detalle">
+        <div>
+          <strong>Referencia</strong>
+          <p>Ubícanos entre la Av. Gallos y la Av. Separadora</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Acciones -->
+    <div class="como-llegar-acciones">
+      <a
+        href="https://maps.app.goo.gl/U9CrUQpyHQqU1JaL6"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="como-llegar-btn como-llegar-btn--primary"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        Abrir en Google Maps
+      </a>
+      <button type="button" class="como-llegar-btn como-llegar-btn--ghost" id="como-llegar-copiar">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Copiar dirección
+      </button>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ASIDE DE COTIZACIÓN IN-PAGE -->
+<!-- ============================================================ -->
+<div class="cot-aside-backdrop" id="cot-aside-backdrop"></div>
+
+<aside
+  class="cot-aside"
+  id="cot-aside"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cot-aside-title"
+  aria-hidden="true"
+>
+  <div class="cot-aside__header">
+    <div class="cot-aside__header-text">
+      <h2 class="cot-aside__title" id="cot-aside-title">Tu solicitud de cotización</h2>
+      <span class="cot-aside__count" id="cot-aside-count">0 productos</span>
+    </div>
+    <button type="button" class="cot-aside__close" id="cot-aside-close" aria-label="Cerrar solicitud">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="cot-aside__body" id="cot-aside-body">
+    <!-- Se llena dinámicamente con los productos del carrito -->
+  </div>
+
+  <div class="cot-aside__footer" id="cot-aside-footer">
+    <div class="cot-aside__aviso">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <span>Esto <strong>no reserva stock</strong>. La disponibilidad se confirma al cotizar.</span>
+    </div>
+
+    <a href="cotizacion.html?origen=outlet" class="cot-aside__btn cot-aside__btn--primary" id="cot-aside-continuar">
+      Continuar con mis datos
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+
+    <button type="button" class="cot-aside__btn cot-aside__btn--ghost" id="cot-aside-vaciar">
+      Vaciar solicitud
+    </button>
+  </div>
+
+  <div class="cot-aside__empty" id="cot-aside-empty" hidden>
+    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="13" y2="17"/>
+    </svg>
+    <h3>Aún no has añadido productos</h3>
+    <p>Selecciona productos del outlet y aparecerán aquí.</p>
+    <button type="button" class="cot-aside__btn cot-aside__btn--ghost" id="cot-aside-seguir-explorando">
+      Seguir explorando
+    </button>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+<script src="./assets/js/tracking.js" defer></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+<script type="module">
+  import { initCatalogo } from './assets/js/catalogo-core.js';
+  import { parsePhoneNumberFromString, AsYouType } from 'https://esm.sh/libphonenumber-js@1.12.26/max';
+
+  initCatalogo({
+    linea: 'outlet',
+    origen: 'outlet',
+    porPagina: 12,
+    storageKeys: {
+      orden: 'gm.outlet.orden',
+      vista: 'outlet_vista'
+    },
+    countdown: true,
+    bloqueo: true,
+    faqs: true,
+    qr: true,
+    carritoBanner: true,
+    sugerencias: true,
+    filtrosPrecio: true,
+    filtrosAvanzados: true,
+    heroImgSelector: '.page-hero__bg-img',
+    ctaScrollSelector: '.saldos-controls',
+    contadorCarritoHeader: 'outlet'
+  });
+</script>
+
+</body>
+</html>

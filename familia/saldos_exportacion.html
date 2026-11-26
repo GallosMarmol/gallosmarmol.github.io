@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Saldos de exportación · Gallos Mármol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Retazos y piezas sobrantes de contenedores de exportación. Mármol, cuarzo y piedra natural en piezas únicas, ideales para proyectos pequeños y de diseño puntual.">
+<meta name="robots" content="index,follow" id="saldos-robots">
+<link rel="canonical" href="https://gallosmarmol.com/familia/saldos_exportacion.html">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gallos Mármol">
+<meta property="og:title" content="Saldos de exportación · Gallos Mármol">
+<meta property="og:description" content="Retazos y piezas sobrantes de contenedores de exportación. Piezas únicas, stock limitado.">
+<meta property="og:image" content="https://gallosmarmol.com/familia/assets/img/saldos/Foto_01.webp">
+<meta property="og:url" content="https://gallosmarmol.com/familia/saldos_exportacion.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Saldos de exportación · Gallos Mármol">
+<meta name="twitter:description" content="Retazos y piezas sobrantes de contenedores de exportación. Piezas únicas, stock limitado.">
+<meta name="twitter:image" content="https://gallosmarmol.com/familia/assets/img/saldos/Foto_01.webp">
+
+<link rel="icon" type="image/png" href="../shared/assets/foto_02.png">
+<link rel="stylesheet" href="../shared/css/shared.css">
+<link rel="stylesheet" href="./assets/css/public.css">
+<link
+  rel="preload"
+  as="image"
+  href="assets/img/saldos/Foto_01.webp"
+  fetchpriority="high"
+>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+</head>
+<body class="page-saldos" data-linea="saldos">
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header class="pub-header" id="pub-header"></header>
+
+<main id="saldos-main">
+  <!-- ============================================================ -->
+  <!-- HERO -->
+  <!-- ============================================================ -->
+  <section class="page-hero page-hero--outlet page-hero--con-foto">
+    <!-- Imagen de fondo (decorativa). El onerror se maneja en catalogo-core.js -->
+    <div class="page-hero__bg" aria-hidden="true">
+      <img
+        src="assets/img/saldos/Foto_01.webp"
+        alt=""
+        width="1920"
+        height="600"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="page-hero__bg-img"
+      >
+      <div class="page-hero__overlay"></div>
+    </div>
+
+    <div class="page-hero-in">
+      <div class="kicker">
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:middle; margin-right:6px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        Piezas únicas
+      </div>
+      <h1>Saldos de exportación</h1>
+      <p>Retazos y piezas sobrantes de contenedores de exportación. Ideales para proyectos pequeños, mesadas o piezas de diseño puntual. Stock limitado, sujeto a disponibilidad.</p>
+
+      <!-- Contador (se llena dinámicamente) -->
+      <div id="saldos-countdown" class="saldos-countdown" hidden></div>
+
+      <!-- CTA principal -->
+      <div class="page-hero-cta">
+        <button type="button" class="btn btn-gold" id="btn-ver-saldos">
+          Ver saldos ↓
+        </button>
+        <a
+          class="btn btn-ghost"
+          id="btn-como-llegar"
+          href="https://maps.app.goo.gl/U9CrUQpyHQqU1JaL6"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Cómo llegar a los saldos (abre Google Maps)"
+          style="border-color:rgba(232,228,210,.35);color: #6b0000;"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          ¿Cómo llegar?
+        </a>
+      </div>
+
+      <!-- Fecha de actualización -->
+      <div id="saldos-actualizado" class="saldos-actualizado" hidden></div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <button type="button" class="saldos-scroll-indicator" id="saldos-scroll-indicator" aria-label="Desliza para ver los productos">
+      <span>Desliza para ver</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ============================================================ -->
+  <div class="saldos-page">
+
+    <!-- CONTENIDO VISIBLE (se oculta cuando está bloqueado) -->
+    <div id="saldos-contenido">
+
+      <!-- ======================================================== -->
+      <!-- BARRA STICKY DE CONTROLES -->
+      <!-- ======================================================== -->
+      <div class="saldos-controls">
+        <div class="saldos-controls__row">
+
+          <!-- Buscador con QR + limpiar -->
+          <div class="saldos-controls__search" id="saldos-search-wrap">
+            <input
+              type="search"
+              id="outlet-search"
+              placeholder="Buscar por nombre, SKU o familia…"
+              autocomplete="off"
+              aria-label="Buscar productos"
+              aria-autocomplete="list"
+              aria-controls="outlet-sugerencias">
+            <span class="saldos-search-sku-badge" id="saldos-search-sku-badge" hidden aria-live="polite">
+              Buscando por SKU
+            </span>
+            <span class="saldos-search-loading" id="saldos-search-loading" hidden aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="42" stroke-dashoffset="14">
+                  <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </span>
+            <button type="button" class="saldos-search-clear" id="saldos-search-clear" hidden title="Limpiar búsqueda" aria-label="Limpiar búsqueda">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            <button type="button" class="saldos-qr-btn" id="outlet-qr-btn" title="Escanear código QR" aria-label="Escanear código QR">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="saldos-sugerencias" id="outlet-sugerencias" role="listbox" hidden></div>
+          </div>
+
+          <!-- Botón filtros -->
+          <button type="button" class="saldos-controls__btn" id="saldos-btn-filtros" aria-label="Abrir filtros" aria-haspopup="dialog" aria-controls="saldos-sheet" aria-expanded="false">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <path d="M3 6h18M6 12h12M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Filtros
+          </button>
+
+          <!-- Selector de ordenamiento -->
+          <label class="saldos-orden-wrapper">
+            <select id="saldos-orden" class="saldos-orden-select" aria-label="Ordenar por">
+              <option value="mayor-descuento">Mayor descuento</option>
+              <option value="menor-precio">Menor precio</option>
+              <option value="mayor-precio">Mayor precio</option>
+              <option value="recientes">Más recientes</option>
+              <option value="a-z">A-Z</option>
+              <option value="orden">Recomendados</option>
+            </select>
+          </label>
+
+          <!-- Toggle vista grid/lista -->
+          <div class="saldos-controls__view" role="group" aria-label="Cambiar vista">
+            <button type="button" id="saldos-vista-grid" class="active" aria-label="Vista en cuadrícula" aria-pressed="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+                <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+            <button type="button" id="saldos-vista-lista" aria-label="Vista en lista" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="3" rx="1" fill="currentColor"/>
+                <rect x="3" y="10.5" width="18" height="3" rx="1" fill="currentColor"/>
+                <rect x="3" y="17" width="18" height="3" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Toggle solo destacados -->
+          <label class="saldos-toggle-destacados" title="Mostrar solo productos destacados">
+            <input type="checkbox" id="saldos-solo-destacados">
+            <span>Destacados</span>
+          </label>
+
+          <!-- Contador -->
+          <div class="saldos-controls__count" id="saldos-count" aria-live="polite">
+            Cargando…
+          </div>
+        </div>
+      </div>
+
+      <!-- Chips de medidas comunes (se llenan dinámicamente) -->
+      <div class="saldos-medidas-chips" id="outlet-medidas-chips" hidden aria-label="Medidas frecuentes"></div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FAMILIA -->
+      <!-- ======================================================== -->
+      <div class="saldos-familias" id="saldos-familias" role="group" aria-label="Filtrar por familia"></div>
+
+      <!-- ======================================================== -->
+      <!-- CHIPS DE FILTROS ACTIVOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-activos" id="saldos-activos" role="list" aria-label="Filtros activos"></div>
+
+      <!-- ======================================================== -->
+      <!-- GRID / LISTA DE PRODUCTOS -->
+      <!-- ======================================================== -->
+      <div class="saldos-productos saldos-productos--grid" id="saldos-grid">
+      <!-- Skeleton inicial (4 cards) -->
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="saldos-skeleton-card">
+        <div class="saldos-skeleton-media"></div>
+        <div class="saldos-skeleton-body">
+          <div class="saldos-skeleton-line saldos-skeleton-line--short"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--long"></div>
+          <div class="saldos-skeleton-line saldos-skeleton-line--price"></div>
+          <div class="saldos-skeleton-actions">
+            <div class="saldos-skeleton-btn"></div>
+            <div class="saldos-skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CARGAR MÁS -->
+      <!-- ======================================================== -->
+      <div class="saldos-cargar-mas" id="saldos-cargar-mas" style="display:none;">
+        <button type="button" class="saldos-cargar-mas__btn" id="saldos-btn-cargar-mas">
+          Cargar más productos
+        </button>
+      </div>
+
+    </div><!-- /#saldos-contenido -->
+
+    <!-- BLOQUE DE "BLOQUEADO" (mantenimiento / próximamente / finalizado) -->
+    <div id="saldos-bloqueado"></div>
+
+  </div><!-- /.saldos-page -->
+</main>
+
+<!-- ============================================================ -->
+<!-- BOTTOM SHEET DE FILTROS -->
+<!-- ============================================================ -->
+<div class="saldos-sheet-backdrop" id="saldos-sheet-backdrop"></div>
+
+<aside class="saldos-sheet" id="saldos-sheet" role="dialog" aria-modal="true" aria-labelledby="saldos-sheet-title" aria-hidden="true">
+  <div class="saldos-sheet__handle"></div>
+  <div class="saldos-sheet__header">
+    <h2 class="saldos-sheet__title" id="saldos-sheet-title">Filtros</h2>
+    <button type="button" class="saldos-sheet__close" id="saldos-sheet-close" aria-label="Cerrar filtros">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="saldos-sheet__body">
+
+    <!-- FAMILIA -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-familia">
+      <h3 class="saldos-filtro-grupo__titulo">Familia</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-familia"></div>
+    </div>
+
+    <!-- MATERIAL -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-material">
+      <h3 class="saldos-filtro-grupo__titulo">Material</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-material"></div>
+    </div>
+
+    <!-- ACABADO -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-acabado">
+      <h3 class="saldos-filtro-grupo__titulo">Acabado</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-acabado"></div>
+    </div>
+
+    <!-- PRECIO (slider) -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-precio">
+      <h3 class="saldos-filtro-grupo__titulo">Precio</h3>
+      <div class="saldos-precio-slider-wrapper">
+        <div id="saldos-precio-slider" class="saldos-precio-slider"></div>
+        <div class="saldos-precio-valores">
+          <span id="saldos-precio-min-valor">S/ 0</span>
+          <span id="saldos-precio-max-valor">S/ 0</span>
+        </div>
+      </div>
+      <button type="button" class="saldos-precio-reset" id="saldos-precio-reset">Resetear rango</button>
+    </div>
+
+    <!-- % DESCUENTO -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-descuento">
+      <h3 class="saldos-filtro-grupo__titulo">Descuento</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-descuento"></div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-stock">
+      <h3 class="saldos-filtro-grupo__titulo">Disponibilidad</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="saldos-toggle-stock">
+        <span>Solo con stock</span>
+      </label>
+    </div>
+
+    <!-- CALIDAD -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-calidad">
+      <h3 class="saldos-filtro-grupo__titulo">Calidad</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-calidad"></div>
+    </div>
+
+    <!-- BORDE -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-borde">
+      <h3 class="saldos-filtro-grupo__titulo">Borde</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-borde"></div>
+    </div>
+
+    <!-- MODELO (buscador) -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-modelo">
+      <h3 class="saldos-filtro-grupo__titulo">Modelo</h3>
+      <input
+        type="search"
+        id="saldos-modelo-search"
+        class="saldos-modelo-search"
+        placeholder="Buscar modelo…"
+        autocomplete="off"
+        aria-label="Buscar modelo"
+      >
+    </div>
+
+    <!-- LARGO / ANCHO / ESPESOR -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-largo">
+      <h3 class="saldos-filtro-grupo__titulo">Largo</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-largo"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="saldos-grupo-ancho">
+      <h3 class="saldos-filtro-grupo__titulo">Ancho</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-ancho"></div>
+    </div>
+
+    <div class="saldos-filtro-grupo" id="saldos-grupo-espesor">
+      <h3 class="saldos-filtro-grupo__titulo">Espesor</h3>
+      <div class="saldos-filtro-opciones" id="saldos-opciones-espesor"></div>
+    </div>
+
+    <!-- DESTACADOS -->
+    <div class="saldos-filtro-grupo" id="saldos-grupo-destacados">
+      <h3 class="saldos-filtro-grupo__titulo">Destacados</h3>
+      <label class="saldos-toggle-stock">
+        <input type="checkbox" id="saldos-toggle-destacados">
+        <span>Solo destacados</span>
+      </label>
+    </div>
+
+  </div>
+  <div class="saldos-sheet__footer">
+    <button type="button" class="btn-limpiar" id="saldos-btn-limpiar">Limpiar</button>
+    <button type="button" class="btn-aplicar" id="saldos-btn-aplicar">Aplicar filtros</button>
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- MODAL QR -->
+<!-- ============================================================ -->
+<div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-label="Escanear código QR" aria-hidden="true">
+  <div class="qr-modal__content">
+  <button type="button" class="qr-modal__close" id="qr-modal-close" aria-label="Cerrar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+    <h2 class="qr-modal__title">Escanear código QR</h2>
+    <p class="qr-modal__hint">Apunta la cámara al código QR del producto.</p>
+    <div id="qr-reader" class="qr-modal__reader"></div>
+    <p class="qr-modal__status" id="qr-status"></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BANNER FLOTANTE DE CARRITO -->
+<!-- ============================================================ -->
+<div class="carrito-banner" id="carrito-banner" hidden role="status" aria-live="polite">
+  <span class="carrito-banner__text">
+    <strong id="carrito-count-banner">0</strong> <span id="carrito-count-label">producto</span> en tu cotización
+  </span>
+  <div class="carrito-banner__acciones">
+    <a href="cotizacion.html?origen=saldos" class="carrito-banner__btn carrito-banner__btn--primary" id="carrito-ver">
+      Solicitar cotización →
+    </a>
+    <button type="button" class="carrito-banner__btn carrito-banner__btn--ghost" id="carrito-seguir">
+      Seguir
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTÓN VOLVER ARRIBA -->
+<!-- ============================================================ -->
+<button id="btn-top" class="saldos-btn-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- BOTÓN FLOTANTE DE FAQs -->
+<!-- ============================================================ -->
+<button
+  type="button"
+  class="outlet-faq-fab"
+  id="saldos-faq-fab"
+  aria-label="Preguntas frecuentes de saldos"
+  aria-haspopup="dialog"
+  aria-controls="saldos-faq-drawer"
+  aria-expanded="false"
+>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- DRAWER DE FAQs DE SALDOS -->
+<!-- ============================================================ -->
+<div class="outlet-faq-backdrop" id="saldos-faq-backdrop"></div>
+
+<aside
+  class="outlet-faq-drawer"
+  id="saldos-faq-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="saldos-faq-title"
+  aria-hidden="true"
+>
+  <div class="outlet-faq-header">
+    <h2 class="outlet-faq-title" id="saldos-faq-title">Preguntas frecuentes de saldos de exportación</h2>
+    <button
+      type="button"
+      class="outlet-faq-close"
+      id="saldos-faq-close"
+      aria-label="Cerrar preguntas frecuentes"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="outlet-faq-body">
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Qué son los saldos de exportación?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Son retazos y piezas sobrantes de contenedores de exportación. Cada pieza es única en medidas y acabado, ideal para proyectos pequeños, mesadas, revestimientos puntuales o piezas de diseño.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Las piezas son iguales a las fotos?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Al ser piezas únicas, las fotos son referenciales. Las medidas exactas están indicadas en cada ficha. Te recomendamos confirmar disponibilidad y ver la pieza físicamente antes de comprar.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Tienen garantía?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los productos de saldos tienen garantía contra defectos de fabricación. No cubre daños por instalación inadecuada ni el desgaste natural del material.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El precio incluye IGV?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Sí. Todos los precios mostrados en saldos de exportación incluyen IGV (18%).
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Hay más unidades de la misma pieza?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Cada pieza es única y el stock es limitado. Una vez vendida, no se repone. Te recomendamos confirmar disponibilidad por WhatsApp antes de acercarte.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿Puedo reservar una pieza?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Coordina con tu asesor. Las reservas dependen de la pieza y del volumen de compra. En general, se atiende por orden de llegada.
+      </div>
+    </details>
+
+    <details class="outlet-faq-item">
+      <summary class="outlet-faq-summary">
+        <span>¿El producto viene embalado en cajas?</span>
+        <svg class="outlet-faq-chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="outlet-faq-answer">
+        Algunos productos dependiendo del tamaño se atienden a granel y otros encajados dependiendo de los inventarios.
+      </div>
+    </details>
+
+  </div>
+</aside>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="../shared/js/shared.js"></script>
+<script src="./assets/js/pub-shell.js"></script>
+<script src="./assets/js/tracking.js" defer></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+<!--
+  NOTA (P-20 / SRI):
+  Para producción, añade `integrity` + `crossorigin="anonymous"` a los dos <script> de CDN.
+  Genera el hash con:
+    openssl dgst -sha384 -binary archivo.js | openssl base64 -A
+  y verifícalo contra el CDN oficial antes de publicar.
+-->
+
+<script type="module">
+  import { initCatalogo } from './assets/js/catalogo-core.js';
+
+  initCatalogo({
+    linea: 'saldos',
+    origen: 'saldos',
+    porPagina: 12,
+    storageKeys: {
+      orden: 'gm.saldos.orden',
+      vista: 'saldos_vista'
+    },
+    countdown: true,
+    bloqueo: true,
+    faqs: true,
+    qr: true,
+    carritoBanner: true,
+    sugerencias: true,
+    filtrosPrecio: true,
+    filtrosAvanzados: true,
+    heroImgSelector: '.page-hero__bg-img',
+    ctaScrollSelector: '.saldos-controls',
+    contadorCarritoHeader: 'saldos'
+  });
+</script>
+
+</body>
+</html>
